@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh sách chức vụ - Cienco6 HR{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary"><i class="bi bi-person-badge-fill me-2"></i>Danh sách chức vụ</h2>
+    <a href="{% url 'position_add' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle-fill me-1"></i>Thêm chức vụ
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Mã</th>
+                    <th>Tên chức vụ</th>
+                    <th>Phòng ban</th>
+                    <th>Mô tả</th>
+                    <th>Ngày tạo</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pos in positions %}
+                <tr>
+                    <td><span class="badge bg-info text-dark">{{ pos.code }}</span></td>
+                    <td class="fw-semibold">{{ pos.name }}</td>
+                    <td>{{ pos.department.name }}</td>
+                    <td class="text-muted">{{ pos.description|truncatechars:60|default:"-" }}</td>
+                    <td>{{ pos.created_at|date:"d/m/Y" }}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'position_edit' pos.pk %}" class="btn btn-outline-warning" title="Sửa">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a href="{% url 'position_delete' pos.pk %}" class="btn btn-outline-danger" title="Xóa">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>Chưa có chức vụ nào
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

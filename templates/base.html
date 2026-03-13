@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cienco6 - Hệ thống Nhân sự{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body>
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
+            <i class="bi bi-building me-2"></i>Cienco6 - Hệ thống Nhân sự
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <span class="nav-link text-white-50">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        <span id="currentDate"></span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar shadow-sm">
+        <div class="sidebar-header py-3 px-3 text-center border-bottom">
+            <div class="text-white-50 small">MENU ĐIỀU HƯỚNG</div>
+        </div>
+        <ul class="list-unstyled components px-2 py-2">
+            <li>
+                <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2 me-2"></i>Trang chủ
+                </a>
+            </li>
+
+            <li class="sidebar-section-title">QUẢN LÝ</li>
+
+            <li>
+                <a href="{% url 'employee_list' %}" class="sidebar-link {% if 'employee' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-people-fill me-2"></i>Nhân viên
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'department_list' %}" class="sidebar-link {% if 'department' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-diagram-3-fill me-2"></i>Phòng ban
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'position_list' %}" class="sidebar-link {% if 'position' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-person-badge-fill me-2"></i>Chức vụ
+                </a>
+            </li>
+
+            <li class="sidebar-section-title">THEO DÕI</li>
+
+            <li>
+                <a href="{% url 'attendance_list' %}" class="sidebar-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-calendar-check-fill me-2"></i>Chấm công
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'leave_list' %}" class="sidebar-link {% if 'leave' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-calendar-x-fill me-2"></i>Nghỉ phép
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'salary_list' %}" class="sidebar-link {% if 'salary' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-cash-coin me-2"></i>Bảng lương
+                </a>
+            </li>
+
+            <li class="sidebar-section-title">HỆ THỐNG</li>
+            <li>
+                <a href="/admin/" class="sidebar-link" target="_blank">
+                    <i class="bi bi-gear-fill me-2"></i>Quản trị Admin
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+        <div class="container-fluid py-4 px-4">
+            <!-- Flash Messages -->
+            {% if messages %}
+            <div class="messages-container mb-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Display current date
+    const d = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('currentDate').textContent = d.toLocaleDateString('vi-VN', options);
+
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(a => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(a);
+            bsAlert.close();
+        });
+    }, 5000);
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

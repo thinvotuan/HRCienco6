@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Bảng lương - Cienco6 HR{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary"><i class="bi bi-cash-coin me-2"></i>Bảng lương</h2>
+    <a href="{% url 'salary_add' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle-fill me-1"></i>Thêm bảng lương
+    </a>
+</div>
+
+<!-- Filter -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold">Tháng</label>
+                <select name="month" class="form-select">
+                    <option value="">-- Tất cả tháng --</option>
+                    {% for m in months %}
+                    <option value="{{ m }}" {% if selected_month == m|stringformat:'s' %}selected{% endif %}>Tháng {{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold">Năm</label>
+                <select name="year" class="form-select">
+                    <option value="">-- Tất cả năm --</option>
+                    {% for y in years %}
+                    <option value="{{ y }}" {% if selected_year == y|stringformat:'s' %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-funnel-fill me-1"></i>Lọc
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nhân viên</th>
+                    <th class="text-center">Tháng/Năm</th>
+                    <th class="text-end">Lương cơ bản</th>
+                    <th class="text-end">Phụ cấp</th>
+                    <th class="text-end">Thưởng</th>
+                    <th class="text-end">Khấu trừ</th>
+                    <th class="text-center">Ngày công</th>
+                    <th class="text-end fw-bold">Thực nhận</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sal in salaries %}
+                <tr>
+                    <td>
+                        <div class="fw-semibold">{{ sal.employee.full_name }}</div>
+                        <small class="text-muted">{{ sal.employee.employee_id }}</small>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge bg-primary">{{ sal.month }}/{{ sal.year }}</span>
+                    </td>
+                    <td class="text-end">{{ sal.basic_salary|floatformat:0 }} ₫</td>
+                    <td class="text-end text-success">+{{ sal.allowance|floatformat:0 }} ₫</td>
+                    <td class="text-end text-success">+{{ sal.bonus|floatformat:0 }} ₫</td>
+                    <td class="text-end text-danger">-{{ sal.deduction|floatformat:0 }} ₫</td>
+                    <td class="text-center">{{ sal.actual_days }}/{{ sal.working_days }}</td>
+                    <td class="text-end fw-bold text-primary">{{ sal.net_salary|floatformat:0 }} ₫</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'salary_edit' sal.pk %}" class="btn btn-outline-warning" title="Sửa">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a href="{% url 'salary_delete' sal.pk %}" class="btn btn-outline-danger" title="Xóa">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>Không có dữ liệu bảng lương
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+    <div class="card-footer bg-transparent">
+        <nav>
+            <ul class="pagination pagination-sm justify-content-center mb-0">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&month={{ selected_month }}&year={{ selected_year }}"><i class="bi bi-chevron-left"></i></a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}&month={{ selected_month }}&year={{ selected_year }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&month={{ selected_month }}&year={{ selected_year }}"><i class="bi bi-chevron-right"></i></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

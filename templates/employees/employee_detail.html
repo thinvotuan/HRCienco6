@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ employee.full_name }} - Chi tiết nhân viên{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary"><i class="bi bi-person-lines-fill me-2"></i>Hồ sơ nhân viên</h2>
+    <div class="btn-group">
+        <a href="{% url 'employee_edit' employee.pk %}" class="btn btn-warning">
+            <i class="bi bi-pencil-fill me-1"></i>Chỉnh sửa
+        </a>
+        <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger">
+            <i class="bi bi-trash-fill me-1"></i>Xóa
+        </a>
+        <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Quay lại
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Profile Card -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body py-4">
+                {% if employee.photo %}
+                <img src="{{ employee.photo.url }}" alt="{{ employee.full_name }}"
+                     class="rounded-circle mb-3 shadow" width="120" height="120" style="object-fit:cover">
+                {% else %}
+                <div class="avatar-large rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3 shadow"
+                     style="width:120px;height:120px;font-size:48px">
+                    {{ employee.full_name|first|upper }}
+                </div>
+                {% endif %}
+                <h4 class="fw-bold mb-1">{{ employee.full_name }}</h4>
+                <p class="text-muted mb-2">{{ employee.position.name|default:"Chưa có chức vụ" }}</p>
+                <span class="badge bg-{{ employee.get_status_display_badge }} fs-6 mb-3">
+                    {{ employee.get_status_display }}
+                </span>
+                <div class="border-top pt-3">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <div class="fw-bold text-primary">{{ employee.employee_id }}</div>
+                            <small class="text-muted">Mã NV</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fw-bold text-success">{{ employee.hire_date|date:"Y" }}</div>
+                            <small class="text-muted">Năm vào làm</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-info-circle-fill me-2 text-primary"></i>Thông tin liên hệ
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="bi bi-telephone-fill text-primary me-3"></i>
+                    <div>
+                        <small class="text-muted d-block">Điện thoại</small>
+                        <span>{{ employee.phone }}</span>
+                    </div>
+                </li>
+                {% if employee.email %}
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="bi bi-envelope-fill text-primary me-3"></i>
+                    <div>
+                        <small class="text-muted d-block">Email</small>
+                        <span>{{ employee.email }}</span>
+                    </div>
+                </li>
+                {% endif %}
+                {% if employee.address %}
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="bi bi-geo-alt-fill text-primary me-3"></i>
+                    <div>
+                        <small class="text-muted d-block">Địa chỉ</small>
+                        <span>{{ employee.address }}</span>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Details -->
+    <div class="col-lg-8">
+        <!-- Personal Info -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-person-fill me-2 text-primary"></i>Thông tin cá nhân
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Ngày sinh</label>
+                        <div class="fw-semibold">{{ employee.date_of_birth|date:"d/m/Y" }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Giới tính</label>
+                        <div class="fw-semibold">{{ employee.get_gender_display }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">CCCD/CMND</label>
+                        <div class="fw-semibold">{{ employee.id_number }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Work Info -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-briefcase-fill me-2 text-primary"></i>Thông tin công việc
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Phòng ban</label>
+                        <div class="fw-semibold">{{ employee.department.name|default:"-" }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Chức vụ</label>
+                        <div class="fw-semibold">{{ employee.position.name|default:"-" }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Ngày vào làm</label>
+                        <div class="fw-semibold">{{ employee.hire_date|date:"d/m/Y" }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Lương cơ bản</label>
+                        <div class="fw-semibold text-success">{{ employee.basic_salary|floatformat:0 }} ₫</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Attendance -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-transparent fw-semibold d-flex justify-content-between">
+                <span><i class="bi bi-calendar-check me-2 text-success"></i>Chấm công gần đây</span>
+                <a href="{% url 'attendance_list' %}?employee={{ employee.pk }}" class="btn btn-sm btn-outline-success">Xem tất cả</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr><th>Ngày</th><th>Vào</th><th>Ra</th><th>Trạng thái</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for rec in recent_attendance %}
+                        <tr>
+                            <td>{{ rec.date|date:"d/m/Y" }}</td>
+                            <td>{{ rec.check_in|default:"-" }}</td>
+                            <td>{{ rec.check_out|default:"-" }}</td>
+                            <td><span class="badge bg-{% if rec.status == 'present' %}success{% elif rec.status == 'absent' %}danger{% elif rec.status == 'late' %}warning text-dark{% else %}secondary{% endif %}">{{ rec.get_status_display }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted">Chưa có dữ liệu</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Leave Requests -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent fw-semibold d-flex justify-content-between">
+                <span><i class="bi bi-calendar-x me-2 text-warning"></i>Đơn nghỉ phép gần đây</span>
+                <a href="{% url 'leave_list' %}" class="btn btn-sm btn-outline-warning">Xem tất cả</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr><th>Loại</th><th>Từ ngày</th><th>Đến ngày</th><th>Số ngày</th><th>Trạng thái</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leave_requests %}
+                        <tr>
+                            <td>{{ leave.get_leave_type_display }}</td>
+                            <td>{{ leave.start_date|date:"d/m/Y" }}</td>
+                            <td>{{ leave.end_date|date:"d/m/Y" }}</td>
+                            <td>{{ leave.days }}</td>
+                            <td><span class="badge bg-{% if leave.status == 'approved' %}success{% elif leave.status == 'rejected' %}danger{% else %}warning text-dark{% endif %}">{{ leave.get_status_display }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center text-muted">Chưa có đơn nghỉ phép</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
