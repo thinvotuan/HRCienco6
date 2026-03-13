@@ -1,0 +1,325 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_NhomUser
+@{    
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<sp_Sys_User_IndexResult> nhanVienThuocNhoms = ViewBag.NhanVienThuocNhoms;
+    int i = 1;  
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    table {
+        margin: 0;
+    }
+
+    td {
+        border: none;
+    }
+
+    #trtop th {
+        border-radius: 0!important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index", "PhanQuyenSuatAn")";
+            location.href = url;
+        });
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+            $(this).closest('.dropdown').find("button").val(this.id);
+            $(this).closest(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").trigger("click");
+        });
+
+        $(document).on("click", "#phongban-dropdown-menu1 li a", function () {
+            $(this).closest('.dropdown').find("button").val(this.id);
+            $(this).closest(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+
+            var maNhomUser = $("#maNhomUser").val();
+            var url = '@Url.Action("LoadPartialNhanVienSuatAnSelected", "PhanQuyenSuatAn")' + "?maNhomUser=" + maNhomUser + "&maPhongBan=" + this.id;
+            beginPaging();
+            $('#loadPartialNhanVien').load(url, function () {
+                successPaging();
+            });
+        });
+
+        $('#btnNhanVien, #btnSearch').click(function () {
+            var maNhomUser = $("#maNhomUser").val(),
+                searchString = $("#searchString").val();
+            var url = '@Url.Action("GetMoreUsers", "PhanQuyenSuatAn")' + "?nhomUser=" + maNhomUser + "&searchString=" + searchString + "&maPhongBan=" + $("#btnPhongBan").val();
+            beginPaging();
+            $('#filter-panel .panel-default').load(url, function () {
+                successPaging();
+            });
+        })
+
+        $(document).on("click", ".btnXoa", function () {
+            $(this).closest("tr").remove();
+            var userID = $(this).attr("attruserId");
+            var maNhomUser = $("#maNhomUser").val();
+            if (userID != "" && userID != ",") {
+                $.ajax({
+                    type: "POST",
+                    url: '/PhanQuyenSuatAn/DeleteUserPQ/',
+                    data: {
+                        userID: userID,
+                        maNhomUser: maNhomUser
+                    },
+                    success: function (result) {
+
+                        if (result) {
+
+
+                        }
+                        else {
+
+                        }
+                    }
+                });
+            }
+        })
+
+        $("#myModal").on("hidden.bs.modal", function () {
+            $("#filter-panel .panel-default").html("");
+        })
+
+
+    })
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    function beginPaging(args) {
+        // Animate         
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate        
+        $('#content').fadeIn('fast');
+    }
+    function ChonNhanVienLienKet() {
+
+        var departmentID = "PANVAT";
+        $("#myModalChonPhongBan .modal-dialog").addClass("modal-lg");
+        $('#myModalChonPhongBan').modal({});
+        var Url = '@Url.Action("ChonNhanVienSuatAn", "PhanQuyenSuatAn")';
+        $('#filter-panelNhanVien').load(Url);
+    }
+
+    function XuatFileDanhSachNhanVien() {
+        var maNhomUser = $("#maNhomUser").val();
+        var maPhongBan = $("#maPhongBan1").val();
+
+        var url = '@Url.Action("XuatFileDanhSachNhanVien", "PhanQuyenSuatAn")' + "?maNhomUser=" + maNhomUser + "&maPhongBan=" + maPhongBan;
+
+        location.href = url;
+    }
+</script>
+<form class="form-horizontal" method="post" id="form-submit">
+    <fieldset>
+        <legend style="display: inline">Cập nhật thông tin nhóm</legend>
+        <div class="collapse" style="display: block">
+            <div class="panel panel-default">
+                <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                        <td>Mã nhóm người dùng        
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.maNhomUser, new { @class = "form-control", @readonly = "readonly" })
+                            <span style="font-style: italic; color: red">@TempData["MessgId"]</span>
+                        </td>
+                        <td style="text-align: right">Tên nhóm  <span style="font-style: italic; color: red">*</span>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.tenNhomUser, new { @class = "form-control", @maxlenght = "100", required = "required" })
+                            <span style="font-style: italic; color: red">@TempData["MessgTen"]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ghi chú
+                        </td>
+                        <td colspan="3">
+                            @Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control", @maxlenght = "100" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <div style="display: flex;">
+                    <button style="height: 25px;" type="button" onclick="ChonNhanVienLienKet()" class="btn btn-info btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="myModalChonPhongBan"><i class="fa fa-user-plus" aria-hidden="true"></i>Bổ sung nhân viên vào nhóm</button>
+                    @*<button class="btn btn-link btn-sm" id="btnNhanVien" type="button" data-toggle="modal" data-target="#myModal">Bổ sung nhân viên vào nhóm</button>*@
+                    <div class="form-group" style="margin-left: 10px;">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="maPhongBan1" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu1">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                        <input type="text" class="form-control input-sm" id="txtsearchPhongBan1" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    <input type="button" value="Xuất file" class="btn btn-info" style="height: 25px;margin-left:50px;" onclick="XuatFileDanhSachNhanVien();"/>
+                </div>
+
+
+            </div>
+
+            <div id="container">
+                <table class="table table-striped table-hover table-condensed" id="tbl-users">
+                    <thead>
+                        <tr id="trtop">
+                            <th>STT</th>
+                            <th>Mã nhân viên</th>
+                            <th>Họ và tên</th>
+                            <th>Phòng ban</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Số điện thoại</th>
+                            <th style="width: 40px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="loadPartialNhanVien">
+                        @if (nhanVienThuocNhoms != null)
+                        {
+                            foreach (var item in nhanVienThuocNhoms.OrderBy(d=>d.tenPhongBan))
+                            {
+                            <tr>
+                                <td class="sothutu">@i</td>
+                                <td>@item.manv
+                                    <input type="hidden" name="userId" value="@item.userId"/>
+                                </td>
+                                <td>
+                                    <i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>&nbsp;@item.HovaTen
+                                </td>
+                                <td>
+                                    @item.tenPhongBan
+                                </td>
+                                <td>
+                                    <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;@item.userName<br />
+                                </td>
+                                <td><i class="fa fa-phone-square" aria-hidden="true"></i>&nbsp;@item.telephone</td>
+                                <td>
+                                    <button class="btn btn-warning btn-xs btnXoa" type="button" attruserId="@item.userId">Xóa</button>
+                                </td>
+                            </tr> 
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: right; margin-bottom: 10px">
+         @*   <button class="btn btn-info" id="btnSubmit">Cập nhật </button>*@
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+</form>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="container" style="width: 98%">
+                    <div class="row">
+
+                        <div style="position: relative">
+                            <div class="form-group" id="phongban-div" style="float: left">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                        Danh sách phòng ban&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                        <li role="presentation">
+                                            <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                                <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                            </div>
+                                        </li>
+                                        <li role="presentation">
+                                            @Html.Raw(ViewBag.PhongBans)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input type="text" id="searchString" class="form-control" style="padding-right: 30px; border-radius: 50px; float: right; width: 250px !important;"
+                                placeholder="Search" onkeyup="enterToSeacrh(event)">
+                            <i class="fa fa-search" id="btnSearch" style="position: absolute; cursor: pointer; top: 0px; right: 0px;"></i>
+                        </div>
+                        <div id="filter-panel" class="filter-panel" style="padding-top: 10px;">
+                            <div class="panel panel-default" style="border: none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnAccept">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;Đồng ý
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModalChonPhongBan" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 98%">
+                    <div class="row">
+                        <div id="filter-panelNhanVien" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+    </div>
+</div>

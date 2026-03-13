@@ -1,0 +1,107 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "";
+ 
+   
+}
+
+<input type="hidden" id="parrentId" name="parrentId" value="@ViewBag.parrentId" />
+
+@{      
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+    int stt = 0;
+    var currentMaNV = (string)ViewBag.currentMaNV;
+    var danhSach = ViewBag.nhanVien as List<BatDongSan.Models.DanhMuc.sp_PB_DanhSachNhanVienResult>;
+    if (danhSach != null)
+    {
+        foreach (var item in danhSach)
+        {
+            //if (item.maNhanVien != currentMaNV)
+            //{
+            stt = stt + 1;
+            var HinhAnh = item.maNhanVien + ".jpg";       
+    <tr>
+        <td align="center">
+            @stt
+        </td>
+        <td align="center">
+            <img id="Avatar" onerror="imgErrorUser(this);" accept="image/*" src="/UploadFiles/QLNV/@HinhAnh"  />
+            <input type="hidden" name="sttMaHieu" value="@stt" />
+            @Html.Hidden("MaNhanVien", item.maNhanVien)
+            @Html.Hidden("TenNhanVien", item.hoVaTen)
+            @Html.Hidden("TenPhongBan", item.phongBan)
+            @Html.Hidden("TenChucDanh", item.chucDanh)
+            @Html.Hidden("Email", item.email)
+            @Html.Hidden("MaPhongBan", item.departmentId)
+        </td>
+        <td align="left">
+            <span data-title="Họ và tên" class="tooltipmssg"><i class="fa fa-user" style="color: blue"></i>
+                @item.hoVaTen</span>
+            @{ if (item.birthday != null)
+               { 
+       
+                <br />
+                <span>Ngày sinh:</span>@Html.Encode(String.Format("{0:dd/MM/yyyy}", item.birthday))
+               } 
+            }
+        </td>
+        <td align="left">
+            @item.phongBan
+        </td>
+        <td align="left">
+            @item.chucDanh
+        </td>
+        <td align="center">
+            <input type="checkbox"  phongBan="@item.departmentId" alt="@item.maNhanVien" value="@item.maNhanVien" name="chk"
+            id="ChekChon"/>
+
+        </td>
+    </tr>
+   
+            //}
+        }
+
+
+    }
+}
+
+<tr>
+    <td colspan="6" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>

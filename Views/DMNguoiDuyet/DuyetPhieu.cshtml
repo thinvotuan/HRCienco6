@@ -1,0 +1,127 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var obj = window.opener;
+        $("#btnGoiDuyet").click(function () {
+            var lyDo = $("#LyDo").val();
+            $("#btnGoiDuyet").replaceWith("Đang xử lý...");
+            $(".pageLoading").show();
+            $.post('@Url.Action("DuyeTheoQuiTrinhDongMNV", "DMNguoiDuyet")', { maPhieu: $('#maPhieu').val(), lyDo: lyDo, idQuiTrinh: $("#idQuiTrinh").val(), maCongViec: $("#maCongViec").val(), url: $("#url").val(), sendMail: document.getElementById('email').checked, sendSMS: document.getElementById('sms').checked }, function (data) {
+                if (data == "Mail") {
+                    window.close();
+                    obj.LoadLaiTrang();
+                }
+                else if (data.length == 0) {
+                    window.close();
+                    obj.LoadLaiTrang();
+                }
+                else {
+                    alert(data);
+                    $(this).attr("disabled", false);
+                }
+            });
+        });
+    });
+</script>
+<style>
+    .clsDuyetPhieu
+    {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 10px !important;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.26);
+        position: relative;
+    }
+
+        .clsLichSuPhieuDuyet .titleDP, .clsDuyetPhieu .titleDP, .clsTraLai .titleDP
+        {
+            position: absolute;
+            top: -21px;
+            background: #fff;
+            padding: 10px;
+            font-size: 16px;
+            color: red;
+            left: 20px;
+        }
+</style>
+@{     
+     
+    var chiTietDuyet = ViewBag.ChiTietDuyet as List<BatDongSan.Models.HeThong.ChiTietQuiTrinhDuyet>;  
+}
+<div id="container">
+    <fieldset class="fieldset1 clsDuyetPhieu">
+
+        <div class="titleDP">Duyệt phiếu</div>
+        <form name="form" action="" method="post">
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <tr>
+                    <input type="hidden" id="maPhieu" name="maPhieu" value="@ViewBag.MaPhieu"/>
+                    <input type="hidden" id="maCongViec" name="maCongViec" value="@ViewBag.MaCongViec"/>
+                    <input type="hidden" id="idQuiTrinh" name="idQuiTrinh" value="@ViewBag.IDQuiTrinh"/>
+                    <input type="hidden" id="url" value="@ViewBag.URL" />
+                    @*<td>Send Email:<input type="checkbox" id="email" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send SMS:<input type="checkbox" id="sms" />
+                    </td>*@
+                    <td style="text-align: center; color: red;">
+
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="email"  value="">Send Email</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="sms" value="">Send SMS</label>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <table id="maintable" class="table">
+                            @if (chiTietDuyet != null && chiTietDuyet.Count > 0)
+                            {
+
+                                foreach (var it in chiTietDuyet)
+                                {                                             
+                                <span style="@it.MaMau">
+                                    @it.TenNhanVien @it.TenHienThiFooter
+                                </span>                                            
+                                }
+                            }
+                        </table>
+                        <br />
+                        Lý do duyệt phiếu:    
+                        <textarea id="LyDo" style="width: 90%"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" style="padding: 7px 0;">
+                        <input type="button" class="btn btn-info" value="Duyệt" id="btnGoiDuyet" />
+                        <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+
+</div>

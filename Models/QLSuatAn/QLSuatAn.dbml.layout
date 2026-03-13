@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="QLSuatAn">
+  <DataContextMoniker Name="/QLSuatAnDataContext" />
+  <nestedChildShapes>
+    <classShape Id="88615062-2c42-4b13-ac01-412a64f05433" absoluteBounds="2.75, 0.5, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/QLSuatAnDataContext/tbl_HT_MaVach" />
+      <nestedChildShapes>
+        <elementListCompartment Id="098658d0-1259-4baf-8e8f-0694ef2b0fc5" absoluteBounds="2.7649999999999997, 0.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="091de1ae-676d-4e70-a74b-2e96ae30897a" absoluteBounds="0.625, 0.5, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/QLSuatAnDataContext/tbl_SA_PhieuAn" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e9d1e957-cbcc-42f8-a420-a6f92970fb2f" absoluteBounds="0.64000000000000012, 0.96, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

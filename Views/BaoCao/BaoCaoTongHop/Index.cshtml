@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Báo cáo tổng hợp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<script src="~/Scripts/loader.js"></script>
+<script type="text/javascript" src="~/Scripts/autoNumeric-1.5.1.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(document).on('click', '#reloadPage', function () {
+            reloadPage();
+        });
+        reloadPage();
+        $(document).on('click', '.btnXemChiTiet', function () {
+
+            var parentID = $(this).parent().attr('id');
+            parentID = "#" + parentID;
+            if ($(parentID + " .detail_BieuDo").css('display') == 'none') {
+                $(this).html('<i class="fa fa-arrow-circle-up" aria-hidden="true"></i>Ẩn').css('color', 'red');
+
+            }
+            else {
+                $(this).html('<i class="fa fa-arrow-circle-down" aria-hidden="true"></i>Xem chi tiết').css('color', 'green');
+            }
+            $(parentID + " .detail_BieuDo").slideToggle();
+        });
+
+    });
+    function reloadPage() {
+        getBieuDoBienDongNVThang();
+        getTongNV();
+        getDoTuoi();
+        getTrinhDo();
+        getHopDongSapHetHan();
+        getBieuDoLuong();
+       
+    }
+    function getTongNV() {
+        var url = '@Url.Action("BieuDoTongSoNV", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_TongNV').html(imageUrl);
+        $('#content_TongNV').load(url, function () {
+        });
+    }
+    function getTuyenMoiNghiViec() {
+        var url = '@Url.Action("BieuDoTuyenMoiNghiViec", "BaoCaoTongHop")';
+
+        $('#content_TuyenMoiNghiViec').load(url, function () {
+        });
+    }
+    function getDoTuoi() {
+        var url = '@Url.Action("BieuDoTuoi", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_TongHopDoTuoi').html(imageUrl);
+        $('#content_TongHopDoTuoi').load(url, function () {
+        });
+    }
+    function getTrinhDo() {
+        var url = '@Url.Action("BieuDoTrinhDo", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_TongHopTrinhDo').html(imageUrl);
+        $('#content_TongHopTrinhDo').load(url, function () {
+        });
+    }
+    function getHopDongSapHetHan() {
+        var url = '@Url.Action("BieuDoHopDongSapHetHan", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_HopDongSapHetHan').html(imageUrl);
+        $('#content_HopDongSapHetHan').load(url, function () {
+        });
+    }
+
+    function getBieuDoLuong() {
+        var url = '@Url.Action("BieuDoLuong", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_TuyenHopBieuDoLuong').html(imageUrl);
+        $('#content_TuyenHopBieuDoLuong').load(url, function () {
+        });
+    }
+    function getBieuDoBienDongNVThang() {
+        var url = '@Url.Action("BieuDoBienDongNVThang", "BaoCaoTongHop")';
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content_BieuDoBienDongNVThang').html(imageUrl);
+        $('#content_BieuDoBienDongNVThang').load(url, function () {
+        });
+    }
+
+
+
+</script>
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+</style>
+<div id="container">
+    <input type="hidden" id="formatSo" class="auto {mNum:18, mDec:3, aNeg:'-'}" />
+    <fieldset class="removeBorderFieldset">
+
+        <div class="wrapper_TotalReport">
+            <div class="component">
+                <div id="reloadPage"></div>
+            </div>
+            <div class="view_left_right">
+                <div class="leftWrap">
+                    <div class="tongNV_TuyenMoi">
+                        <div class="tongNV">
+
+                            <div class="title_BieuDo">
+
+                                <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                    <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Tổng quan<span style="color: red; font-style: italic"></span></h4>
+                                </div>
+                            </div>
+                            <div id="content_TongNV">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="bieuDoLuong">
+                        <div class="title_BieuDo">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Biểu đồ lương <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </div>
+                        <div id="content_TuyenHopBieuDoLuong">
+                        </div>
+
+                    </div>
+                    <div class="hetHan">
+                        <div class="title_BieuDo">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Hợp đồng sắp hết hạn <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </div>
+                        <div id="content_HopDongSapHetHan">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="rightWrap">
+                    <div class="doTuoi">
+                        <div class="title_BieuDo">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Độ tuổi <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </div>
+                        <div id="content_TongHopDoTuoi">
+                        </div>
+
+                    </div>
+                    <div class="trinhDo">
+                        <div class="title_BieuDo">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Trình Độ <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </div>
+                        <div id="content_TongHopTrinhDo">
+                        </div>
+                    </div>
+                    <div class="binhquan">
+                        <div class="title_BieuDo">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Biểu đồ biến động nhân viên theo tháng <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </div>
+                        <div id="content_BieuDoBienDongNVThang"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+

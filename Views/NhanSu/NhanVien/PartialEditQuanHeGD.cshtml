@@ -1,0 +1,66 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model NhanVienModel
+@{int count = 1;}
+<script>
+    $(document).ready(function () {        
+        $(".btnDelete").click(function () {
+            var row = $(this).closest("tr");
+            $.ajax({
+                url: "/NhanVien/DeleteQuanHeGiaDinh/" + this.value,
+                type: "POST",
+                data: "json",
+                success: function (html) {
+                    row.remove();
+                    Alert.success("Xóa thành công!", "Thông báo", { displayDuration: 2000 });
+                },
+                error: function () {
+                    Alert.error("Có lỗi xảy ra", "Lỗi", { displayDuration: 2000 });
+                },
+            })
+        })
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+    })    
+</script>
+<style>
+    #tbl-quanhegiadinh td, #tbl-quanhegiadinh th
+    {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+<div id="container">
+    <table class="table table-hover table-striped table-condensed" id="tbl-quanhegiadinh" style="position: relative">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên người quan hệ</th>
+                <th>Mối quan hệ</th>
+                <th>Ngày sinh</th>
+                <th>Nghề nghiệp</th>
+                <th>Giảm trừ phụ thuộc</th>
+                <th>Số tiền giảm trừ</th>
+                <th>Ngày bắt đầu giảm trừ</th>
+                <th>Ngày kết thúc giảm trừ</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.quanHeGiaDinhs)
+        {
+            <tr>
+                <td>@count</td>
+                <td style="text-align: left">@item.tenNguoiQuanHe</td>
+                <td style="text-align: left">@item.tenLoaiQuanHe</td>
+                <td>@item.ngaySinh.Value.ToString("dd/MM/yyyy")</td>
+                <td>@item.ngheNghiep</td>
+                <td>@Html.CheckBoxFor(model => item.giamTruPhuThuoc, new { disabled = "disabled" })</td>
+                <td style="text-align: right"><span class="numberinput">@item.soTienGiam</span></td>
+                <td>@Html.Raw(item.ngayBatDauGiam.HasValue ? item.ngayBatDauGiam.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                <td>@Html.Raw(item.ngayKetThucGiam.HasValue ? item.ngayKetThucGiam.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                <td>
+                    <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.id">Xóa</button></td>
+            </tr> 
+            count++;
+        }
+    </table>
+</div>

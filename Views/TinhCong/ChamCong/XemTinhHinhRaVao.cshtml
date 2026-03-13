@@ -1,0 +1,156 @@
+﻿@using BatDongSan.Models.ChamCong
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+   
+
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+  
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSearch").click(function () {
+            Search();
+        });
+        $("#nam,#thang").change(function () {
+            $("#btnSearch").click();
+        });
+        Search();
+      
+        
+
+    });
+    function OnCriteriaPC(page) {
+        var giatri = $("#qSearch").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadXemTinhHinhRaVao", "ChamCong")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+
+        var giatri = $("#qSearch").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadXemTinhHinhRaVao", "ChamCong")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=0";
+
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#tbody').html(imageUrl);
+            $('#tbody').load(url, function () {
+            });
+        }
+
+
+        function Reset() {
+            location.href = '@Url.Action("XemTinhHinhRaVao", "ChamCong")';
+        }
+   
+   
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+        
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active"><a><span>Xem tình hình nhân viên ra vào</span></a></li>
+        </ul>
+    </div>
+    <div id="container">
+        <div id="filter-panel" class="collapse filter-panel" style="display: block;position:relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float:left">
+                            Tháng:@Html.DropDownList("thang", ViewData["lstThang"] as SelectList, new  {@style="width:150px" })
+                        Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new  {@style="width:150px" })
+                          
+                           
+                            
+                        </div>
+                         <div style="display: inline-flex; width: 350px; float: right" class="clrFullMobile">
+                        <input type="text" class="form-control input-sm" style="width: 100%" id="qSearch" value="" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event)">
+                        <div style="float: right">
+                            <button id="btnSearch" type="button" class="btn btn-primary btn-sm" style="border: 1px double; margin-left: 5px">
+                                <span class="glyphicon glyphicon-search"></span>Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                        
+                    </div>
+                </div>
+            </div>
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome TableMobile TableXemTinhHinhRaVao">
+
+                        <thead>
+                            <tr>
+                                <th style="width: 35px; text-align:center">STT
+                                </th>
+                                <th style="text-align:center">Nhân viên
+                                </th>
+                               
+                                <th style="text-align:center">Mã Vân tay - Mã chấm công
+                                </th>
+                                 <th style="text-align:center">Tên phòng ban-Chức danh
+                                </th>
+                               
+                                 <th style="text-align:center">Ngày quét</th>
+                                <th style="text-align:center">Tên ngày</th>
+                                <th style="text-align:center">Giờ quét</th>
+                                
+                               
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+
+                   
+        </table>
+
+    </div>
+</fieldset>

@@ -1,0 +1,106 @@
+﻿@using BatDongSan.Models.HeThong;
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+   
+    Sys_ThongBao item = ViewBag.data;
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+       
+       
+
+        setTimeout(function () { $("#divMsg").hide() }, 5000);
+    });
+
+    
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+    .noiDung
+    {
+        max-width:850px;
+        word-wrap: break-word;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <fieldset class="fieldset1">
+        
+        <legend class="legend">Xem thông báo </legend>
+        <div id="divMsg" style="color: Red;text-align: left">
+            @{if ((string)ViewBag.Message != "")
+              {
+               <span>@ViewBag.Message.ToString()</span>
+              }
+            }
+        </div>
+       
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                 <div class="panel-body">
+                <table border="0" cellpadding="0" cellspacing="0" class="table table-striped table-responsive table-condensed">
+                    <tr>
+                        <td style="width: 150px;" class="tdtitle">Tên
+                        </td>
+                        <td >
+                            @item.tenThongBao
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  class="tdtitle">Nội dung
+                        </td>
+                        <td><div class="noiDung">@Html.Raw(item.noiDungThongBao)</div></td>
+                    </tr>
+                    
+                    <tr>
+                        <td  class="tdtitle">Ngày lập
+                        </td>
+                        <td>@item.ngayLap
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  class="tdtitle">Người lập
+                        </td>
+                        <td>
+                           @item.nguoiLap
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>&nbsp;
+                        </td>
+                        <td colspan="2">
+                          
+                            <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("IndexView", "QuanLyThongBao")    '" />
+                        </td>
+                    </tr>
+                   
+                </table>
+                     </div>
+            </div>
+        </div>
+    </fieldset>
+}

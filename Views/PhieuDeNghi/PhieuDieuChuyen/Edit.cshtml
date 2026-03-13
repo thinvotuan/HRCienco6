@@ -1,0 +1,277 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDieuChuyen
+@{
+    ViewBag.Title = "Cập nhật phiếu quyết định điều động nhân sự";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#noiDung").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+
+        $("#ChoosePB").click(function () {
+            $('#myModalChonPhongBan').modal();
+            var Url = '@Url.Action("ChonPhongBan", "PhieuCongTac")';
+            $('#filter-panel').load(Url);
+        });
+
+
+    });
+
+    function CheckForm() {
+        var flag = true;
+        if ($("#ngayChuyen").val() == "") {
+            $("#ngayChuyen").addClass("error").attr("title", "Vui lòng chọn ngày chuyển.");
+            flag = false;
+
+        }
+        if ($("#maCoSo").val() == "") {
+            $("#maCoSo").addClass("error").attr("title", "Vui lòng chọn chi nhánh.");
+            flag = false;
+
+        }
+        if ($("#NhanVien_maNhanVien").val() == "") {
+            $("#NhanVien_maNhanVien").addClass("error").attr("title", "Vui lòng chọn nhân viên cần chuyển.");
+            flag = false;
+
+        }
+
+        if ($("#tenPhongBan").val() == "") {
+            $("#tenPhongBan").addClass("error").attr("title", "Vui lòng chọn phòng ban nhân viên.");
+            flag = false;
+
+        }
+        if ($("#maChucDanh").val() == "") {
+            $("#maChucDanh").addClass("error").attr("title", "Vui lòng chọn chức danh nhân viên.");
+            flag = false;
+
+        }
+        if ($("#maBoPhanTinhLuong").val() == "") {
+            $("#maBoPhanTinhLuong").addClass("error").attr("title", "Vui lòng chọn bọ phận tính lương nhân viên.");
+            flag = false;
+
+        }
+        return flag;
+    }
+
+
+    function closePopup_onclick() {
+        $('#divUploadFile').hide();
+        $('.jqmOverlay').remove();
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+    function chonNguoiDuyet(status, employeeId) {
+        @*  var lyDo = "";
+        var url = ('@Url.Action("SelectCapDuyet1/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDieuChuyen' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $('#maNVD').val() + '&lyDo=' + lyDo + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 800, 500);*@
+        //Duyệt động
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDieuChuyen' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhieuDieuChuyen")' + $('#maPhieu').val();
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+}
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Cập nhật phiếu điều chuyển </span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                <tr>
+                    <td class="tdtitle">Số phiếu </td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", @readonly = true })
+                        <input type="hidden" id="url" value="@ViewBag.URL" />
+                        @Html.HiddenFor(m => m.maQuiTrinhDuyet)
+                    </td>
+                    <td class="tdtitle">Ngày lập </td>
+                    <td>@Html.TextBoxFor(model => model.ngayLap, "{0: dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Mã nhân viên</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.maNhanVien, new { @class = "form-control", @readonly = true })</td>
+                    <td style="width: 15%" class="tdtitle">Tên nhân viên </td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Phòng ban
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.tenPhongBanCu, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(m => m.maPhongBanCu)
+                    </td>
+                    <td class="tdtitle">Chức danh
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.tenChucDanhCu, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(m => m.maChucDanhCu)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Phân ca</td>
+                    <td>
+                        @Model.tenPhanCaCu
+                        @Html.TextBoxFor(m => m.maPhanCaCu, new { @class = "form-control", @readonly = true, @style = "display:none" })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày chuyển</td>
+                    <td>@Html.TextBoxFor(model => model.ngayChuyen, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+                    <td class="tdtitle">Bộ phận tính lương
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.tenBoPhanTinhLuongCu, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(m => m.maBoPhanTinhLuongCu)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdtitle">Ghi chú</td>
+                    <td colspan="3">
+                        <div id="editor">@Html.Raw(Model.noiDung)</div>
+                        @Html.HiddenFor(model => model.noiDung, new { @class = "form-control" })</td>
+                </tr>
+            </table>
+            <div style="clear: both"></div>
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Thông tin đề nghị điều động</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed">
+                <tr>
+                    <td class="tdtitle">Phòng ban
+                    </td>
+                    <td colspan="3">
+                        <div style="width: 100%; display: inline-flex">
+                            @Html.TextBoxFor(m => m.tenPhongBan, new { @class = "form-control", @readonly = true })
+                            @Html.HiddenFor(m => m.maPhongBan)
+                            <div style="float: right">
+                                <button type="button" class="btn " id="ChoosePB"><i class="fa fa-user-plus" aria-hidden="true"></i>Chọn</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td class="tdtitle">Bộ phận tính lương
+                    </td>
+                    <td>
+                        @Html.DropDownList("maBoPhanTinhLuong", ViewBag.BoPhanTinhLuong as SelectList, new { @class = "form-control" })
+
+                    </td>
+                </tr>
+                <tr>
+                    |<td class="tdtitle">Phân ca</td>
+                    <td>
+
+                        @Html.DropDownList("maPhanCaMoi", ViewBag.PhanCa as SelectList, new { @class = "form-control" })
+
+                    </td>
+                </tr>
+            </table>
+
+            <div style="clear: both"></div>
+            <div style="text-align: right; margin-top: 10px">
+                <input type="hidden" name="maNVD" id="maNVD" value="@user1.manv" />
+                @if (ViewBag.TenTrangThaiDuyet != "KDD")
+                {
+                    if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.maNhanVienLapPhieu == user1.manv && Model.Duyet.maBuocDuyet != "KDD" && Model.Duyet.maBuocDuyet != "DD")
+                    {
+                    <button class="btn btn-info" type="button" onclick="chonNguoiDuyet();">Gửi duyệt </button>
+                    <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                    }
+                }
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+
+    </div>
+    <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+        <div class="modal-dialog  modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 98%">
+                        <div class="row">
+                            <div id="filter-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

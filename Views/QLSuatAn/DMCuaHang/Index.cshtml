@@ -1,0 +1,541 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet
+@model IList<tbl_SA_CuaHang>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    #navigation1 {
+        overflow: auto;
+        height: 600px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //setting phong ban//
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+
+            $("#btnPhongBan").val($(this).text());
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+        })
+
+        $(".tabToggle").click(function () {
+            $(".tabToggle").removeClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").hide(300);
+            var index = $(".tabToggle").index(this);
+            $(".tabToggle").eq(index).addClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").eq(index).show(300);
+        });
+
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "DMCuaHang")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)
+        });
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "DMCuaHang")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        });
+        $(document).on("click", ".btnDanhSachMonAn", function () {
+            var url = "@Url.Action("DanhSachMonAn", "DMCuaHang")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        });
+        $(document).on("click", ".btnDeleteServer", function () {
+            var parent = $(this).parent().parent();
+
+            var maMonAn = $(this).attr("attrMaMonAn");
+
+            var url = "@Url.Action("DeleteMonAn", "DMCuaHang")";
+            $.ajax({
+
+                type: "POST",
+                url: url,
+                data: {
+                    'maMonAn': maMonAn
+                },
+                success: function (result) {
+
+                    if (result == 'true') {
+                        Alert.success("Đã xóa món ăn thành công", "Thông báo", { displayDuration: 2000 });
+                        parent.remove();
+                    }
+                    else {
+                        Alert.error(result, "Món ăn này đã được đặt.", { displayDuration: 2000 });
+                    }
+                }
+            });
+
+        });
+
+        $(document).on("click", ".btnDanhSachNhanVien", function () {
+            var url = "@Url.Action("DanhSachNhanVien/", "DMCuaHang")" + "?qsearch=" + "&maCuaHang=" + $(this).attr("alt");
+            $("#maCuaHang_DanhSachNhanVien").val($(this).attr("alt"));
+
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel_DanhSachNhanVien").load(url);
+        });
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "DMCuaHang")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        });
+
+        $(document).on("click", "#btnSendmail", function () {
+            bootbox.confirm("Bạn có muốn gửi mail danh sách nhân viên đến của hàng này không", function (result) {
+                if (result) {
+                    var url = "@Url.Action("SendMailCuaHang", "DMCuaHang")";
+                    $.ajax({
+
+                        type: "POST",
+                        url: url,
+                        data: {
+                            'maCuaHang': $("#maCuaHang_DanhSachNhanVien").val()
+                        },
+                        success: function (result) {
+                            if (result == '') {
+                                Alert.success("Đã gửi mail thành công", "Thông báo", { displayDuration: 2000 });
+                            }
+                            else {
+                                Alert.success(result, "Thông báo", { displayDuration: 2000 });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '#btnXuatFile', function () {
+            var url = '@Url.Action("XuatFileMonAnNhanVien", "DMCuaHang")' + "?maCuaHang=" + $("#maCuaHang_DanhSachNhanVien").val();
+
+            window.location = url;
+
+        });
+
+        $(document).on("click", "#btnDuyetPhanBo", function () {
+            bootbox.confirm("Bạn có muốn duyệt phân bổ tháng này?", function (result) {
+                if (result) {
+                    $.ajax({
+
+                        type: "POST",
+                        url: '@Url.Action("DuyetPhanBoSuatAn", "DMCuaHang")',
+                        data: {
+                            'nam': $("#nam").val(),
+                            'thang': $("#thang").val()
+                        },
+                        success: function (result) {
+                            if (result.kq == true) {
+                                $("#btnPhanBo").remove();
+                                $("#btnDuyetPhanBo").remove();
+
+                                Alert.success("Duyệt phân bổ thành công.", "Thông báo", { displayDuration: 2000 });
+                            }
+                            else {
+                                Alert.error(result.message, "Thông báo", { displayDuration: 2000 });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '#btnPhanBo', function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('.infor_PhanBo').html(imageUrl).css('display', 'block');
+
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("PhanBoSuatAn", "DMCuaHang")',
+                data: {
+                    'nam': $("#nam").val(),
+                    'thang': $("#thang").val()
+                },
+                success: function (result) {
+                    $(".infor_PhanBo").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_PhanBo").html('Phân bổ thành công suất ăn tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+                    else {
+                        $(".infor_PhanBo").html('Phân bổ thất bại suất ăn tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+
+                    $("#btnSearch").click();
+                }
+            });
+
+        });
+
+        $("#btnSearch").click(function () {
+            $(".infor_PhanBo").css('display', 'none');
+
+            OnCriteriaPC(1);
+        });
+
+        $("#thang,#nam").change(function () {
+            $("#btnSearch").click();
+        });
+
+        $("#thuocCongTy").change(function () {
+            $("#btnSearch").click();
+        });
+
+        $("#btnSearch").click();
+
+        $("#tab-3").click(function () {
+            loadPartiaViewBaoCaoPhanBo();
+        });
+
+        $("#thang_PB,#nam_PB").change(function () {
+            loadPartiaViewBaoCaoPhanBo();
+        });
+    });
+
+    function xuatFileTongNhanVienAnTrongNgay() {
+        var url = '@Url.Action("XuatFileMonAnNhanVien", "DMCuaHang")' + "?maCuaHang=";
+
+        window.location = url;
+    }
+    
+    function OnCriteriaPC(page) {
+        var giatri = $("#qSearch").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadDanhSachPhanBo", "DMCuaHang")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val();
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+            if ($("#isDuyetPhanBo").val() == 'True') {
+                $("#btnPhanBo").hide();
+                $("#btnDuyetPhanBo").hide();
+            }
+            else {
+                $("#btnPhanBo").show();
+                $("#btnDuyetPhanBo").show();
+            }
+        });
+    }
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+    function beginPaging() {
+    }
+    function successPaging() {
+    }
+
+    function loadPartiaViewBaoCaoPhanBo() {
+        var url = "@Url.Action("LoadDanhSachBaoCaoPhanBo", "DMCuaHang")" + "?thang=" + $("#thang_PB").val() + "&nam=" + $("#nam_PB").val();
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/images/loading.gif")"/></div>';
+        $('#tbody_PB').html(imageUrl);
+        $('#tbody_PB').load(url, function () { });
+    }
+
+    
+</script>
+
+<fieldset class="removeBorderFieldset">
+    <div id="tabs" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab tabToggle">
+                <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Danh sách cửa hàng</span></a>
+            </li>
+            <li class="ui-state-default ui-corner-top tabToggle">
+                <a href="#"><span><i class="fa fa-users" aria-hidden="true"></i>Phân bổ suất ăn</span></a></li>
+             <li class="ui-state-default ui-corner-top tabToggle" id="tab-3">
+                <a href="#"><span><i class="fa fa-users" aria-hidden="true"></i>Thống kê Phân bổ suất ăn</span></a></li>
+        </ul>
+    </div>
+    <div id="container">
+        <div class="contentToggle" style="display: block;">
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px">STT</th>
+                            <th>Mã cửa hàng</th>
+                            <th>Tên cửa hàng</th>
+                            <th>Nhà hàng cấp QL</th>
+                            <th>Danh sách món ăn</th>
+                            <th>Danh sách nhân viên
+                                <br />
+                                đăng ký trong ngày<i onclick="xuatFileTongNhanVienAnTrongNgay();" class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;"
+                                        aria-hidden="true"></i></th>
+                            <th>Ghi chú</th>
+                            <th style="width: 100px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int i = 1; }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="text-align: center">@i</td>
+                                <td>@item.maCuaHang</td>
+                                <td>@item.tenCuaHang</td>
+                                <td>@item.capQuanLy</td>
+                                <td><a class="btnDanhSachMonAn" alt="@item.maCuaHang" data-toggle="modal" 
+                                    data-target="#customModal"  title ="Thêm món ăn">
+                                    <i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;"
+                                        aria-hidden="true"></i></a></td>
+                                <td><a class="btnDanhSachNhanVien" alt="@item.maCuaHang" data-toggle="modal" 
+                                    data-target="#customModal_DanhSachNhanVien"  title ="Danh sách nhân viên">
+                                    <i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;"
+                                        aria-hidden="true"></i></a></td>
+                                <td>@item.ghiChu</td>
+                                <td style="text-align: right">
+                                    <a class="btnEdit" alt="@item.id" data-toggle="modal" data-target="#customModal"  title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;" aria-hidden="true">| </i></a>
+                                    <a class="btnDelete" alt="@item.id" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+
+                                    @*  <button class="btn btn-primary btn-xs btnEdit" type="button" data-toggle="modal" data-target="#customModal" value="@item.id">Sửa</button>
+                                    <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.id">Xóa</button>*@
+                                </td>
+                            </tr> 
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="contentToggle" style="display: none">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float: left">
+                            <div style="float: left">
+                                Tháng:@Html.DropDownList("thang", ViewData["thangs"] as SelectList, new { @style = "" })
+                                Năm:@Html.DropDownList("nam", ViewData["nams"] as SelectList, new { @style = "" })
+                            </div>
+
+                            @*<div class="form-group" id="phongban-div" style="float: left; margin-left: 10px;">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                        Danh sách phòng ban&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                        <li role="presentation">
+                                            <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                                <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                            </div>
+                                        </li>
+                                        <li role="presentation">
+                                            @Html.Raw(ViewBag.PhongBans)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div style="float:left; margin-left:5px;">
+                                Thuộc công ty: @Html.DropDownList("thuocCongTy", ViewData["thuocCongTys"] as SelectList, new { @style = "" })
+                            </div>*@
+
+                        </div>
+                        <div style="float: right">
+                            <input type="text" id="qSearch" value="@ViewBag.Search" class="form-control" style="width:200px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnSearch" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                            <button class="btn btn-info" id="btnPhanBo" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Phân bổ</button>
+                            <button class="btn btn-info" id="btnDuyetPhanBo" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Duyệt phân bổ</button>
+                            @*<button class="btn btn-info" id="btnXuatFileBLNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>
+                                <button class="btn btn-info" id="btnSendMailNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Send mail NV</button>*@
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="infor_PhanBo" style="display: none"></div>
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center">STT
+                        </th>
+                        <th style="text-align: center">Tên cửa hàng
+                        </th>
+                        <th style="text-align: center">Số suất ăn <br/> nhân viên nhập vào</th>
+                        <th style="text-align: center">Công chuẩn</th>
+                        <th style="text-align: center">Tỷ lệ phân bổ</th>
+                        <th style="text-align: center">Số lần ăn được phân bổ </th>
+
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+
+
+            </table>
+        </div>
+
+        <div class="contentToggle" style="display: none" id ="tab-2">
+                    <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                        <div class="panel panel-default background_top">
+                            <div class="panel-body">
+                                <div style="line-height: 26px; float: left">
+                                    <div style="float: left">
+                                        Tháng:@Html.DropDownList("thang_PB", ViewData["thangs"] as SelectList, new { @style = "" })
+                                        Năm:@Html.DropDownList("nam_PB", ViewData["nams"] as SelectList, new { @style = "" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="infor_PhanBo" style="display: none"></div>
+                    <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                        <thead>
+                            <tr>
+                                <th style="width: 35px; text-align: center">STT
+                                </th>
+                                <th style="text-align: center">Tên cửa hàng
+                                </th>
+
+                                <th style="text-align: center">Ghi chú</th>
+                                <th style="text-align: center">Số suất ăn nhập vào<br />(nhân viên nhập)</th>
+                                <th style="text-align: center">Tỷ lệ phân bổ</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_PB">
+                        </tbody>
+
+
+                    </table>
+                </div>
+    </div>
+    <div style="text-align: center; display: none" id="loader">
+        <img src="/Images/loader.gif" />
+    </div>
+</fieldset>
+<form id="form-submit" method="post" enctype="multipart/form-data">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<form id="form-submit_DanhSachNhanVien" method="post" enctype="multipart/form-data">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal_DanhSachNhanVien" class="modal fade" role="dialog">
+        <input type="hidden" id="maCuaHang_DanhSachNhanVien" />
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel_DanhSachNhanVien" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        @*<button type="button" class="btn btn-primary" id="btnSendmail">Send mail của hàng</button>*@
+                        <button type="button" class="btn btn-primary" id="btnXuatFile">Xuất file</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

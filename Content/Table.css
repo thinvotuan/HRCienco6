@@ -1,0 +1,353 @@
+#body
+{
+	min-height: 100%;
+	background: #fff url(../images/bg_left.png) no-repeat scroll;
+}
+
+
+h1
+{
+	color: white;
+	font-weight: bold;
+	padding: 8px 0 9px 20px;
+}
+h1 img
+{
+	position: relative;
+}
+img, fieldset
+{
+	border: medium none;
+}
+label.label_check
+{
+	cursor: pointer;
+	display: block;
+	padding-top: 2px;
+}
+
+label:hover
+{
+	cursor: pointer;
+}
+
+input#chk
+{
+	float: left;
+	margin-left: 10px;
+	width: 10%;
+	border: 0px;
+}
+input#chk:hover, input#chk:focus
+{
+	border: 0px;
+	background: none;
+}
+
+input[type=submit], input[type=button], input[type=submit]:focus, input[type=button]:focus, button[type=button]
+{
+	-webkit-border-radius: 8;
+	-moz-border-radius: 8;
+	border-radius: 4px;
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 12px;
+	background: #0F4C99;
+	padding: 5px 7px 5px 7px;
+	text-decoration: none;
+	border: 0px;
+	cursor: pointer;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	transition: all 400ms;
+	/* text-shadow: 1px 1px #03232C; */
+}
+/*input[type=submit]:hover,input[type=button]:hover{background: url(../images/bg_button_over.jpg) repeat-x scroll; color:#333;border:1px solid #666;}*/
+
+input[type=submit]:hover, input[type=button]:hover, button[type=button]:hover
+{
+	background: #3cb0fd;
+	text-decoration: none;
+	box-shadow: 0px 6px 12px #a1a1a1;
+	color: #fff;
+}
+
+input[type=text]
+{
+	width: 97.5%;
+}
+input[type=text]:hover, input[type=text]:focus,textarea:hover
+{
+	border: 1px solid #284179;
+	background: none #d8e4f2;
+}
+
+input[type=checkbox], div.myatable03 input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio], input[type=radio]:hover, input[type=radio]:focus
+{
+	border: 0px;
+	background: 0px;
+}
+
+div.myatable03 table.tabl_check_gioitinh, table.tabl_check_gioitinh
+{
+	border: 0px;
+}
+div.myatable03 table.tabl_check_gioitinh tr, div.myatable03 table.tabl_check_gioitinh td, table.tabl_check_gioitinh tr, table.tabl_check_gioitinh td
+{
+	/*background:none;*/
+	border: 0px;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+img.main_img
+{
+	background: none repeat scroll 0 0 white;
+	border: 2px solid #333;
+	height: 100px;
+	margin: 5px;
+	padding: 5px;
+	width: 100px;
+}
+div.myatable03 table
+{
+	width: 100%;
+	border-collapse: collapse;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	font-family: Arial, Helvetica, sans-serif;
+}
+table em
+{
+	color: red;
+	float: right;
+	padding: 8px 5px 0 0;
+	vertical-align: top;
+}
+
+div.myatable03 table td
+{
+	/*background: none repeat scroll 0 0 #FAFBFD;*/
+	border-bottom: 1px solid #D7E4F4;
+	border-left: 1px solid #D7E4F4;
+	border-collapse: collapse;
+	padding-left: 3px; /*color:#386FA8;*/
+}
+div.myatable03 table td.al
+{
+	/*background:#e9f2f7;     color: #386FA8;*/
+	height: 32px;
+	line-height: 1em;
+	padding: 4px 0 0 3px;
+	vertical-align: middle;
+	text-align: left;
+}
+div.myatable03 table td.txv
+{
+	text-align: right;
+	vertical-align: middle;
+}
+
+div.myatable03 table td.DuyAnh
+{
+	text-align: right;
+	vertical-align: middle;
+}
+
+div.myatable03 table td
+{
+	line-height: 1.25em;
+	vertical-align: middle;
+	padding: 6px 2px;
+}
+div.phone div.inp
+{
+	float: left;
+}
+
+input.input-text:hover, select:hover, textarea:hover, input:hover, input.input-text:focus, select:focus, textarea:focus, input:focus
+{
+	/*border: 1px solid #828189; 	background: #ffffcc;*/
+}
+
+.clear_line
+{
+	border-top: 2px solid #0b75dd;
+	margin: 10px 5px;
+	clear: both;
+}
+
+.mtxxs
+{
+	clear: both;
+	margin-top: 5px;
+}
+#bottombutton
+{
+	border-top: 2px solid #0b75dd;
+	margin: -52px 5px 0;
+	overflow: hidden;
+	padding: 10px 0 17px;
+	text-align: center;
+}
+#bottombutton img
+{
+	margin: 0 3px;
+	vertical-align: top;
+}
+#popupclose
+{
+	float: right;
+	margin-top: -40px;
+	padding-right: 4px;
+	position: relative;
+}
+
+a:hover
+{
+	color: gray;
+}
+
+button
+{
+	margin: 0 5px;
+}
+
+.sub_tab
+{
+	background: url(../Images/tab/line_top_sub_tab.jpg) repeat-x 0 top scroll;
+	width: 100%;
+	float: left;
+}
+.sub_tab .tab_l
+{
+	background: url(../Images/tab/sub_tab_left.jpg) no-repeat scroll;
+	float: left;
+}
+.sub_tab .tab_l ul
+{
+	background: url(../Images/tab/sub_tab_right.jpg) no-repeat right 0 scroll;
+	line-height: 26px;
+	height: 26px;
+	padding-right: 15px;
+	float: left;
+}
+.tab_l ul li
+{
+	background: url(../Images/tab/line_sub_tab.jpg) no-repeat right center scroll;
+	list-style: none;
+	float: left;
+	padding: 0 13px 0 10px;
+	line-height: 26px;
+}
+.tab_l ul li a img
+{
+	padding: 3px 5px 0 0;
+}
+.tab_l ul li a
+{
+	padding-left: 10px;
+}
+.tab_l ul li a:hover
+{
+	text-decoration: underline;
+	color: gray;
+}
+
+
+/* ---------------------- navigation -------------------------------*/
+
+.navigation
+{
+	border: 0 none;
+	color: #333333;
+}
+.navigation span
+{
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #CCCCCC;
+	color: #CCCCCC;
+	font-size: 11px;
+	margin: 0 2px;
+	padding: 2px 6px;
+	text-decoration: none;
+}
+.navigation a:link, .navigation a:visited, .navigation a:hover, .navigation a:active
+{
+	background: none repeat scroll 0 0 #F9F9F9;
+	border: 1px solid #CCCCCC;
+	color: #636363;
+	font-size: 11px;
+	margin: 0 2px;
+	padding: 2px 6px;
+	text-decoration: none;
+}
+.navigation a:hover
+{
+	background: #79B9E8;
+	border-color: #06C;
+	color: white;
+}
+.colorgrid
+{
+	background-color: #f5f5f5;
+}
+
+/* ---------------------- END navigation -------------------------------*/
+
+table.big_font h2
+{
+	font-size: 16px;
+}
+.lable
+{
+	background-color: #E8EEF4;
+	font-size: 1.1em;
+	font-style: italic;
+}
+
+table.tbl
+{
+	/*width: 900px;*/
+	border-bottom: 1px solid #000;
+	margin-left: 0px;
+	margin-top: 0px;
+	border-top: 1px solid #cfcfcf;
+	border-right: 1px solid #cfcfcf;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	border-collapse: collapse;
+}
+
+table.tbl th
+{
+	border-left: 1px solid #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
+	background: #f1edec url(../images/bg_th.gif) repeat-x bottom left; /*background: linear-gradient(to bottom, rgb(222, 255, 0), #c7e506);*/
+	padding: 3px;
+}
+
+
+table.tbl td
+{
+	border-left: 1px solid #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
+	padding: 3px;
+}
+
+.tdleft
+{
+	background-color: #1A91BD !important;
+	color: White;
+}
+
+.tdright
+{
+	background: #D0F0E5;
+}
+
+
+
+

@@ -1,0 +1,512 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Controllers.HeThong;
+@model IList<sp_Sys_NhomUserCongViecVuViec_IndexResult>
+@{    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<sp_Sys_NhomUserCongViecVuViec_IndexResult> nhomUserCVVVs = ViewBag.UserCVVVs; // List đã được Filter    
+    IQueryable<Sys_NhomUser> nhomUsers = ViewBag.NhomUsers;
+    IQueryable<Sys_CongViec> congViecs = ViewBag.CongViecs;
+    IList<sp_Sys_VuViecCuaCongViecResult> vuViecOfCVs = ViewBag.VuViecOfCV;
+    int i = nhomUsers.Count();
+    int j = 1;// dùng để đặt id<tr> của parent row
+    string str = "dataVal";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-switch/bootstrap3/bootstrap-switch.min.css" />
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Scripts/bootstrap-switch.min.js"></script>
+<style>
+    th.vuviecname
+    {
+        vertical-align: middle;
+        border-left-color: #ADC2D6;
+    }
+
+    .transition.parent
+    {
+        text-align: left;
+    }
+
+    .transition
+    {
+        /*text-shadow: 5px 1px 2px #ADC2D6;*/
+        text-align: center;
+        cursor: pointer;
+        color: black;
+        background-color: #efefef;
+        -moz-transition: background-color 100ms linear, color 100ms linear;
+        -webkit-transition: background-color 100ms linear, color 100ms linear;
+        -o-transition: background-color 1000ms linear, color 100ms linear;
+        transition: background-color 100ms linear, color 100ms linear;
+    }
+    /*.transition:hover
+        {
+            color: white;
+            background-color: #ADC2D6;
+        }*/
+
+    #container td
+    {
+        padding: 3px;
+        border-bottom: 1px inset #ADC2D6;
+        border: none;
+    }
+
+    button
+    {
+        background-color: none;
+        border: none;
+    }
+
+    td.options
+    {
+        padding: 25px 0px 0px 0px;
+        border: 1px inset #ADC2D6;
+        border-bottom: none;
+        position: relative;
+    }
+
+    /* ================ CHECKBOX-ALL STYLES =================== */
+    /* Base for label styling */
+    .checkall label
+    {
+        margin: 0;
+    }
+
+    input[name="checkall"]:not(:checked),
+    input[name="checkall"]:checked
+    {
+        position: absolute;
+        left: -9999px;
+    }
+
+        input[name="checkall"]:not(:checked) + label,
+        input[name="checkall"]:checked + label
+        {
+            position: relative;
+            padding-left: 13px;
+            cursor: pointer;
+        }
+
+            /* checkbox aspect */
+            input[name="checkall"]:not(:checked) + label:before,
+            input[name="checkall"]:checked + label:before
+            {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 2px;
+                width: 15px;
+                height: 15px;
+                border: 1px solid #aaa;
+                background: #f8f8f8;
+                border-radius: 3px;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+            }
+            /* checked mark aspect */
+            input[name="checkall"]:not(:checked) + label:after,
+            input[name="checkall"]:checked + label:after
+            {
+                content: '✔';
+                position: absolute;
+                top: 4px;
+                left: 2px;
+                font-size: 13px;
+                line-height: 0.8;
+                color: #09ad7e;
+                transition: all .2s;
+            }
+            /* checked mark aspect changes */
+            input[name="checkall"]:not(:checked) + label:after
+            {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            input[name="checkall"]:checked + label:after
+            {
+                opacity: 1;
+                transform: scale(1);
+            }
+    /* disabled checkbox */
+    input[name="checkall"]:disabled:not(:checked) + label:before,
+    input[name="checkall"]:disabled:checked + label:before
+    {
+        box-shadow: none;
+        border-color: #bbb;
+        background-color: #ddd;
+    }
+
+    input[name="checkall"]:disabled:checked + label:after
+    {
+        color: #999;
+    }
+
+    input[name="checkall"]:disabled + label
+    {
+        color: #aaa;
+    }
+    /* accessibility */
+    input[name="checkall"]:checked:focus + label:before,
+    input[name="checkall"]:not(:checked):focus + label:before
+    {
+        border: 1px dotted blue;
+    }
+
+    /* hover style just for information */
+    label:hover:before
+    {
+        border: 1px solid #4778d9!important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //-------Expand - collapse table Parent Row-------//  
+        var idParent;
+        $("tr:not(.parent)").hide();
+        $("#maintable tr:first-child").show();
+        $("#searchtbl tr").show();
+        $("#maintable td.parent.transition").click(function () {
+            var temp = $(this);
+            idParent = temp.parents("tr")[0].id;
+            $("." + idParent).toggle();
+            $("." + idParent).find("samp").html("&#9656 ");
+            $("[data-val=dataVal" + idParent + "]").each(function () {
+                if ($(this).is(":visible")) {
+                    $(this).toggle();
+                }
+            })
+            if ($("." + idParent).is(':visible')) {
+                temp.find("samp").html("&#9662 ");
+            }
+            else
+                temp.find("samp").html("&#9656 ");
+        });
+
+        //-------Expand - collapse table child Row-------//  
+        $(".child-td").click(function (e) {
+            var that = this;
+            var idChild = $(this).attr("data-identity");
+            if (idChild != "") {
+                $("." + idChild).toggle();
+            }
+            if ($(this).parent().next().is(":visible")) {
+                $(that).find("samp").html(function () {
+                    return "&#9662 ";
+                });
+            }
+            else
+                $(that).find("samp").html(function () {
+                    return "&#9656 ";
+                });
+        });
+
+        //-------Submit vu viec checkbox-------//  
+        $("input[type=checkbox]").click(function () {
+            if (this.name != "checkall") {
+                var mavv = $(this).attr("class");
+                var mausers = $(this).attr("name");
+                var macv = $(this).attr("value");
+                var checkBoxSameAll = $("input[name=" + mausers + "][value=" + macv + "]").length;
+                var checkBoxChecked = $("input[name=" + mausers + "][value=" + macv + "]:checked").length;
+                if (checkBoxChecked == checkBoxSameAll) {
+                    $("#" + macv + mausers).prop("checked", true);
+                }
+                else {
+                    $("#" + macv + mausers).prop("checked", false);
+                }
+                var dataPost = { "maVuViec": mavv, "maCongViec": macv, "maNhomUser": mausers };
+                var json = JSON.stringify(dataPost);
+                $.ajax({
+                    url: '@Url.Action("UpdateVuViec", "UserGroup")',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: json,
+                    contentType: 'application/json; charset=utf-8',
+                })
+                }
+        });
+
+        //-------Xóa nhóm người dùng-------//  
+        $(".user-group").click(function () {
+            var maUsers = $(this).parent().attr('class');
+            if (maUsers != null) {
+                var cnf = window.confirm("Bạn có muốn xóa không!")
+                if (cnf) {
+                    var json = { "id": maUsers };
+                    $.ajax({
+                        url: "/UserGroup/Delete/",
+                        type: "POST",
+                        dataType: 'json',
+                        data: JSON.stringify(json),
+                        contentType: 'application/json; charset=utf-8',
+                    });
+                    window.location.reload(true);
+                }
+            }
+        });
+
+        //-------EVENT SELECT LIST ITEM-------//  s       
+
+        $("#childlst").change(function () {
+            var url = "@Url.Action("Index", "UserGroup")" + "?congViecCha=" + $('#parentlst').val() + "&congViecCon=" + $('#childlst').val();
+            window.location.href = url;
+        })
+
+        $("#parentlst").change(function () {
+            var url = "@Url.Action("Index", "UserGroup")" + "?congViecCha=" + $('#parentlst').val();
+            window.location.href = url;
+        })
+
+        //============Checkbox tất cả vụ việc=====================
+        $("[name=checkall]").click(function () {
+            var value = this.value;
+            var role = $(this).attr('data-role');
+            if ($(this).prop('checked') == true) {
+                $("input[name=" + role + "][value=" + value + "]").each(function (i) {
+                    if ($(this).prop("checked") == false) {
+                        $(this).trigger("click");
+                    }
+                })
+            }
+            else {
+                $("input[name=" + role + "][value=" + value + "]").each(function (i) {
+                    if ($(this).prop("checked") == true) {
+                        $(this).trigger("click");
+                    }
+                })
+            }
+        })
+
+    });
+
+    function themMoi() {
+        var url = "@Url.Action("Create", "UserGroup")";
+        window.location.href = url;
+    }
+
+    function assignUser() {
+        var url = "@Url.Action("Index", "User")";
+        window.location.href = url;
+    }
+
+</script>
+<div>
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>
+                      Nhóm người dùng và phân quyền</span></a></li>
+                </ul>
+            </div>
+            <div>
+                <table class="table table-condensed" id="searchtbl">
+                    <tr>
+                        <td>
+                            <div id="filter-panel" class="collapse filter-panel" style="display: block">
+                                <div class="panel panel-default background_top">
+                                    <div class="panel-body">
+                                        <form class="form-inline" role="form">
+                                            <div class="form-group">
+                                                <label class="filter-col" style="margin-right: 0; font-size: 15px" for="pref-perpage">Nhóm công việc:</label>
+                                                @Html.DropDownList("parentlst", ViewBag.CongViecChas as SelectList, new { @class = "form-control" })
+                                            </div>                                            
+                                            <div class="form-group">
+                                                <label class="filter-col" style="margin-right: 0; font-size: 15px" for="pref-perpage">Công việc:</label>
+                                                @Html.DropDownList("childlst", ViewBag.CongViecCons as SelectList, new { @class = "form-control" })
+                                            </div>
+                                            <div class="form-group" style="float: right">
+                                                <button class="btn btn-info" type="button" onclick="themMoi()">Thêm nhóm</button>
+                                            </div>
+                                            <div class="form-group" style="float: right">
+                                                <button class="btn btn-info" type="button" onclick="assignUser()">Chỉ định user thuộc nhóm</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="maintable" style="margin-top: 0px">
+                <thead>
+                    <tr id="toptitle">
+                        <th style="width: 20%">Tên công việc</th>
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers) //TẠO CÁC NHÓM NGƯỜI DÙNG
+                        {                         
+                            <th class="@nhomUser.maNhomUser" style="text-align:center; color:#c7254e">
+                                <i class="fa fa-remove user-group"></i>
+                            </th>                          
+                        }
+                    </tr>
+                </thead>
+
+                @foreach (var congViecCha in nhomUserCVVVs.OrderBy(o => o.tenCongViec) // TẠO CÁC ROW CỦA CÔNG VIỆC CHA
+                                                          .GroupBy(c => new { c.maCongViec, c.tenCongViec }))
+                {
+                    //TRƯỜNG HỢP CÓ CÔNG VIỆC CON
+                    if (congViecs.Select(s => s.maCha).Contains(congViecCha.Key.maCongViec))
+                    {                        
+                    <tr class="parent" id="@j" style="background-color:#e0e0df">
+                        <td class="transition parent">
+                            <samp>&#9656 </samp>
+                            @congViecCha.Key.tenCongViec</td>
+
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers) //TẠO CÁC NHÓM NGƯỜI DÙNG
+                        {
+                            //TẠO CÁC CHECKBOX CẤP QUYỀN CHO XEM CÔNG VIỆC CHA - KIỂM TRA ĐIỀU KIỆN CHECKBOX ĐƯỢC CHECKED HOẶC KHÔNG (CÓ maVuVuViec = 001)
+                            if (nhomUserCVVVs.Where(s => s.maCongViec == congViecCha.Key.maCongViec
+                                                    && s.maNhomUser == nhomUser.maNhomUser
+                                                    && s.maVuViec == "001").FirstOrDefault() != null)
+                            {       
+                            <td class="transition">
+                                <input name="@nhomUser.maNhomUser" type="checkbox" checked="checked" class="001" value="@congViecCha.Key.maCongViec">
+                                <a href="@Url.Action("Edit", "UserGroup", new { id = @nhomUser.maNhomUser })">@nhomUser.tenNhomUser</a>
+                            </td>
+                            }
+                            else
+                            {
+                            <td class="transition">
+                                <input name="@nhomUser.maNhomUser" type="checkbox" class="001" value="@congViecCha.Key.maCongViec">
+                                <a href="@Url.Action("Edit", "UserGroup", new { id = @nhomUser.maNhomUser })">@nhomUser.tenNhomUser</a>
+                            </td>
+                            }
+                        }
+                    </tr>     
+                        //TẠO CÁC ROWS CÔNG VIỆC CON      
+                        foreach (var congViecCon in congViecs.Where(a => a.maCha != null && a.maCha == congViecCha.Key.maCongViec))
+                        {                                               
+                    <tr class="@j" id="@congViecCon.maCongViec" data-val="child">
+                        <td style="padding-left: 20px!important" class="child-td" data-identity="@congViecCon.maCongViec" >
+                            <samp>&#9656 </samp>@congViecCon.tenCongViec</td>
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers) //TẠO CÁC NHÓM NGƯỜI DÙNG
+                        {
+                            //TẠO CHECKBOX CHO PHÉP CHỌN TẤT CẢ
+                            var vuViec_CV_UserCount = Model.Where(s => s.maCongViec == congViecCon.maCongViec && s.maNhomUser == nhomUser.maNhomUser).Count();
+                            var vuViec_CV = vuViecOfCVs.Where(s => s.maCongViec == congViecCon.maCongViec).Count();
+                            if (vuViec_CV_UserCount == vuViec_CV)
+                            {
+                            <td style="text-align: center" class="checkall">
+                                <input name="checkall" checked="checked" id="@congViecCon.maCongViec@nhomUser.maNhomUser" type="checkbox" 
+                                    value="@congViecCon.maCongViec" data-role="@nhomUser.maNhomUser" />
+                                <label for="@congViecCon.maCongViec@nhomUser.maNhomUser" style="font-size: 13px;">&nbsp;</label>
+                            </td>
+                            }
+                            else
+                            {
+                            <td style="text-align: center" class="checkall">
+                                <input name="checkall" id="@congViecCon.maCongViec@nhomUser.maNhomUser" type="checkbox" 
+                                    value="@congViecCon.maCongViec" data-role="@nhomUser.maNhomUser" />
+                                <label for="@congViecCon.maCongViec@nhomUser.maNhomUser" style="font-size: 13px;">&nbsp;</label>
+                            </td>                                
+                            }
+                        }
+                    </tr>  
+                        //TẠO ROWS VỤ VIỆC CỦA CÔNG VIỆC CON
+                        foreach (var vuViec in vuViecOfCVs.Where(s => s.maCongViec == congViecCon.maCongViec))
+                        {
+                            if (vuViec.maVuViec != null)
+                            {
+                    <tr class="@congViecCon.maCongViec" data-val="@str@j">
+                        <td style="padding-left: 40px!important">@vuViec.tenVuViec</td>
+
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers) // HIỂN THỊ CÁC CHECKBOX
+                        {
+                            // kiểm tra điều kiện vụ việc - công việc - phòng ban (checkbox is checked or not)
+                            var temp = Model.Where(s => s.maNhomUser == nhomUser.maNhomUser && s.maVuViec == vuViec.maVuViec && s.maCongViec == congViecCon.maCongViec).FirstOrDefault();
+                            if (temp != null)
+                            {                                
+                            <td style="text-align: center">
+                                <input checked="checked" name="@nhomUser.maNhomUser" type="checkbox" class="@vuViec.maVuViec" value="@congViecCon.maCongViec">
+                            </td>                                
+                            }
+                            else
+                            {
+                            <td style="text-align: center">
+                                <input type="checkbox" name="@nhomUser.maNhomUser" class="@vuViec.maVuViec" value="@congViecCon.maCongViec">
+                            </td>
+                            }
+
+                        }
+                    </tr>
+                            }
+                        }
+                        }
+                        j++;
+                    }
+                    //TRƯỜNG HỢP KHÔNG CÓ CÔNG VIỆC CON
+                    else
+                    {
+                    <tr class="parent" id="@congViecCha.Key.maCongViec" style="background-color:#e0e0df">
+                        <td class="transition parent">
+                            <samp>&#9656 </samp>
+                            @congViecCha.Key.tenCongViec</td>
+                        @*TẠO CÁC CHECKBOX CẤP QUYỀN CHO XEM CÔNG VIỆC CHA - KIỂM TRA ĐIỀU KIỆN CHECKBOX ĐƯỢC CHECKED HOẶC KHÔNG (CÓ maVuVuViec = 001)*@
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers) // TẠO CÁC NHÓM NGƯỜI DÙNG
+                        {
+                            //TẠO CHECKBOX CHO PHÉP CHỌN TẤT CẢ                                  
+                            var vuViec_CV_UserCount = Model.Where(s => s.maCongViec == congViecCha.Key.maCongViec && s.maNhomUser == nhomUser.maNhomUser).Count();
+                            var vuViec_CV = vuViecOfCVs.Where(s => s.maCongViec == congViecCha.Key.maCongViec).Count();
+                            if (vuViec_CV_UserCount == vuViec_CV)
+                            {
+                            <td class="transition">
+                                <input name="checkall" checked="checked" id="@congViecCha.Key.maCongViec@nhomUser.maNhomUser" type="checkbox" 
+                                    value="@congViecCha.Key.maCongViec" data-role="@nhomUser.maNhomUser" />
+                                <label for="@congViecCha.Key.maCongViec@nhomUser.maNhomUser" style="margin:0; font-size: 13px;">&nbsp;</label>
+                                @*<input name="@nhomUser.maNhomUser" type="checkbox" checked="checked" class="001" value="@congViecCha.Key.maCongViec">*@
+                                <a href="@Url.Action("Edit", "UserGroup", new { id = @nhomUser.maNhomUser })">@nhomUser.tenNhomUser</a>
+                            </td>
+                            }
+                            else
+                            {
+                            <td class="transition">
+                                <input name="checkall" id="@congViecCha.Key.maCongViec@nhomUser.maNhomUser" type="checkbox" 
+                                    value="@congViecCha.Key.maCongViec" data-role="@nhomUser.maNhomUser" />
+                                <label for="@congViecCha.Key.maCongViec@nhomUser.maNhomUser" style="margin:0; font-size: 13px;">&nbsp;</label>
+                                <a href="@Url.Action("Edit", "UserGroup", new { id = @nhomUser.maNhomUser })">@nhomUser.tenNhomUser</a>
+                            </td>
+                            }
+                        }
+                    </tr>     
+                        //TẠO ROWS VỤ VIỆC CỦA CÔNG VIỆC CHA
+                        foreach (var vuViec in vuViecOfCVs.Where(s => s.maCongViec == congViecCha.Key.maCongViec))
+                        {
+                            if (vuViec.maVuViec != null)
+                            {
+                    <tr class="@congViecCha.Key.maCongViec" id="@j">
+                        <td style="padding-left: 40px!important">@vuViec.tenVuViec</td>
+                        @* HIÊN THỊ CÁC CHECKBOX *@
+                        @foreach (Sys_NhomUser nhomUser in nhomUsers)
+                        {
+                            // kiểm tra điều kiện vụ việc - công việc - phòng ban (checkbox is checked or not)
+                            var temp = Model.Where(s => s.maNhomUser == nhomUser.maNhomUser && s.maVuViec == vuViec.maVuViec && s.maCongViec == congViecCha.Key.maCongViec).FirstOrDefault();
+                            if (temp != null)
+                            {
+                                
+                            <td style="text-align: center">
+                                <input checked="checked" name="@nhomUser.maNhomUser" type="checkbox" class="@vuViec.maVuViec" value="@congViecCha.Key.maCongViec">
+                            </td>                                
+                            }
+                            else
+                            {
+                            <td style="text-align: center">
+                                <input type="checkbox" name="@nhomUser.maNhomUser" class="@vuViec.maVuViec" value="@congViecCha.Key.maCongViec">
+                            </td>
+                            }
+
+                        }
+                    </tr>
+                            }
+                            j++;
+                        }
+                        j++;
+                    }
+                }
+            </table>
+        </fieldset>
+    </div>
+</div>

@@ -1,0 +1,496 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model NhanVienModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1, j = 1; 
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<style>
+    .successOk
+    {
+        color: green;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#maChamCong").on("input", function () {
+            if ($("#maChamCong").val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/DanhSachCongNhan/CheckMaChamCong",
+                    data: {
+
+                        maChamCong: $("#maChamCong").val()
+
+                    },
+                    error: function () {
+                        alert("Error");
+                        return false;
+                    },
+                    success: function (result) {
+
+                        if (result == 1) {
+
+                            $(".maCCInfor").html('Mã chấm công này đã tồn tại').addClass('error').removeClass("successOk");
+                            $("#maChamCong").addClass("error");
+
+                            $("#btnSubmit").hide();
+
+                        }
+                        else {
+                            $(".maCCInfor").html('Mã chấm công này có thể sử dụng').removeClass('error').addClass("successOk");
+                            $("#maChamCong").removeClass("error");
+                            if ($("#maCongNhan").hasClass("error") == false && $("#maChamCong").hasClass("error") == false) {
+                                $("#btnSubmit").show();
+                            }
+                        }
+
+
+                    }
+                });
+            }
+            else {
+                $(".maCCInfor").html('').removeClass('error').addClass("successOk");
+                $("#maChamCong").removeClass("error");
+                if ($("#maCongNhan").hasClass("error") == false && $("#maChamCong").hasClass("error") == false) {
+                    $("#btnSubmit").show();
+                }
+            }
+
+        });
+        $('#btnSearch').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("Index", "NhanVien")" + "?searchString=" + searchText;
+            beginPaging();
+            $('#content').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('#btnPhongBan').click(function () {
+            var url = '/NhanVien/PhongBanListTree';
+            $('#phongban-panel').load(url);
+        })
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $("#hinhAnh").change(function (evt) {
+            var img = document.getElementById("mgAvartar");
+            img.src = URL.createObjectURL(evt.target.files[0])
+        })
+
+        $("#phongBanModal").on("hide.bs.modal", function () {
+            $("#phongban-panel").html("");
+        });
+
+        $("#btnTroVe").click(function () {
+            location.href = "/NhanVien";
+        })
+
+        $("#tamTruTinhThanh, #thuongTruTinhThanh").change(function () {
+            var quanHuyen = $(this).parent().next().find("select");
+            quanHuyen.empty();
+            $.ajax({
+                url: "/NhanVien/GetQuanHuyen/" + this.value,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    var textAppend = "<option value=''>[Chọn quận huyện]</option>";
+                    $.each(data, function (i, quanHuyen) {
+                        textAppend += "<option value=" + quanHuyen.id + ">" + quanHuyen.tenQuanHuyen + "</option>";
+                    });
+                    quanHuyen.append(textAppend);
+                }
+            })
+        })
+    })
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    body table tr td.removeBorderBkgr, body table tr:hover td.removeBorderBkgr, .table-hover > tbody > tr:hover td.removeBorderBkgr
+    {
+        border: none !important;
+        background: #FFF !important;
+    }
+</style>
+<form id="form-submit" method="post" action="/NhanVien/Create" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Thông tin nhân viên</span></a></li>
+                <li class="ui-tabs-selected">
+                    <a href="#tab2" data-toggle="tab"><span>Liên hệ</span></a></li>
+            </ul>
+        </div>
+        <div class="form-group" style="float: right">
+            <button class="btn btn-info" id="btnSubmit">Lưu </button>
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table class="table table-hover table-striped table-condensed" style="position: relative">
+                    <tr>
+                        <td class="tdtitle">Phòng ban <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.TextBoxFor(model => model.tenPhongBan, new { @class = "form-control", required = "required", @readonly = "readonly" })
+                            @Html.HiddenFor(model => model.maPhongBan, new { required = "required" })
+                        </td>
+                        <td>
+                            <button style="padding-left: -1px; border-radius: 0px 4px 4px 0px" type="button" class="btn btn-primary" id="btnPhongBan" data-toggle="modal" data-target="#phongBanModal">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn phòng ban</button>
+                        </td>
+                        <td class="tdtitle">Phân ca: @Html.DropDownListFor(model => model.maPhanCa, ViewBag.ListPhanCas as SelectList, new { @class = "form-control" })</td>
+                        <td rowspan="8" style="text-align: center">
+                            <div style="text-align: center;">
+                                <img id="mgAvartar" src="/Images/card.gif" style="max-width: 200px;" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Mã nhân viên <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.maNhanVien, new { @class = "form-control", required = "required" , @maxlength="50"})
+                            <span style="color: red; font-style: italic">@TempData["MaNhanVien"]</span>
+                        </td>
+                        <td class="tdtitle">Loại</td>
+                        <td>@Html.DropDownListFor(model => model.idLoaiNhanVien, ViewBag.LoaiNhanViens as SelectList, new { @class = "form-control" })</td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Mã chấm công</td>
+                        <td>@Html.TextBoxFor(model => model.maChamCong, new { @class = "form-control" , @maxlength="20"})
+                            <span style="color: red; font-style: italic">@TempData["MaChamCong"]</span>
+                            <span class="maCCInfor"></span>
+                        </td>
+                        <td class="tdtitle">Học hàm - Học vị</td>
+                        <td>@Html.DropDownListFor(model => model.idTrinhDoChuyenMon, ViewBag.HocHams as SelectList, new { @class = "form-control" })</td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Họ <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ho, new { @class = "form-control", required = "required", @maxlength="100" })</td>
+                        <td class="tdtitle">Tên <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ten, new { @class = "form-control", required = "required", @maxlength="100" })</td>
+
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày sinh <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ngaySinh, new { @class = "form-control datepicker", required = "required" })</td>
+
+                        <td class="tdtitle">Nơi sinh <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.noiSinh, new { @class = "form-control", required = "required", @maxlength="500" })</td>
+
+                        <td class="removeBorderBkgr" style="text-align: center"></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Số CMND <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.CMNDSo, new { @class = "form-control", required = "required", @maxlength="20" })
+                            <span style="color: red; font-style: italic">@TempData["CMND"]</span>
+                        </td>
+                        <td class="tdtitle">Ngày cấp CMND <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.CMNDNgayCap, new { @class = "form-control datepicker", required = "required" })</td>
+                        <td class="removeBorderBkgr"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tdtitle">Nơi cấp CMND <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.CMNDNoiCap, new { @class = "form-control", required = "required" , @maxlength="200"})</td>
+                        <td class="tdtitle">Quốc tịch <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.DropDownListFor(model => model.maQuocTich, ViewBag.QuocTichs as SelectList, new { @class = "form-control", required = "required" })</td>
+                        <td class="removeBorderBkgr"></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày bắt đầu tính phép<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ngayBatDauTinhPhepNam, new { @class = "form-control datepicker", required = "required" })</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày vào làm <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ngayVaoLam, new { @class = "form-control datepicker", required = "required" })</td>
+                        <td class="tdtitle">Email <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.email, new { @class = "form-control", type = "email", required = "required", @maxlength="200" })</td>
+                        <td>
+                            <input type="file" class="form-control" value="Chọn hình ảnh" name="hinhAnh" id="hinhAnh" /></td>
+                        <td class="removeBorderBkgr"></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Bộ phận tính lương</td>
+                        <td>@Html.DropDownListFor(model => model.idKhoiTinhLuong, ViewBag.KhoiTinhLuongs as SelectList, new { @class = "form-control" })</td>
+                        <td class="tdtitle">Ngân hàng</td>
+                        <td>@Html.DropDownListFor(model => model.maChiNhanhNganHang, ViewBag.ChiNhanhNHs as SelectList, new { @class = "form-control" })</td>
+                        <td>
+                            <label class="radio" style="font-size: 13px; font-weight: normal; text-align: center">
+                                @Html.CheckBoxFor(model => model.hoanTatHoSo, new { style = "width:auto" })Hoàn tất hồ sơ?</label>
+                        </td>                        
+                    </tr>
+
+                    <tr>
+                        <td class="tdtitle">Số tài khoản</td>
+                        <td>@Html.TextBoxFor(model => model.soTaiKhoan, new { @class = "form-control", @maxlength="50"  })</td>
+                        <td class="tdtitle">Mã số thuế</td>
+                        <td>@Html.TextBoxFor(model => model.maSoThue, new { @class = "form-control", @maxlength="20"  })</td>
+                        <td rowspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Chức danh <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.DropDownListFor(model => model.maChucDanh, ViewBag.ChucDanhs as SelectList, new { @class = "form-control"})</td>
+                        <td class="tdtitle">Ngành nghề <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.DropDownListFor(model => model.maNgheNghiep, ViewBag.Nghenghieps as SelectList, new { @class = "form-control" })</td>                        
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Giới tính <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.gioiTinh, true, new { style = "width:auto", required = "required" }) Nam
+                            </label>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.gioiTinh, false, new { style = "width:auto", required = "required" }) Nữ
+                            </label>
+
+
+                        </td>
+
+                        <td class="tdtitle">Người <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.laNguoiNgoaiQuoc, true, new { style = "width:auto", required = "required" }) Việt Nam
+                            </label>
+
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.laNguoiNgoaiQuoc, false, new { style = "width:auto", required = "required" }) Nước ngoài
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Bảo hiểm</td>
+                        <td>
+                            <label class="radio" style="font-size: 13px; font-weight: normal">
+                                @Html.CheckBoxFor(model => model.dangBaoHiemNoiKhac, new { style = "width:auto" }) Tham gia bảo hiểm tại nơi khác</label>
+
+
+                        </td>
+                        <td class="tdtitle">Hôn nhân <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.tinhTrangHonNhan, 1, new { style = "width:auto" }) Có gia đình
+                            </label>
+
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.tinhTrangHonNhan, 2, new { style = "width:auto" }) Độc thân
+                            </label>
+
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.tinhTrangHonNhan, 3, new { style = "width:auto" }) Ly hôn
+                            </label>
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <td class="tdtitle">Dân tộc                
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.idDanToc, ViewBag.DanTocs as SelectList, new { @class = "form-control" })
+                        </td>
+                        <td class="tdtitle">Tôn giáo            
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.idTonGiao, ViewBag.TonGiaos as SelectList, new { @class = "form-control" })
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Đã kết nạp Đảng/Đoàn <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.DropDownListFor(model => model.loaiKetNap, ViewBag.LoaiKetNaps as SelectList, new { @class = "form-control" })
+                        </td>
+                        <td class="tdtitle">Tình trạng<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.trangThai, 0, new { style = "width:auto", required = "required" }) Đang làm việc
+                            </label>
+                            <label class="radio-inline" style="font-size: 13px">
+                                @Html.RadioButtonFor(model => model.trangThai, 1, new { style = "width:auto", required = "required" }) Đã nghỉ việc
+                            </label>
+                        </td>             
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tập tin đính kèm</td>
+                        <td colspan="4">
+                            <div id="dinhkemfile-panel" class="filter-panel">
+                                <input type="hidden" id="nguoiUpLoad" value="@Session["TenNhanVien"]" />
+                                <div id="container">
+                                    <table class="table" id="tbl-uploading">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Tên tài liệu</th>
+                                                <th>Người upload</th>
+                                                <th>Ngày upload</th>
+                                                <th style="width: 100px">
+                                                    <input type="file" style="height: 30px; display: none" name="fileDinhKems" id="input-upload" class="form-control" multiple="multiple" value="" />
+                                                    <label class="btn btn-info btn-xs btn-link" style="font-size: 12px; color: #000 !important; background: #fff !important;" for="input-upload">Chọn tập tin</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    @*<tr>
+                       
+                        
+                        <td class="tdtitle">Trình độ ngoại ngữ</td>
+                        <td colspan="4">
+                            <div class="columnAutoTableChungChi">
+                                <table class="table">
+                                    <tr>
+                                        <td class="tdtitle">STT</td>
+                                        <td>Chứng chỉ</td>
+                                        <td></td>
+                                    </tr>
+                                    @foreach (var item in Model.ngoaiNgus)
+                                    {
+                                        <tr>
+                                            <td class="tdtitle">@j</td>
+                                            <td>@item.tenChungChi</td>
+                                            <td style="text-align:center">
+                                                <input type="checkbox" name="ngoaiNgu" value="@item.id"/>
+                                                <input name="ngoaiNgu" type="hidden" value="false">
+                                            </td>
+                                        </tr> 
+                                        j++;
+                                    }
+                                </table>
+                            </div>
+                        </td>
+                      
+                    </tr>*@
+                </table>
+            </div>
+            <div class="tab-pane" id="tab2">
+                <table class="table table-hover table-striped table-condensed">
+                    <tr>
+                        <td class="tdtitle">Di động</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.phoneNumber1, new { @class = "form-control", @maxlength="30"  })</td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Điện thoại Cố định</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.phoneNumber2, new { @class = "form-control", @maxlength="30"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Địa chỉ liên lạc</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.tamTruTenDuong, new { @class = "form-control", style = "width:100%", placeholder = "Địa chỉ", @maxlength="50"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tỉnh thành tạm trú</td>
+                        <td>@Html.DropDownListFor(model => model.tamTruTinhThanh, ViewBag.TamTruTinhThanhs as SelectList, new { @class = "form-control", placeholder = "Tỉnh/Thành phố" })</td>
+                        <td>
+                            <select class="form-control" id="tamTruQuanHuyen" name="tamTruQuanHuyen">
+                                <option value="">[Chọn quận huyện]</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Địa chỉ thường trú</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.thuongTruTenDuong, new { @class = "form-control", style = "width: 100%", placeholder = "Tên đường" })</td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tỉnh thành thường trú</td>
+                        <td>@Html.DropDownListFor(model => model.thuongTruTinhThanh, ViewBag.ThuongTruTinhThanhs as SelectList, new { @class = "form-control", placeholder = "Tỉnh/Thành phố" })</td>
+                        <td>
+                            <select class="form-control" id="thuongTruQuanHuyen" name="thuongTruQuanHuyen">
+                                <option value="">[Chọn quận huyện]</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Liên lạc khẩn cấp báo cho</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.nguoiLienLacKhanCap, new { @class = "form-control", @maxlength="100"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Địa chỉ liên lạc khẩn cấp</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.diaChiLienLacKhanCap, new { @class = "form-control", @maxlength="500"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Điện thoại liên lạc khẩn cấp</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.phoneLienLacKhanCap, new { @class = "form-control", @maxlength="30"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Sổ bảo hiểm (nếu có)</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.soBaoHiem, new { @class = "form-control", @maxlength="50"  })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Số sổ Lao động</td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.soSoLaoDong, new { @class = "form-control", @maxlength="50"  })</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+<div id="phongBanModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="phongban-panel" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

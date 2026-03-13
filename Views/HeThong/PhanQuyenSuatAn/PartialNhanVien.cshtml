@@ -1,0 +1,42 @@
+﻿@using BatDongSan.Models.HeThong;
+@model IList<sp_Sys_User_IndexResult>
+@{
+    int i = 1;
+}
+<table class="table table-striped table-hover table-condensed tbl-nhanvien" id="container">
+    <thead>
+        <tr id="trtop">
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>Tên đăng nhập</th>            
+            <th>Số điện thoại</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>
+                    <i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>&nbsp;@item.HovaTen                    
+                </td>
+                <td>
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;@item.userName<br />                    
+                </td>
+                <td><i class="fa fa-phone-square" aria-hidden="true"></i>&nbsp;@item.telephone</td>                
+            </tr> 
+            i++;               
+        }
+    </tbody>
+</table>
+<style>
+    .tbl-nhanvien
+    {
+        border: 1px solid #f2dede;
+    }
+
+        .tbl-nhanvien td
+        {
+            border: none;
+        }
+</style>

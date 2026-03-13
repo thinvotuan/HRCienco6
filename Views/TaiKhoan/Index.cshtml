@@ -1,0 +1,102 @@
+﻿@using BatDongSan;
+@model IPagedList<sp_DanhSachTaiKhoanNhaThauResult>
+@{
+    ViewBag.Title = "Danh sách tài khoản nhà thầu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#btnTimKiem').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("Index", "TaiKhoan")" + "?searchString=" + searchText + "&trangThai=" + $("#TrangThai").val();
+            beginPaging();
+            $('#content').load(url);
+            successPaging();
+        });
+        $("#btnThem").click(function () {
+            location.href = '@Url.Action("DangKy")';
+        });
+        $('#TrangThai').change(function () {
+            $('#btnTimKiem').click();
+        });
+    });
+        
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+    
+    function UpdateTrangThai(id) {
+        @*location.href = '@Url.Action("ThongTinTaiKhoan","TaiKhoan")' + "?userName=" + userName;*@
+        var url = "@Url.Action("CapNhatTrangThai", "TaiKhoan")" + "/" + id;
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                Alert.success("Cập nhật thành công!", "Thông báo", { displayDuration: 2000 });
+                $("#btnTimKiem").click();
+            },
+            error: function () {
+                Alert.error(data, "Lỗi", { displayDuration: 2000 });
+            }
+        })
+    }
+</script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+     #content th
+    {
+        text-align:center
+    }
+    #filter-panel td
+    {
+        border: none;
+    }
+</style>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Danh sách tài khoản nhà thầu</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block;position:relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">                        
+                        <div>
+                            <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:30%;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnTimKiem" type="button" style="float: left">Tìm kiếm</button>
+                            
+                        </div>
+                        <div style="line-height:37px;">                            
+                            
+                            @*<button class="btn btn-info" id="btnThem" type="button" style="margin-top: 5px; float: right">Thêm</button>*@
+                            @Html.DropDownList("TrangThai", ViewBag.ListTrangThai as SelectList, new { @class = "form-control",@style="width:150px;float:right"})
+                            <span style="float:right">Trạng thái</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("ViewIndex");}
+            </div>
+        </fieldset>
+    </div>
+</form>

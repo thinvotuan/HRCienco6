@@ -1,0 +1,27 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Controllers;
+@using BatDongSan.Utils;
+
+
+
+
+            @if (Session["CongViecUser"] != null)
+            {
+                var countMenuCha = 0;
+                IList<sp_Sys_CongViecCuaUsersResult> congViecs = Session["CongViecUser"] as IList<sp_Sys_CongViecCuaUsersResult>;
+                IList<sp_Sys_CongViecCuaUsersResult> congViecOfUser = congViecs.Where(s => s.maCha == null).ToList();
+                foreach (var root in congViecOfUser.OrderBy(o => o.doUuTien))
+                {
+                   
+                    if (congViecs.Where(s => s.maCha == root.maCongViec).Count() > 0)
+                    {
+                        var clsMenuParent = "clsMenuParent"+countMenuCha;
+                <li id="@clsMenuParent"><a href="#">@root.tenCongViec</a>
+                    @Html.Raw(MenuHelper.BuildMenuMobile(congViecs, root.maCongViec).ToString())
+                </li> 
+                        countMenuCha++;       
+                    }
+                     
+                }
+            }
+     

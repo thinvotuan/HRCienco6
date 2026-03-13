@@ -1,0 +1,82 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    Layout = null;
+}
+
+<script>
+    getDataBieuDoBienDongNVThang();
+    function getDataBieuDoBienDongNVThang() {
+      
+        $.ajax({
+
+            type: "POST",
+            url: '@Url.Action("GetBieuDoBienDongNVThang", "BaoCaoTongHop")',
+            data: {
+              
+            },
+            success: function (result) {
+             
+                if (result != null) {
+                  
+                    google.charts.load('current', { 'packages': ['bar'] });
+                    google.charts.setOnLoadCallback(drawChart);
+                    function drawChart() {
+                       
+                        var data = new google.visualization.DataTable();
+                        data.addColumn('string', 'Tháng');
+                        data.addColumn('number', 'Nhân viên');
+                        data.addRows([
+                           ['1', 200]
+                        ]);
+                        data.addRows([
+                           ['2', 500]
+                        ]);
+                        data.addRows([
+                           ['3', 400]
+                        ]);
+                        data.addRows([
+                          ['4', 600]
+                        ]);
+                        var options = {
+                            chart: {
+                                title: '',
+                                subtitle: '',
+                            },
+                            bars: 'horizontal' // Required for Material Bar Charts.
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('BieuDoBienDongNVThang'));
+
+                        chart.draw(data, options);
+                    }
+                   
+                }
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+
+
+
+    }
+</script>
+<div id="BieuDoBienDongNVThang"></div>
+<div class="Detail_BieuDoBienDongNVThang contentBieuDo"id="show_BieuDoBienDongNVThang">
+    <div class="btnXemChiTiet"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i>Xem chi tiết</div>
+    <div class="detail_BieuDo" style="display:none">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                  <th>Tháng</th>  
+                    <th>Nhân Viên</th>
+                   
+                </tr>
+            </thead>
+            <tbody class="showData">
+               
+            </tbody>
+        </table>
+
+    </div>
+</div>

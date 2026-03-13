@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+    int i = 1;
+}
+
+@{      
+    
+    int total_ = Convert.ToInt32(ViewData["total"]);
+    int stt = 0;
+    
+    var danhSach = ViewData["nhanVien"] as List<BatDongSan.Models.DanhMuc.sp_PB_DanhSachNhanVienLienKetResult>;
+    if (danhSach != null)
+    {
+        foreach (var item in danhSach)
+        {            
+             var HinhAnh = item.maNhanVien + ".jpg";  
+<tr>
+    <td align="center">
+        @(++stt)
+    </td>
+    <td align="center">
+       <div class="mouseOver">
+           <img class="smallImg" onerror="imgError(this);" accept="image/*" src="/UploadFiles/QLNV/@HinhAnh" />
+           </div>  
+    </td>
+    <td align="left">
+        <span data-title="Họ và tên" class="tooltipmssg"><i class="fa fa-user" style="color: blue">
+        </i>
+            @item.hoVaTen</span>
+        @{if (item.birthday != null)
+          { 
+        <br />
+        <i class="fa fa-calendar"></i> <span>Ngày sinh:</span>@Html.Encode(String.Format("{0:dd/MM/yyyy}", item.birthday))
+        } 
+        }
+    </td>
+   
+    <td align="left">
+        @item.chucDanh
+    </td>
+    <td align="left">
+        <span data-title="Tên người thêm" class="tooltipmssg"><i class="fa fa-user" style="color: blue">
+        </i>
+           Được thêm bởi: @item.NguoiThem</span>
+        @{
+            if (item.NgayThem != null)
+          { 
+        <br />
+        <i class="fa fa-calendar"></i><span>Cập nhật:</span>@Html.Encode(String.Format("{0:dd/MM/yyyy}", item.NgayThem))
+        }
+        } 
+    </td>
+    <td style="text-align:center" class="btnXoaNVLKView">
+     
+     <a href="javascript:void(0)" onclick="XoaNhanVienLKView('@item.maNhanVien ','@item.hoVaTen')"><i class="fa fa-times" aria-hidden="true"></i></a>
+   
+    </td>
+   
+    
+    
+   
+</tr>
+  
+    }
+        
+         
+    }
+    }
+   
+
+<tr>
+    <td colspan="6" align="left">
+      
+    
+        <span>Tổng số dòng :</span><strong>@ViewData["total"]</strong>
+  
+    
+    </td>
+</tr>

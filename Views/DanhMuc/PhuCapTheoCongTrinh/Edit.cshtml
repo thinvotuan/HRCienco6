@@ -1,0 +1,84 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_NS_PhuCapTheoCongTrinh
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+       
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Sửa phụ cấp theo công trình</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã phụ cấp<span style="font-style: italic; color: red">*</span></td>
+            <td>
+            
+               @Html.TextBoxFor(model => model.maPhuCap, new { @class = "form-control", required = "required", @readonly="readonly" })
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên phụ cấp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenPhuCap, new { @class = "form-control", required = "required" })
+                
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Phòng ban <span style="font-style: italic; color: red">*</span>
+                </td>
+            <td>
+                 @Html.TextBoxFor(model => model.maPhongBan, new { @class = "form-control", required = "required", @readonly="readonly"})
+            </td>
+           
+            
+        </tr>
+        
+        <tr>
+            <td class="tdtitle">Ngày áp dụng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.ngayApDung, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })</td>
+        </tr>
+
+        <tr>
+             <td class="tdtitle">Số tiền <span style="font-style: italic;  color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.soTien, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+       
+       
+      
+
+    </table>
+</div>
+
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+
+    #tbl-mota td
+    {
+        border: none;
+    }
+</style>

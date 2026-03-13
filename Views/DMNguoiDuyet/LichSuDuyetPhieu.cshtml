@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+@{    
+    var ds = ViewBag.LichSuDP as List<BatDongSan.Models.HeThong.sp_NS_QuiTrinhDuyet_LichSuDuyetResult>;
+}
+<div id="container">
+    <fieldset class="fieldset1">
+        <form name="form" action="" method="post">
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <tr>
+                    <td colspan="2">
+                        <div style="overflow-x: hidden; height: 400px">
+                            <table id="maintable" class="table">
+                                <thead>
+                                    <tr>                                      
+                                        <th style="text-align: center"></th>
+                                        <th style="text-align: center">Tên nhân viên
+                                        </th>
+                                        <th style="text-align: center">Ngày
+                                        </th>
+                                        <th style="width: 150px">Ghi chú
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int count = 0;
+                                        if (ds != null && ds.Count > 0)
+                                        {
+                                            foreach (var item in ds)
+                                            {
+                                                count++;
+                                        <tr>                                         
+                                            <td>@item.TenBuocDuyet</td>
+                                            <td>@item.HoTen</td>
+                                            <td>@Html.Encode(String.Format("{0:dd/MM/yyyy hh:mm tt}", item.ngayThucHien))</td>
+                                            <td>@item.lyDo</td>
+                                        </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+
+</div>

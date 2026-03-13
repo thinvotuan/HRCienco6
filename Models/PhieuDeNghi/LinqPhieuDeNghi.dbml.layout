@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 19.375, 17.625" name="LinqPhieuDeNghi">
+  <DataContextMoniker Name="/LinqPhieuDeNghiDataContext" />
+  <nestedChildShapes>
+    <classShape Id="509a893a-d159-477c-bea3-5d3ecf6018aa" absoluteBounds="6.875, 3.25, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuThoiViec" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fa8f237c-c1f1-4d9d-8d3f-feded5c98960" absoluteBounds="6.8900000000000006, 3.71, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="55f68324-198e-42fc-bde6-a142779c12c7" absoluteBounds="3.75, 3.375, 2, 4.8477197265625">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuNghiPhep" />
+      <nestedChildShapes>
+        <elementListCompartment Id="988edb0b-5ae0-472c-99d1-e8198f7d153d" absoluteBounds="3.7649999999999997, 3.835, 1.9700000000000002, 4.2877197265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2bfe1a52-af25-4807-ad0d-0ee5c4929323" absoluteBounds="6.875, 7.125, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuDiLamLai" />
+      <nestedChildShapes>
+        <elementListCompartment Id="78983180-6adc-4b02-b6d0-f761fea3fbcc" absoluteBounds="6.8900000000000006, 7.585, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="91714237-6e95-4d86-8a7a-a19bab1a793d" absoluteBounds="0.5, 2.625, 2, 4.4631168619791666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuCongTac" />
+      <nestedChildShapes>
+        <elementListCompartment Id="780dfbf4-e6e6-40bb-baf1-4e8de0be6eb6" absoluteBounds="0.51499999999999968, 3.085, 1.9700000000000002, 3.903116861979167" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cd5bb8b0-4e4b-4288-8485-c73a8ec0f81b" absoluteBounds="10.75, 10.625, 2, 3.8862125651041666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuDieuChuyen" />
+      <nestedChildShapes>
+        <elementListCompartment Id="157e8818-4508-4726-8d0c-89b479c480da" absoluteBounds="10.765, 11.085, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f26ff903-8832-400f-96dc-05c17aa815dc" absoluteBounds="1.75, 9.375, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuCapNhatNgayCong" />
+      <nestedChildShapes>
+        <elementListCompartment Id="53869798-9fdb-4f15-a1b5-ca57ba43751d" absoluteBounds="1.7649999999999997, 9.835, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="56a65575-b53a-4ff2-8253-b70cff0614f4" absoluteBounds="17.125, 5, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuTangCa_DSNhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="950d9758-d57e-4c7c-a6c0-5ba422138955" absoluteBounds="17.14, 5.46, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4891bd83-fa73-47ee-aac7-853fa42f6578" absoluteBounds="1.75, 11.75, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuCapNhatNgayCong_NhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="450eba97-fd5e-490d-85ed-39c7a237d435" absoluteBounds="1.7650000000000006, 12.21, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f49d8514-f903-4675-bafb-5e9204192d6a" absoluteBounds="14.75, 5, 2, 4.0785139973958326">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuTangCa" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1a9021aa-b13d-4424-b2ae-2c99eef0c548" absoluteBounds="14.765, 5.46, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b178ce81-5e6b-4257-9158-bd6d9a94bb9d" isExpanded="false" absoluteBounds="6, 0.75, 2, 0.45">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_DN_NghiPhepNhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6b83ff60-e7b0-439e-afc2-2aabfa766b36" absoluteBounds="6.015, 1.21, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ac67d8d9-e6ca-4324-8acf-720065600887" absoluteBounds="5.625, 14.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuDanhGiaNhanVien_LamViecTaiNha" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8f5d6bc6-b795-4cfb-929a-ec12ee2a25f4" absoluteBounds="5.64, 15.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c12ca318-aa36-45c3-a5dd-7b4afcf1fa65" absoluteBounds="2.375, 15.375, 2, 1.9631982421875">
+      <DataClassMoniker Name="/LinqPhieuDeNghiDataContext/tbl_NS_PhieuDanhGiaNhanVien_LamViecTaiNha_ChiTiet" />
+      <nestedChildShapes>
+        <elementListCompartment Id="994dba45-8d96-4bc4-be61-cd19c6c80854" absoluteBounds="2.3899999999999997, 15.835, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

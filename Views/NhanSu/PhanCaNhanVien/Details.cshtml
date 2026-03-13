@@ -1,0 +1,280 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_NS_PhanCa
+@{
+    ViewBag.Title = "Chi tiết phân ca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var chiTiet = ViewBag.ChiTietPhanCa as DMPhanCaChiTiet;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 1, mNum: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index/", "PhanCaNhanVien")";
+            location.href = url;
+        });
+        $("#btnSubmit").click(function () {
+            $("#chiTiet_batDauNghiGiuaCa,#chiTiet_ketThucNghiGiuaCa").focus();
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+        $("#listOfWeek").change(function () {
+            $("#weekdayId").val($(this).val());
+            getShiftDetail();
+            setAutoUpdate();
+        });
+        $("[name='chiTiet.nghiGiuaCa']").click(function () {
+            fnChangeLeaveTime();
+        });
+        setDayOfWeek();
+        getShiftDetail();
+        setAutoUpdate();
+    });
+    var getShiftDetail = (function () {
+        if ($("#listOfWeek").val() != null && $("#listOfWeek").val() != "") {
+            var url = "@Url.Action("GetShiftDetail", "PhanCaNhanVien")" + "?dayOfWeek=" + $("#listOfWeek").val() + "&shiftId=" + "@Model.maPhanCa";
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $("#shiftDetailId").val(data.maPhanCaChiTiet);
+                    $("#chiTiet_soGio").val(data.soGio);
+                    $("#chiTiet_heSo").val(data.heSo);
+                    $("#chiTiet_gioBatDau").val(data.hourStartShift);
+                    $("#chiTiet_gioKetThuc").val(data.hourEndShift);
+                    $("#chiTiet_diTreChoPhep").val(data.diTreChoPhep);
+                    $("#chiTiet_veSomChoPhep").val(data.veSomChoPhep);
+                    (data.nghiGiuaCa == true ? document.getElementById("rad-1").checked = true : document.getElementById("rad-2").checked = true);
+                    $("#chiTiet_thoiGianNghiGiuaCa").val(data.thoiGianNghiGiuaCa);
+                    $("#chiTiet_batDauNghiGiuaCa").val(data.hourStartBetweenShift);
+                    $("#chiTiet_ketThucNghiGiuaCa").val(data.hourEndBetweenShift);
+                    $("#chiTiet_ghiChu").val(data.ghiChu);
+                    fnChangeLeaveTime();
+                },
+                error: function () {
+                    $("form input[type='text']").val("");
+                    $("#shiftDetailId").val("");
+                }
+            });
+        }
+    });
+
+    var setDayOfWeek = (function () {
+        if ($("#weekdayId").val() == "") {
+            $("#listOfWeek option:eq(0)").attr("selected", true);
+            $("#weekdayId").val($("#listOfWeek").val());
+        } else {
+            $("#listOfWeek").val($("#weekdayId").val());
+        }
+    });
+
+    var setAutoUpdate = (function () {
+        if ($("#listOfWeek option:eq(0)").is(":selected"))
+            $("#autoUpdate").attr("disabled", false);
+        else {
+            $("#autoUpdate").attr("disabled", true);
+            $("#autoUpdate").attr("checked", false);
+        }
+    });
+    var fnChangeLeaveTime = (function () {
+        var leaveValue = $("[name='chiTiet.nghiGiuaCa']:checked").val();
+        if (leaveValue == "True") {
+            $("#chiTiet_thoiGianNghiGiuaCa").removeAttr("disabled");
+            $("#chiTiet_batDauNghiGiuaCa").removeAttr("disabled");
+            $("#chiTiet_ketThucNghiGiuaCa").removeAttr("disabled");
+
+        }
+        else {
+            $("#chiTiet_thoiGianNghiGiuaCa").attr("disabled", true);
+            $("#chiTiet_batDauNghiGiuaCa").attr("disabled", true);
+            $("#chiTiet_ketThucNghiGiuaCa").attr("disabled", true);
+            $("#chiTiet_thoiGianNghiGiuaCa").val(0);
+            $("#chiTiet_batDauNghiGiuaCa").val(0);
+            $("#chiTiet_ketThucNghiGiuaCa").val(0);
+        }
+
+    });
+</script>
+<style>
+    #CreatePhanCa td
+    {
+        border: none;
+    }
+
+    #CreatePhanCa
+    {
+        margin: 0;
+    }
+</style>
+<form class="form-horizontal" method="post" id="form-submit" style="width: 100%">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Cập nhật ca làm việc</span></a></li>
+                </ul>
+            </div>
+            <div class="collapse" style="display: block">
+                <div class="panel panel-default">
+                    <table class="table table-striped table-hover table-condensed" id="CreatePhanCa">
+                        <tr class="background_tr">
+
+                            <td style="width: 15%; line-height: 30px">Tên ca</td>
+                            <td rowspan="3" style="width: 85%;">
+                                @Model.tenPhanCa
+                            </td>
+                        </tr>
+                        @* <tr>
+                            <td colspan="4">&nbsp;</td>
+                        </tr>*@
+                        <tr>
+                            <td colspan="4">
+                                @*<div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                                    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Quy định giờ làm việc</span></a></li>
+                                    </ul>
+                                </div>*@
+                                <table class="table table-striped table-hover table-condensed" id="QuiDinhNgaylam" style="position: relative">
+
+                                    <tr>
+                                        <td style="text-align: center; width: 10%" rowspan="6">Ngày trong tuần
+                                            <select id="listOfWeek" class="form-control" style="height: 170px !important;" multiple="multiple">
+                                                @{
+                                                    bool Thu2 = Model.thuHai ?? false;
+                                                    if (Thu2 == true)
+                                                    {
+                                                    <option value="2" selected="selected">Thứ 2</option>
+                                                    }
+                                                    bool Thu3 = Model.thuBa ?? false;
+                                                    if (Thu3 == true)
+                                                    {
+                                                    <option value="3">Thứ 3</option>
+                                                    }
+                                                    bool thuTu = Model.thuTu ?? false;
+                                                    if (thuTu == true)
+                                                    {
+                                                    <option value="4">Thứ 4</option>
+                                                    }
+                                                    bool thuNam = Model.thuNam ?? false;
+                                                    if (thuNam == true)
+                                                    {
+                                                    <option value="5">Thứ 5</option>
+                                                    }
+
+                                                    bool ThuSau = Model.thuSau ?? false;
+                                                    if (ThuSau == true)
+                                                    {
+                                                    <option value="6">Thứ 6</option>
+                                                    }
+
+
+                                                    bool ThuBay = Model.thuBay ?? false;
+                                                    if (ThuBay == true)
+                                                    {
+                                                    <option value="7">Thứ 7</option>
+                                                    }
+                                                    bool ChuNhat = Model.chuNhat ?? false;
+                                                    if (ChuNhat == true)
+                                                    {
+                                                    <option value="1">Chủ nhật</option>
+                                                    }
+
+                                                }
+                                            </select>
+                                        </td>
+                                        <td style="width: 15%" class="tdtitle">Số giờ
+
+                                        </td>
+                                        <td style="width: 30%">
+                                            @Html.TextBoxFor(model => chiTiet.soGio, new { @class = "form-control numberinput", required = "required" })
+                                            @Html.Hidden("shiftDetailId", ViewData["shiftDetailId"])
+                                            @Html.Hidden("weekdayId", (string)ViewData["weekdayId"])
+                                        </td>
+                                        <td style="width: 15%" class="tdtitle">Hệ số</td>
+                                        <td style="width: 30%">
+                                            @Html.TextBoxFor(model => chiTiet.heSo, new { @class = "form-control numberinput", required = "required" })
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="tdtitle">Bắt đầu
+                                            
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.gioBatDau, "{0:HH\\:mm}", new { @class = "form-control timepicker", required = "required" })
+                                        </td>
+                                        <td class="tdtitle">Kết thúc</td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.gioKetThuc, "{0:HH\\:mm}", new { @class = "form-control timepicker", required = "required" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdtitle">Đi trễ cho phép (phút)
+
+                                        </td>
+                                        <td>@Html.TextBoxFor(model => chiTiet.diTreChoPhep, new { @class = "form-control numberinput", required = "required" })</td>
+                                        <td class="tdtitle">Về sớm cho phép (phút)
+
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.veSomChoPhep, new { @class = "form-control numberinput", required = "required" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdtitle">Nghỉ giữa ca
+
+                                        </td>
+                                        <td>
+                                            @Html.RadioButtonFor(model => chiTiet.nghiGiuaCa, true, new { @id = "rad-1", @style = "width:auto", required = "required" }) Có @Html.RadioButtonFor(model => chiTiet.nghiGiuaCa, false, new { @id = "rad-2", style = "width:auto", required = "required" }) Không
+                                        </td>
+                                        <td class="tdtitle">TG nghỉ giữa ca (phút)</td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.thoiGianNghiGiuaCa, new { @class = "form-control numberinput", required = "required" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdtitle">Bắt đầu nghỉ giữa ca
+
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.batDauNghiGiuaCa, new { @class = "form-control timepicker", required = "required" })
+                                        </td>
+                                        <td class="tdtitle">Kết thúc nghỉ giữa ca</td>
+                                        <td>
+                                            @Html.TextBoxFor(model => chiTiet.ketThucNghiGiuaCa, new { @class = "form-control timepicker", required = "required" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdtitle">Ghi chú
+
+                                        </td>
+                                        <td>@Html.TextBoxFor(model => chiTiet.ghiChu, new { @class = "form-control" })</td>
+                                        <td class="tdtitle" colspan="2">Áp dụng cho các ngày còn lại trong tuần :
+                                            @Html.CheckBox("autoUpdate", false) (Tùy chọn)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+    </div>
+</form>
+

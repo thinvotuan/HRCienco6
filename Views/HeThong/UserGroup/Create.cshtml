@@ -1,0 +1,95 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Controllers.HeThong;
+@{    
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Sys_NhomUser nhomUser = new Sys_NhomUser();    
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css" />
+<style>  
+    td
+    {
+        border: none;
+    }
+
+    table
+    {
+        margin:0;
+    }
+
+    input
+    {
+        border: none;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#dialog").hide();
+        $("#btnSubmit").click(function (event) {
+            var temp = $("#manhomuser").val();
+            if (temp == "" || temp == null) {
+                $("#dialog").show();
+                var counter = 5;
+                var timer = setInterval(function () {
+                    counter--;
+                    if (counter == 0) {
+                        $("#dialog").hide();
+                        clearInterval(timer);
+                    }
+                }, 800);
+                event.preventDefault();
+            }
+        });
+
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index", "UserGroup")";
+            location.href = url;
+        })
+
+        $("#manhomuser").keypress(function (e) {
+            if (e.keyCode == 32) {
+                return false;
+            }
+        });
+    });
+</script>
+<form class="form-horizontal" method="post" style="width: 60%">
+    <fieldset>
+        <div id="dialog" class="alert alert-info">
+            <strong>!</strong> Vui lòng nhập mã nhóm người dùng.  
+        </div>
+        <legend style="display: inline">Tạo nhóm mới</legend>        
+        <div class="collapse" style="display: block">
+            <div class="panel panel-default">
+                <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                        <td>Mã nhóm người dùng        
+                        </td>
+                        <td style="color: red">
+                            @Html.TextBox("manhomuser", nhomUser.maNhomUser, new { @class = "form-control", @maxlenght = "20" })
+                            @TempData["MessgId"]
+                        </td>
+                        <td style="text-align: right">Tên nhóm        
+                        </td>
+                        <td style="color: red">
+                            @Html.TextBox("tennhomuser", nhomUser.tenNhomUser, new { @class = "form-control", @maxlenght = "100" })
+                            @TempData["MessgTen"]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ghi chú
+                        </td>
+                        <td colspan="3">
+                            @Html.TextArea("ghiChu", nhomUser.ghiChu, new { @class = "form-control", @maxlenght = "100" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+    </fieldset>
+</form>

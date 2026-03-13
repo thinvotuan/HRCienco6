@@ -1,0 +1,186 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .btnXemChiTiet
+    {
+        color: green;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+        .btnXemChiTiet:hover
+        {
+            color: #d2790b;
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSearch").click(function () {
+            Search();
+        });
+        $("#nam,#thang").change(function () {
+            $("#btnSearch").click();
+        });
+        $(document).on('click', '.btnXemChiTiet', function () {
+
+            var parentId = $(this).parent().attr('id');
+            var clsParentId = "." + parentId + " .showDetailLuong";
+            var idParentId = "#" + parentId;
+
+            if ($(clsParentId).css('display') == 'none') {
+
+                $(clsParentId).show('fast');
+
+                $(this).html('<i class="fa fa-arrow-circle-up" aria-hidden="true"></i>Ẩn').css('color', 'red');
+
+                var thangCurent = $(idParentId + " .thangCurrent").val();
+                var url = '@Url.Action("ViewChiTietLuong", "ChamCong")' + "?nam=" + $("#nam").val() + "&thang=" + thangCurent;
+                var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+                $(clsParentId).html(imageUrl);
+                $(clsParentId).load(url, function () {
+                });
+            }
+            else {
+                $(clsParentId).hide('fast');
+                $(this).html('<i class="fa fa-arrow-circle-down" aria-hidden="true"></i>Xem chi tiết').css('color', 'green');
+
+            }
+
+        });
+        Search();
+
+
+
+    });
+    function OnCriteriaPC(page) {
+
+        var url = '@Url.Action("LoadXemBangLuong", "ChamCong")' + "?nam=" + $("#nam").val() + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+
+        var url = '@Url.Action("LoadXemBangLuong", "ChamCong")' + "?nam=" + $("#nam").val() + "&_page=0";
+
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+
+    function Reset() {
+        location.href = '@Url.Action("XemBangLuong", "ChamCong")';
+    }
+
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active"><a><span>Bảng lương chi tiết cho nhân viên</span></a></li>
+        </ul>
+    </div>
+    <div id="container">
+        <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+            <div class="panel panel-default background_top">
+                <div class="panel-body">
+                    <div style="line-height: 26px; float: left">
+                        Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new { @style = "width:150px" })
+
+
+
+                    </div>
+                    <div style="float: right">
+                        <button class="btn btn-info" id="btnSearch" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome  TableMobile TableXemBangLuong">
+
+            <thead>
+                <tr>
+                    <th style="width: 35px; text-align: center">STT
+                    </th>
+                    <th style="text-align: center">Nhân viên
+                    </th>
+
+                    <th style="text-align: center">Tháng
+                    </th>
+                    <th style="text-align: center">Tổng lương
+                    </th>
+
+                    <th style="text-align: center">Ngày công chuẩn</th>
+                    <th style="text-align: center">Tổng ngày công</th>
+                    <th style="text-align: center">Thuế</th>
+                    <th style="text-align: center">Bảo hiểm</th>
+                    <th style="text-align: center">Thực lãnh</th>
+                    <th style="min-width: 100px;"></th>
+
+                </tr>
+            </thead>
+
+            <tbody id="tbody">
+            </tbody>
+
+
+
+
+        </table>
+
+    </div>
+</fieldset>

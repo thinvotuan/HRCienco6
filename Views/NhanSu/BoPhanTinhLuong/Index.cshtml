@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Bộ phận tính lương";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnThem").click(function () {
+            location.href = '@Url.Action("Create","BoPhanTinhLuong")';
+        });
+        $('#btnTimKiem').click(function () {
+            Xem();
+        });
+        $("#maBoPhan").change(function () {
+            Xem();
+        });
+    });
+    function Update(id) {
+        location.href = '@Url.Action("Edit/","BoPhanTinhLuong")' + id;
+    }
+    function Delete(id) {
+        var url = '@Url.Action("Delete","BoPhanTinhLuong")';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { maBP: id },
+            dataType: "json",
+            success: function (resultData) {
+                if (resultData == "") {
+                    Alert.success("Xóa thành công.", "Thông báo", { displayDuration: 3000 });
+                    Xem();
+                }
+                else {
+                    Alert.error("Xóa không thành công.", "Thông báo", { displayDuration: 3000 });
+                }
+            }
+        });
+    }
+    function Xem() {
+        var searchText = $('#searchString').val().replace(/\ /g, '+');
+        var valPhongBan = $("#maBoPhan").val();
+        var url = "@Url.Action("Index", "BoPhanTinhLuong")" + "?qSearch=" + searchText + "&maBoPhan=" + valPhongBan;
+            beginPaging();
+            $('#content').load(url);
+            successPaging();
+    }
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab"><a><i class="fa fa-yelp" aria-hidden="true"></i><span>Danh sách bộ phận tính lương</span></a></li>
+                    
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block;position: relative">
+                    <div class="panel panel-default background_top">
+                        <div class="panel-body">
+                            <div>
+                                <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:300px;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                                <button class="btn btn-info" id="btnTimKiem" type="button" style="float: left; margin-left: 5px">Tìm kiếm</button>
+                                <button class="btn btn-info" id="btnThem" type="button" style="float: right">Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="content">
+                    @{Html.RenderPartial("ViewIndex");}
+                </div>
+        </fieldset>
+    </div>
+</form>

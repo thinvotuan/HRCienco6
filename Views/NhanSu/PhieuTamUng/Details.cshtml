@@ -1,0 +1,134 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model PhieuTamUng
+@{
+    ViewBag.Title = "Chi tiết phiếu tạm ứng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+
+        $("#btnGuiDuyet").click(function () {
+            chonNguoiDuyet();
+        })
+
+        $("#btnDuyetPhieu").click(function () {
+            duyetPhieu();
+        })
+
+
+        $("#btnTraLai").click(function () {
+            TraLai();
+        })
+
+    });
+
+
+    function chonNguoiDuyet() {
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuTamUng' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function duyetPhieu() {
+        var url = ('@Url.Action("DuyetPhieu/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuTamUng' + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function TraLai() {
+        var tenBD = $('#tenBuocDuyet').val().replace(/\ /g, '');
+        var url = ('@Url.Action("TraLaiDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?tenBuocDuyet=' + tenBD + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&maCongViec=PhieuTamUng' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhieuTamUng")' + $('#maPhieu').val();
+    }
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+@{
+    
+
+    BatDongSan.Models.HeThong.Sys_User user = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+    
+}
+<div id="container" class="custome_fieldSet">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                    <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Chi tiết phiếu tạm ứng</span></a></li>
+            </ul>
+        </div>
+        <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+            <tr>
+                <td class="tdtitle">Số phiếu</td>
+                <td>
+                    @Model.maPhieu
+                    @Html.HiddenFor(model => model.maPhieu)
+                    <input type="hidden" id="url" value="@ViewBag.URL" />
+                    @Html.HiddenFor(m => m.maQuiTrinhDuyet)
+                    <input type="hidden" id="tenBuocDuyet" value="@ViewBag.TenBuocDuyet " />
+                </td>
+                <td class="tdtitle">Người lập</td>
+                <td>@Model.NhanVienLapPhieu.hoVaTen
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%" class="tdtitle">Nhân viên</td>
+                <td style="width: 35%">@Model.NhanVien.hoVaTen
+                </td>
+                <td style="width: 15%" class="tdtitle">Ngày thu tạm ứng </td>
+                <td style="width: 35%">@string.Format("{0:dd/MM/yyyy}", Model.ngayTamUng)</td>
+            </tr>
+            <tr>
+                <td class="tdtitle">Tháng, năm </td>
+                <td>
+                    @Model.tamUngThang, @Model.tamUngNam
+                </td>
+                <td class="tdtitle">Số tiền</td>
+                <td>@string.Format("{0:#,##0}", Model.soTien)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdtitle">Nội dung</td>
+                <td colspan="3">@Html.Raw(Model.ghiChu)</td>
+
+            </tr>
+        </table>
+        <div style="text-align: right; margin-bottom: 10px">
+            <input type="hidden" name="maNhanVien" id="maNhanVien" value="@user.manv" />
+            <input type="hidden" name="tenNhanVien" id="tenNhanVien" value="@ViewBag.HoTen" />
+            @if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.nguoiLap == user.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnGuiDuyet">Gửi duyệt </button>
+            }
+            else if (Model.Duyet != null && Model.Duyet.maBuocDuyet != "DTN" && Model.Duyet.maBuocDuyet != "DD" && Model.Duyet.nguoiDuyet.maNhanVien == user.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnDuyetPhieu">Duyệt phiếu này</button>
+                <button class="btn btn-info" type="button" id="btnTraLai">Trả lại</button>
+            }
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+
+</div>
+

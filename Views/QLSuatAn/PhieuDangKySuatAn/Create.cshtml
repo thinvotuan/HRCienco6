@@ -1,0 +1,279 @@
+﻿@using BatDongSan.Models.QLSuatAn;
+@model PhieuDangKySuatAnModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+
+        $("#btnDangKyCuaHang").click(function () {
+
+            var url = "@Url.Action("LoadDanhSachCuaHang/", "PhieuDangKySuatAn")" + $("#maNhanVienThuHuong").val();
+            $(".clsLoadDanhSachCuaHang").load(url, function () {
+
+            });
+        });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $(document).on("click", ".itemCH", function () {
+            $(".itemCH").removeClass("activeCH");
+            $(this).addClass("activeCH");
+        });
+        $(document).on("click", ".boxMonAn", function () {
+            $(".boxMonAn").removeClass("activeCH");
+            $(this).addClass("activeCH");
+        });
+
+        $("#btnSubmit").click(function () {
+            var maCuaHang = $("#maCuaHang").val();
+
+
+            if (maCuaHang == "" || maCuaHang == null || typeof (maCuaHang) == "undefined") {
+
+                Alert.error("Vui lòng chọn cửa hàng!!", "Thông báo", { displayDuration: 2000 });
+                return false;
+            }
+            bootbox.confirm("Bạn không thể thay đổi cửa hàng sau khi lưu?", function (result) {
+                if (result) {
+                    var url = "@Url.Action("Create", "PhieuDangKySuatAn")";
+                    var form = document.getElementById("form-submit");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+                else {
+
+                }
+            });
+        });
+        $("#ChooseNV").click(function () {
+            $("#loaiNghiPhep").val('');
+            $("#soNgayTangCa,#tongNgayTangCa,#soPhepNamConLai,#const_datePermiss").val(0);
+            $('#myModalChonPhongBan').modal();
+            var Url = '@Url.Action("ChonNhanVien", "PhieuDangKySuatAn")';
+            $('#filter-panel').load(Url);
+        });
+        $(".btnChonCH").click(function () {
+
+            // $(".closeCH").trigger("click");
+            var maCuaHang = $("input[name='chkSA123']:checked").val();
+            if (maCuaHang == null) {
+                Alert.error("Vui lòng chọn cửa hàng!!", "Thông báo", { displayDuration: 2000 });
+                return false;
+            }
+            $(".pageLoading").show();
+            var url = "@Url.Action("ChiTietCuaHang", "PhieuDangKySuatAn")"
+                + "?maCuaHang=" + maCuaHang + "&maNhanVien=" + $("#maNhanVienThuHuong").val();
+
+            $(".thongTinCuaHangSeleted").load(url, function () {
+                $(".closeCH").trigger("click");
+                $(".pageLoading").hide();
+                //Alert.success($(".clsThongBao").html(), "Thông báo", { displayDuration: 6000 });
+
+            });
+        });
+    });
+    function ChonNhanVienLienKet() {
+
+        var departmentID = "PANVAT";
+        $("#myModalChonPhongBanNhanVien .modal-dialog").addClass("modal-lg");
+        $('#myModalChonPhongBanNhanVien').modal({});
+        var Url = '@Url.Action("ChonNhanVienSuatAnTheoPB", "PhieuDangKySuatAn")';
+        $('#filter-panelNhanVien').load(Url);
+    }
+</script>
+<form id="form-submit" method="post" action="/PhieuDangKySuatAn/Create" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Thêm mới phiếu đăng ký suất ăn</span></a></li>
+
+            </ul>
+        </div>
+        <div class="form-group" style="float: right">
+            <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+
+        <div style="margin-top: 15px">
+            <table class="table table-hover table-striped table-condensed TableMobileChild" style="position: relative">
+                <tr>
+                    <td class="tdtitle">Mã phiếu<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+                    <td class="tdtitle">Họ tên NV lập phiếu<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.hoTenNhanVien, new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    @if (Model.themNhanVien == true)
+                    {
+                        <td class="tdtitle">Mã NV phiếu ăn<span style="font-style: italic; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.maNhanVienThuHuong, new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+                        <td class="tdtitle">Họ tên NV phiếu ăn<span style="font-style: italic; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.hoTenNhanVienThuHuong, new { @class = "form-control", required = "required", @readonly = "readonly", @style = "width:85%; float: left; margin-right: 5px;" })
+                            <button class="btn btn-info" id="ChooseNV" style="" type="button">...</button>
+                        </td>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(model => model.maNhanVienThuHuong, new { @class = "form-control", required = "required", @readonly = "readonly" })
+                    }
+                </tr>
+                <tr>
+
+                    <td class="tdtitle">Ngày lập<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.ngayLapPhieu, "{0:dd/MM/yyyy}", new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+                </tr>
+               @* <tr>
+                    <td colspan="4">
+                        <div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+                            <button style="height: 25px; float: right" type="button" onclick="ChonNhanVienLienKet()" class="btn btn-info btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="myModalChonPhongBanNhanVien"><i class="fa fa-user-plus" aria-hidden="true"></i>Bổ sung nhân viên vào phiếu ăn</button>
+                            <h4 style="color: #1b809e; margin-left: 10px">Đăng ký nhiều nhân viên
+
+                            </h4>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <div id="container">
+                            <table class="table table-striped table-hover table-condensed  TableMobile IndexNhanVienPNP" id="tbl-users">
+                                <thead>
+                                    <tr id="trtop">
+                                        <th>STT</th>
+                                        <th>Mã nhân viên</th>
+                                        <th>Họ và tên</th>
+                                        <th>Phòng ban</th>
+                                        <th>Chức danh</th>
+                                        <th style="width: 100px">Email</th>
+                                        <th style="width: 40px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyNhanVien">
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>*@
+                <tr>
+                    <td colspan="4">
+                        <div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+                            <button style="/* width: 100%; */float: right;" type="button" class="btn btn-primary btn-sm" id="btnDangKyCuaHang" data-toggle="modal" data-target="#customModal">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn cửa hàng</button>
+                            <h4 style="color: #1b809e; margin-left: 10px">Đăng ký cửa hàng
+
+                            </h4>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Cửa hàng</td>
+                    <td class="thongTinCuaHangSeleted" colspan="3"></td>
+                </tr>
+
+
+
+            </table>
+        </div>
+    </fieldset>
+</form>
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+
+    #alerts {
+        top: 173px!important;
+    }
+</style>
+<!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+<div id="customModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="overflow: hidden">
+                <button type="button" class=" close closeCH" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Danh sách cửa hàng</h4>
+                <div class="groupbtnChon" style="float: right; overflow: hidden; clear: both;">
+                    <button class="btn btn-primary btnChonCH btn-sm" type="button"><i class="fa fa-save"></i>Chọn</button>
+
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="custom-panel" class="filter-panel clsLoadDanhSachCuaHang">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btnChonCH btn-sm" type="button"><i class="fa fa-save"></i>Chọn</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModalChonPhongBan" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 98%">
+                    <div class="row">
+                        <div id="filter-panel" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="myModalChonPhongBanNhanVien" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 98%">
+                    <div class="row">
+                        <div id="filter-panelNhanVien" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+    </div>
+</div>

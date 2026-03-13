@@ -1,0 +1,170 @@
+﻿<script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+@*<script type="text/javascript" src="~/Scripts/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.dataTables.min.css"></script>*@
+<style>
+    td
+    {
+        vertical-align: middle;
+        border: none;
+    }
+
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+
+    #container #extras
+    {
+        width: auto;
+    }
+
+    .dataTables_length
+    {
+        float: right;
+    }
+
+    .removeBorderFieldset
+    {
+    }
+
+        .removeBorderFieldset input[type="search"], select
+        {
+            border: 1px solid #ccc;
+        }
+
+    select
+    {
+        padding: 2px;
+    }
+
+    #maintable_filter
+    {
+        margin-top: 0px;
+        background: #ddd;
+        margin-bottom: 1px;
+        padding-top: 5px;
+    }
+
+    .dataTables_length label
+    {
+        padding-top: 5px;
+    }
+
+    .removeBorderFieldset a
+    {
+        text-decoration: none;
+        color: blue;
+        cursor: pointer;
+    }
+
+        .removeBorderFieldset a:hover
+        {
+            font-style: italic;
+            color: red;
+        }
+
+
+
+    i.fa
+    {
+        color: #0f4c99;
+        padding-right: 2px;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //  oTable = $('#maintable').DataTable({
+        //"bJQueryUI": true,
+        //"sPaginationType": "full_numbers",
+        //"aLengthMenu": [[20, 50, -1], [20, 50, "All"]],
+        //"iDisplayLength": -1,
+        //"aoColumns": [{ "bSortable": false, "bSearchable": false },
+        //                     { "bSortable": false, "bSearchable": true },
+        //                     { "bSortable": false, "bSearchable": true },
+        //                     { "bSortable": false, "bSearchable": true },
+        //                     { "bSortable": false, "bSearchable": true },
+        //                     { "bSortable": false, "bSearchable": true }
+        //]
+        // });
+
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("ListCongViecProcess", "User")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+") + "&maCongViec=" + $("#congViec").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+        $("#congViec").change(function () {
+            $("#btnSearch").click();
+        });
+
+
+    });
+
+    function ViewDetailHistory(soPhieu, maQuiTrinhDuyet) {
+        var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + '?id=' + soPhieu + '&maQuiTrinh=' + maQuiTrinhDuyet;
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13) {
+            $("#btnSearch").click();
+        }
+    }
+</script>
+<div id="container">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs" style="" class="ui-tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách công việc cần duyệt</span></a></li>
+            </ul>
+        </div>
+        <div class="removeBorderFieldset">
+            <table width="100%" class="table table-hover table-responsive table-condensed" style="position: relative">
+                <tbody>
+                    <tr class="background_tr cusText">
+                        <td>
+                            <span style="float: left">Công việc:</span>
+                            @Html.DropDownList("congViec", ViewBag.CongViec as SelectList, new { @class = "form-control", @style = "float:left;width:270px" })
+                            <div class="input-group col-md-4 timkiem" style="float: right">
+                                <input type="text" id="pref-search" class="form-control" value="" placeholder="Tìm kiếm..." onkeypress="enterToSeacrh(event)">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" id="btnSearch" type="button">Tìm kiếm</button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="content">
+                @{Html.RenderPartial("PartialIndex");}
+            </div>
+        </div>
+    </fieldset>
+</div>

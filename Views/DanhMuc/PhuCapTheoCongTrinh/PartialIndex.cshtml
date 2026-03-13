@@ -1,0 +1,78 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_NS_PhuCapTheoCongTrinh_IndexResult>
+@{
+    Layout = null;
+    int i = 1;    
+}
+<style>
+    td
+    {
+        border: none;
+    }
+
+        td a
+        {
+            color: blue !important;
+        }
+</style>
+
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th style="width: 100px">Mã phụ cấp</th>
+            <th style="">Tên phụ cấp</th>
+            <th style="">Phòng ban</th>
+            <th style="">Ngày áp dụng</th>
+            <th style="">Số tiền</th>
+            <th style="width: 80px">Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {                            
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td style="text-align: left; color: green">@Html.ActionLink(item.maPhuCap, "Details", new { id = item.id })</td>
+                <td style="text-align: left">@item.tenPhuCap</td>
+                <td style="text-align: left">@item.tenPhongBan</td>
+                <td style="text-align: center"><i class="fa fa-calendar"></i>@Html.Raw(item.ngayApDung.HasValue ? item.ngayApDung.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+
+
+
+                <td style="text-align: right">
+                    @String.Format("{0:###,##0}", item.soTien) </td>
+                <td style="text-align: center">
+                    <a href="javascript:void(0);" onclick="ViewDetailHistory('@item.maPhuCap','@item.maQuiTrinhDuyet')">
+                        @item.tenTrangThaiDuyet</a>
+                </td>
+                <td style="text-align: center">
+                    @if (item.nguoiLap == user1.manv && item.trangThai == 0)
+                    {
+                        <a class="btnEdit" alt="@item.id" data-toggle="modal" data-target="#customModal"  title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;" aria-hidden="true">| </i></a>
+                        <a class="btnDelete" alt="@item.id" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+                </td>
+            </tr> 
+                    i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "PhuCapTheoCongTrinh", action = "Index", searchString = ViewBag.searchString, maPhongBan = ViewBag.maPhongBan }))
+    </ul>
+</div>
+

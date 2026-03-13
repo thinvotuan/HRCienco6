@@ -1,0 +1,140 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model PhanBoLuongModel
+<fieldset>
+    <legend>Chi tiết phân bổ</legend>
+<div id="container">
+    @*<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+        <h4 style="color: #1b809e; margin-left: 10px">Bảng tính chi phí phân bổ lương</h4>
+    </div>*@
+    <div class="removeBorderFieldset">
+      @*  <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Bảng tính chi phí phân bổ lương</span></a></li>
+            </ul>
+        </div>*@
+        <div style="margin-top: 15px">
+            <table class="table table-hover table-striped table-condensed" style="position: relative">
+                <tr>
+                    <td>Ngày áp dụng</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ngayApDung, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required", @readonly="readonly" })
+                    </td>
+                    <td class="col-sm-1"></td>
+                    <td>Mức tính phân bổ</td>
+                    <td>
+                        @*     @Html.ActionLink(Model.mucTinhPhanBo, "CayTaiLieu", "TaiLieuThiCong", new { @target = "_blank" })*@
+                        <a href="javascript:void" style="color: #519ee5">@Model.mucTinhPhanBo</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tổng phụ cấp (C)</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.tongPhuCap, new { @class = "form-control numberinput", required = "required", @readonly = "readonly" })
+                    </td>
+                    <td class="col-sm-1"></td>
+                    <td>Lương cơ bản</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.luongCoBan, new { @class = "form-control numberinput", required = "required", @readonly = "readonly" })
+                    </td>
+                </tr>
+            </table>
+
+            @*<ul class="nav nav-pills details" style="padding-top: 50px;">
+                <li class="active">
+                    <a href="#pane1" data-toggle="tab"><b>Chi tiết phân bổ tổng phụ cấp (C)</b></a></li>
+            </ul>*@
+            <div class="tab-content">
+                <div id="pane1" class="tab-pane active">
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Mã phụ cấp</th>
+                                <th>Tên phụ cấp</th>
+                                <th>Loại phụ cấp</th>
+                                <th>Số tiền phân bổ</th>
+                                <th>Tỉ lệ phân bổ (%)</th>
+                                <th>Thành tiền</th>
+                               @* <th>Ghi chú</th>
+                                <th></th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>I</b></td>
+                                <td colspan="4"><b>Tổng phụ cấp không theo tỉ lệ</b></td>
+                                <td style="text-align: right;font-weight :bold " class="numberinput">@Model.tongPhuCapKhongTheoTyLe</td>
+                                <td style="display: none">@Html.HiddenFor(model => model.tongPhuCapKhongTheoTyLe)</td>
+                            </tr>
+                            @foreach (var item1 in Model.chiTiets.Where(s => s.loaiTyLe == "I"))
+                            {
+                                <tr>
+                                    <td>@item1.maPhuCap
+                                        @Html.Hidden("loaiTyLe", item1.loaiTyLe)
+                                    </td>
+                                    <td>@item1.tenPhuCap</td>
+                                    <td style="text-align: center">@item1.tenLoaiPhuCap</td>
+                                    <td style="text-align: center"></td>
+                                    <td></td>
+                                    <td>@Html.TextBox("salaryTemplate", item1.salaryTemplate, new { @style = "text-align:right", @readonly = "readonly", @class = "form-control numberinput loaiI" })</td>
+                                  @*  <td>@Html.TextBox("ghiChuChiTiet", item1.ghiChu, new { @class = "form-control" })</td>*@
+                                    <td style="display: none">@Html.Hidden("maPhuCap", item1.maPhuCap)</td>
+                                </tr>
+                
+                            }
+                            <tr class="rowTypePhuCap">
+                                <td><b>II</b></td>
+                                <td colspan="4"><b>Tổng phụ cấp theo tỉ lệ:</b></td>
+                                <td style="text-align: right;font-weight :bold " class="numberinput">@Model.tongPhuCapTheoTyLe</td>
+                                <td style="display: none">@Html.HiddenFor(model => model.tongPhuCapTheoTyLe)</td>
+                            </tr>
+                            @foreach (var item1 in Model.chiTiets.Where(s => s.loaiTyLe == "II"))
+                            {
+                                <tr>
+                                    <td>@item1.maPhuCap
+                                        @Html.Hidden("loaiTyLe", item1.loaiTyLe)
+                                    </td>
+                                    <td>@item1.tenPhuCap</td>
+                                    <td style="text-align: center">@item1.tenLoaiPhuCap</td>
+                                    <td style="text-align: center" class="numberinput">@Model.tongPhuCapTheoTyLe</td>
+                                    <td style="text-align: center">@item1.tyLe</td>
+                                    <td style="text-align: center">@Html.TextBox("salaryTemplate", item1.salaryTemplate, new { @style = "text-align:right", @readonly = "readonly", @class = "form-control numberinput loaiII" })
+                                 @*   <td>@Html.TextBox("ghiChuChiTiet", item1.ghiChu, new { @class = "form-control" })</td>*@
+                                    <td style="display: none">@Html.Hidden("maPhuCap", item1.maPhuCap)</td>
+                                </tr>                
+                            }
+                            <tr class="sum">
+                                <td colspan="4" style="text-align: center"><b>TỔNG CỘNG</b></td>
+                                <td style="text-align: center" class="numberinput" data-a-sign=" %">@Model.tongTyle</td>
+                                <td style="text-align: right ;font-weight :bold;color :red  " class="numberinput">@Model.tongPhuCap</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+</fieldset>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+    });
+</script>

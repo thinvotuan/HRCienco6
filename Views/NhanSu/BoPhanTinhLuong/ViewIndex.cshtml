@@ -1,0 +1,60 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_BoPhanTinhLuong_IndexResult>
+@{
+    int i = 1;
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+</script>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style=" width: 30px">STT</th>
+            <th style="width: 130px">Mã bộ phận</th>
+            <th style="width: 200px">Tên bộ phận</th>            
+            <th style="width: 80px">Số lượng nhân viên</th>
+            <th style="width: 60px"></th>
+          
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center">@i</td>
+               
+                <td  style="text-align:left"><a style="color:#519ee5" href="@Url.Action("Details","BoPhanTinhLuong",new {id=item.maboPhan})">@item.maboPhan</a></td>
+                <td>@item.tenBoPhan</td>
+                <td style="text-align:right">@String.Format("{0:#,#0.#}",item.soLuongNV)</td>
+                <td style="text-align: center;font-size: 17px;">
+                   <a title="Cập nhật" href="javascript:void(0)" onclick="Update('@item.maboPhan')" style="color: black;
+                            cursor: pointer; background: #53CFE9;border: 1px solid #3EC6E0; padding: 0 2px; border-radius: 2px;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a style="color: black;  cursor: pointer; border: 1px solid #E3536C; background: #EB6379; padding: 0 2px; border-radius: 2px;" onclick="Delete('@item.maboPhan')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                </td>
+            </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div style="margin:5px 0">
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div style="margin:5px 0">
+    <ul class="pagination" >
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "BoPhanTinhLuong", action = "Index", searchString = ViewBag.searchString, maPhongBan = ViewBag.maPhongBan }))
+    </ul>
+</div>

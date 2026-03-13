@@ -1,0 +1,20 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{  
+    Layout = null;
+}
+
+@{
+    var noiDung = (string)(ViewBag.NoiDung == null ? string.Empty : ViewBag.NoiDung);       
+}
+<style>
+    #print-preview td
+    {
+        border:0px;
+    }
+</style>
+<div id="print-preview" style="max-width: 900px; margin: 20px auto; border: 1px solid rgba(0, 0, 0, 0.53); padding: 10px; box-sizing: border-box; border-radius: 4px;">
+    @Html.Raw(noiDung)
+</div>
+
+
+

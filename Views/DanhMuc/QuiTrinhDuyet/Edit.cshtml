@@ -1,0 +1,210 @@
+﻿@model BatDongSan.Models.HeThong.tbl_HT_QuiTrinhDuyet
+@{      
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var trangThaiDongMo = new SelectList(ViewBag.TrangThaiDM, "Key", "Value", "1");
+    var chiTiet = ViewBag.ChiTietQuiTrinhDuyet as List<BatDongSan.Models.HeThong.ChiTietQuiTrinhDuyet>;
+}
+<style>
+    .main-tbl td
+    {
+        border: none !important;
+        line-height: 2.428571 !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/uploadfilehopdongncc.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinputInt").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "QuiTrinhDuyet")";
+        });
+
+        $(document).on("click", ".vtt", function () {
+            var i = $("#kythanhtoantbl >tbody>tr").length - 2;
+            i++;
+            $("#kythanhtoantbl").append("<tr>"
+                            + "<td><input type='text' style='text-align:left;width:300px' class='form-control' readonly='true' required='true' id='tenQuiTrinhDuyet" + i + "' ondblclick = 'chonQuiTrinh(" + i + ")' name='tenQuiTrinhDuyet' value='' /></td>"
+                            + "<td><input type='text' style='text-align:right' class='form-control numberinputInt' required='true' id='sttQuiTrinhDuyet" + i + "' name='sttQuiTrinhDuyet' value=''/><input type='hidden' style='text-align:right' class='form-control' required='true' id='maQuiTrinh" + i + "' name='maQuiTrinh' value=''/></td>"
+                            + "<td><input type='text' style='text-align:left' class='form-control' readonly='true' id='tenNhanVien" + i + "' name='tenNhanVien'  ondblclick = 'chonNhanVien(" + i + ")' value=''/><input type='hidden' style='text-align:right' class='form-control' id='maNhanVienDuyet" + i + "' name='maNhanVienDuyet' value=''/></td>"
+                            //+ "<td><input type='text' style='text-align:left' class='form-control' required='true' readonly='true' id='tenNhanVien" + i + "' name='tenNhanVien'  ondblclick = 'chonNhanVien(" + i + ")' value=''/><input type='hidden' style='text-align:right' class='form-control' required='true' id='maNhanVienDuyet" + i + "' name='maNhanVienDuyet' value=''/></td>"                        
+                            //+ "<td><input type='text' style='text-align:left' class='form-control' readonly='true' id='tenNhanVien" + i + "' name='tenNhanVien' value=''/><input type='hidden' style='text-align:right' class='form-control'  id='maNhanVienDuyet" + i + "' name='maNhanVienDuyet' value=''/></td>"
+                            + "<td style='vertical-align: middle; text-align: right'><button type='button' class='btn btn-warning btn-xs'><span class='glyphicon glyphicon-minus'></span></button></td></tr>");
+            $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ' ', aDec: ',' });
+        });
+
+        $(document).on("click", ".btn.btn-warning.btn-xs", function () {
+            $(this).parents('tr').remove();
+        });
+
+    });
+
+    function chonQuiTrinh(stt) {
+        var url = '@Url.Action("ChonQuiTrinh", "QuiTrinhDuyet")' + "?stt=" + stt;
+        PopUpManager(url, 100, 100);
+    }
+
+    function chonNhanVien(stt) {
+        var url = '@Url.Action("DanhSachNVPB/", "QuiTrinhDuyet")' + "?stt=" + stt;
+        PopUpManagerNV(url, "DUYET", 1000, 500);
+    }
+
+    function PopUpManagerNV(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (900 / 2);
+        var top = (screen.height / 2) - (350 / 2);
+        var targetWin = window.open(url, title, 'width=' + 900 + ', height=' + 350 + ', top=' + top + ', left=' + left);
+    }
+
+    var getBuocDuyet = (function (maBuocDuyet, tenBuocDuyet, stt) {
+        $("#maQuiTrinh" + stt).val(maBuocDuyet);
+        $("#tenQuiTrinhDuyet" + stt).val(tenBuocDuyet);
+    });
+
+    var getNhanVien = (function (maNhanVien, tenNhanVien, stt) {
+        $("#maNhanVienDuyet" + stt).val(maNhanVien);
+        $("#tenNhanVien" + stt).val(tenNhanVien);
+    });
+</script>
+<form id="form-submit" method="post" action="@Url.Action("Edit", "QuiTrinhDuyet")">
+    <div style="width: 100%">
+        <fieldset>
+            <legend style="display: inline">Cập nhật qui trình duyệt</legend>
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog  modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container" style="width: 98%">
+                                <div class="row">
+                                    <div id="filter-panel" class="filter-panel">
+                                        <div class="panel panel-default">
+                                            @{if (ViewBag.isGet != null)
+                                              {
+                                                  Html.RenderPartial("PartialNhanViens", Model);
+                                              }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <button style="width: 100%; height: 34px; margin-top: 2px; display: none" type="button" class="btn btn-primary btn-sm btnNhanVien" id="btnNhanVien" data-toggle="modal" data-target="#myModal">
+                </button>
+                <table class="table main-tbl">
+                    <tr>
+                        <td class="col-md-3">Tên qui trình duyệt <span style="font-style: italic; float: right; color: red">*</span>
+                        </td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(model => model.TenQuiTrinh, new { @class = "form-control", required = "required" })
+                            @Html.HiddenFor(model => model.Id, new { @class = "form-control", required = "required" })
+                            <span style="color: red; font-style: italic">@TempData["Error"]</span>
+                        </td>
+
+                        <td>Ngày lập phiếu<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.TextBoxFor(model => model.NgayLap, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Người lập</td>
+                        <td>
+                            @Html.TextBox("hoTen", (string)ViewBag.TenNhanVien, new { @class = "form-control", required = "required", @readonly = "true" })
+                            @Html.HiddenFor(model => model.MaNV, new { @class = "form-control" })
+                        </td>
+                        <td>Trạng thái</td>
+                        <td>
+                            @Html.DropDownListFor(model => model.TrangThaiDong, @trangThaiDongMo, new { @class = "form-control", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mã công việc <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td colspan="3">
+                            @Html.DropDownListFor(model => model.MaCongViec, (SelectList)ViewBag.CongViecCanDuyet, new { @class = "form-control", @required = "true" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ghi chú</td>
+                        <td colspan="3">
+                            @Html.TextBoxFor(model => model.GhiChu, new { @class = "form-control" })
+                        </td>
+                    </tr>
+
+                </table>
+                <br />
+                <table class="table table-striped table-hover table-condensed tbl-3" id="kythanhtoantbl">
+                    <tr class="headrow">
+                        <td class="col-sm-2" style="text-align: center; width: 250px">Tên bước duyệt</td>
+                        <td style="text-align: center">Thứ tự</td>
+                        <td style="text-align: center">Người duyệt</td>
+                        <td style="vertical-align: middle; text-align: right">
+                            <button type="button" class="btn btn-primary btn-xs vtt">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    @{
+            
+                        int j = 0;
+                    }
+                    @if (chiTiet != null && chiTiet.Count > 0)
+                    {
+                        foreach (var item in chiTiet.OrderBy(d=>d.ThuTuDuyet))
+                        {
+                            ++j;
+                        <tr>
+
+                            <td>@Html.TextBox("tenQuiTrinhDuyet", item.TenBuocDuyet, new { @class = "form-control", @readonly = "true", @id = "tenQuiTrinhDuyet" + (j - 1), @ondblclick = "chonQuiTrinh(" + (j - 1) + ")" })
+                                @Html.Hidden("maQuiTrinh", item.MaBuocDuyet, new { @class = "form-control", @readonly = "true", @id = "maQuiTrinh" + (j - 1) })
+                            </td>
+                            <td>@Html.TextBox("sttQuiTrinhDuyet", item.ThuTuDuyet, new { @class = "form-control", maxlength = "500", @id = "sttQuiTrinhDuyet" + (j - 1), @style = "text-align:right" })
+                            </td>
+                            <td>
+                                @Html.TextBox("tenNhanVien", item.TenNhanVien, new { @class = "form-control", @readonly = "true", maxlength = "500", @id = "tenNhanVien" + (j - 1), @ondblclick = "chonNhanVien(" + (j - 1) + ")" })
+                                @*@Html.TextBox("tenNhanVien", item.TenNhanVien, new { @class = "form-control", @readonly = "true", maxlength = "500", @id = "tenNhanVien" + (j - 1) })*@
+                                @Html.Hidden("maNhanVienDuyet", item.MaNhanVien, new { @class = "form-control", maxlength = "500", @id = "maNhanVienDuyet" + (j - 1) })
+                            </td>
+                            <td style="vertical-align: middle; text-align: right">
+                                <button type='button' class='btn btn-warning btn-xs'><span class="glyphicon glyphicon-minus"></span></button>
+                            </td>
+                        </tr>
+                        }
+                    }
+                </table>
+                <div style="text-align: right">
+                    <button value="Chọn" type="submit" id="btnSubmit" class="btn btn-info">Lưu</button>
+                    <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

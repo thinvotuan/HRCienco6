@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="NhanSuNew" Class="LinqChamCongClientDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=W7-PC;Initial Catalog=NhanSuNew;Persist Security Info=True;User ID=tv" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="NhanSuNewConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tbl_ChamCong" Member="tbl_ChamCongs">
+    <Type Name="tbl_ChamCong">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="badgenumber" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

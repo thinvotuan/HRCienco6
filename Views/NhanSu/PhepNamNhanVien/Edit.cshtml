@@ -1,0 +1,185 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model PhepNamNhanVien
+@*@{
+    ViewBag.Title = "Cập nhật phép năm nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    Layout = "~/Views/Shared/_Popup.cshtml";
+   
+}
+<script src="~/Scripts/autoNumeric.js"></script>
+<script>
+    var obj = window.opener;
+    $(document).ready(function () {
+        
+        $(".numberinput").autoNumeric('init', { mDec: 1, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $("#btnClose").click(function () {
+            //location.href = '@Url.Action("Index")';
+            obj.$("#btnTimKiem_Tab3").click();
+            window.close();
+            
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                $("#form-submit").submit();
+                //obj.$("#btnTimKiem_Tab3").click();
+            }
+        });
+
+        $('[name="soNgayPhepDacBiet"]').bind('change keyup', function () {
+            var idx = $("[name='soNgayPhepDacBiet']").index($(this));
+            tinhTongSoNgayPhepNam(idx);
+        });
+
+        $('[name="soNgayPhepThamNien"]').bind('change keyup', function () {
+            var idx = $("[name='soNgayPhepThamNien']").index($(this));
+            tinhTongSoNgayPhepNam(idx);
+        });
+
+        $('[name="soNgayPhepNamQuiDinh"]').bind('change keyup', function () {
+            var idx = $("[name='soNgayPhepNamQuiDinh']").index($(this));
+            tinhTongSoNgayPhepNam(idx);
+        });
+
+        
+
+        $('[name="soNgayPhepTonDuocDuyet"]').bind('change keyup', function () {
+            var flag = true;
+            var idx = $("[name='soNgayPhepTonDuocDuyet']").index($(this));
+            var TonNamTruoc = $("[name='soNgayPhepTonNamTruoc']:eq(" + idx + ")").val();
+            var soNgayPhepTonDuocDuyet = $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val();
+            if (soNgayPhepTonDuocDuyet != "") {
+                if (parseFloat(soNgayPhepTonDuocDuyet) > parseFloat(TonNamTruoc)) {
+                    flag = false;
+                    Alert.error("Duyệt phép tồn phải nhỏ hơn số ngày phép tồn năm trước.", "Thông báo", { displayDuration: 3000 });
+                    $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val(TonNamTruoc);
+                }
+            }
+            else {
+                $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val(TonNamTruoc);
+            }
+            tinhTongSoNgayPhepNam(idx);
+        });
+
+    });
+    function CheckForm() {
+        var flag = true;
+        if ($("#soNgayPhepTonDuocDuyet").val() == "") {
+            $("#soNgayPhepTonDuocDuyet").addClass("error").attr("title", "Số ngày Phép tồn được duyệt không được rỗng.");
+            flag = false;
+        }
+        if ($("#soNgayPhepNamQuiDinh").val() == "") {
+            $("#soNgayPhepNamQuiDinh").addClass("error").attr("title", "Số ngày Phép qui định không được rỗng.");
+            flag = false;
+        }
+        if ($("#soNgayPhepThamNien").val() == "") {
+            $("#soNgayPhepThamNien").addClass("error").attr("title", "Số ngày Phép thâm niên không được rỗng.");
+            flag = false;
+        }
+        if ($("#soNgayPhepHienTai").val() == "") {
+            $("#soNgayPhepHienTai").addClass("error").attr("title", "Số ngày Phép hiện tại không được rỗng.");
+            flag = false;
+        }
+        return flag;
+    }
+
+    function tinhTongSoNgayPhepNam(idx) {
+        var maNhanVien = $("#MaNhanVien").val();
+        var soNgayPhepTonDuocDuyet = $("#soNgayPhepTonDuocDuyet").val();
+        var soNgayPhepTheoQuiDinh = $("#soNgayPhepNamQuiDinh").val();
+        var soNgayPhepThamNien = $("#soNgayPhepThamNien").val();
+        var soNgayPhepDacBiet = $("#soNgayPhepDacBiet").val();
+        var tongSoNgayPhepNam = parseFloat(soNgayPhepTonDuocDuyet) + parseFloat(soNgayPhepTheoQuiDinh) + parseFloat(soNgayPhepThamNien) + parseFloat(soNgayPhepDacBiet);
+        $("#soNgayPhepHienTai").val(tongSoNgayPhepNam);
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+        line-height: 35px;
+    }
+</style>
+<form id="form-submit" class="form-horizontal" method="post" action="Edit">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Cập nhật phép năm nhân viên</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                <tr>
+                    <td class="tdtitle" style="width: 15%">Tên nhân viên
+                    </td>
+                    <td style="width: 35%">
+                        @Html.TextBox("tenNhanVien", Model.tenNhanVien, new { @readonly = "readonly", @class = "form-control" })
+                        @Html.Hidden("MaNhanVien", Model.maNhanVien)
+                    </td>
+                    <td class="tdtitle" style="width: 15%">Cấp bậc quản lý</td>
+                    <td style="width: 35%">
+                        @Html.TextBox("tenChucVu", Model.tenChucVu, new { @readonly = "readonly", @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Năm
+                    </td>
+                    <td>
+                        @Html.TextBox("name", Model.Nam, new { @readonly = "readonly", @class = "form-control", @style = "text-align:right" })
+                    </td>
+                    <td class="tdtitle">Số ngày phép tồn năm trước</td>
+                    <td>
+                        @Html.TextBox("soNgayPhepTonNamTruoc", String.Format("{0:#,#0.#}", Model.soNgayPhepTonNamTruoc), new { @class = "form-control numberinput", @style = "text-align:right", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Phép tồn được duyệt
+                    </td>
+                    <td>
+                        @Html.TextBox("soNgayPhepTonDuocDuyet", String.Format("{0:#,#0.#}", Model.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+                    </td>
+                    <td class="tdtitle">Phép năm theo quy định</td>
+                    <td>
+                        @Html.TextBox("soNgayPhepNamQuiDinh", String.Format("{0:#,#0.#}", Model.soNgayPhepQuiDinh), new { @class = "form-control numberinput", @style = "text-align:right" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số ngày phép thâm niên
+                    </td>
+                    <td>
+                        @Html.TextBox("soNgayPhepThamNien", String.Format("{0:#,#0.#}", Model.soNgayPhepThamNien), new { @class = "form-control numberinput", @style = "text-align:right" })
+                    </td>
+                    <td class="tdtitle">Số ngày phép đặc biệt</td>
+                    <td>
+                        @Html.TextBox("soNgayPhepDacBiet", String.Format("{0:#,#0.#}", Model.soNgayPhepDacBiet), new { @class = "form-control numberinput", @style = "text-align:right" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Tổng số ngày phép năm</td>
+                    <td>
+                        @Html.TextBox("soNgayPhepHienTai", String.Format("{0:#,#0.#}", Model.tongSoNgayPhep), new {@readonly="readonly", @class = "form-control numberinput", @style = "text-align:right" })
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Ngày cập nhật</td>
+                    <td style="width: 35%">@String.Format("{0: dd/MM/yyyy}", Model.ngayLap)</td>
+                    <td style="width: 15%" class="tdtitle">Người cập nhật </td>
+                    <td style="width: 35%">@Model.NhanVien.hoVaTen</td>
+                </tr>
+
+            </table>
+            <div style="text-align: right; margin: 10px 0">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnClose">Đóng </button>
+            </div>
+        </fieldset>
+
+    </div>
+</form>

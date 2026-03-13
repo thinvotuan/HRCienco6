@@ -1,0 +1,174 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model List<DanhSachNhanVien>
+@{
+    Layout = null;
+    int i = 1;
+    int yearNow = DateTime.Now.Year - 1;
+}
+
+@foreach (var item in Model.OrderBy(d => d.maPhongBan))
+{
+    if (DateTime.Now.Year > yearNow)
+    {
+        if (item.soNgayPhepTonNamTruoc >= 5)
+        {
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.tenPhongBan
+        </td>
+        <td>@item.tenNhanVien
+            @Html.Hidden("maNhanVien", item.maNhanVien)</td>
+        <td>
+            @item.tenChucVu
+        </td>
+        <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepTonNamTruoc)
+            @Html.Hidden("TonNamTruoc", item.soNgayPhepTonNamTruoc)
+            @Html.Hidden("soNgayPhepTheoQuiDinh", item.soNgayPhepQuiDinh)
+            @Html.Hidden("soNgayPhepThamNien", item.soNgayPhepThamNien)
+        </td>
+        <td>
+            @Html.TextBox("soNgayPhepTonDuocDuyet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+        </td>
+        <td style="text-align: right">
+            @String.Format("{0:#,#0.#}", item.soNgayPhepQuiDinh)
+        </td>
+        <td style="text-align: right">
+            @String.Format("{0:#,#0.#}", item.soNgayPhepThamNien)
+        </td>
+        <td style="text-align: right">
+            @Html.TextBox("soNgayPhepDacBiet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+        </td>
+        <td style="text-align: right">
+            @{
+            string tongSoNgayPhepNam = "tongSoNgayPhepNam" + item.maNhanVien;
+            }
+            <span id="@tongSoNgayPhepNam">@String.Format("{0:#,#0.#}", item.tongSoNgayPhep)</span>
+        </td>
+        <td style="text-align: center"><a style="color: black; font-size: 17px; cursor: pointer; border: 1px solid #E3536C; background: #EB6379; padding: 0 2px; border-radius: 2px;" onclick="Delete(this)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+    </tr>
+        }
+        else
+        {
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.tenPhongBan
+        </td>
+        <td>@item.tenNhanVien
+            @Html.Hidden("maNhanVien", item.maNhanVien)</td>
+        <td>
+            @item.tenChucVu
+        </td>
+        <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepTonNamTruoc)
+            @Html.Hidden("TonNamTruoc", item.soNgayPhepTonNamTruoc)
+            @Html.Hidden("soNgayPhepTheoQuiDinh", item.soNgayPhepQuiDinh)
+            @Html.Hidden("soNgayPhepThamNien", item.soNgayPhepThamNien)
+        </td>
+        <td>
+            @Html.TextBox("soNgayPhepTonDuocDuyet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+        </td>
+        <td style="text-align: right">
+            @String.Format("{0:#,#0.#}", item.soNgayPhepQuiDinh)
+        </td>
+        <td style="text-align: right">
+            @String.Format("{0:#,#0.#}", item.soNgayPhepThamNien)
+        </td>
+        <td style="text-align: right">
+            @Html.TextBox("soNgayPhepDacBiet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+        </td>
+        <td style="text-align: right">
+            @{
+            string tongSoNgayPhepNam = "tongSoNgayPhepNam" + item.maNhanVien;
+            }
+            <span id="@tongSoNgayPhepNam">@String.Format("{0:#,#0.#}", item.tongSoNgayPhep)</span>
+        </td>
+        <td style="text-align: center"><a style="color: black; font-size: 17px; cursor: pointer; border: 1px solid #E3536C; background: #EB6379; padding: 0 2px; border-radius: 2px;" onclick="Delete(this)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+    </tr>
+        }
+    }
+    else
+    {
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.tenPhongBan
+        </td>
+        <td>@item.tenNhanVien
+            @Html.Hidden("maNhanVien", item.maNhanVien)</td>
+        <td>
+            @item.tenChucVu
+        </td>
+        <td style="text-align: right">
+            @Html.Hidden("TonNamTruoc", 0)
+            @Html.Hidden("soNgayPhepTheoQuiDinh", item.soNgayPhepQuiDinh)
+            @Html.Hidden("soNgayPhepThamNien", item.soNgayPhepThamNien)
+        </td>
+        <td>@Html.TextBox("soNgayPhepTonDuocDuyet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })</td>
+        <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepQuiDinh)</td>
+        <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepThamNien)</td>
+        <td style="text-align: right">
+            @Html.TextBox("soNgayPhepDacBiet", String.Format("{0:#,#0.#}", item.soNgayPhepTonDuocDuyet), new { @class = "form-control numberinput", @style = "text-align:right" })
+        </td>
+        <td style="text-align: right">
+            @{
+        string tongSoNgayPhepNam = "tongSoNgayPhepNam" + item.maNhanVien;
+            }
+            <span id="@tongSoNgayPhepNam">@String.Format("{0:#,#0.#}", item.tongSoNgayPhep)</span>
+        </td>
+        <td style="text-align: center"><a style="color: black; font-size: 17px; cursor: pointer; border: 1px solid #E3536C; background: #EB6379; padding: 0 2px; border-radius: 2px;" onclick="Delete(this)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+    </tr>
+    }
+    i++;
+}
+<script src="~/Scripts/autoNumeric.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 1, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $('[name="soNgayPhepDacBiet"]').bind('change keyup', function () {
+            var idx = $("[name='soNgayPhepDacBiet']").index($(this));
+            tinhTongSoNgayPhepNam(idx);
+        });
+
+        $('[name="soNgayPhepTonDuocDuyet"]').bind('change keyup', function () {
+            var flag = true;
+            var idx = $("[name='soNgayPhepTonDuocDuyet']").index($(this));
+            var TonNamTruoc = $("[name='TonNamTruoc']:eq(" + idx + ")").val();
+            var soNgayPhepTonDuocDuyet = $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val();
+            if (soNgayPhepTonDuocDuyet != "") {
+                if (parseFloat(soNgayPhepTonDuocDuyet) > parseFloat(TonNamTruoc)) {
+                    flag = false;
+                    Alert.error("Duyệt phép tồn phải nhỏ hơn số ngày phép tồn năm trước.", "Thông báo", { displayDuration: 3000 });
+                    $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val(TonNamTruoc);
+                }
+            }
+            else {
+                $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val(TonNamTruoc);
+            }
+            tinhTongSoNgayPhepNam(idx);
+        });
+    });
+
+    function DuyetNgayTon(obj, phepTon) {
+        var flag = true;
+        if ($(obj).val() != "") {
+            if (parseFloat($(obj).val()) > parseFloat(phepTon)) {
+                flag = false;
+                Alert.error("Duyệt phép tồn phải nhỏ hơn số ngày phép tồn năm trước.", "Thông báo", { displayDuration: 3000 });
+                $(obj).val(phepTon);
+            }
+        }
+
+        if (flag == true) {
+            tinhTongSoNgayPhepNam(obj);
+        }
+    }
+
+    function tinhTongSoNgayPhepNam(idx) {
+        var maNhanVien = $("[name='maNhanVien']:eq(" + idx + ")").val();
+        var soNgayPhepTonDuocDuyet = $("[name='soNgayPhepTonDuocDuyet']:eq(" + idx + ")").val();
+        var soNgayPhepTheoQuiDinh = $("[name='soNgayPhepTheoQuiDinh']:eq(" + idx + ")").val();
+        var soNgayPhepThamNien = $("[name='soNgayPhepThamNien']:eq(" + idx + ")").val();
+        var soNgayPhepDacBiet = $("[name='soNgayPhepDacBiet']:eq(" + idx + ")").val();
+        var tongSoNgayPhepNam = parseFloat(soNgayPhepTonDuocDuyet) + parseFloat(soNgayPhepTheoQuiDinh) + parseFloat(soNgayPhepThamNien) + parseFloat(soNgayPhepDacBiet);
+        $("#tongSoNgayPhepNam" + maNhanVien).html(tongSoNgayPhepNam);
+    }
+</script>

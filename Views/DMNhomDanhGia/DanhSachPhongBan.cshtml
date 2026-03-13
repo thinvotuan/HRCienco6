@@ -1,0 +1,184 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    Layout = "~/Views/Shared/_Popup.cshtml";
+   
+}
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+
+<script src="/Scripts/autoNumeric.js"></script>
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+    var obj = window.opener;
+    $().ready(function () {
+
+
+        $('#checkAll').click(function (e) {
+            $('[name="chk"]').prop('checked', this.checked);
+        });
+
+        $('[name="chk"]').click(function (e) {
+            if ($('[name="chk"]:checked').length == $('[name="chk"]').length || !this.checked)
+                $('#checkAll').prop('checked', this.checked);
+        });
+        $("#navigation1").treeview({
+            persist: "location",
+            collapsed: false,
+            unique: false
+        });
+        var parentId = "";
+        //khi click vào công viêc tren tree
+        $("#navigation1 a").click(function () {
+            $.each($("#navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            parentId = $(this).attr("alt");
+
+            // Get phòng ban
+            var giatri = $(this).attr("alt").replace(/ /gi, '+');
+            var flag = $(this).attr("flag").replace(/ /gi, '+');
+            var tenPhongBans = $(this).text();
+            var table = obj.document.getElementById("tbody");
+            var idTbody = "tbody";
+            var stt = table.rows.length;
+            if (flag == "true") {
+                if (checkPhongBan(giatri)) {
+                    var index = table.rows.length;
+                    var row = table.insertRow(index);
+                    var stt = row.insertCell(row.childNodes.length);
+                    stt.innerHTML = (index + 1);
+                    stt.setAttribute("align", "center");
+
+                    var maPhongBan = row.insertCell(row.childNodes.length);
+                    maPhongBan.innerHTML = "<input name='maPhongBan' type='hidden' value='" + giatri + "' />" + giatri;
+                    maPhongBan.setAttribute("align", "left");
+
+                    var tenPhongBan = row.insertCell(row.childNodes.length);
+                    tenPhongBan.innerHTML = "<input name='tenPhongBan' type='hidden' value='" + tenPhongBans + "' />" + tenPhongBans;
+                    tenPhongBan.setAttribute("align", "left");
+
+                    var del = row.insertCell(row.childNodes.length);
+                    del.innerHTML = "<a href='javascript:void(0);'  style='color:blue;' onclick=\"DeleteRow('" + idTbody + "'," + index + ",'true');\">Xóa</a>";
+                    del.setAttribute("align", "center");
+                }
+            }
+        });
+
+
+
+    });
+
+    function OnCriteriaPC(page) {
+        var giatri = $("#parrentId").val().replace(/ /gi, '+');
+        var qsearch = $("#searchText").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadNhanVien", "PhieuTangCa")' + "?parrentId=" + giatri.trim() + "&_page=" + page + '&qSearch=' + qsearch;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+        var giatri = $("#parrentId").val().replace(/ /gi, '+');
+        var qsearch = $("#searchText").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadNhanVien", "PhieuTangCa")' + "?parrentId=" + giatri.trim() + "&_page=1" + '&qSearch=' + qsearch;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function checkPhongBan(maPhongBan) {
+        for (var i = 0; i < obj.$("[name='maPhongBan']").length; i++) {
+            if (obj.$("[name='maPhongBan']:eq(" + i + ")").val() == maPhongBan) {
+                return false;
+            }
+        }
+        return true;
+    }
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+
+</script>
+
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    #Avatar
+    {
+        width: 100%;
+        height: auto;
+        max-width: 50px;
+        object-fit: cover;
+    }
+
+    #imgInp
+    {
+        opacity: 0;
+        height: 100%;
+        width: 100%;
+        bottom: 0;
+        cursor: pointer;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        right: 0;
+    }
+</style>
+<div id="container">
+
+
+
+    <table width="100%" cellpadding="2" border="0" cellspacing="0">
+        <tr>
+            <td style="width: 30%" valign="top">
+                <fieldset class="removeBorderFieldset">
+
+                    <div id="tabs" style="" class="ui-tabs">
+                        <ul class="ui-tabs-nav">
+                            <li class="ui-tabs-selected ui-state-active"><a><span>Danh mục bộ phận</span></a></li>
+                        </ul>
+                    </div>
+                    <div style="height: 90%; overflow: hidden; margin-left: 30px" id="divTreeCongViec">@Html.Raw(ViewBag.departments)</div>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+
+</div>

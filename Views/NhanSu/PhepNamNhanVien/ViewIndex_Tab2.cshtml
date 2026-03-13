@@ -1,0 +1,114 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    int i = 1;
+    DateTime ngayKiemTra = (DateTime)(ViewBag.NgayKiemTra);
+
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+    
+     var Model = ViewData["lsDanhSach"]  as List<sp_PhepTonNamResult>;
+}
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+</style>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="width: 45px">STT</th>
+            <th style="width: 130px">Mã nhân viên</th>
+            <th style="width: 200px">Họ tên</th>
+            <th style="width: 300px">Phòng ban</th>
+            <th style="width: 80px">Phép tồn năm @(ngayKiemTra.Year - 1) </th>
+            <th style="width: 80px">Phép năm @(ngayKiemTra.Year) theo qui định</th>
+            <th style="width: 80px">Tổng phép</th>
+            <th style="width: 80px">Phép năm đã nghĩ đến thời điểm @(string.Format("{0:dd/MM/yyyy}", ngayKiemTra))</th>
+            <th style="width: 80px">Phép nghỉ @(ngayKiemTra.Year - 1)</th>
+            <th style="width: 80px">Phép nghỉ @(ngayKiemTra.Year)</th>
+            <th style="width: 80px">Số phép tồn còn lại năm @(ngayKiemTra.Year)</th>
+            @*<th style="width: 80px">Số ngày phép được tính lại năm @(ngayKiemTra.Year)</th>*@
+        </tr>
+    </thead>
+    <tbody id="load_Tab2">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td style="text-align: left">@item.maNhanVien</td>
+                <td style="text-align: left"><a style="color:#519ee5" href="/NhanVien/Details/@item.maNhanVien">@item.maNhanVien</a><br />
+                    <i class="fa fa-user" aria-hidden="true"></i>@item.tenNhanVien</td>
+                <td style="text-align: left">@item.phongBan</td>
+
+
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.tonNhapCu)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.quiDinhNam_Moi)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.tongNam_Moi)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soPhepDaNghiNam_Moi)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.tonNam_Cu)</td>
+                <td style="text-align: center">@String.Format("{0:#,#0.#}", item.thongKenghi_namMoi)</td>
+                <td style="text-align: center">@String.Format("{0:#,#0.#}", item.soPhepTon)</td>
+                @*<td style="text-align: center">@String.Format("{0:#,#0.#}", item.soNgayPhepNamHienTai)</td>*@
+            </tr> 
+                i++;
+            }
+        }
+        <tr>
+            <td colspan="11" align="left">
+                @{
+                
+                    if (page_ > 1)
+                    {
+        
+                    <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ - 1));">
+                Previous</a>
+       
+                    }
+
+
+                    if (page_ - 2 >= 1)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ - 2));">
+                        @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ - 1));">
+                            @(page_ - 1) </a>
+                    } <span class="pageActive">@page_</span>
+                    if (page_ + 2 <= total_)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ + 1) );">
+                        @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ + 2));">
+                            @(page_ + 2) </a>
+                    }
+
+                    if (page_ < total_)
+                    { 
+        
+                    <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab2(@total_);">
+                Last</a>
+        
+                    }
+        
+                    <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+

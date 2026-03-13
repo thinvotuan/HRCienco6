@@ -1,0 +1,89 @@
+﻿@using BatDongSan.Models.QLSuatAn
+@model List<PhieuDangKySuatAnModel>
+@{
+    ViewBag.Title = "PrintSuatAn";
+    Layout = "";
+    var lstCuaHang  = ViewBag.lstCuaHang as List<BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_CuaHang>;
+   // var lstMonAn = ViewBag.lstMonAn as List<BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_CuaHang_MonAn>;
+       
+}
+<style>
+    .boxCH {
+        height: 357px;
+        float: left;
+        margin: 10px 1%;
+        width: 250px;
+        overflow: hidden;
+    }
+</style>
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach(var item in Model)
+        {
+            var thonTinCuaHang = lstCuaHang.Where(d => d.maCuaHang == item.maCuaHang).FirstOrDefault();
+          //  var thonTinMonAn = lstMonAn.Where(d => d.maMonAn == item.maMonAn).FirstOrDefault();
+    <div style="height: 70mm !important; float: left;  margin:4px 10px;   border: 0px; width: 300px;" class="boxCH">
+        <table border="1" style="border-spacing:0; font-size:12px;">
+            <tbody>
+                <tr>
+                    <td colspan="4" style="text-align: center"><strong>
+                        <img src="~/Images/logo.png" style="width: 55px;"></strong></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align: center;    font-size: 12px;"><strong>PHIẾU ĂN TRƯA DÀNH  CHO NHÂN VIÊN</strong></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Mã vạch</strong></td>
+                    <td>
+                        <img src="~/FileUploads/BarcodeImage/@item.maVach" style="    width: 70px;
+    height: 30px;" /></td>
+                    <td style="text-align: right; font-weight: bold; padding-right: 10px;">Ngày sử dụng</td>
+
+                    <td>@String.Format("{0:dd/MM/yyyy}", item.ngayLapPhieu)</td>
+                </tr>
+                <tr>
+                    <td><strong>MSNV</strong></td>
+                    <td>@item.maNhanVien</td>
+                    <td style=""><strong>Họ tên NV</strong></td>
+                    <td style="min-width:100px;font-size:10px;">@item.hoTenNhanVien</td>
+                </tr>
+                <tr>
+                    <td><strong>Cửa hàng</strong></td>
+                    <td style="font-size:10px;">@thonTinCuaHang.tenCuaHang</td>
+                    <td><strong>Số suất ăn còn lại</strong></td>
+                    <td>@item.soSuatAnConLaiCuaNVTaiQuan</td>
+                </tr>
+              @*  <tr>
+                    <td><strong>Thời gian phục vụ</strong></td>
+                    <td style="font-size:10px; font-weight:bold"></td>
+                 
+                </tr>*@
+                
+
+                <tr>
+                    <td rowspan="2"><strong>STT</strong></td>
+                    <td rowspan="2">@item.soThuTuPhucVuTaiQuan</td>
+                    <td colspan="2" style="text-align: center;"><strong>Nhân viên sử dụng ký  tên</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p>&nbsp;</p>
+                        <p>
+                            <br>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    
+        }
+     
+      
+        
+    }
+}

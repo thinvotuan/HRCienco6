@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 16, 9.375" name="linqERPCienco6">
+  <DataContextMoniker Name="/linqERPCienco6DataContext" />
+  <nestedChildShapes>
+    <classShape Id="7ad64c3d-a9af-4611-9262-548f6f97093b" absoluteBounds="13.75, 2.25, 2, 4.0785139973958326">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/tbl_NhanVienHR" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d39a5f78-5168-4f93-9d15-6adbf73f00b8" absoluteBounds="13.765, 2.71, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2d7ec54f-dd2a-40c3-a91d-106ee64bd196" isExpanded="false" absoluteBounds="5.875, 1.25, 2, 0.45">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/NS_TBL_NhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2ac4f0ba-7039-4a79-820d-245b8eb4910b" absoluteBounds="5.8900000000000006, 1.71, 1.9700000000000002, 9.8644612630208321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ec72740e-73a8-4426-9a82-732d4203d0c4" absoluteBounds="2.75, 2, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/NS_TBL_ChucDanhNhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ad0d7558-65d4-4cc7-af8b-ca81c2d0ce2d" absoluteBounds="2.7650000000000006, 2.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.875 : 1.475); (3.75 : 1.475); (3.75 : 2)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/linqERPCienco6DataContext/NS_TBL_NhanVien/NS_TBL_NhanVien_NS_TBL_ChucDanhNhanVien" />
+      <nodes>
+        <classShapeMoniker Id="2d7ec54f-dd2a-40c3-a91d-106ee64bd196" />
+        <classShapeMoniker Id="ec72740e-73a8-4426-9a82-732d4203d0c4" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="26d726ce-5dd3-4039-9ae1-104acdb4092a" absoluteBounds="8.875, 2, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/NS_TBL_PhongBanNhanVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b2ef9ed2-7619-4322-8ee5-20ca63c345ab" absoluteBounds="8.89, 2.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.875 : 1.475); (9.875 : 1.475); (9.875 : 2)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/linqERPCienco6DataContext/NS_TBL_NhanVien/NS_TBL_NhanVien_NS_TBL_PhongBanNhanVien" />
+      <nodes>
+        <classShapeMoniker Id="2d7ec54f-dd2a-40c3-a91d-106ee64bd196" />
+        <classShapeMoniker Id="26d726ce-5dd3-4039-9ae1-104acdb4092a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="1f9ab2b2-8c9d-4ef2-98a1-4e129245316f" absoluteBounds="8.375, 4.875, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/HT_User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="630b78d4-1f1c-4f40-9b87-86d0554cd842" absoluteBounds="8.39, 5.335, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b80ebc5-9370-4b80-9d41-9f3c84a84da5" absoluteBounds="11.875, 7.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/tbl_PhongBan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="69c3a577-6a35-49be-b080-fa301abb22a4" absoluteBounds="11.89, 8.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a0d22b48-9a83-497a-9b9a-d3153010666e" absoluteBounds="11.375, 3.625, 2, 1.9631982421875">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/NS_DM_PhongBan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="28a064eb-752a-48db-82a5-63b73d0f48ed" absoluteBounds="11.39, 4.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(11.375 : 3.625); (10.875 : 3.57859537760417)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/linqERPCienco6DataContext/NS_DM_PhongBan/NS_DM_PhongBan_NS_TBL_PhongBanNhanVien" />
+      <nodes>
+        <classShapeMoniker Id="a0d22b48-9a83-497a-9b9a-d3153010666e" />
+        <classShapeMoniker Id="26d726ce-5dd3-4039-9ae1-104acdb4092a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="6ce0a7ef-cb43-4acf-88e2-dc4ed802702d" absoluteBounds="5.875, 5.125, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/linqERPCienco6DataContext/NS_DM_ChucDanh" />
+      <nestedChildShapes>
+        <elementListCompartment Id="67e8d175-77b3-4960-86ca-66b6531559dd" absoluteBounds="5.89, 5.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.875 : 5.125); (6.875 : 2.78929768880208); (4.75 : 2.78929768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/linqERPCienco6DataContext/NS_DM_ChucDanh/NS_DM_ChucDanh_NS_TBL_ChucDanhNhanVien" />
+      <nodes>
+        <classShapeMoniker Id="6ce0a7ef-cb43-4acf-88e2-dc4ed802702d" />
+        <classShapeMoniker Id="ec72740e-73a8-4426-9a82-732d4203d0c4" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

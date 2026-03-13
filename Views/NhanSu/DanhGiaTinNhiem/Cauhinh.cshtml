@@ -1,0 +1,297 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ls = ViewBag.lsDanhSach as List<sp_NS_PhieuDanhGia_IndexResult>; 
+   
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $().ready(function() {
+
+        $("#btnSave").click(function() {
+            if (checkForm()) {
+                $("form").submit();
+            }
+        });
+        $("#KyDanhGia").addClass("form-control");
+        $(".datetime").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+       
+        $("input[type='text']:eq(0)").focus();
+        
+        setTimeout(function() { $("#divMsg").hide() }, 5000);
+        $(".diem").bind("change keyup", function() {
+            if ($(this).val() > 100)
+                $(this).val(100);
+            var maNV = $(this).attr("alt");
+            var tongDiem = getNumber($("#" + maNV + "_xepLoai_1").val()) * 2 + getNumber($("#" + maNV + "_xepLoai_2").val()) * 2
+             + getNumber($("#" + maNV + "_xepLoai_3").val()) + getNumber($("#" + maNV + "_xepLoai_4").val()) * 1.5 +
+             getNumber($("#" + maNV + "_xepLoai_5").val());
+
+            $("#" + maNV + "_diemTong").val(tongDiem / 7.5);
+        });
+
+    });
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+    function checkForm() {
+        var flag = true;
+        if (isEmpty($("#Name"), ""))
+            flag = false;
+        return flag;
+    }
+</script>
+<style>
+    #KyDanhGia
+    {
+        width:100%;
+
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    var lsCauHinh = (List<tbl_NS_Cauhinh>)ViewBag.lsCauHinh;
+          
+    <fieldset class=" removeBorderFieldset">
+        <div class="myatable03 mtxxs">
+
+            <div id="tabs" style="" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Cấu hình thông tin đánh giá tín nhiệm
+                    </span></a></li>
+                </ul>
+            </div>
+            <div id="container">
+
+                <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                    <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Cấu hình thang điểm xếp loại<span style="color: red; font-style: italic"></span></h4>
+                </div>
+                <table class="table table-striped table-hover table-condensed tableThemeCustome ">
+                    <tr>
+                        <td style="width: 25%" class="tdtitle">Loại xuất sắc&nbsp; >= :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+
+
+                            @Html.TextBox("LoaiXuatSac", lsCauHinh.Where(t => t.maLoai.Equals("LoaiXuatSac")).FirstOrDefault().giaTri)
+                        </td>
+                        <td style="width: 25%" class="tdtitle">Loại A&nbsp; >= :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @Html.TextBox("LoaiA", lsCauHinh.Where(t => t.maLoai.Equals("LoaiA")).FirstOrDefault().giaTri)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Loại B&nbsp; >= :
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("LoaiB", lsCauHinh.Where(t => t.maLoai.Equals("LoaiB")).FirstOrDefault().giaTri)
+                        </td>
+                        <td class="tdtitle">Loai C&nbsp; >= :
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("LoaiC", lsCauHinh.Where(t => t.maLoai.Equals("LoaiC")).FirstOrDefault().giaTri)
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                    <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Cấu hình hệ số điểm các cấp<span style="color: red; font-style: italic"></span></h4>
+                </div>
+                <table class="table table-striped table-hover table-condensed tableThemeCustome ">
+                    <tr>
+                        <td style="width: 25%" class="tdtitle">Hệ số điểm ngang cấp :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @Html.TextBox("NgangCap", lsCauHinh.Where(t => t.maLoai.Equals("NgangCap")).FirstOrDefault().giaTri)
+                        </td>
+                        <td style="width: 25%" class="tdtitle">Hệ số điểm cấp dưới :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @Html.TextBox("CapDuoi", lsCauHinh.Where(t => t.maLoai.Equals("CapDuoi")).FirstOrDefault().giaTri)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Hệ số điểm cấp trên :
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("CapTren", lsCauHinh.Where(t => t.maLoai.Equals("CapTren")).FirstOrDefault().giaTri)
+                        </td>
+                        <td class="tdtitle">Số lượng phiếu qui đổi :
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("HeSoQuiDoi", lsCauHinh.Where(t => t.maLoai.Equals("HeSoQuiDoi")).FirstOrDefault().giaTri)
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                    <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Cấu hình ngày tháng đánh giá<span style="color: red; font-style: italic"></span></h4>
+                </div>
+                <table class="table table-striped table-hover table-condensed tableThemeCustome ">
+                    <tr>
+                        <td class="tdtitle">Chọn kỳ</td>
+                        <td>
+                         
+                           @Html.DropDownList("KyDanhGia", new SelectList(ViewBag.KyDanhGias, "Value", "Text", lsCauHinh.Where(t => t.maLoai.Equals("kyDanhGia")).Select(d => d.giaTri).FirstOrDefault()))
+                        </td>
+                        <td style="width: 25%" class="tdtitle">Ngày bắt đầu thông báo :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @{  
+    var NgayBatDauThongBao1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDauThongBao1")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThucThongBao1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThucThongBao1")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+                           
+                            }
+                            @Html.TextBox("NgayBatDauThongBao1", NgayBatDauThongBao1.HasValue ? NgayBatDauThongBao1.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                        
+
+                    </tr>
+                    <tr>
+                        <td style="width: 25%" class="tdtitle">Ngày bắt đầu đánh giá:
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @{  
+    var NgayBatDau1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDau1")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThuc1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThuc1")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayBatDauCongBo1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDauCongBo1")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThucCongBo1 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThucCongBo1")).Select(d => d.giaTriNgayThang).FirstOrDefault();  
+                            }
+                            @Html.TextBox("NgayBatDau1", NgayBatDau1.HasValue ? NgayBatDau1.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                        <td style="width: 25%" class="tdtitle">Ngày kết thúc đánh giá:
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @Html.TextBox("NgayKetThuc1", NgayKetThuc1.HasValue ? NgayKetThuc1.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày công bố kết quả:
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("NgayBatDauCongBo1", NgayBatDauCongBo1.HasValue ? NgayBatDauCongBo1.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                        <td class="tdtitle">Ngày kết thúc thông báo:
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("NgayKetThucThongBao1", NgayKetThucThongBao1.HasValue ? NgayKetThucThongBao1.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                @*<div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                    <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Cấu hình ngày tháng kỳ 2<span style="color: red; font-style: italic"></span></h4>
+                </div>
+                <table class="table table-striped table-hover table-condensed tableThemeCustome ">
+                    <tr>
+                        <td style="width: 25%" class="tdtitle">Ngày bắt đầu thông báo :
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @{  
+    var NgayBatDauThongBao2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDauThongBao2")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThucThongBao2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThucThongBao2")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+                           
+                            }
+                            @Html.TextBox("NgayBatDauThongBao2", NgayBatDauThongBao2.HasValue ? NgayBatDauThongBao2.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 25%" class="tdtitle">Ngày bắt đầu đánh giá:
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @{ 
+    var NgayBatDau2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDau2")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThuc2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThuc2")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayBatDauCongBo2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayBatDauCongBo2")).Select(d => d.giaTriNgayThang).FirstOrDefault();
+    var NgayKetThucCongBo2 = lsCauHinh.Where(t => t.maLoai.Equals("NgayKetThucCongBo2")).Select(d => d.giaTriNgayThang).FirstOrDefault();  
+                            }
+                            @Html.TextBox("NgayBatDau2", NgayBatDau2.HasValue ? NgayBatDau2.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                        <td style="width: 25%" class="tdtitle">Ngày kết thúc đánh giá:
+                        </td>
+                        <td style="width: 25%; font-weight: 700;">
+                            @Html.TextBox("NgayKetThuc2", NgayKetThuc2.HasValue ? NgayKetThuc2.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày công bố kết quả:
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("NgayBatDauCongBo2", NgayBatDauCongBo2.HasValue ? NgayBatDauCongBo2.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                        <td class="tdtitle">Ngày kết thúc thông báo:
+                        </td>
+                        <td style="font-weight: 700">
+                            @Html.TextBox("NgayKetThucThongBao2", NgayKetThucThongBao2.HasValue ? NgayKetThucThongBao2.Value.ToString("dd/MM/yyyy") : string.Empty, new { @class = "datetime" })
+                        </td>
+                    </tr>
+                </table>*@
+                <div style="float: right">
+
+                    <input type="submit" value="Lưu" />
+                    <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "DanhGiaTinNhiem")    '" />
+                </div>
+                <br />
+                <br />
+                <b><i>Note : Công thức tính điểm đánh giá như sau.</i></b><br />
+                Điểm tổng hợp = ((hsDiemNC * (sLPhieuNC % sLPhieuQuiDoi + 1) * <span style="color: #CC0000">dBQNC</span>) +(hsDiemCD * (sLPhieuCD % sLPhieuQuiDoi + 1) * <span style="color: #CC0000">dBQCD</span>) + (hsDiemCT * (sLPhieuCT % sLPhieuQuiDoi + 1) * <span style="color: #CC0000">dBQCT</span>))/&nbsp;
+            <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            (<span style="color: #0000FF">hsDiemNC * (sLPhieuNC % sLPhieuQuiDoi + 1) + hsDiemCD
+                * (sLPhieuCD % sLPhieuQuiDoi + 1) + hsDiemCT * (sLPhieuCT % sLPhieuQuiDoi + 1))</span>
+                <br />
+                <br />
+                <i>Chú thích :<br />
+                    dBQNC : Điểm bình quân ngang cấp
+                <br />
+                    dBQCD : Điểm bình quân cấp dưới
+                <br />
+                    dBQCT : Điểm bình quân cấp trên
+                <br />
+                    <br />
+                    sLPhieuNC : Số lượng phiếu ngang cấp
+                <br />
+                    sLPhieuCD : Số lượng phiếu cấp dưới
+                <br />
+                    sLPhieuCT : Số lượng phiếu cấp trên
+                <br />
+                    <br />
+                    hsDiemNC : Hệ số điểm ngang cấp
+                <br />
+                    hsDiemCD : Hệ số điểm cấp dưới
+                <br />
+                    hsDiemCT : Hệ số điểm cấp trên
+                <br />
+                    sLPhieuQuiDoi : Số lượng phiếu qui đổi </i>
+            </div>
+
+
+        </div>
+    </fieldset>
+}

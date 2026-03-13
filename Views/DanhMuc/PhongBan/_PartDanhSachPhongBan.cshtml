@@ -1,0 +1,84 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<style>
+    td
+    {
+        border: none;
+    }
+    #navigation1 a:link
+    {
+        color:#0000FF;
+    }
+</style>
+<script>
+    var maPhongban = "";
+    $(document).ready(function () {
+
+        var heightBrowser = $(window).height();
+        var heightWrapper = $(".popupChonNVDuyet").height();
+
+        var heightSet = heightBrowser - heightWrapper;
+        heightSet = parseInt(heightSet);
+        heightSet = heightSet - 50;
+
+        $("#TabPB").css("height", heightSet);
+        $("#TabPB #navigation1").treeview({
+            persist: "location",
+            collapsed: true,
+            unique: false
+        }).find(".expandable-hitarea").click();;
+        $("#TabPB #navigation1 a").click(function () {
+            beginPaging();            
+            @*$.each($("#TabPB #navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            maPhongban = $(this).attr("alt");
+            var url = "@Url.Action("LoadNhanVienDuyet", "PhongBan")" + "?searchString=" + "&maPhongBan=" + maPhongban;
+            $(".popupChonNVDuyet #TabNV").load(url, function () {
+                
+            });*@
+         
+                var maPhongBan = $(this).attr("alt");
+
+
+
+                $("#parentId").val(maPhongBan);
+                $(".close").click();
+                $(".modal-backdrop, .fade, .in").removeClass("modal-backdrop fade in");
+           
+            successPaging();
+        });       
+
+    });
+
+    function beginPaging(args) {
+        // Animate        
+        $('.popupChonNVDuyet #TabNV').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('.popupChonNVDuyet #TabNV').fadeIn('fast');
+    }
+
+</script>
+
+<div id="content" class="popupChonNVDuyet">
+    <div id="tabs" style="width: 30%;margin-right:10px; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Danh sách Bộ phận</span></a></li>
+                </ul>
+            </div>
+   
+    <div style="clear:both"></div>
+    <div style="width: 100%; float: left;overflow:auto;margin-right:10px;box-shadow: 0 0 6px #000; height:500px; " id="TabPB">
+
+        @Html.Raw(ViewBag.NVPB)
+    </div>
+    
+
+</div>

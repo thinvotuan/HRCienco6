@@ -1,0 +1,82 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_NS_NhanVien_IndexResult>
+@{
+    Layout = null;
+    int i = 1;
+  //  string[] parameters = TempData["Params"].ToString().Split(',');
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("Index", "NhanVien")" + "?searchString=" + searchText;
+            beginPaging();
+            $('#content').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('.btnChon').click(function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var hoten = selected.find('#hoten').val();
+                var manv = selected.find('#manhanvien').val();
+                $('#nhanvien').val(hoten);
+                $('#manv').val(manv);
+                //$('.panel-default').html('');
+            }
+            //$('#filter-panel').removeClass('in');
+        })
+    })
+</script>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th>Mã nhân viên</th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Ngày vào làm</th>
+            <th>Phòng ban</th>
+            <th>Chức danh</th>
+            <th>Loại</th>
+            <th style="width: 83px"></th>
+        </tr>
+    </thead>
+    <tbody>
+      @*  @foreach (var item in Model)
+        {                                                        
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td style="text-align: left">
+                    <a style="color:#519ee5" href="@Url.Action("Details", "NhanVien", new { id = item.maNhanVien })">@item.maNhanVien</a></td>
+                <td>@item.ho</td>
+                <td>@item.ten</td>
+                <td>@Html.Raw(item.ngayVaoLam.HasValue ? item.ngayVaoLam.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                <td style="text-align: left">@item.tenPhongBan</td>
+                <td>@item.TenChucDanh</td>
+                <td>@item.tenLoaiNhanVien</td>
+                <td style="text-align: right">
+                    <button class="btn btn-primary btn-xs btnEdit" type="button" value="@item.maNhanVien">Sửa</button>
+                    <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.maNhanVien">Xóa</button>
+                </td>
+            </tr> 
+            i++;
+        }*@
+    </tbody>
+</table>
+<div>
+   @* Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count*@
+</div>
+<div>
+ @*   <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "NhanVien", action = "Index", searchString = parameters[0], maPhongBan = parameters[1] }))
+    </ul>*@
+</div>
+

@@ -1,0 +1,86 @@
+﻿@using BatDongSan.Models.NhanSu
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "DeNghiChiLuong")" + "?qSearch=" + $("#pref-search").val().replace(/\ /g, "+") + "&nam=" + $("#nam").val();            
+            $("#content").html('<h4>Loading...</h4>').load(url, function () { });
+        });
+        $("#nam").change(function () {
+            $("#btnSearch").click();
+        });
+        $("#btnCreate").click(function () {
+            location.href = '@Url.Action("Create","DeNghiChiLuong")';
+        });
+    });
+    $(document).on("click", ".btnEdit", function () {
+        var url = "/DeNghiChiLuong/Edit/" + this.value;
+        location.href = url;
+    });
+    $(document).on("click", ".btnDelete", function () {
+        var url = "@Url.Action("Delete", "DeNghiChiLuong")" + "/" + $(this).attr("alt");
+        bootbox.confirm("Bạn có muốn xóa không", function (result) {
+            if (result) {
+                var form = document.getElementById("form-submit");
+                form.action = url;
+                form.submit();
+            }
+        })
+    });
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+    function ViewDetailHistory(soPhieu, maQuiTrinh) {
+        var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + soPhieu + '?maQuiTrinh=' + maQuiTrinh;
+        PopUpManager(url, "DUYET", 700, 200);
+    }
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+</script>
+<form id="form-submit" method="post">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách đề nghị chi lương</span></a></li>
+                </ul>
+            </div>
+            <div class="panel-body background_top" style="padding-bottom: 2px !important; padding-top: 2px !important;">
+                <div class="form-inline">
+                     <div class="form-group" id="loaiHopDong-div">
+                        @Html.DropDownList("nam", ViewBag.Nams as SelectList, new { @class = "btn btn-sm btn-default btn-select btn-select-light", @style = "padding:2px !important;" })
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" id="pref-search" onkeypress="enterToSeacrh(event)" value="@ViewBag.Search" style="width:200px" />
+                    </div>
+                    <div class="form-group">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style=""></span>Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group" style="float: right;">
+                        <button id="btnCreate" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus"></span>Thêm bổ sung
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("PartialIndex");}
+            </div>
+        </fieldset>
+    </div>
+</form>

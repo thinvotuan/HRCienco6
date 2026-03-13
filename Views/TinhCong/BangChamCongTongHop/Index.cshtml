@@ -1,0 +1,153 @@
+﻿@model IList<BatDongSan.Models.ChamCong.sp_XemNhanVienRaVaoNewResult>
+@{
+    ViewBag.Title = "Danh sách phiếu đăng ký công tác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    var sIndex = 0, offSet = 40, limit = 20, isPreviousEventComplete = true, isDataAvailable = true;
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            location.href = "@Url.Action("Create", "PhieuCongTac")";
+        });
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "PhieuCongTac")" + "/" + this.value;
+            var form = document.getElementById("form-listview");
+            form.method = "post";
+            form.action = url;
+            form.submit();
+        });
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "PhieuCongTac")" + "/" + this.value;
+            location.href = url;
+        });
+        $(document).on("click", ".btnDetails", function () {
+            var url = "@Url.Action("Details", "PhieuCongTac")" + "/" + this.value;
+            location.href = url;
+        });
+        $('#btnTimKiem').click(function () {
+            @*  var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("ViewIndexAdmin", "ChamCong")" + "?searchString=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&indexRowStart=" + 0 + "&indexRowEnd=" + 40;
+            var imageUrl = '<tr><td colspan="12 "><div id="divMsg" align="center"><img src="@Url.Content("~/Content/images/loading.gif")"/></div></td></tr>';
+            $('#content').html(imageUrl);
+            $('#content').load(url);*@
+
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("Index", "ChamCong")" + "?searchString=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val();
+            var imageUrl = '<tr><td colspan="12 "><div id="divMsg" align="center"><img src="@Url.Content("~/Content/images/loading.gif")"/></div></td></tr>';
+            $('#content').html(imageUrl);
+            $("#content").load(url, function () {
+            })
+
+        });
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnCreateTrucTiep").click(function () {
+            location.href = "@Url.Action("CreateTrucTiep", "PhieuCongTac")";
+        });
+        toMonth();
+    });
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+
+    function OnCriteriaTU(page) {
+        sIndex = (page - 1) * 40;
+        var searchText = $('#searchString').val().replace(/\ /g, '+');
+        var url = "@Url.Action("ViewIndexAdmin", "ChamCong")" + "?id=" + page + "&searchString=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&indexRowStart=" + (sIndex + 1) + "&indexRowEnd=" + ((sIndex) + offSet);
+        var imageUrl = '<tr><td colspan="12 "><div id="divMsg" align="center"><img src="@Url.Content("~/Content/images/loading.gif")"/></div></td></tr>';
+        $('#content').html(imageUrl);
+        $('#content').load(url);
+    }
+
+    function OnCriteriaTULast(page) {
+        sIndex = (page * 40) - 40;
+        var searchText = $('#searchString').val().replace(/\ /g, '+');
+        var url = "@Url.Action("ViewIndexAdmin", "ChamCong")" + "?id=" + page + "&searchString=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&indexRowStart=" + (sIndex + 1) + "&indexRowEnd=" + ((sIndex) + offSet);
+        var imageUrl = '<tr><td colspan="12 "><div id="divMsg" align="center"><img src="@Url.Content("~/Content/images/loading.gif")"/></div></td></tr>';
+        $('#content').html(imageUrl);
+        $('#content').load(url);
+    }
+
+    function toDay() {
+        $("#tuNgay").data("DateTimePicker").date(moment());
+        $("#denNgay").data("DateTimePicker").date(moment());
+    }
+    function toWeek() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(7, "day"));
+    }
+    function toMonth() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(1, "month"));
+    }
+
+
+</script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+
+    #content th
+    {
+        text-align: center;
+    }
+
+    #filter-panel td
+    {
+        border: none;
+    }
+</style>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Danh sách phiếu chấm công chi tiết</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 37px;">
+                            <span style="float: left">Từ ngày:</span>
+                            <input type="text" id="tuNgay" class="form-control datepicker" style="width: 120px; float: left" />
+                            <span style="float: left">Đến ngày:</span>
+                            @{
+                                string ngayHienTai = DateTime.Now.ToString("dd/MM/yyyy");
+                            }
+                            <input type="text" id="denNgay" class="form-control datepicker" value="@ngayHienTai" style="width: 120px; float: left" />
+                            <a href="javascript:void(0);" onclick="toDay()">Today</a> | <a href="javascript:void(0);" onclick="toWeek()">Last 7 days</a> |                                    
+                                    <a href="javascript:void(0);" onclick="toMonth()">Last 30 days</a>
+                        </div>
+                        <div style="clear: both"></div>
+                        <div>
+                            <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:40%;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnTimKiem" type="button" style="margin-top: 5px; float: left">Xem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("ViewIndexAdmin");}
+            </div>
+        </fieldset>
+    </div>
+</form>

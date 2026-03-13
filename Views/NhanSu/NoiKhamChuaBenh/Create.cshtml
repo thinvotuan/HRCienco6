@@ -1,0 +1,45 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model tbl_DM_NoiKhamChuaBenh
+
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Thêm mới nơi khám chữa bệnh</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã bệnh viện <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maNoiKham, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên bệnh viện <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenNoiKham, new { @class = "form-control", required = "required" })</td>
+        </tr>        
+        <tr>
+            <td class="tdtitle">Loại bệnh viện</td>
+            <td>@Html.DropDownListFor(model => model.loai, ViewBag.LoaiBenhViens as SelectList, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tỉnh thành <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.DropDownListFor(model => model.maTinhThanh, ViewBag.TinhThanhs as SelectList, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Địa chỉ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.diaChi, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextBoxFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

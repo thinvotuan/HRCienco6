@@ -1,0 +1,48 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model System.Text.StringBuilder
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<style>
+    td
+    {
+        border: none;
+    }
+
+    #navigation1 a:link
+    {
+        color: #0000FF;
+    }
+</style>
+<script>
+    var heightBrowser = $(window).height();
+    var heightWrapper = $("#phongBanTree").height();
+
+    var heightSet = heightBrowser - heightWrapper;
+    heightSet = parseInt(heightSet);
+    heightSet = heightSet - 50;
+
+    $("#Tree").css("height", heightSet - 20);
+    $("#navigation1").treeview({
+        persist: "location",
+        collapsed: true,
+        unique: false
+    }).find(".expandable-hitarea").click();
+
+    $("#phongBanTree a").click(function () {        
+        var maPhongBan = $(this).attr("alt"),
+            text = $(this).text(),
+            thuocBoPhan = $(this).parents("li")[1],
+            thuocCongTy = $(thuocBoPhan).parents("li")[0];
+        $("#tenPhongBan").val(text);
+        $("#maPhongBan").val(maPhongBan);
+        $("#tenBoPhan").val($(thuocBoPhan).find("a:first").text());
+        $("#tenCongTy").val($(thuocCongTy).find("a:first").text());
+    });
+
+</script>
+
+<div id="phongBanTree">
+    <div style="width: 100%; float: left; overflow: auto" id="Tree">
+        @Html.Raw(Model.ToString())
+    </div>
+</div>

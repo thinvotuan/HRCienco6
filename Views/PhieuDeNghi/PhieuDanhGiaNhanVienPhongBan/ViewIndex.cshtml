@@ -1,0 +1,140 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model IPagedList<sp_NS_PhieuDanhGia_LamViecTaiNha_IndexResult>
+@{
+    int i = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+</script>
+
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed TableMobile TablePhieuTangCa" id="maintable">
+    <thead>
+        <tr>
+            <th style="width: 45px">STT</th>
+            <th style="width: 125px">Số phiếu</th>
+            <th style="width: 200px">Nhân viên</th>
+            <th style="width: 135px">Phòng ban</th>
+            <th style="width: 200px"></th>
+            <th>Nội dung</th>
+            <th style="width: 120px">Trạng thái</th>
+            <th style="width: 100px"></th>
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @{
+            var ls = ViewData["lsDanhSach"] as List<sp_NS_PhieuDanhGia_LamViecTaiNha_IndexResult>;
+            if (ls != null)
+            {
+                foreach (var item in ls.ToList())
+                {
+                   
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td><i class="fa fa-clipboard"></i><a style="color:blue" href="@Url.Action("Edit", "PhieuDanhGiaNhanVienPhongBan", new { id = item.MaPhieu })">@item.MaPhieu</a>
+                    <br />
+                    <i class="fa fa-calendar" aria-hidden="true"></i>@String.Format("{0: dd/MM/yyyy}", item.NgayLap)
+                </td>
+                <td><i class="fa fa-user"></i>@item.hoTen
+
+                </td>
+                <td>@item.TenPhongBan
+                    <br />
+                    <i class="fa fa-ticket" aria-hidden="true"></i>@item.TenChucDanh
+                </td>
+                <td>
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i>Fr: @String.Format("{0: dd/MM/yyyy}", @item.TuNgay)
+                    <br />
+                    <i class="fa fa-calendar" aria-hidden="true"></i>To: @String.Format("{0: dd/MM/yyyy}", @item.DenNgay)
+                </td>
+                <td>
+                    <div style="max-width: 350px; clear: both; float: none; text-align: left" class="responTangCa">
+                        @Html.Raw(item.NoiDung)
+                    </div>
+
+                </td>
+                <td style="text-align: center">
+                    @if (item.XacNhan == 0 || item.XacNhan == 2)
+                    {
+                        <span style="color: red; font-weight: bold">Chưa Xác Nhận</span>
+                    }
+                    else
+                    {
+                        <span style="color: red; font-weight: bold">Đã Xác Nhận</span>
+                    }
+                </td>
+
+                <td style="text-align: center">
+                    @if ((item.XacNhan != 1 && item.MaNVLPhieu == user1.manv) || ((string)ViewBag.Administrator == "true" || (string)ViewBag.AdminNhanSu == "true" || (string)ViewBag.QLChamCong == "true"))
+                    {   <a href="@Url.Action("Edit", "PhieuDanhGiaNhanVienPhongBan", new { id = item.MaPhieu })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true">|</i></a>                         
+                        <a class="btnDelete" alt="@item.MaPhieu" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+
+                </td>
+            </tr>
+                    i++;
+                }
+            }
+        }
+        <tr>
+            <td colspan="10" align="left" class="clrBeforeMobile">
+                @{
+                
+                    if (page_ > 1)
+                    {
+        
+                    <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+                    }
+
+
+                    if (page_ - 2 >= 1)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                        @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                            @(page_ - 1) </a>
+                    } <span class="pageActive">@page_</span>
+                    if (page_ + 2 <= total_)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                        @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                            @(page_ + 2) </a>
+                    }
+
+                    if (page_ < total_)
+                    { 
+        
+                    <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+                    }
+        
+                    <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@model BatDongSan.tbl_ThongTinDangNhap
+@{
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+
+<style>
+    #ActiveBox
+    {
+        text-align:center;
+        padding:20px;
+        font-size:16px;
+        line-height:30px;
+    }
+    .success-lable
+    {
+        
+    }
+</style>
+<div id="ActiveBox">
+    <span class="success-lable">Chúc mừng bạn đã đăng ký tài khoản thành công!</span>
+    <br />
+    Vui lòng kiểm tra Email <a>@Model.mailNguoiDaiDien</a> để kích hoạt tài khoản.
+    <br />
+    Bấm vào <a href="@Url.Action("Index","Home")">đây</a> để quay về trang chủ 
+</div>
+

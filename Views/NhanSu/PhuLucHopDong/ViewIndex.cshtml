@@ -1,0 +1,74 @@
+﻿<style>
+    td
+    {
+        border: none;
+    }
+</style>
+
+@{
+    var i = 1;
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+    var ds = ViewBag.DSPhuLuc as List<BatDongSan.Models.NhanSu.sp_NS_PhuLucHopDong_IndexResult>;
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th>Số phụ lục</th>
+            <th>Mã nhân viên</th>
+            <th>Phòng ban</th>
+            <th>Ngày hiệu lục</th>
+            <th>Mức lương mới</th>
+            <th>Nội dung thay đổi</th>
+            <th style="width: 80px">Trạng thái</th>
+            <th style="width: 100px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ds != null && ds.Count > 0)
+        {
+            foreach (var item in ds)
+            {                                                        
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td style="text-align: left">
+                    <a style="color:#519ee5" href="@Url.Action("Details", "PhuLucHopDong", new { id = item.soPhuLuc })">@item.soPhuLuc</a><br />
+                </td>
+                <td style="text-align: left">@item.maNhanVien<br />
+                    <i class="fa fa-user" aria-hidden="true"></i>@item.hoTen
+                </td>
+                <td>
+                    @item.tenPhongBan
+                </td>
+                <td style="text-align: left">@item.ngayHieuLuc.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td style="text-align: right">
+                    @String.Format("{0:#,##0.####}", item.tongLuong)
+                </td>
+                <td>
+                    @item.noiDungThayDoi
+                </td>
+                <td style="text-align: center">
+                    <a href="javascript:void(0);" onclick="ViewDetailHistory('@item.soPhuLuc','@item.maQuiTrinhDuyet')">
+                        @item.tenTrangThaiDuyet</a>
+                </td>
+                <td style="text-align: center">
+                    @if (item.maNVNL == user1.manv && item.trangThai == 0)
+                    {
+                        <a href="@Url.Action("Edit", "PhuLucHopDong", new { id = item.soPhuLuc })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true">| </i></a>
+                        <a class="btnDelete" alt="@item.soPhuLuc" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+
+                </td>
+            </tr> 
+                    i++;
+            }
+        }
+    </tbody>
+</table>
+
+

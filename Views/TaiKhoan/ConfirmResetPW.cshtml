@@ -1,0 +1,258 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Đặt lại mật khẩu";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống nhân sự</title>
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/login.css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/login.js"></script>
+    <link href="~/Scripts/pgwslider.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="~/Scripts/pgwslider.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.pgwSlider').pgwSlider({
+
+                displayControls: true,
+                autoSlide: true,
+                transitionEffect: 'sliding',
+                displayList: true,
+                touchControls: true,
+                adaptiveDuration: 200,
+                transitionDuration: 600,
+                intervalDuration: 2500
+
+            }
+            );
+            $("#btnUpdatePW").click(function () {
+                var passw = $("#password").val();
+                var rePassw = $("#repassword").val();
+                if (passw == "" || rePassw == "") {
+
+                    $(".inforLoginFailed").html("Bạn phải nhập mật khẩu!").css("color", "red");
+                    $("#password").focus();
+
+                    return false;
+                }
+                if (passw != rePassw) {
+
+                    $(".inforLoginFailed").html("Mật khẩu không khớp!").css("color", "red");
+                    $("#password").focus();
+                    return false;
+                }
+                else {
+                    //Quen Mật khẩu
+                    $.ajax({
+                        url: "@Url.Action("DatLaiPassword", "TaiKhoan")",
+                        type: "POST",
+                        data: {
+                            maCode: $("#maCode").val(),
+                            passwd: $("#password").val()
+                        },
+                        type: "POST",
+                        success: function (data) {
+
+                            if (data == "ok") {
+
+                                $(".inforLoginFailed").html("Cập nhật mật khẩu thành công").css("color", "green");
+                                setTimeout(function () {
+
+                                    location.href = "@Url.Action("Index", "Home")";
+                                }, 1000);
+                            }
+                            else {
+
+                                $(".inforLoginFailed").html("Cập nhật mật khẩu thất bại").css("color", "red");
+                            }
+
+                        }
+                    });
+                    // End
+                }
+            });
+
+
+
+        });
+        function enterToSeacrh(event) {
+            if (event.keyCode == 13)
+                $("#btnUpdatePW").click();
+        }
+    </script>
+</head>
+
+<body>
+    <div class="wrapper_page_login">
+        <div class="header">
+            <div class="maxWidth">
+                <div class="logo">
+                    <a href="@Url.Action("Index", "Home")">
+                        <div class="logoLogin" style="text-align: center;">
+                            <img class="img-logo" src="~/Content/images/logo.png">
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="main">
+            <div class="maxWidth">
+                <div class="left">
+                    <div class="box_form_login">
+                        <div class="form_login_account">
+                            <div class="titleForm">Hệ thống Nhân sự</div>
+
+                            <div id="contentLeft">
+                                <div class="box_form_login">
+                                    <div class="form_login_account">
+                                       
+                                        <div>@ViewBag.Susccess</div>
+                                        <div class="inforLoginFailed"></div>
+
+                                        @{
+                                            if (ViewBag.statusReset == 0)
+                                            {
+                                            <form class="form-horizontal " method="post" id="form-submit">
+                                                <input type="hidden" value="@ViewBag.MaCode" id="maCode" />
+                                                <div class="form-group txtLoginUserID">
+                                                    <label class="control-label col-sm-12 text-left">Mật khẩu mới:<span class="require">(*)</span></label>
+                                                    <div class="col-sm-12">
+                                                        <input type="password" class="form-control" placeholder="Password" id="password" onkeypress="enterToSeacrh(event)" required="required" name="password">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group txtLoginUserID">
+                                                    <label class="control-label col-sm-12 text-left">Nhập lại mật khẩu mới:<span class="require">(*)</span></label>
+                                                    <div class="col-sm-12">
+                                                        <input type="password" class="form-control" placeholder="Re-Password" id="repassword" onkeypress="enterToSeacrh(event)" required="required" name="repassword">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <div class="col-sm-12">
+
+                                                        <input class="btn btn-primary btnUpdatePW" type="button" id="btnUpdatePW" value="Cập nhật">
+                                                    </div>
+                                                </div>
+
+
+                                            </form>   
+                                            }
+                                            else
+                                            {
+                                            <p>Link này đã được sử dụng, vui lòng <a href="@Url.Action("Index", "Home")">Click đây</a> để đăng nhập.</p>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+
+                                <div class="box_footer_form_login">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <ul class="pgwSlider">
+                        @{
+                            string[] itemImgSlider = { "img01.jpg", "img02.jpg", "img03.jpg", "img04.jpg", "img05.jpg" };
+
+                            foreach (var item in itemImgSlider)
+                            {
+                           <li> 
+                                <img src="~/Content/images/Slider/@item " alt="" data-description="">
+                            </li>
+                        
+                            }
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+
+            <div class="maxWidth">
+                    <link href="~/Scripts/ResponsiveCarousel/css/owl.carousel.css" rel="stylesheet" type="text/css" />
+                <link href="~/Scripts/ResponsiveCarousel/css/entypo.css" rel="stylesheet" type="text/css" />
+                <script type="text/javascript" src="~/Scripts/ResponsiveCarousel/js/owl.carousel.js"></script>
+
+                <!-- Khach hang -->
+                @*<div class="interface banks" id="customerScroll">
+
+                    <div class="content widthSite">
+                        <div class="owl-carousel">
+                            @{
+                                string[] itemImgBank = { "vietinbank.jpg", "dong-a.jpg", "bidv.jpg", "eximbank.jpg", "ocb.jpg", "vietcombank.jpg" };
+
+                                foreach (var item in itemImgBank)
+                                {
+                                <div class="item">
+                                    <div class="avatar">
+                                        <img src="~/Content/images/Bank/@item" />
+                                    </div>
+                                </div>
+                                }
+                            }
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <!--End Khach hang -->
+                <div class="group_phone_email">
+                    <div class="imgPhone">
+                        <img src="~/Content/images/icon_phone.jpg" alt="Phone" />
+                        <a href="" title="Hệ thống nhân sự"> 0123456789</a>
+                    </div>
+                    <div class="imgEmail">
+                        <img src="~/Content/images/icon_email.jpg" alt="Email" />
+                        <a href="">supportbds@thuanviet.com.vn</a>
+                    </div>
+                </div>*@
+                <div class="titleFooter">
+                    © 2016 - Hệ thống Nhân sự Thuận Việt
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+
+            $(".banks .owl-carousel").owlCarousel({
+
+                navigation: false,
+                navigationText: ["<i class='entypo-left-open-big'></i>", "<i class='entypo-right-open-big'></i>"],
+                slideSpeed: 800,
+                pagination: false,
+
+                autoPlay: true,
+                rewindNav: true,
+                stopOnHover: true,
+
+                afterAction: function (el) {
+                    this.$owlItems.removeClass('active')
+                    this.$owlItems.eq(this.currentItem + 1).addClass('active')
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

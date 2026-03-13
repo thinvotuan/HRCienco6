@@ -1,0 +1,47 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_CapBacChucDanh
+<script src="~/Scripts/autoNumeric.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {        
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0', vMax: '10' });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cập nhật cấp bậc</h4>
+</div>
+<div style="margin-top: 15px">
+    <table  class="table table-striped table-hover table-condensed" style="width:100%" id="tbl-create">
+        <tr>
+            @Html.HiddenFor(model => model.id, new { @class = "form-control", @readonly = "readonly" })
+            <td  class="tdtitle">Số cấp bậc <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.soCapBac, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên cấp bậc <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenCapBac, new { @class = "form-control", required = "required" })</td>
+        </tr>        
+       
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextBoxFor(model => model.moTa, new { @class = "form-control"})</td>
+        </tr>
+              
+    </table>
+</div>
+
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+
+    #tbl-mota td
+    {
+        border: none;
+    }
+</style>

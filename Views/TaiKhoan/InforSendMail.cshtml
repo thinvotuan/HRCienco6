@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Thông tin đăng ký";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+ <link rel="stylesheet" href="~/Content/menuMobile.css" type="text/css" />
+ <link rel="stylesheet" href="~/Content/common.css" type="text/css" />
+ <script src="/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+@Styles.Render("~/Content/css")
+<script>
+    $(document).ready(function () {
+        $("#btnQuenMatKhau").click(function () {
+            
+            
+            if ($("#email").val() == "")
+            {
+                $(".ProcessLoading").html('');
+                Alert.error("Email không hợp lệ.", "Thông báo", { displayDuration: 2000 });
+                $(".inforLoginFailed").html("Email không hợp lệ").css("color", "red");
+                $("#email").focus();
+                return false;
+            }
+            else
+            {
+                $(".ProcessLoading").html('<img  alt="" src="@Url.Content("~/Content/images/loading.gif")" />');
+                $.ajax({
+                    url: "@Url.Action("CheckEmail", "TaiKhoan")" + "?email=" + $("#email").val(),
+                    type: "POST",
+                    success: function (data) {
+
+                        if (data == "0") {
+                            Alert.error("Email không tồn tại.", "Thông báo", { displayDuration: 2000 });
+                        } 
+                        else {
+                        
+                            //Quen Mật khẩu
+                            $.ajax({
+                                url: "@Url.Action("ResetPassword", "TaiKhoan")" + "?email=" + $("#email").val(),
+                                type: "POST",
+                                success: function (data) {
+
+                                    if (data == "ok") {
+                                        Alert.success("Đã send email", "Thông báo", { displayDuration: 2000 });
+                                        $(".inforLoginFailed").html("Đã gửi email").css("color", "green");
+                                        setTimeout(function () {
+
+                                            location.href = "@Url.Action("Index", "Home")";
+                                        }, 1000);
+                                    }
+                                    else {
+                                        Alert.error("Send Email thất bại", "Thông báo", { displayDuration: 2000 });
+                                        $(".inforLoginFailed").html("Gửi email thất bại").css("color","red");
+                                    }
+                                   
+                                }
+                            });
+                            // End
+                        }
+                        $(".ProcessLoading").html("");
+                    },
+                    error: function (result) {
+                        $(".ProcessLoading").html("");
+                        Alert.error(result, "Thông báo", { displayDuration: 2000 });
+                        $(".inforLoginFailed").html("Gửi email thất bại").css("color", "red");
+                    },
+                });
+            }
+            });
+     
+
+        
+    });
+    
+   
+</script>
+<style>
+    .require
+    {
+        color: red;
+    }
+</style>
+<div class="wrapper_page_login">
+    <div class="box_form_login">
+        <div class="form_login_account">
+            <h4 class="title">Thông tin đăng ký</h4>
+            <div class="thongbao">
+                @{
+                    if(ViewBag.infor == "ok"){
+                     <p>Chúng tôi đã gửi email đến địa chỉ email của bạn</p>
+                     <p>Vui lòng click vào link để click hoạt tài khoản</p>
+                    }
+                    else{
+                     <p>Có lỗi xảy ra trong quá trình gửi mail</p>
+                     <p>Vui lòng liên hệ quản trị website!</p> 
+                    }
+                    }
+            </div>
+        </div>
+    </div>
+
+    <div class="box_footer_form_login">
+    </div>
+</div>

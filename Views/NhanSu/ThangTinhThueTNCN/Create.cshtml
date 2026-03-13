@@ -1,0 +1,140 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model tbl_NS_ThanhTinhThueTNCN
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $("#btnTroVe").click(function () {
+            location.href = "/ThangTinhThueTNCN";
+        })
+
+        $("#btnAdd").click(function () {
+            var table = $(this).closest("table"),
+            row = table.find("tbody >tr:first").clone();
+            row.find(".numberinput").attr("required", "required");
+            row.show();
+            table.append(row);
+            addSTT()
+            $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        })
+
+        $(document).on("click", ".deleteRow", function () {
+            $(this).closest("tr").remove();
+            addSTT()
+        })               
+    })
+
+    function addSTT() {
+        $(".stt").each(function (i) {
+            $(this).html(i);
+        })
+    }
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+<form id="form-submit" method="post" action="/ThangTinhThueTNCN/Create" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Thêm mới thang thuế thu nhập cá nhân</span></a></li>
+            </ul>
+        </div>
+        <div class="form-group" style="float: right">
+            <button class="btn btn-info" id="btnSubmit">Lưu </button>
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table class="table table-hover table-striped table-condensed" style="position: relative">
+                    <tr>
+                        <td style="width: 200px" class="tdtitle">Mô tả <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.moTa, new { @class = "form-control", required = "required", style= "width: 50%" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày áp dụng <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.ngayApDung, "{0:dd/MM/yyyy}",new { @class = "form-control datepicker", required = "required", style= "width: 50%" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Giảm trừ cá nhân <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.giamTruCaNhan, new { @class = "form-control numberinput", required = "required", style= "width: 50%" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Giảm trừ gia cảnh / người <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.giamTruGiaCanh, new { @class = "form-control numberinput", required = "required", style= "width: 50%" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ghi chú</td>
+                        <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control", style= "width: 50%" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Thông tin chi tiết</td>
+                        <td>
+                            <div id="container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Nội dung</th>
+                                            <th>Từ</th>
+                                            <th>Đến</th>
+                                            <th>Mức đóng</th>
+                                            <th style="text-align: right">
+                                                <label class="btn btn-info btn-xs btn-link" id="btnAdd" style="font-size: 12px; color:#fff;">Thêm dòng</label></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="display: none">
+                                            <td class="stt" style="text-align:center"></td>
+                                            <td>
+                                                <input class="form-control" name="noiDung" value="" /></td>
+                                            <td>
+                                                <input class="form-control numberinput" name="mucChiuThueTu" value="" /></td>
+                                            <td>
+                                                <input class="form-control numberinput" name="mucChiuThueDen" value="" /></td>
+                                            <td>
+                                                <input class="form-control numberinput" name="thue" value="" data-v-max=" 100" data-a-sign=" %"/></td>
+                                            <td style="text-align: right"><a style="color: #519ee5" href="#" class="deleteRow"><i>Xóa</i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+</form>

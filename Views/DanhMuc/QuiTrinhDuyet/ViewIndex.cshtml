@@ -1,0 +1,97 @@
+﻿@using BatDongSan
+@model IPagedList<BatDongSan.Models.HeThong.sp_QuiTrinhDuyet_IndexResult>
+@{
+    Layout = null;
+    int i = 1;
+    string[] parameters = TempData["Params"].ToString().Split(',');
+  
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("Index", "QuiTrinhDuyet")" + "?searchString=" + searchText;
+            beginPaging();
+            $('#content').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+
+        $(document).on("click", ".btnCapNhatDSDK", function () {
+            var url = "@Url.Action("Create", "CapNhatDanhSachDKDauThau")" + "/" + this.value;
+            location.href = url;
+        })
+
+        $(".btnThamGiaDT").click(function () {
+            var url = "@Url.Action("Create", "ThamGiaDauThau")" + "/" + this.value;
+            location.href = url;
+        })
+
+        $('.btnChon').click(function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var hoten = selected.find('#hoten').val();
+                var manv = selected.find('#manhanvien').val();
+                $('#nhanvien').val(hoten);
+                $('#manv').val(manv);
+                //$('.panel-default').html('');
+            }
+            //$('#filter-panel').removeClass('in');
+        })
+    })
+</script>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th style="text-align: center; width: 250px">Tên qui trình</th>
+            <th style="text-align: center; width: 100px">Người lập</th>
+            <th style="text-align: center; width: 100px">Ngày lập</th>
+            <th style="text-align: center; width: 100px">Trạng thái</th>
+            <th style="width: 83px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {                                                        
+            <tr>
+                <td style="text-align: center">@item.NUMBER</td>            
+                <td style="text-align: left">@item.tenQuiTrinh</td>
+                <td style="text-align: left">@item.hoTenNguoiLap</td>
+                <td>@Html.Raw(item.ngayLap.HasValue ? item.ngayLap.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+                <td>
+                    @if(item.trangThai==1)
+                    {
+                        <span>Đang mở</span>
+                    }
+                    else                    
+                    {
+                        <span>Đã đóng</span>
+                    }
+                </td>
+                <td style="text-align: right">
+                    <button class="btn btn-primary btn-xs btnEdit" title="Sửa" value="@item.id" type="button">Sửa</button>
+                    <button class="btn btn-warning btn-xs btnDelete" title="Xóa" value="@item.id" type="button">Xóa</button>
+
+                </td>
+            </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "QuiTrinhDuyet", action = "Index", searchString = parameters[0] }))
+    </ul>
+</div>
+

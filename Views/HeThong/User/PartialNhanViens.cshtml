@@ -1,0 +1,123 @@
+﻿@using BatDongSan.Models.HeThong;
+@model IPagedList<sp_NS_NhanVien_IndexResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("GetNhanVienInfo", "User")" + "?searchString=" + searchText;
+            beginPaging();
+            $('#content').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('.btnChon').click(function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var hoten = selected.find('#hoten').val();
+                var manv = selected.find('#manhanvien').val();
+                var emailNV = selected.find('#emailNV').val();
+                var tenDN = detectEmail(emailNV);
+                $('#userName').val(tenDN);
+                $('#nhanvien').val(hoten);
+                $('#manv').val(manv);
+                $('#email').val(emailNV);
+                //$('.panel-default').html('');
+            }
+            //$('#filter-panel').removeClass('in');
+        })
+    })
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+    
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+</script>
+<div id="content">
+    <div class="panel-body">
+        <div style="position: relative">
+            <input type="text" id="searchString" class="form-control" style="padding-right: 30px; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh(event);" value="@ViewBag.SearchString" />
+            <i class="fa fa-search" id="btnSearch" style="position: absolute; top: 9px; right: 10px; cursor: pointer"></i>
+        </div>
+    </div>
+    <div id="container">
+        <table class="table table-striped table-hover table-condensed">
+            <thead style="font-size: 13px">
+                <tr>
+                    <th style="width: 45px">STT</th>
+                    <th>Mã nhân viên
+                    </th>
+                    <th>Tên nhân viên
+                    </th>
+                    <th>Phòng ban
+                    </th>
+                    <th>Chức năng
+                    </th>
+                    <th style="width: 45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderBy(o => o.tenPhongBan).ThenBy(o => o.ho))
+                {                    
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.maNhanVien</td>
+                        <td>@item.ho @item.ten</td>
+                        <td>@item.tenPhongBan</td>
+                        <td>@item.TenChucDanh</td>
+                        <td style="color: #0b74d5; text-align: center">
+                            <input type="hidden" id="hoten" value="@item.ho @item.ten" />
+                            <input type="hidden" id="manhanvien" value="@item.maNhanVien"/>
+                            <input type="hidden" id="tenChucDanh" value="@item.TenChucDanh"/>
+                            <input type="hidden" id="emailNV" value="@item.email"/>
+                            @*<div class="radio" style="margin: 0">
+                                <label class="radio" style="font-size: 15px; margin: 0">
+                                    @Html.RadioButton("NhanVienChoose", @item.Manv, new { style = "width:auto" })
+                                </label>
+                            </div>*@
+                            @{
+                    if (item.userName == null)
+                    {
+                            <button type="button" class="btn btn-primary btn-xs btnChon" data-dismiss="modal">chọn</button>
+                    }
+                }
+                                </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        <div>
+            Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+        </div>
+        <div>
+            <ul class="pagination">
+                @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "User", action = "GetNhanVienInfo" }))
+            </ul>
+        </div>
+    </div>
+</div>

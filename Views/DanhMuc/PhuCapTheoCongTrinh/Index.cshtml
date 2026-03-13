@@ -1,0 +1,235 @@
+﻿@using BatDongSan.Models.DanhMuc
+@{
+    ViewBag.Title = "Phụ cấp theo công trình";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+
+    #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+    }
+
+    #phongban-dropdown-menu
+    {
+        width: 500px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //setting phong ban//
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+
+        $('#txtsearch').on("input", function () {
+
+            $('#phongban-div #navigation1').filterLink($('#phongban-div #txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", "#phongban-div #phongban-dropdown-menu li a", function () {
+            $("#saveIDPhongBan").val($(this).attr('alt'));
+            $("#btnPhongBan").val($(this).attr('alt'));
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+
+        });
+
+        var beginCheck = 0;
+        if (beginCheck == 0) {
+            $("#tempPhongBan").html($("#phongban-div").html());
+        }
+        beginCheck = 1;
+        $("#btnModalCreate").click(function () {
+
+            var url = "@Url.Action("Create", "PhuCapTheoCongTrinh")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url, function () {
+
+                $("#bindMaPhongBan").html($("#tempPhongBan").html());
+            })
+        });
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "PhuCapTheoCongTrinh")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+") + "&maPhongBan=" + $("#btnPhongBan").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        });
+
+        $("#trangThaiDuyet").change(function () {
+            var url = "@Url.Action("Index", "PhuCapTheoCongTrinh")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+") + "&maPhongBan=" + $("#btnPhongBan").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        });
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "PhuCapTheoCongTrinh")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "PhuCapTheoCongTrinh")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+
+    });
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    //Lịch sử duyệt
+    function ViewDetailHistory(soPhieu, maQuiTrinh) {
+        var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + soPhieu + '?maQuiTrinh=' + maQuiTrinh;
+        PopUpManager(url, "DUYET", 700, 200);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <input type="hidden" value="" id="saveIDPhongBan" />
+            <div id="tempPhongBan" style="display: none"></div>
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav" style="text-align: center">
+
+                    <li class="ui-tabs-selected ui-state-active"><a><span><i class="fa fa-list" aria-hidden="true"></i>Danh sách phụ cấp theo công trình</span></a></li>
+
+                </ul>
+            </div>
+
+            <div class="panel-body background_top">
+
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" id="pref-search" onkeypress="enterToSeacrh(event)" style="width: 200px">
+                    </div>
+                    <div class="form-group">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style=""></span>Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group" style="float: right">
+
+                        <span>Trạng thái:</span>
+                        @Html.DropDownList("trangThaiDuyet", ViewBag.TrangThaiDuyet as SelectList, new { @class = "form-control", @style = "width:250px" })
+
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+    <div id="content">
+        @{Html.RenderPartial("PartialIndex");}
+    </div>
+    </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

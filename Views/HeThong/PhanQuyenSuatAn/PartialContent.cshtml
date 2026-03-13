@@ -1,0 +1,21 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Utils.Paging;
+@model IList<Sys_NhomUser>
+@{
+    int i = 1;             
+}
+@foreach (var item in Model)
+{
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.maNhomUser</td>
+        <td>@item.tenNhomUser</td>
+        <td>
+            <button class="btn btn-link btn-xs btnNhanVien" type="button" data-value="@item.maNhomUser" data-toggle="modal" style="margin: 0; color: #F39104" data-target="#nhanVienModal">Xem chi tiết</button></td>
+        <td>@item.ghiChu</td>
+        <td style="text-align: center">
+            <input type="checkbox" value="@item.maNhomUser" name="nhomUser"/> 
+        </td>
+    </tr> 
+    i++;
+}

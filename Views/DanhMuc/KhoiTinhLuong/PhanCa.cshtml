@@ -1,0 +1,142 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_NS_KhoiTinhLuong
+@{
+    ViewBag.Title = "Thêm mới phân ca cho khối " + Model.tenKhoiTinhLuong;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<tbl_NS_PhanCa> listPhanCa = ViewBag.ListPhanCa;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "KhoiTinhLuong")";
+        });
+        $("#btnThem").click(function () {
+            location.href = "@Url.Action("CreatePhanCa/", "KhoiTinhLuong")" + "@Model.maKhoiTinhLuong";
+        });
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("EditPhanCa", "KhoiTinhLuong")" + "/" + this.value;        
+            location.href = url;
+        });
+        $(document).on("click", ".btnQuiDinh", function () {
+            var url = "@Url.Action("DetailPhanCa", "KhoiTinhLuong")" + "/" + this.value;
+             location.href = url;
+         });
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("DeletePhanCa", "KhoiTinhLuong")" + "/" + this.value;
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "html",
+                success: function (html) {
+                    location.href = "@Url.Action("PhanCa/","KhoiTinhLuong")" + "@Model.maKhoiTinhLuong";
+                },
+                error: function () {
+                    Alert.error("Có lỗi xảy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                }
+            });
+        });
+    });
+</script>
+<style>
+    input[type='checkbox']
+    {
+        pointer-events:none;
+    }
+</style>
+<form>
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Phân ca</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div class="form-group" style="float: right">
+                            <button class="btn btn-info" id="btnThem" type="button">Thêm</button>
+                            <button class="btn btn-info" id="btnTroVe" type="button">Trở về</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <td style="width: 180px">Khối tính lương</td>
+                            <td>@Model.tenKhoiTinhLuong</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <span style="font-weight: bold">Danh sách phân ca</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table class="table table-striped table-hover table-condensed" id="ListPhanCa">
+
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center; width: 45px">STT</th>
+                                            <th>Tên ca</th>
+                                            <th>Tính Ngày/Giờ công</th>
+                                            <th>Số H/Ngày</th>
+                                            <th>T2</th>
+                                            <th>T3</th>
+                                            <th>T4</th>
+                                            <th>T5</th>
+                                            <th>T6</th>
+                                            <th>T7</th>
+                                            <th>CN</th>
+                                            <th>Ghi chú</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ViewBody">
+                                        @{int count = 0;}
+                                        @foreach (var item in listPhanCa)
+                                        {
+                                            count++;
+                                            <tr>
+                                                <td>
+                                                    @count
+                                                </td>
+                                                <td>@item.tenPhanCa</td>
+                                                <td style="text-align:center">@Html.CheckBox("isSalaryByMonth",Convert.ToBoolean(item.tinhNgayGioCong))</td>
+                                                <td>@item.tongGioLamViec</td>
+                                                <td style="text-align:center">@Html.CheckBox("monday",Convert.ToBoolean(item.thuHai))</td>
+                                                <td style="text-align:center">@Html.CheckBox("tuesday",Convert.ToBoolean(item.thuBa))</td>
+                                                <td style="text-align:center">@Html.CheckBox("wednesday",Convert.ToBoolean(item.thuTu))</td>
+                                                <td style="text-align:center">@Html.CheckBox("thursday",Convert.ToBoolean(item.thuNam))</td>
+                                                <td style="text-align:center">@Html.CheckBox("friday",Convert.ToBoolean(item.thuSau))</td>
+                                                <td style="text-align:center">@Html.CheckBox("sathurday",Convert.ToBoolean(item.thuBay))</td>
+                                                <td style="text-align:center">@Html.CheckBox("sunday",Convert.ToBoolean(item.chuNhat))</td>
+                                                <td>@item.ghiChu</td>
+                                                <td style="text-align: center">
+                                                    <button class="btn btn-warning btn-xs btnQuiDinh" type="button" value="@item.maPhanCa">Qui định giờ</button>
+                                                    <button class="btn btn-warning btn-xs btnEdit" type="button" value="@item.maPhanCa">Sửa</button>
+                                                    <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.maPhanCa">Xóa</button></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="ViewBody">
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</form>
+
+
+

@@ -1,0 +1,87 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_NS_LuongChoViec_IndexResult>
+@{
+    Layout = null;
+    int i = 1;    
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th>Mã phiếu</th>
+            <th>Số hợp đồng</th>
+            <th>Mã nhân viên</th>
+            <th>Phòng ban</th>
+            <th>Ngày lập</th>
+            <th>Chờ việc</th>
+            <th style="width: 100px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {                                                        
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td style="text-align: left">
+                    <a style="color:#519ee5" href="@Url.Action("Details", "LuongChoViec", new { id = item.maLuongChoViec })">@item.maLuongChoViec</a><br />
+                </td>
+                <td style="text-align: left">
+                    <a style="color:#519ee5" target="_blank" href="@Url.Action("Details", "HopDongLaoDong", new { id = item.soHopDong })">@item.soHopDong</a><br />
+                    <i class="fa fa-file-image-o" aria-hidden="true"></i>@item.tenLoaiHopDong
+                </td>
+                <td style="text-align: left">@item.maNhanVien<br />
+                    <i class="fa fa-user" aria-hidden="true"></i>@item.hoTenNhanVien
+                </td>
+                <td style="text-align: left">
+                    @item.tenPhongBan<br />
+                    <i class="fa fa-ticket" aria-hidden="true"></i>@item.TenChucDanh
+                </td>
+                <td style="text-align: left">Ký : @item.ngayLap.Value.ToString("dd/MM/yyyy")
+                    <br />
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i>@item.tenThoiHanHopDong
+                </td>
+                <td style="text-align: left">CCV:
+                    <div style="float: right">@String.Format("{0:#,##0.####}", item.congChoViec)</div>
+                    <br />
+                    TL: 
+                    <div style="float: right">@String.Format("{0:#,##0.####}", item.tyLe)</div>
+                    <br />
+                    LCV:<div style="float: right">@String.Format("{0:#,##0.####}", item.luongChoViec)</div>
+                </td>
+                <td style="text-align: center">
+                    @if (item.nguoiLap == user1.manv)
+                    {
+                        <a href="@Url.Action("Edit", "LuongChoViec", new { id = item.maLuongChoViec })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true">| </i></a>
+                        <a class="btnDelete" alt="@item.maLuongChoViec" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+
+                </td>
+            </tr> 
+                    i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "LuongChoViec", action = "Index", searchString = ViewBag.searchString, loaiHopDong = ViewBag.loaiHopDong, maPhongBan = ViewBag.maPhongBan }))
+    </ul>
+</div>
+

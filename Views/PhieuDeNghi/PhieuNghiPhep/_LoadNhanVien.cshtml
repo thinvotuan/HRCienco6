@@ -1,0 +1,118 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<script>
+    $(document).ready(function () {
+        $('#btnSearchNhanVienPhongBan').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("LoadNhanVien", "PhieuNghiPhep")" + "?searchString=" + searchText + '&maPhongBan=' + "@ViewBag.MaPhongBan";
+            beginPaging();
+            $('#TabNV').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('.btnChonNVPB').click(function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var tenNV = selected.find('#hotenNVPB').val();
+                var maNV = selected.find('#maNVPB').val();
+                var phongBan = selected.find('#tenPhongBan').val();
+                var chucDanh = selected.find('#chucDanh').val();
+                var chiNhanh = selected.find('#chiNhanh').val();
+                $('#NhanVien_maNhanVien').val(maNV);
+                $('#NhanVien_hoVaTen').val(tenNV);
+                $('#NhanVien_tenPhongBan').val(phongBan);
+                $('#NhanVien_tenChucDanh').val(chucDanh);
+                $('#NhanVien_tenChiNhanh').val(chiNhanh);
+                xuathien();
+                //   window.close();
+            }
+        })
+    });
+    function beginPaging(args) {
+        // Animate        
+        $('.popupChonNVDuyet #container').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('.popupChonNVDuyet #container').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchNhanVienPhongBan").click();
+    }
+</script>
+<div class="panel-body">
+    <div style="position: relative; margin-bottom: 5px;">
+        <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="padding-right: 30px; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh(event);" />
+        <i class="fa fa-search" id="btnSearchNhanVienPhongBan" style="position: absolute; top: 9px; right: 10px; cursor: pointer"></i>
+    </div>
+</div>
+<div id="container">
+    <table class="table table-striped table-hover table-condensed  TableMobile IndexNhanVienPNP">
+        <thead style="font-size: 13px">
+            <tr>
+                <th style="width: 45px">STT</th>
+                <th>Hình ảnh
+                </th>
+                <th>Nhân viên
+                </th>
+                <th>Phòng ban
+                </th>
+                <th>Chức danh
+                </th>
+                <th style="width: 45px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var HinhAnh = item.maNhanVien + ".jpg";          
+                <tr>
+                    <td style="text-align: center">@i</td>
+                    <td style="text-align: center">
+                        <img id="Avatar"  accept="image/*" onerror="imgError(this);"  src="/UploadFiles/QLNV/@HinhAnh" />
+
+                    </td>
+                    <td><i class="fa fa-user" style="color: blue"></i>@item.hoVaTen
+                        @if (item.birthday != null)
+                        { 
+                            <p>
+                                Ngày sinh: 
+                                    @String.Format("{0:dd/MM}", item.birthday)
+                            </p>
+                        }
+
+                    </td>
+                    <td>@item.phongBan</td>
+                    <td>@item.chucDanh</td>
+                    <td style="color: #0b74d5; text-align: center">
+                        <input type="hidden" id="hotenNVPB" value="@item.hoVaTen" />
+                        <input type="hidden" id="maNVPB" value="@item.maNhanVien"/>
+                        <input type="hidden" id="tenPhongBan" value="@item.phongBan"/>
+                        <input type="hidden" id="chucDanh" value="@item.chucDanh"/>
+                        <input type="hidden" id="chiNhanh" value="@item.tenChiNhanh"/>
+                        <button type="button" class="btn btn-primary btn-xs btnChonNVPB" data-dismiss="modal">Chọn</button>
+                    </td>
+                </tr>
+                        i++;
+            }
+        </tbody>
+    </table>
+    <div>
+        Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+    </div>
+    <div>
+        <ul class="pagination">
+            @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "TabNV", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhieuNghiPhep", action = "LoadNhanVien", searchString = ViewBag.Search, maPhongBan = ViewBag.MaPhongBan }))
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿<script>
+
+    function imgErrorAva(image) {
+        image.onerror = "";
+        image.src = "/Content/images/no-image.jpg";
+        return true;
+    }
+</script>
+
+<ul>
+    @{
+        var countNhacViec = (int)Session["countNhacViec"];
+        var tenNV = Session["TenNhanVien"];
+        var tenNhanVien = "Khách";
+        if (tenNV != null)
+        {
+            tenNhanVien = tenNV.ToString();
+        }
+        
+    }
+    @{
+        string color = string.Empty;
+        if (@countNhacViec > 0)
+        {
+            color = "color:red";
+        }
+        
+        // 
+    }
+
+    <li class="hvr-underline-from-center"><a href="/home/index"><i class="fa fa-home" aria-hidden="true"></i>Trang chủ</a></li>
+    <li class="hvr-underline-from-center"><a href="/NhanVien/MyProfile"style=""><i class="fa fa-user"></i>@tenNhanVien</a></li>
+    <li class=" hvr-underline-from-center"><i class="fa fa-list-alt"></i>
+
+        <a  href="@Url.Action("ListCongViecProcess", "User")"><span id="txtCongViec"><span id="countNhacViec">(@countNhacViec)</span></span></a>
+       
+    </li>
+     
+
+@*    <li class="hvr-underline-from-center"><i class="fa fa-sitemap"></i><a href="@Url.Action("SoDoToChuc", "PhongBan")"></a></li>*@
+      <li class="hvr-underline-from-center"><a href="@Url.Action("IndexView", "QuanLyThongBao")"><i class="fa fa-bullhorn"></i><span class="">(<span class="showTotalTB">@Session["listThongBao"]</span>)</span></a></li>
+   
+    @using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { id = "logoutForm" }))
+    {
+
+        @Html.AntiForgeryToken()
+        <li><a class="btnLogOut" href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i></a></li>
+    }
+    <li id="inforUser" class="" ><a id="inForHover">
+
+
+        
+         @{
+                        var HinhAnhNV = Session["manv"] + ".jpg";        
+                    
+                      <img id="Avatar" class="imgSmall" accept="image/*" onerror="imgError(this);" src="/UploadFiles/QLNV/@HinhAnhNV">
+                    }
+    </a>
+        <div class="gb_u">
+        </div>
+        <div id="popUpUser" style="display: none">
+            <div id="topInfor">
+                <div class="left-infor">
+                    
+                    
+                      <img id="Avatar" class="imgSmall" accept="image/*" onerror="imgError(this);" src="/UploadFiles/QLNV/@HinhAnhNV">
+                    
+
+                </div>
+                <div class="right-infor customeLink">
+                    <span style="font-weight: bold; display: block; text-align: center; font-size: 10px;" class="nameNV">@tenNhanVien</span>
+                    <div class="help hvr-underline-from-center"><a href="/NhanVien/MyProfile"style=""><i class="fa fa-user"></i>Thông tin cá nhân</a>
+                    </div>
+                    <div class="help hvr-underline-from-center">
+
+                        <a class="changeMk" href="@Url.Action("ChangePassword", "TaiKhoan")">
+                            <i class="fa fa-unlock"></i>Đổi mật khẩu </a>
+                    </div>
+                    <div class="help hvr-underline-from-center">
+                        <a href="@Url.Action("IndexView", "QuanLyGiupDo")" ><i class="fa fa-life-ring"></i>Giúp đỡ </a>
+                    </div>
+                    <div class="logout hvr-underline-from-center">
+                        <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i>Thoát </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+

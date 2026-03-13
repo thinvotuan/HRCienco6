@@ -1,0 +1,49 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model tbl_NS_BangPhanTachMucLuong
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+    });
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cập nhật thông tin chấm công</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã mức <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maMucLuong, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên mức <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenMucLuong, new { @class = "form-control", required = "required" })</td>
+        </tr>        
+        <tr>
+            <td class="tdtitle">Mức lương từ</td>
+            <td>@Html.TextBoxFor(model => model.mucLuongTu, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Mức lương đến</td>
+            <td>@Html.TextBoxFor(model => model.mucLuongDen, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương cơ bản</td>
+            <td>@Html.TextBoxFor(model => model.luongCoBan, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>      
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

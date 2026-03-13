@@ -1,0 +1,120 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Popup.cshtml";
+  
+   
+}
+ @{
+        var thongTin = ViewData["ThongTinNhanVien"] as vw_NS_DanhSachNhanVienTheoPhongBan;
+        var listNhanVien = ViewData["ListNhanVien"] as List<sp_NS_KetQuaDanhGiaNhanVien_ChiTietResult>;
+    <div class="wrapper_danhgia_home " id="container" style="max-width:90%; margin:0px auto;">
+        <div>
+    <div style="margin-top:50px;">
+        <div class="titleBorderPhieu">
+              <div class="colorCommonBieuNgu">Báo cáo chi tiết kết quả đánh giá nhân viên<br>
+             <span>Trách Nhiệm</span> – <span>Công Tâm</span> – <span>Đúng Sự Thật</span>
+              </div>
+            </div>
+    
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome" >
+            <tr class="background_tr">
+                <td style="font-weight: bold;">Mã nhân viên
+                </td>
+                <td>
+                    @(thongTin!=null ? thongTin.maNhanVien : string.Empty)
+                </td>
+                <td style="font-weight: bold;">Họ và tên
+                </td>
+                <td>
+                    @(thongTin!=null ? thongTin.ho + " " + thongTin.ten : string.Empty )
+                </td>
+            </tr>
+            <tr class="background_tr">
+                <td style="font-weight: bold;">Phòng ban
+                </td>
+                <td>
+                    @(thongTin!=null ?thongTin.tenPhongBan : string.Empty)
+                </td>
+                <td style="font-weight: bold;">Chức vụ
+                </td>
+                <td>
+                    @(thongTin != null ? thongTin.TenChucDanh : string.Empty)
+                </td>
+            </tr>
+            </table>
+            <table style="width: 100%;" class="table table-striped table-hover table-condensed tableThemeCustome">
+                        <thead>
+                            <tr class="background_tr">
+                                <th style="">STT
+                                </th>
+                                <th style="width:200px">Người đánh giá
+                                </th>
+                                <th style=" text-transform: none;">Trình độ chuyên môn, kỹ thuật
+                                </th>
+                                <th style="text-transform: none">Thái độ, tác phong làm việc
+                                </th>
+                                <th style="text-transform: none">Kinh nghiệm làm việc
+                                </th>
+                                <th style="text-transform: none">Khả năng làm việc nhóm
+                                </th>
+                                <th style="text-transform: none">Khả năng lãnh đạo
+                                </th>
+                                <th style="">Tổng Điểm
+                                </th>
+                                <th style="">Nhận xét
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                
+                            if (listNhanVien != null && listNhanVien.Count > 0)
+                              {
+                                  var count = 0;
+                                  foreach (var item in listNhanVien)
+                                  {
+                            
+                            <tr>
+                                <td align="center">
+                                    @(++count)
+                                </td>
+                                <td>
+                                    @item.hoTenNhanVienDanhGia
+                                </td>
+                                <td align="center">
+                                    @string.Format("{0:#,0.##}",item.diemTC1)
+                                </td>
+                                <td align="center">
+                                    @string.Format("{0:#,0.##}",item.diemTC2)
+                                </td>
+                                <td align="center">
+                                    @string.Format("{0:#,0.##}",item.diemTC3)
+                                </td>
+                                <td align="center">
+                                    @string.Format("{0:#,0.##}",item.diemTC4)
+                                </td>
+                                <td align="center">
+                                    @string.Format("{0:#,0.##}",item.diemTC5)
+                                </td>
+                                <td align="center" style="color: Red; font-weight: bold">
+                                    @string.Format("{0:#,0.##}", item.tongDiem)
+                                </td>
+                                <td>
+                                    @item.nhanXet
+                                </td>
+
+                            </tr>
+                            
+                                  }
+                              } 
+                              }
+                        </tbody>
+                    </table>
+             
+        
+    </div>
+        </div>
+        </div>
+ }

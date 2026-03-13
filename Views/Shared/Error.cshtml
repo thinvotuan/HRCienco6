@@ -1,0 +1,19 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<hgroup class="title" style="text-align: center;">
+    <div class="container">
+        <div style="text-align: center">
+            <img src="/Content/images/error.png" />
+            <div>
+                <h1 style="color: #eece1d">Có lỗi xảy ra trong quá trình xử lý</h1><p></p>
+                <p>Vui lòng liên hệ với nhà quản trị để được hỗ trợ!</p>
+                <h2 class="error">@Model</h2>
+            </div>
+        </div>
+
+    </div>
+
+</hgroup>

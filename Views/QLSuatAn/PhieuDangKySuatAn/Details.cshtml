@@ -1,0 +1,122 @@
+﻿@using BatDongSan.Models.QLSuatAn;
+@model PhieuDangKySuatAnModel
+@{
+    ViewBag.Title = "Chi tiết";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var thonTinCuaHang = ViewBag.thonTinCuaHang as BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_CuaHang;
+    var thongTinMonAn = ViewBag.thongTinMonAn as BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_CuaHang_MonAn;
+    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-buttons.css" />
+<script>
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+
+
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+       
+
+    });
+</script>
+<fieldset class="removeBorderFieldset">
+    <div id="tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected active">
+                <a href="#tab1" data-toggle="tab"><span>Chi tiết phiếu đăng ký suất ăn</span></a></li>
+
+        </ul>
+    </div>
+    <div class="form-group" style="float: right">
+        <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+    </div>
+
+    <div style="margin-top: 15px">
+        <table class="table table-hover table-striped table-condensed TableMobileChild" style="position: relative">
+            <tr>
+                <td class="tdtitle">Mã phiếu</td>
+                <td>@Model.maPhieu</td>
+                <td class="tdtitle">Ngày lập</td>
+                <td>@Html.DisplayFor(model => model.ngayLapPhieu, "{0:dd/MM/yyyy}", new { required = "required", @readonly = "readonly" })<img src="~/FileUploads/BarcodeImage/@Model.maVach" style="    width: 50px;
+    height: auto; float:right" /></td>
+
+            </tr>
+
+            <tr>
+
+                <td class="tdtitle">Mã NV phiếu ăn</td>
+                <td>@Model.maNhanVienThuHuong</td>
+                <td class="tdtitle">Họ tên NV phiếu ăn</td>
+                <td>@Model.hoTenNhanVienThuHuong
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td class="tdtitle">Tên cửa hàng</td>
+                <td>@thonTinCuaHang.tenCuaHang</td>
+                <td class="tdtitle">Hình ảnh</td>
+                <td>
+                    <img src="@thonTinCuaHang.avatar"  style="width:150px; height:100px; object-fit: contain;" />
+
+                </td>
+
+            </tr>
+            @if (thongTinMonAn != null)
+            {
+                <tr>
+
+                    <td class="tdtitle">Tên món ăn </td>
+                    <td>@thongTinMonAn.tenMonAn</td>
+                    <td class="tdtitle">Hình ảnh</td>
+                    <td>
+                        <img src="@thongTinMonAn.avatar"  style="width:150px; height:100px; object-fit: contain;" />
+
+                    </td>
+
+                </tr>
+            }
+              @*<tr>
+
+                <td class="tdtitle" style="font-weight:bold">Thời gian phục vụ</td>
+                <td style="font-weight:bold">@Model.thoiGianDuKienPhucVu</td>
+               
+
+            </tr>*@
+            <tr>
+
+                <td class="tdtitle">Số thứ tự phiếu ăn</td>
+                <td>@Model.soThuTuPhucVuTaiQuan</td>
+                <td class="tdtitle">Số lần ăn còn lại tại quán</td>
+                <td>@Model.soSuatAnConLaiCuaNVTaiQuan
+
+                </td>
+
+            </tr>
+
+
+
+
+
+        </table>
+    </div>
+</fieldset>
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>

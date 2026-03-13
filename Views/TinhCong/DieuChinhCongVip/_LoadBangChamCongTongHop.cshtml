@@ -1,0 +1,117 @@
+﻿@using BatDongSan.Models.VIP
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+@{
+                                
+    int stt = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSach"] as List<sp_XemDieuChinhCongVIPResult>;
+
+    foreach (var item in ls.ToList())
+    {
+
+
+      
+    <tr>
+        <td align="center" rowspan="2">
+            @(stt++)
+        </td>
+        <td rowspan="2"><a style="color:#519ee5" href="@Url.Action("Details", "NhanVienVip", new { id = item.maNhanVien })">@item.tenNhanVien</a>
+        </td>
+
+        <td style="text-align: center">@item.ngayCongChuan</td>
+        <td style="text-align: center">@item.ngayCong</td>
+        <td style="text-align: center">@(item.ngayNghiPhep ?? 0)</td>
+        <td style="text-align: center">@(item.nghiKhongLuong ?? 0)</td>
+        <td style="text-align: center">@(item.ngayNghiLeTet ?? 0)</td>
+        
+        <td style="text-align: center">@(item.ngayLuyKeThangTruoc ?? 0)</td>
+        <td style="max-width:100px; text-align:right">
+             <input type="text" value=" @(item.congDieuChinh ?? 0)" class="txtCongDieuChinh" attrThang="@item.thang" attrNV="@item.maNhanVien" placeholder="Nhập công điều chỉnh" style="text-align:right"/>
+           
+        </td>
+        <td style="text-align: center">
+             <div class="tongCongSauKhiDC" style="text-align:center">
+                @{
+        if (item.tongCongSauKhiDC == null || item.tongCongSauKhiDC == 0)
+        {
+            <span>
+                @((item.ngayCong??0)+(item.ngayNghiPhep??0)+(item.ngayNghiLeTet??0)+(item.ngayLuyKeThangTruoc??0) - (item.nghiKhongLuong ??0))
+            </span>
+        }
+        else { 
+       <span>@item.tongCongSauKhiDC</span> 
+        }
+                    }
+                </div>
+        </td>
+        <td style="text-align: center">
+                   @{
+                       if(item.trangThai == 1){
+                       <i class="fa fa-check" aria-hidden="true" style="color:#3198a3; font-size:20px;"></i>
+                       }
+                       else if(item.guiDuyet == 1){
+                    <button class="btn btn-info" type="button" onclick="DuyetPhieu('@item.thang','@item.nam','@item.maNhanVien')"><i class="fa fa-paper-plane"></i>Duyệt</button>
+                            <button class="btn btn-info" type="button" onclick="TraPhieu('@item.thang','@item.nam','@item.maNhanVien')"><i class="fa fa-paper-plane"></i>Trả lại</button>
+                   } 
+                   }
+                       
+        </td>
+     </tr>
+    <tr>
+        <td style="text-align: left" colspan="10">
+            <div class="txtLyDo">
+                 <textarea class="textLyDo" attrThang="@item.thang" attrNV="@item.maNhanVien"  placeholder="Nhập lý do điều chỉnh">@item.lyDoXinDC</textarea>
+
+            </div></td>
+    </tr>
+    
+                           
+    
+    }
+}
+
+<tr>
+    <td colspan="14" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>

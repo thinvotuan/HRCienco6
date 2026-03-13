@@ -1,0 +1,814 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .infor_THCT, .infor_CCChiTiet {
+        padding: 5px;
+        background: rgb(226, 144, 72);
+        border-radius: 3px;
+        color: #fff;
+        box-sizing: border-box;
+        margin: 5px auto;
+        line-height: 1.7;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+
+
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSearch").click(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search();
+        });
+        $("#thang,#nam").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search();
+        });
+
+
+
+        $(".tabToggle").click(function () {
+            $(".tabToggle").removeClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").hide(600);
+            var index = $(".tabToggle").index(this);
+            $(".tabToggle").eq(index).addClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").eq(index).show(600);
+        });
+        $(document).on('click', '#btnTinhCCChiTiet', function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('.infor_CCChiTiet').html(imageUrl).css('display', 'block');
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("UpdateBangChamCongChiTiet", "BangChamCongTongHop")',
+                data: {
+                    'nam': $("#nam").val(),
+                    'thang': $("#thang").val()
+
+                },
+                success: function (result) {
+                    $(".infor_CCChiTiet").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_CCChiTiet").html('Cập nhật thành công bảng công chi tiết tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+                    else {
+                        $(".infor_CCChiTiet").html('Cập nhật thất bại bảng công chi tiết tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+
+                    Search();
+                }
+            });
+        });
+        $(document).on('click', '#btnImportDuLieuVanTay', function () {
+            var tuNgay = $("#TuNgay").val();
+            var denNgay = $("#DenNgay").val();
+            if (denNgay < tuNgay) {
+                Alert.error("Ngày kết thúc phải lớn hơn ngày bắt đầu", "Thông báo", { displayDuration: 3000 });
+                return false;
+
+            }
+
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('.infor_VanTay').html(imageUrl).css('display', 'block');
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("ImportDuLieuVanTay", "BangChamCongTongHop")',
+                data: {
+                    'nam': $("#namImport").val(),
+                    'thang': $("#thangImport").val(),
+                    'TuNgay': $("#TuNgay").val(),
+                    'DenNgay': $("#DenNgay").val()
+
+                },
+                success: function (result) {
+                    $(".infor_VanTay").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_VanTay").html('Cập nhật dữ liệu import thành công: ' + $("#thangImport").val() + " năm: " + $("#namImport").val() + "<br> Tổng cộng: " + result.soLuotImport + " được cập nhật.");
+                    }
+                    else {
+                        $(".infor_VanTay").html('Cập nhật thất bại import dữ liệu vân tay tháng: ' + $("#thangImport").val() + " năm: " + $("#namImport").val());
+                    }
+
+
+                }
+            });
+        });
+        Search();
+        // Cap nhat bang luong chi tiet
+
+        $("#btnSearch_Tab1").click(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search_Tab1();
+        });
+        $("#thang_Tab1,#nam_Tab1").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search_Tab1();
+        });
+
+        $(document).on('click', '#btnDownload', function () {
+            var url = "/BangChamCongTongHop/XuatFileBangTongHopCongThangMau" + '?thang=' + $("#thangtc").val() + "&nam=" + $("#namtc").val()
+            location.href = url;
+        });
+
+
+    });
+    function OnCriteriaPC(page) {
+        var giatri = $("#qSearch").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadBangChamCongChiTiet", "BangChamCongTongHop")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+        $(".infor_THCT").html('').css('display', 'none');
+        var giatri = $("#qSearch").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+
+
+        var url = '@Url.Action("LoadBangChamCongChiTiet", "BangChamCongTongHop")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=0";
+
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+
+    function Reset() {
+        location.href = '@Url.Action("LoadBangChamCongChiTiet", "BangChamCongTongHop")';
+    }
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+        $("#btnSearchTC").click(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+            SearchTC();
+        });
+        $("#thangtc,#namtc").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+            SearchTC();
+        });
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+            $("#btnPhongBan").val(this.id);
+
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            SearchTC();
+        })
+
+        $(document).on("click", "#phongban-dropdown-menu_Tab1 li a", function () {
+            $("#btnPhongBan_Tab1").val(this.id);
+
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            Search_Tab1();
+        })
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+        $(document).on('click', '#btnXuatFileCongTH', function () {
+            var url = '/BangChamCongTongHop/XuatFileBangChamCongTH' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val();
+
+            window.location = url;
+
+        });
+        $(document).on('click', '#btnXuatFileCongThang', function () {
+            var giatri = $("#qSearchTC").val().trim();
+            giatri = giatri.replace(/ /gi, '+');
+            var maPhongBan = $("#btnPhongBan").val().trim();
+            maPhongBan = maPhongBan.replace(/ /gi, '+');
+            var url = '@Url.Action("XuatFileBangTongHopCongThang", "BangChamCongTongHop")' + "?thang=" + $("#thangtc").val() + "&nam=" + $("#namtc").val() + "&qSearch=" + giatri + "&maPhongBan=" + maPhongBan + "&_page=0";
+            window.location = url;
+
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+        $("#phongban-dropdown-menu_Tab1").removeAttr("style");
+
+        $("#thang_Tab1,#nam_Tab1").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+            Search_Tab1();
+        });
+
+
+        SearchTC();
+        $(document).on('click', '#btnTinhTHCT', function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('.infor_THCT').html(imageUrl).css('display', 'block');
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("UpdateBangChamCongTH", "BangChamCongTongHop")',
+                data: {
+                    'nam': $("#namtc").val(),
+                    'thang': $("#thangtc").val()
+
+                },
+                success: function (result) {
+                    $(".infor_THCT").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_THCT").html('Cập nhật thành công tháng: ' + $("#thangtc").val() + " năm: " + $("#namtc").val());
+                    }
+                    else {
+                        $(".infor_THCT").html('Cập nhật thất bại tháng: ' + $("#thangtc").val() + " năm: " + $("#namtc").val());
+                    }
+
+                    SearchTC();
+                }
+            });
+        });
+
+        $(document).on('click', '#btnDownload', function () {
+            var url = "/BangChamCongTongHop/XuatFileBangTongHopCongThangMau" + '?thang=' + $("#thangtc").val() + "&nam=" + $("#namtc").val()
+            location.href = url;
+        });
+
+        $(document).on('click', '#btnSaveImport', function () {
+            var obj = $(this);
+            var button = $(obj).clone();
+            $(obj).prop('disabled', true).html('<img src="/Images/progress.gif" />')
+            var fd = new FormData();
+            fd.append("fileToUpload", document.getElementById('fileImport').files[0]);
+            $.ajax({
+                url: "/BangChamCongTongHop/ImportFileTC" + '?thang=' + $("#thangtc").val() + "&nam=" + $("#namtc").val(),
+                type: 'POST',
+                dateType: 'json',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success == true) {
+                        $(obj).replaceWith(button);
+                        Alert.success("Lưu dữ liệu thành công", "Thông báo", { displayDuration: 2000 });
+                        $("#fileImport").val("");
+                        $("#btnSearchTC").click();
+                    } else {
+                        $(obj).replaceWith(button);
+                        Alert.warning("Định dạng file không được hỗ trợ", "Thông báo", { displayDuration: 0 });
+                        $("#fileImport").val("");
+                    }
+                },
+                error: function (request, textStatus, errorThrown) {
+                    Alert.error("Lưu không thành công", "Thông báo", { displayDuration: 0 });
+                }
+            })
+        });
+
+
+        $(document).on("blur", "[name=congDieuChinh]", function () {
+            var parent = $(this).closest("tr");
+            var maNhanVienDieuChinh = parent.find("[name='maNhanVienDieuChinh']").val();
+            var thangDieuChinh = parent.find("[name='thangDieuChinh']").val();
+            var namDieuChinh = parent.find("[name='namDieuChinh']").val();
+            var congDieuChinh = parent.find("[name='congDieuChinh']").val();
+            $.ajax({
+                type: "POST",
+                url: '/BangChamCongTongHop/DieuChinhCong/',
+                data: {
+                    maNhanVienDieuChinh: maNhanVienDieuChinh, thangDieuChinh: thangDieuChinh, namDieuChinh: namDieuChinh, congDieuChinh: congDieuChinh
+                },
+                success: function (result) {
+                    if (result == "Error") {
+                        Alert.warning("Điều chỉnh công thất bại!", "Thông báo", { displayDuration: 2000 });
+                    }
+                }
+            });
+        });
+    });
+    function OnCriteriaPCTC(page) {
+        var giatri = $("#qSearchTC").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadBangChamCongTongHop", "BangChamCongTongHop")' + "?thang=" + $("#thangtc").val() + "&nam=" + $("#namtc").val() + "&qSearch=" + giatri + "&_page=" + page;
+        var imageUrl = '<div id="divMsgTC" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbodyTC').html(imageUrl);
+        $('#tbodyTC').load(url, function () {
+        });
+    }
+
+    function SearchTC() {
+
+        var giatri = $("#qSearchTC").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var maPhongBan = $("#btnPhongBan").val().trim();
+        maPhongBan = maPhongBan.replace(/ /gi, '+');
+
+
+        var url = '@Url.Action("LoadBangChamCongTongHop", "BangChamCongTongHop")' + "?thang=" + $("#thangtc").val() + "&nam=" + $("#namtc").val() + "&qSearch=" + giatri + "&maPhongBan=" + maPhongBan + "&_page=0";
+
+        var imageUrl = '<div id="divMsgTC" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbodyTC').html(imageUrl);
+        $('#tbodyTC').load(url, function () {
+        });
+    }
+
+    function Search_Tab1() {
+
+        OnCriteria_Tab1(1);
+    }
+
+
+    function ResetTC() {
+        location.href = '@Url.Action("LoadBangChamCongTongHop", "BangChamCongTongHop")';
+    }
+    function enterToSeacrhTC(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchTC").click();
+    }
+    function beginPaging() {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+
+    //tab1 - start
+    function OnCriteria_Tab1(page) {
+        var giatri = $("#qSearch_Tab1").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        //var maPhongBan = $("#btnPhongBan_Tab1").val().trim();
+        var maPhongBan = '';
+        var url = '@Url.Action("LoadBangDanhSachPhieuTangCaDuyet", "BangChamCongTongHop")' + "?thang=" + $("#thang_Tab1").val() + "&nam=" + $("#nam_Tab1").val() + "&qSearch=" + giatri + "&maPhongBan=" + maPhongBan + "&_page=" + page;
+        var imageUrl = '<div id="divMsgTC" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody_Tab1').html(imageUrl);
+        $('#tbody_Tab1').load(url, function () {
+        });
+    }
+
+    function Search_Tab1() {
+
+        OnCriteria_Tab1(1);
+    }
+
+
+    function enterToSeacrh_Tab1(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch_Tab1").click();
+    }
+    //tab2 - end
+    //tab1
+    function SaveDuyetTangCa(obj) {
+        bootbox.confirm({
+            message: "Bạn có chắc chắn muốn cập nhật ngày công tăng ca cho nhân viên này ?",
+            buttons: {
+                confirm: {
+                    label: 'Xác nhận',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Đóng',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $(".pageLoading").show();
+
+                    var index = $("[name=btnDuyetPhieuTangCa]").index(obj);
+
+                    var soPhieu = $("[name=soPhieu_Tab1]:eq(" + index + ")").val();
+                    var maNhanVien = $("[name=maNhanVien_Tab1]:eq(" + index + ")").val();
+                    var ngayTangCa = $("[name=ngayTangCa_Tab1]:eq(" + index + ")").val();
+                    var duyetGioVao = $("[name=duyetGioVao_Tab1]:eq(" + index + ")").val();
+                    var duyetGioRa = $("[name=duyetGioRa_Tab1]:eq(" + index + ")").val();
+                    var duyetSoGio = $("[name=soGioTangCa_Tab1]:eq(" + index + ")").val();
+                    var heSoTangCa = $("[name=heSoTangCa_Tab1]:eq(" + index + ")").val();
+
+                    var url = '@Url.Action("SaveDuyetTangCa", "BangChamCongTongHop")';
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: $.param({
+                            soPhieu: soPhieu, maNhanVien: maNhanVien, ngayTangCa: ngayTangCa, duyetGioVao: duyetGioVao, duyetGioRa: duyetGioRa, duyetSoGio: duyetSoGio, heSoTangCa: heSoTangCa
+                        }, true),
+                        success: function () {
+
+                            var today = new Date();
+                            var dd = today.getDate();
+                            var mm = today.getMonth() + 1; //January is 0!
+
+                            var yyyy = today.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+                            var today = dd + '/' + mm + '/' + yyyy;
+                            $(obj).parent().html(today);
+                            $(obj).remove();
+
+                            $(".pageLoading").hide();
+                            Alert.success("Cập nhật thành công", "Thông báo", { displayDuration: 2000 });
+                        },
+                        error: function () {
+                            $(".pageLoading").hide();
+
+                            Alert.error("Có lỗi xảy ra", "Thông báo", { displayDuration: 2000 });
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+
+
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab tabToggle">
+                    <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Bảng chấm công chi tiết</span></a>
+
+                </li>
+
+                <li class="ui-state-default ui-corner-top tabToggle">
+                    <a href="#"><span><i class="fa fa-users" aria-hidden="true"></i>Bảng tổng hợp công tháng</span></a></li>
+                <li class="ui-state-default ui-corner-top tabToggle">
+                    <a href="#"><span><i class="fa fa-chrome" aria-hidden="true"></i>Import dữ liệu chấm công</span></a></li>
+
+                <li class="ui-state-default ui-corner-top tabToggle">
+                    <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Chi tiết tăng ca</span></a>
+
+                </li>
+            </ul>
+
+        </ul>
+    </div>
+    <div id="container">
+        <div class="contentToggle" style="display: block;">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float: left">
+                            Tháng:@Html.DropDownList("thang", ViewData["lstThang"] as SelectList, new { @style = "width:150px" })
+                            Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new { @style = "width:150px" })
+
+
+
+                        </div>
+                        <div style="float: right">
+                            <input type="text" id="qSearch" value="@ViewBag.Search" class="form-control" style="width:300px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnSearch" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                            <button class="btn btn-info" id="btnTinhCCChiTiet" type="button" style="float: left; margin-left: 10px !important">Tính Công Chi Tiết</button>
+                            <button class="btn btn-info" id="btnXuatFileCongTH" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="infor_CCChiTiet" style="display: none"></div>
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center">STT
+                        </th>
+                        <th style="text-align: center">Nhân viên
+                        </th>
+
+                        <th style="text-align: center">Mã vân tay
+                        </th>
+
+                        <th style="text-align: center">Ngày quét</th>
+                        <th style="text-align: center">Tên ngày</th>
+
+                        <th style="text-align: center">Giờ vào</th>
+                        <th style="text-align: center">Giờ ra</th>
+                        <th style="text-align: center">Loại</th>
+                        <th style="text-align: center">Số giờ công</th>
+
+
+
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+
+
+            </table>
+        </div>
+        <div class="contentToggle" style="display: none">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float: left">
+                            Tháng:@Html.DropDownList("thangtc", ViewData["lstThang"] as SelectList, new { @style = "width:50px" })
+                            Năm:@Html.DropDownList("namtc", ViewData["lstNam"] as SelectList, new { @style = "width:70px" })
+
+                        </div>
+                        <div class="form-group" id="phongban-div" style="float: left">
+
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                    Danh sách phòng ban&nbsp;<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                    <li role="presentation">
+                                        <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                            <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                        </div>
+                                    </li>
+                                    <li role="presentation">
+                                        @Html.Raw(ViewBag.PhongBans)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="float: right">
+                            <input type="text" id="qSearchTC" value="@ViewBag.SearchTC" class="form-control" style="width:300px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrhTC(event);" />
+                            <button class="btn btn-info" id="btnSearchTC" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                            <button class="btn btn-info" id="btnTinhTHCT" type="button" style="float: left; margin-left: 10px !important">Tính Công Tháng</button>
+                            <button class="btn btn-info" id="btnXuatFileCongThang" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>
+                            <button class="btn btn-info" data-toggle="modal" data-target="#importModal" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Import file</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="infor_THCT" style="display: none"></div>
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center">STT
+                        </th>
+                        <th style="text-align: center">Nhân viên
+                        </th>
+
+
+                        <th style="text-align: center">Phòng ban<br />
+                            chức vụ
+                        </th>
+                        <th style="text-align: center">Công chuẩn
+                        </th>
+                        <th style="text-align: center">Số ngày
+                            <br />
+                            Công chờ việc</th>
+                        <th style="text-align: center">Số ngày quét</th>
+                        <th style="text-align: center">Công tác</th>
+                        <th style="text-align: center">Nghỉ phép<br />
+                            có lương</th>
+                        <th style="text-align: center">Nghỉ phép<br />
+                            không lương</th>
+                        <th style="text-align: center">Nghỉ lễ</th>
+                        <th style="text-align: center">TC thường</th>
+                        <th style="text-align: center">TC chủ nhật</th>
+                        <th style="text-align: center">TC nghỉ lễ</th>
+                        <th style="text-align: center">Lũy kế<br />
+                            tháng trước</th>
+                        <th style="text-align: center"><b>Tổng cộng</b></th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyTC">
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+        <div class="contentToggle" style="display: none">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+
+
+                        <div style="line-height: 26px; float: left">
+                            Từ ngày:@Html.DropDownList("TuNgay", ViewData["TuNgay"] as SelectList, new { @style = "width:150px" })-
+                            Đến ngày:@Html.DropDownList("DenNgay", ViewData["DenNgay"] as SelectList, new { @style = "width:150px" })
+                            Tháng:@Html.DropDownList("thangImport", ViewData["lstThang"] as SelectList, new { @style = "width:150px" })
+                            Năm:@Html.DropDownList("namImport", ViewData["lstNam"] as SelectList, new { @style = "width:150px" })
+
+                        </div>
+
+                        <div style="float: right">
+
+                            <button class="btn btn-info" id="btnImportDuLieuVanTay" type="button" style="float: left; margin-left: 10px !important">Import dữ liệu chấm công</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="infor_VanTay" style="display: none"></div>
+            <div class="list-group" style="max-width: 600px; margin-top: 200px;">
+                <a href="#" class="list-group-item disabled">Ghi chú
+                </a>
+                <a href="#" class="list-group-item">Vui lòng chọn: ngày, tháng, năm cần import.</a>
+
+
+            </div>
+        </div>
+
+        <div class="contentToggle" style="display: none">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float: left">
+                            Tháng:@Html.DropDownList("thang_Tab1", ViewData["lstThang"] as SelectList, new { @style = "width:150px" })
+                            Năm:@Html.DropDownList("nam_Tab1", ViewData["lstNam"] as SelectList, new { @style = "width:150px" })
+                            <div class="form-group" id="phongban-div_Tab1" style="float: right">
+
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan_Tab1" type="button" data-toggle="dropdown">
+                                        Danh sách phòng ban&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="phongban-dropdown-menu_Tab1">
+                                        <li role="presentation">
+                                            <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                                <input type="text" class="form-control input-sm" id="txtsearch_Tab1" placeholder="Search" style="width: 100%" />
+                                                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                            </div>
+                                        </li>
+                                        <li role="presentation">
+                                            @Html.Raw(ViewBag.PhongBans)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div style="float: right">
+                            <input type="text" id="qSearch_Tab1" value="@ViewBag.Search_Tab1" class="form-control" style="width:300px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh_Tab1(event);" />
+                            <button class="btn btn-info" id="btnSearch_Tab1" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                            @*<button class="btn btn-info" id="btnTinhCCChiTiet" type="button" style="float: left; margin-left: 10px !important">Tính Công Chi Tiết</button>*@
+                            @*<button class="btn btn-info" id="btnXuatFileCongTH" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>*@
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome" id="table_ChiTiet_Tab1">
+                <thead>
+                    <tr>
+                        <th rowspan="2">STT
+                        </th>
+                        <th rowspan="2">Số phiếu
+                        </th>
+                        <th rowspan="2">Nhân viên
+                        </th>
+                        <th colspan="4">Phiếu tăng ca
+                        </th>
+                        <th colspan="2">Quét vân tay
+                        </th>
+                        <th colspan="3">Thời gian tăng ca
+                        </th>
+                        @*<th rowspan="2">#
+                        </th>*@
+                    </tr>
+                    <tr>
+
+                        <th style="text-align: center">Ngày tăng ca</th>
+                        @*<th style="text-align: center">Tên ngày<br />
+                            Hệ số</th>*@
+                        <th style="text-align: center">Giờ bắt đầu</th>
+                        <th style="text-align: center">Giờ kết thúc</th>
+                        <th style="text-align: center">Nghỉ giữa ca</th>
+
+
+                        <th style="text-align: center">Giờ quét vào</th>
+                        <th style="text-align: center">Giờ quét ra</th>
+
+                        <th style="text-align: center">Tính giờ vào</th>
+                        <th style="text-align: center">Tính giờ ra</th>
+                        <th style="text-align: center">Số giờ</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tbody_Tab1">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</fieldset>
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery-1.9.0.min.js"></script>
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/ui-1.10.0/ui-lightness/jquery-ui-1.10.0.custom.min.css" />
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.css" />
+
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/select2.full.js"></script>
+<link rel="stylesheet" href="~/Content/css/select2.min.css" />
+
+<script type="text/javascript">        jQuery.noConflict(); </script>
+
+
+
+<div id="importModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="import-panel" class="filter-panel">
+                            <div id="dialog" class="alert alert-info" style="display: none">
+                                <strong>Thông báo!</strong> File đính kèm không đúng định dạng.  
+                            </div>
+                            <h4>Tải về mẫu phiếu nhập thông tin dữ liệu chấm công từ file: </h4>
+                            <button class="btn btn-link btn-sm" id="btnDownload"><i style="color: #2e6da4" class="fa fa-download" aria-hidden="true"></i></button>
+                            <h4>Chọn file dữ liệu (*.xlsx, *.xls)</h4>
+                            <div class="panel panel-default">
+                                <input type="file" id="fileImport" name="fileImport" value="Chọn file" style="border: none" />
+                            </div>
+                            <div class="panel panel-default" style="float: right">
+                                <button type="button" id="btnSaveImport" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

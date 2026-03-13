@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var obj = window.opener;
+        $("#btnGoiDuyet").click(function () {
+            if (window.confirm('Bạn có chắc chắn trả lại phiếu duyệt này hay không?')) {
+                $("#btnGoiDuyet").replaceWith("Đang xử lý...");
+                $(this).attr("disabled", true);
+                $.post('@Url.Action("TraLaiPhieuDuyet", "DMNguoiDuyet")', { lyDo: $('#lyDoTraLai').val(), maPhieu: $('#maPhieu').val(), soNgayNghiPhep: $('#soNgayNghiPhep').val(), maCongViec: $('#maCongViec').val(), hoTen: $('#tenNhanVien').val(), maQuiTrinh: $("#maQuiTrinh").val(), sendMail: document.getElementById('email').checked, sendSMS: document.getElementById('sms').checked, url: $("#url").val() }, function (data) {
+                    if (data.length == 0) {
+                        window.close();
+                        obj.LoadLaiTrang();
+                    }
+                    else {
+                        alert(data);
+                        $(this).attr("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+</script>
+@{    
+    var ds = ViewBag.DSNhanVienDuyet as List<BatDongSan.Models.NhanSu.NhanVienModel>;
+}
+<div id="container">
+    <fieldset class="fieldset1 clsDuyetPhieu">
+        <form name="form" action="" method="post">
+            <input type="hidden" id="maPhieu" value="@ViewData["maPhieu"]" />
+            <input type="hidden" id="maCongViec" value="@ViewData["maCongViec"]" />
+            <input type="hidden" id="trangThai" value="@ViewData["trangThai"]" />
+            <input type="hidden" id="soNgayNghiPhep" value="@ViewData["soNgayNghiPhep"]" />
+            <input type="hidden" id="tenNhanVien" value="@ViewData["tenNhanVien"]" />
+            <input type="hidden" id="lyDo" value="@ViewData["lyDo"]" />
+            <input type="hidden" id="maNV" />
+            <input type="hidden" id="url" value="@ViewBag.URL" />
+            <input type="hidden" id="maQuiTrinh" value="@ViewBag.IDQuiTrinh" />
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <tr>
+                    <td style="font-size: 25px; text-align: center;" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>Send Email:<input type="checkbox" id="email" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send SMS:<input type="checkbox" id="sms" />
+                    </td>
+                    <td align="right" style="padding: 7px 0; float:right">
+                        <input type="button" class="btn btn-info" value="Trả lại" id="btnGoiDuyet" />
+                        <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        @Html.TextArea("lyDoTraLai", string.Empty, new { @class = "form-control" })
+                        <div style="float: right; margin-top: 10px">
+                            <input type="button" class="btn btn-info" value="Trả lại" id="btnGoiDuyet" />
+                            <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" />
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </fieldset>
+</div>

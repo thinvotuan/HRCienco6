@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Đăng Nhập";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" href="~/Content/menuMobile.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/common.css" type="text/css" />
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+@Styles.Render("~/Content/css")
+<script>
+    $(document).ready(function () {
+        @*$(".btnLogin").click(function () {
+            $.ajax({
+                url: "@Url.Action("CheckDangNhap", "TaiKhoan")" + "?userName=" + $("#userName").val() + "&password=" + $("#password").val(),
+                type: "POST",
+                success: function (data) {
+
+                    if (data == "0") {
+                        Alert.error("Username không tồn tại.", "Thông báo", { displayDuration: 2000 });
+                    } else if (data == "2") {
+                        Alert.error("Mật khẩu không đúng.", "Thông", { displayDuration: 2000 });
+                    }
+                    else if (data == "1") {
+                        location.href = '@Url.Action("Index", "Home")';
+                    }
+                }
+            });
+        });*@
+
+
+    });
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSubmit").click();
+    }
+</script>
+<style>
+    .require
+    {
+        color: red;
+    }
+    .wrapper_website .main
+    {
+        min-width:100%;
+    }
+</style>
+<div class="wrapper_page_login">
+    <div class="box_form_login">
+        <div class="form_login_account">
+            <h4 class="title">Đăng nhập</h4>
+            <a  href="@Url.Action("QuenMatKhau","TaiKhoan")" title="Quên mật khẩu" class="linkForgetPW">Quên mật khẩu?</a>
+            <div>@ViewBag.Susccess</div>
+            <div class="inforLoginFailed"></div>
+            
+            <form class="form-horizontal " method="post" action="@Url.Action("Login", "Home", new { returnUrl = ViewBag.ReturnUlr })" id="form-submit">
+                <div class="form-group txtLoginUserID">
+                    <label class="control-label col-sm-12 text-left">Tên đăng nhập/Email:<span class="require">(*)</span></label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" placeholder="Username" id="userName" required="required" name="userName">
+                    </div>
+                </div>
+                <div class="form-group txtLoginPassword">
+                    <label class="control-label col-sm-12 text-left">Mật khẩu:<span class="require">(*)</span></label>
+                    <div class="col-sm-12">
+                        <input type="password" class="form-control" id="password" name="password" required="required" onkeypress="enterToSeacrh(event);" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-12">
+
+                        <input class="btn btn-danger btnLogin col-sm-12" type="submit" id="btnSubmit" value="Đăng nhập">
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="border_newto">
+                            <div class="newtomailtt">Đăng ký tài khoản mới?</div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-12">
+                        <input type="button" class="btn btn-default col-sm-12" value="Đăng ký" onclick="location.href = '../TaiKhoan/DangKy'">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="box_footer_form_login">
+    </div>
+</div>

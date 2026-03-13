@@ -1,0 +1,108 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Controllers.HeThong;
+@{    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ 
+  
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+    });
+    function toDay() {
+        $("#fromDate").data("DateTimePicker").date(moment());
+        $("#toDate").data("DateTimePicker").date(moment());
+    }
+    function toWeek() {
+        $("#fromDate").data("DateTimePicker").date(moment().subtract(7, "day"));
+        $("#toDate").data("DateTimePicker").date(moment());
+    }
+    function toMonth() {
+        $("#fromDate").data("DateTimePicker").date(moment().subtract(1, "month"));
+        $("#toDate").data("DateTimePicker").date(moment());
+    }
+</script>
+<style>
+    #maintable td
+    {
+        vertical-align: middle;
+        border-right: 2px solid #ADC2D6;
+        position: relative;
+    }
+
+    #filterPanel td
+    {
+        border: none;
+        vertical-align: middle;
+    }
+
+    #content td
+    {
+        border: none;
+    }
+
+    .tdtitle
+    {
+        font-weight: bold;
+    }
+
+    .datepicker
+    {
+        width: 100% !important;
+    }
+</style>
+<div id="container">
+    <div>
+        <fieldset class="removeBorderFieldset">
+
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Ghi nhận Log</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-condensed">
+                            <tr class="background_tr">
+                                <td style="position: relative;width:100px">
+                                    <input class="form-control datepicker" id="fromDate" placeholder="từ ngày" />
+                                </td>
+                                <td style="position: relative;width:100px">
+                                    <input class="form-control datepicker" id="toDate" placeholder="đến ngày" />
+                                </td>
+                                <td style="font-size: 12px" class="font-link-time ">
+                                    <a href="javascript:void(0);" onclick="toDay()">Today</a> | <a href="javascript:void(0);" onclick="toWeek()">Last 7 days</a> |
+                                    <a href="javascript:void(0);" onclick="toMonth()">Last 30 days</a>
+                                </td>
+                              
+                                <td>
+                                    <input type="text" style="width: 100%" class="form-control" id="pref-search" onkeypress="enterToSeacrh(event);" />
+                                </td>
+                                <td>
+                                    <button id="btnSearch" type="button" class="btn btn-primary btn-sm" style="border: 1px double; margin-left: 5px">
+                                        <span class="glyphicon glyphicon-search"></span>Tìm kiếm
+                                    </button>
+                                </td>
+                                                                                           
+                            </tr>
+                            
+                        </table>
+            <div class="Wrapper_TimeLine">
+               
+                @{Html.RenderPartial("ViewTimeLine");}
+            </div>
+
+
+        </fieldset>
+    </div>
+</div>
+

@@ -1,0 +1,354 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model PhuLucHopDongModel
+@{
+    ViewBag.Title = "Chi tiết phụ lục hợp đồng";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-999999999' });
+
+        $("#mucDieuChinh").on("keydown keyup", function () {
+            var mucLuongMoi = 0,
+                soLuongCu = parseFloat($("#soLuongCu").autoNumeric("get")),
+                mucDieuChinh = parseFloat($(this).autoNumeric("get"));
+            mucLuongMoi = soLuongCu + mucDieuChinh;
+            $("#mucLuongMoi").autoNumeric("set", mucLuongMoi);
+        })
+
+        $("#btnPhanBo").click(function () {
+            var mucLuongMoi = $("#mucLuongMoi").autoNumeric("get"),
+                maNhanVien = $("#maNhanVien").val();
+            var url = "@Url.Action("PhanBoLuong", "PhuLucHopDong")" + "?luongThoaThuan=" + mucLuongMoi + "&maNhanVien=" + maNhanVien;
+            $("#phanbo-div").load(url);
+        })
+
+
+        $("#btnSubmitPhuCap").click(function (e) {
+            if (checkValid() == true) {
+                var tongLuong = $("#mucLuongThoaThuan").val(),
+                    luongCoBan = $("#luongCoBan").val();
+
+                $("#tongLuong").val(tongLuong);
+                $("#luongHopDong").val(luongCoBan);
+
+                $.ajax({
+                    url: "/HopDongLaoDong/SavePhuCapLuong",
+                    type: "POST",
+                    dataType: "json",
+                    data: $("#phucap-form").serialize(),
+                    success: function () {
+                        Alert.success("Lưu thành công", "Thông báo", { displayDuration: 2000 });
+                    },
+                    error: function () {
+                        Alert.error("Có lỗi xảy ra", "Lỗi", { displayDuration: 2000 });
+                    }
+                })
+            }
+        });
+
+        $("#btnSubmit").click(function (e) {
+            if ($("#form-submit").valid()) {
+                if (checkValid() == false) {
+                    e.preventDefault();
+                }
+            }
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index", "PhuLucHopDong")?id=" + $("#soHopDong").val();
+            location.href = url;
+        });
+
+        $("#btnGuiDuyet").click(function () {
+            chonNguoiDuyet();
+        });
+
+        $("#btnDuyetPhieu").click(function () {
+            duyetPhieu();
+        });
+
+
+        $("#btnTraLai").click(function () {
+            TraLai();
+        });
+    })
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    function checkValid() {
+        var tongLoaiI = 0, tongLoaiII = 0;
+        var phuCapKhongTheoTiLe = parseFloat($("#tongPhuCapKhongTheoTyLe").val()),
+            phuCapTheoTiLe = parseFloat($("#tongPhuCapTheoTyLe").val());
+        $(".loaiI").each(function () {
+            tongLoaiI += parseFloat($(this).autoNumeric("get"));
+        })
+
+        $(".loaiII").each(function () {
+            tongLoaiII += parseFloat($(this).autoNumeric("get"));
+        })
+
+        if (isNaN(tongLoaiI) || (tongLoaiI != phuCapKhongTheoTiLe)) {
+            $("#alertPhanBo").show();
+            setTimeout(function () { $("#alertPhanBo").hide(); }, 2000);
+            return false;
+        }
+
+        if (isNaN(tongLoaiII) || (tongLoaiII != phuCapTheoTiLe)) {
+            $("#alertPhanBo").show();
+            setTimeout(function () { $("#alertPhanBo").hide(); }, 2000);
+            return false;
+        }
+
+        return true;
+    }
+
+    function chonNguoiDuyet() {
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#soPhuLuc').val() + '?maCongViec=PhuLucHopDongLaoDong' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function duyetPhieu() {
+        var url = ('@Url.Action("DuyetPhieu/", "DMNguoiDuyet")' + $('#soPhuLuc').val() + '?maCongViec=PhuLucHopDongLaoDong' + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function TraLai() {
+        var tenBD = $('#tenBuocDuyet').val().replace(/\ /g, '');
+        var url = ('@Url.Action("TraLaiDong/", "DMNguoiDuyet")' + $('#soPhuLuc').val() + '?tenBuocDuyet=' + tenBD + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&maCongViec=PhuLucHopDongLaoDong' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhuLucHopDong")' + $('#soPhuLuc').val();
+    }
+
+</script>
+<style>
+    td {
+        border: none!important;
+    }
+
+    .input-group-btn {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput {
+        text-align: right;
+    }
+</style>
+@{
+    BatDongSan.Models.HeThong.Sys_User user = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+    var phanBoLuong = ViewBag.PhanBoLuong as PhanBoLuongModel;
+}
+<form id="form-submit" method="post" action="/PhuLucHopDong/Edit" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Chi tiết phụ lục hợp đồng lao động</span></a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table class="table table-hover table-striped table-condensed" style="position: relative">
+                    <tr>
+                        <td style="width: 15%" class="tdtitle">Số phụ lục</td>
+                        <td style="width: 35%">@Html.HiddenFor(model => model.soPhuLuc, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            <input type="hidden" id="url" value="@ViewBag.URL" />
+                            @Html.HiddenFor(m => m.maQuiTrinhDuyet)
+                            <input type="hidden" id="tenBuocDuyet" value="@ViewBag.TenBuocDuyet " />
+                            @Html.DisplayFor(model => model.soPhuLuc)
+                        </td>
+
+                        <td style="width: 15%" class="tdtitle">Số hợp đồng</td>
+                        <td style="width: 35%">@Html.HiddenFor(model => model.soHopDong, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            @Html.DisplayFor(model => model.soHopDong)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Mã nhân viên</td>
+                        <td>@Html.HiddenFor(model => model.maNhanVien, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            @Html.DisplayFor(model => model.maNhanVien)
+                        </td>
+
+                        <td class="tdtitle">Tên nhân viên</td>
+                        <td>@Html.HiddenFor(model => model.tenNhanVien, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            @Html.DisplayFor(model => model.tenNhanVien)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Chức danh</td>
+                        <td>@Html.HiddenFor(model => model.tenChucDanh, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            @Html.DisplayFor(model => model.tenChucDanh)
+                        </td>
+                        <td class="tdtitle">Người cập nhật</td>
+                        <td>@Html.HiddenFor(model => model.nguoiCapNhat, new { @class = "form-control", @readonly = "readonly", required = "required" })
+                            @Html.DisplayFor(model => model.nguoiCapNhat)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Loại hợp đồng</td>
+                        <td>
+                            @Html.DisplayFor(model => model.tenLoaiHopDong)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Thời hạn hợp đồng</td>
+                        <td>@Html.DisplayFor(model => model.tenThoiHanHopDong)</td>
+
+                        <td class="tdtitle">Thời hạn</td>
+                        <td>@Html.DisplayFor(model => model.soThang) Tháng</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ngày hiệu lực</td>
+                        <td>
+                            @String.Format("{0:dd/MM/yyyy}", Model.ngayHieuLuc)
+                        </td>
+                        <td class="tdtitle">Gia hạn đến</td>
+                        <td>
+                            @String.Format("{0:dd/MM/yyyy}", Model.giaHanDen)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="tdtitle">Lương (1)</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.luong)
+                        </td>
+                        <td class="tdtitle">Phụ cấp lương (2)</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.phuCapLuong)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Lương đóng BH (3=1+2) <span style="font-style: italic; float: right; color: red"></span></td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.luongDongBH)
+                        </td>
+                        <td class="tdtitle">Khoản bổ sung lương (4)</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.khoanBoSungLuong)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tổng lương (5=3+4)</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.tongLuong)
+                        </td>
+                        <td class="tdtitle">Phụ cấp khác(thuê nhà, xăng xe, tiền ăn,…)</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.tongLuong)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Đoàn phí</td>
+                        <td style="text-align: right">
+                            @Html.DisplayFor(model => model.doanPhi) %
+                        </td>
+                        <td class="tdtitle">Đảng phí</td>
+                        <td style="text-align: right">
+                            @Html.DisplayFor(model => model.dangPhi) %
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tiền điện thoại</td>
+                        <td style="text-align: right">
+                            @string.Format("{0:#,##0}", Model.tienDienThoai)
+                        </td>
+                        <td class="tdtitle">Tiền ăn giữa ca</td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.tienAnGiuaCa)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Nội dung thay đổi</td>
+                        <td colspan="3">@Html.Raw(Model.noiDungThayDoi)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        @* <div class="alert alert-danger" id="alertPhanBo" style="margin-top: 20px; display: none">
+            <strong>Phân bổ không hợp lệ!</strong> <span id="error-info"></span>
+        </div>
+        <div id="phanbo-div" style="padding-top: 0px;">
+            @{Html.RenderPartial("PartialPhanBoLuong", phanBoLuong);}
+        </div>*@
+        <div class="form-group" style="float: right">
+            @if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.nguoiLap == user.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnGuiDuyet">Gửi duyệt </button>
+            }
+            else if (Model.Duyet != null && Model.Duyet.maBuocDuyet != "DTN" && Model.Duyet.maBuocDuyet != "DD" && Model.Duyet.nguoiDuyet.maNhanVien == user.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnDuyetPhieu">Duyệt phiếu này</button>
+                <button class="btn btn-info" type="button" id="btnTraLai">Trả lại</button>
+            }
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+</form>
+<div id="customModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="custom-panel" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

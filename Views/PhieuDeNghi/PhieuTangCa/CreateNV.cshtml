@@ -1,0 +1,618 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDeNghiTangCa
+@{
+    ViewBag.Title = "Đăng ký phiếu tăng ca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<BatDongSan.Models.NhanSu.NhanVienModel> nhanVienThuocNhoms = ViewBag.ChiTietNhanVien;
+    int i = 1;
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#ghiChu").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+
+        $("#maLoaiTangCa").change(function () {
+            $.post('@Url.Action("HeSoTangCa", "PhieuTangCa")', { maLoaiTangCa: $("#maLoaiTangCa").val() }, function (data) {
+                $("#heSoTangCa").val(data);
+            });
+        });
+
+
+        $("#ChoosePB").click(function () {
+            $('#myModalChonPhongBan').modal();
+            var Url = '@Url.Action("ChonPhongBan", "PhieuCongTac")';
+            $('#filter-panel').load(Url);
+        });
+
+        $(document).on("dp.change", "#ngayTangCa", function (e) {
+            var date = new Date();
+            var expire = moment().subtract(0, "day");
+            $(this).data("DateTimePicker").minDate(expire, function () {
+                return;
+            });
+            var ngayBD = $('#ngayLap').val();
+            var ngayKT = $('#ngayTangCa').val();
+            var d1 = Date.parse(convertDate(ngayBD));
+            var d2 = Date.parse(convertDate(ngayKT));
+            if (d2 < d1) {
+                Alert.error("Ngày tăng ca > ngày lập. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+                $("#ngayTangCa").val("");
+            }
+        });
+
+        $('#btnNhanVien').click(function () {
+            var maPhongBan = $("#maPhongBan").val();
+            var searchString = $("#searchString").val().replace(/ /gi, '+');
+            var url = '@Url.Action("GetMoreUsers", "PhieuTangCa")' + "?maPB=" + maPhongBan + "&searchString=" + searchString;
+            beginPaging();
+            $('#filter-panel .panel-default').load(url, function () {
+                successPaging();
+            });
+        })
+
+        $('#btnSearch').click(function () {
+            var maPhongBan = $("#maPhongBan").val();
+            var searchString = $("#searchString").val().replace(/ /gi, '+');
+            var url = '@Url.Action("GetMoreUsers", "PhieuTangCa")' + "?maPB=" + maPhongBan + "&searchString=" + searchString;
+            beginPaging();
+            $('#filter-panel .panel-default').load(url, function () {
+                successPaging();
+            });
+        })
+
+        $(document).on("click", ".btnXoa", function () {
+            $(this).closest("tr").remove();
+        })
+
+
+    });
+
+    function beginPaging(args) {
+        // Animate         
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate        
+        $('#content').fadeIn('fast');
+    }
+
+    function checkEndTime() {
+        var valueStartTime = $("#gioBatDau").val();
+        var valueEndTime = $("#gioKetThuc").val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        if (parseFloat(endTimeSplit[0]) < parseFloat(startTimeSplit[0])) {
+            $("#gioKetThuc").val('');
+            $("#gioKetThuc").focus();
+            $("#gioKetThuc").addClass("error").attr("title", "Giờ kết thúc > giờ bắt đầu");
+        }
+        else {
+            if (parseFloat(endTimeSplit[0]) == parseFloat(startTimeSplit[0])) {
+                if (parseFloat(endTimeSplit[1]) < parseFloat(startTimeSplit[1])) {
+                    $("#gioKetThuc").val('');
+                    $("#gioKetThuc").focus();
+                    $("#gioKetThuc").addClass("error").attr("title", "Giờ kết thúc > giờ bắt đầu");
+                }
+            }
+        }
+        GenerateDuration();
+    }
+
+    function GenerateDuration() {
+        var valueStartTime = $("#gioBatDau").val();
+        var valueEndTime = $("#gioKetThuc").val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var today = new Date();
+        var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), startTimeSplit[0], startTimeSplit[1], 00);
+        var endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), endTimeSplit[0], endTimeSplit[1], 00);
+
+
+        var diff = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        diff.setTime(endDate.getTime() - startDate.getTime());
+        var result = diff.getHours() - 7 + ":" + diff.getMinutes();
+        if (result == 'NaN:NaN') {
+            $("#soGioTangCa").val('');
+        }
+        else {
+            if (diff.getMinutes() == 0) {
+                $("#soGioTangCa").val(diff.getHours() - 7 + ":" + "00");
+                if ($("#soGioTangCa").val() == 'NaN:0NaN') {
+                    $("#soGioTangCa").val(0);
+                }
+                //  $("#soGioTangCaHidden").val(diff.getHours() - 7 + ":" + "00");
+            }
+            else {
+                $("#soGioTangCa").val(result);
+                if ($("#soGioTangCa").val() == 'NaN:0NaN') {
+                    $("#soGioTangCa").val(0);
+                }
+                //  $("#soGioTangCaHidden").val(result);
+            }
+        }
+        GenerateSoGioTangCa();
+    }
+
+    function GenerateSoGioTangCa() {
+        var timeNghiGiuaCa = parseFloat($("#soGioNghiGiuaCa").val());
+        GenerateDurationTwo();
+        var soGioTangCa = $("#soGioTangCa").val();
+        var splitSoGioTangCa = soGioTangCa.split(':');
+        var soGioTangCaGio = parseFloat(splitSoGioTangCa[0]);
+        var soGioTangCaPhut = parseFloat(splitSoGioTangCa[1]);
+        var doiRaPhutCuaGioTangCa = soGioTangCaGio * 60 + soGioTangCaPhut;
+        var soPhutTangCa = doiRaPhutCuaGioTangCa - timeNghiGiuaCa;
+
+        var soGioNew = Math.floor(soPhutTangCa / 60);
+        var soPhutNew = soPhutTangCa - soGioNew * 60;
+        if (soPhutNew > 9) {
+            $("#soGioTangCa").val(soGioNew + ":" + soPhutNew);
+            if ($("#soGioTangCa").val() == 'NaN:0NaN') {
+                $("#soGioTangCa").val(0);
+            }
+        }
+        else {
+            $("#soGioTangCa").val(soGioNew + ":0" + soPhutNew);
+            if ($("#soGioTangCa").val() == 'NaN:0NaN') {
+                $("#soGioTangCa").val(0);
+            }
+        }
+    }
+
+    function GenerateDurationTwo() {
+        var valueStartTime = $("#gioBatDau").val();
+        var valueEndTime = $("#gioKetThuc").val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var today = new Date();
+        var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), startTimeSplit[0], startTimeSplit[1], 00);
+        var endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), endTimeSplit[0], endTimeSplit[1], 00);
+
+
+        var diff = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        diff.setTime(endDate.getTime() - startDate.getTime());
+        var result = diff.getHours() - 7 + ":" + diff.getMinutes();
+        if (result == 'NaN:NaN') {
+            $("#soGioTangCa").val('');
+        }
+        else {
+            if (diff.getMinutes() == 0) {
+                $("#soGioTangCa").val(diff.getHours() - 7 + ":" + "00");
+                //  $("#soGioTangCaHidden").val(diff.getHours() - 7 + ":" + "00");
+            }
+            else {
+                $("#soGioTangCa").val(result);
+                //  $("#soGioTangCaHidden").val(result);
+            }
+        }
+    }
+
+    //Kiểm tra khi change bắt đầu nghỉ giữa ca
+    function CheckThoiGianBatDauNghiGiuaCa() {
+        var flag = true;
+        var valueStartTime = $("#gioBatDau").val();
+        var valueEndTime = $("#gioKetThuc").val();
+        var valueStartTimeHaft = $("#thoiGianNghiGiuaCa").val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var startTimeHaftSplit = valueStartTimeHaft.split(':');
+
+        //so sanh voi gio bat dau tang ca
+        if (startTimeHaftSplit[0] != '') {
+            if (parseFloat(startTimeHaftSplit[0]) < parseFloat(startTimeSplit[0])) {
+                $("#thoiGianNghiGiuaCa").focus();
+                $("#thoiGianNghiGiuaCa").addClass("error").attr("title", "Giờ bắt đầu nghỉ giữa ca không được nhỏ hơn giờ bắt đầu");
+                flag = false;
+            }
+            else {
+                if (parseFloat(startTimeHaftSplit[0]) == parseFloat(startTimeSplit[0])) {
+                    if (parseFloat(startTimeHaftSplit[1]) < parseFloat(startTimeSplit[1])) {
+                        $("#thoiGianNghiGiuaCa").focus();
+                        $("#thoiGianNghiGiuaCa").addClass("error").attr("title", "Giờ bắt đầu nghỉ giữa ca không được nhỏ hơn giờ bắt đầu");
+                        flag = false;
+                    }
+                }
+            }
+        }
+        //so sanh voi gio ket thuc tang ca
+        if (parseFloat(startTimeHaftSplit[0]) > parseFloat(endTimeSplit[0])) {
+            $("#thoiGianNghiGiuaCa").focus();
+            $("#thoiGianNghiGiuaCa").addClass("error").attr("title", "Giờ bắt đầu nghỉ giữa ca không được lớn hơn giờ kết thúc");
+            flag = false;
+        }
+        else {
+            if (parseFloat(startTimeHaftSplit[0]) == parseFloat(endTimeSplit[0])) {
+                if (parseFloat(startTimeHaftSplit[1]) > parseFloat(endTimeSplit[1])) {
+                    $("#thoiGianNghiGiuaCa").focus();
+                    $("#thoiGianNghiGiuaCa").addClass("error").attr("title", "Giờ bắt đầu nghỉ giữa ca không được lớn hơn giờ kết thúc");
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
+
+    //Hàm tính tự đồng thời gian nghỉ giữa ca khi chan
+    function GenerateThoiGianNghiGiuaCa() {
+        if ($("#thoiGianNghiGiuaCa").val() == '') {
+            setInvalid($("#thoiGianNghiGiuaCa"), "");
+            $("#thoiGianNghiKetThucGiuaCa").val('');
+            return;
+        }
+        if (CheckThoiGianBatDauNghiGiuaCa()) {
+            if (CheckThoiGianKetThucNghiGiuaCa()) {
+                var valueStartTime = $("#thoiGianNghiGiuaCa").val();
+                var valueEndTime = $("#thoiGianNghiKetThucGiuaCa").val();
+                var startTimeSplit = valueStartTime.split(':');
+                var endTimeSplit = valueEndTime.split(':');
+                var starDateGio = parseFloat(startTimeSplit[0]);
+                var startDatePhut = parseFloat(startTimeSplit[1]);
+                var endDateGio = parseFloat(endTimeSplit[0]);
+                var endDatePhut = parseFloat(endTimeSplit[1]);
+                var soGio = 0;
+                var soPhut = 0;
+                var soPhutNew = 0;
+                if (endDateGio >= starDateGio) {
+                    if (endDatePhut >= startDatePhut) {
+                        soGio = endDateGio - starDateGio;
+                        soPhut = endDatePhut - startDatePhut;
+                        soPhutNew = soGio * 60 + soPhut;
+                        $("#soGioNghiGiuaCa").val(soPhutNew);
+                    }
+                    else {
+                        soGio = endDateGio - starDateGio - 1;
+                        soPhut = 60 - startDatePhut + endDatePhut;
+                        soPhutNew = soGio * 60 + soPhut;
+                        $("#soGioNghiGiuaCa").val(soPhutNew);
+                    }
+
+                }
+                GenerateSoGioTangCa();
+            }
+            else {
+                alert("Xin vui lòng chọn lại thời gian kết thúc nghĩ giữa ca");
+            }
+        }
+        else {
+            alert("Xin vui lòng chọn lại thời gian bắt đầu nghĩ giữa ca");
+        }
+    }
+
+    function CheckThoiGianKetThucNghiGiuaCa() {
+        var flag = true;
+
+        var valueStartTimeHaft = $("#thoiGianNghiGiuaCa").val();
+        var valueEndTimeHaft = $("#thoiGianNghiKetThucGiuaCa").val();
+
+        var endTimeHaftSplit = valueEndTimeHaft.split(':');
+        var startTimeHaftSplit = valueStartTimeHaft.split(':');
+        if ($("#thoiGianNghiKetThucGiuaCa").val() != '') {
+            //so sanh voi gio bat dau tang ca
+            if (parseFloat(endTimeHaftSplit[0]) < parseFloat(startTimeHaftSplit[0])) {
+                $("#thoiGianNghiKetThucGiuaCa").focus();
+                $("#thoiGianNghiKetThucGiuaCa").addClass("error").attr("title", "Giờ kết thúc nghỉ giữa ca không được nhỏ hơn giờ bắt đầu nghĩ giữa ca");
+                flag = false;
+            }
+            else {
+                if (parseFloat(endTimeHaftSplit[0]) == parseFloat(startTimeHaftSplit[0])) {
+                    if (parseFloat(endTimeHaftSplit[1]) < parseFloat(startTimeHaftSplit[1])) {
+                        $("#thoiGianNghiKetThucGiuaCa").focus();
+                        $("#thoiGianNghiKetThucGiuaCa").addClass("error").attr("title", "Giờ kết thúc nghỉ giữa ca không được nhỏ hơn giờ bắt đầu nghĩ giữa ca");
+                        flag = false;
+                    }
+                }
+            }
+        }
+        return flag;
+    }
+
+
+
+    function Generate() {
+        var startDate = $("#ngayBatDau").val();
+        var endDate = $("#ngayKetThuc").val();
+        $.post('@Url.Action("Generate", "PhieuCongTac")', { dateOne: startDate, dateTwo: endDate }, function (data) {
+            if (data != null) {
+                $("#soNgayCongTac").val(data.soNgay);
+            }
+        });
+    }
+    function CheckForm() {
+        var flag = true;
+        if ($("#gioBatDau").val() == "") {
+            $("#gioBatDau").addClass("error").attr("title", "Xin vui lòng chọn giờ bắt đầu");
+            flag = false;
+        }
+
+        if ($("#gioKetThuc").val() == "") {
+            $("#gioKetThuc").addClass("error").attr("title", "Xin vui lòng chọn giờ kết thúc");
+            flag = false;
+
+        }
+
+        if ($("#maLoaiTangCa").val() == "0") {
+            $("#maLoaiTangCa").addClass("error").attr("title", "Xin vui lòng chọn loại tăng ca");
+            flag = false;
+
+        }
+
+        //if ($("#lyDo").val() == "") {
+        //    $("#lyDo").addClass("error").attr("title", "Vui lòng nhập lý do.");
+        //    flag = false;
+
+        //}
+
+        var ngayBD = $("#ngayLap").val();
+        var ngayKT = $("#ngayTangCa").val();
+        var d1 = Date.parse(convertDate(ngayBD));
+        var d2 = Date.parse(convertDate(ngayKT));
+        if (d2 < d1) {
+            Alert.error("Ngày tăng ca > ngày lập. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+            $("#ngayTangCa").val("");
+            flag = false;
+        }
+        if ($("#tbody tr").length == 0) {
+            Alert.error("Bạn phải nhập ít nhất 1 nhân viên.", "Thông báo", { displayDuration: 3000 });
+            flag = false;
+        }
+        return flag;
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-plus-square-o" aria-hidden="true"></i>Thêm mới phiếu tăng ca</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed TableMobileChild" id="tbl-create" style="position: relative">
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Mã nhân viên</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.maNhanVien, new { @class = "form-control", @readonly = true })</td>
+                    <td style="width: 15%" class="tdtitle">Tên nhân viên </td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số phiếu ĐK tăng ca </td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", @readonly = true })</td>
+                    <td class="tdtitle">Phòng ban công tác </td>
+                    <td>@Html.TextBoxFor(model => model.tenPhongBan, new { @class = "form-control", @readonly = true, @Style = "width:100%;  margin-right: 5px;   float: left;" })
+                        @Html.HiddenFor(model => model.maPhongBan)
+                    </td>
+                    @*<td>Loại công tác</td>
+                    <td>
+                        @Html.RadioButtonFor(model => model.loaiCongTac, false, new { @id = "rad-1", @style = "width:auto",@checked=true }) Trong nước @Html.RadioButtonFor(model => model.loaiCongTac, true, new { @id = "rad-2", style = "width:auto" }) Nước ngoài
+
+                    </td>*@
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày lập</td>
+                    <td>@Html.TextBoxFor(model => model.ngayLap, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker", @readonly = "readonly" })</td>
+                    <td class="tdtitle">Ngày tăng ca</td>
+                    <td>@Html.TextBoxFor(model => model.ngayTangCa, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Giờ bắt đầu</td>
+                    <td>@Html.TextBoxFor(model => model.gioBatDau, new { @class = "form-control", required = "required" })</td>
+                    <td class="tdtitle">Giờ kết thúc</td>
+                    <td>@Html.TextBoxFor(model => model.gioKetThuc, new { @class = "form-control", required = "required" })</td>
+                </tr>
+
+                <tr>
+
+                    <td class="tdtitle">Số giờ tăng ca</td>
+                    <td>@Html.TextBoxFor(model => model.soGioTangCa, new { @class = "form-control", @readonly = "readonly" })</td>
+                    <td class="tdtitle">Loại tăng ca</td>
+                    <td>@Html.DropDownListFor(model => model.maLoaiTangCa, ViewBag.LoaiTangCa as SelectList, new { @class = "form-control", required = "required" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Hình thức tăng ca <span style="font-style: italic; float: right; color: red">*</span></td>
+                    <td>
+                        <label class="radio-inline" style="font-size: 13px">
+                            @Html.RadioButtonFor(model => model.hinhThucTangCa, "tcnb", new { style = "width:auto", required = "required" }) Tăng ca nghỉ bù
+                        </label>
+                        <label class="radio-inline" style="font-size: 13px">
+                            @Html.RadioButtonFor(model => model.hinhThucTangCa, "tctl", new { style = "width:auto", required = "required" }) Tăng ca tính lương
+                        </label>
+                    </td>
+
+
+                </tr>
+
+                <tr>
+                    <td class="tdtitle">Bắt đầu nghỉ giữa ca</td>
+                    <td>@Html.TextBoxFor(model => model.thoiGianNghiGiuaCa, new { @class = "form-control" })</td>
+                    <td class="tdtitle">Kết thúc nghỉ giữa ca</td>
+                    <td>@Html.TextBoxFor(model => model.thoiGianNghiKetThucGiuaCa, new { @class = "form-control" })</td>
+                </tr>
+
+
+                <tr>
+                    <td class="tdtitle">Hệ số tăng ca</td>
+                    <td>@Html.TextBoxFor(model => model.heSoTangCa, new { @class = "form-control numberinput", @readonly = "readonly", data_v_max = "999" })</td>
+
+                    <td class="tdtitle">Thời gian nghỉ giữa ca (phút)</td>
+                    <td>@Html.TextBoxFor(model => model.soGioNghiGiuaCa, new { @class = "form-control numberinputInt", @readonly = "readonly" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nội dung tăng ca</td>
+                    <td colspan="3">
+                        <div id="editor"></div>
+                        @Html.HiddenFor(model => model.ghiChu, new { @class = "form-control" })
+                    </td>
+
+                </tr>
+            </table>
+            <br />
+            <label>
+                <button class="btn btn-link btn-sm" id="btnNhanVien" type="button" data-toggle="modal" data-target="#myModal">Thêm nhân viên</button>
+            </label>
+            <div id="containerNhanVien">
+                <table class="table table-striped table-hover table-condensed  TableMobile IndexNhanVienPNP" id="tbl-users">
+                    <thead>
+                        <tr id="trtop">
+                            <th>STT</th>
+                            <th>Mã nhân viên</th>
+                            <th>Họ và tên</th>
+                            <th>Phòng ban</th>
+                            <th>Chức danh</th>                                                
+                              <th style="width:100px">Email</th>   
+                            <th style="width: 40px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+
+    </div>
+</form>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:900px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container" style="width: 98%">
+                    <div class="row">
+                        <div style="position: relative">
+                            <input type="text" id="searchString" class="form-control" style="padding-right: 30px; border-radius: 50px" placeholder="Search" onkeyup="enterToSeacrh(event)">
+                            <i class="fa fa-search" id="btnSearch" style="position: absolute; cursor: pointer; top: 6px; right: 7px;"></i>
+                        </div>
+                        <div id="filter-panel" class="filter-panel" style="padding-top: 10px;">
+                            <div class="panel panel-default" style="border: none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" id="btnAccept">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;Đồng ý
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery-1.9.0.min.js"></script>
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/ui-1.10.0/ui-lightness/jquery-ui-1.10.0.custom.min.css" />
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.css" />
+
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/select2.full.js"></script>
+<link rel="stylesheet" href="~/Content/css/select2.min.css" />
+
+<script type="text/javascript">        jQuery.noConflict(); </script>
+
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#gioBatDau').timepicker({
+            showAnim: 'blind'
+        });
+
+        $('#gioKetThuc').timepicker({
+            showAnim: 'blind'
+        });
+
+        $('#thoiGianNghiGiuaCa').timepicker({
+            showAnim: 'blind'
+        });
+
+        $('#thoiGianNghiKetThucGiuaCa').timepicker({
+            showAnim: 'blind'
+        });
+
+        $("#gioKetThuc").change(function () {
+            checkEndTime();
+        });
+
+        $("#gioBatDau").change(function () {
+            checkEndTime();
+        });
+
+        $("#thoiGianNghiGiuaCa").change(function () {
+            CheckThoiGianBatDauNghiGiuaCa();
+            if ($("#thoiGianNghiKetThucGiuaCa").val() != "") {
+                GenerateThoiGianNghiGiuaCa();
+            }
+
+        });
+
+        $("#thoiGianNghiKetThucGiuaCa").change(function () {
+            CheckThoiGianBatDauNghiGiuaCa();
+            if ($("#thoiGianNghiKetThucGiuaCa").val() != "") {
+                GenerateThoiGianNghiGiuaCa();
+            }
+
+        });
+    });
+
+</script>
+
+

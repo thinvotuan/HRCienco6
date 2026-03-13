@@ -1,0 +1,28 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_BangCap
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Tạo mới tên bằng cấp</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Tên bằng cấp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenBangCap, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextBoxFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

@@ -1,0 +1,203 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_MauIn
+@{
+    ViewBag.Title = "Cập nhật mẫu in văn bản";
+    Layout = "~/Views/Shared/_Layout.cshtml";      
+}
+<style>
+    label
+    {
+        font-size: 15px;
+        height: 16px;
+    }
+
+    td
+    {
+        padding: 3px;
+        vertical-align: middle;
+        border-bottom: 1px inset #ADC2D6;
+        border: none;
+    }
+
+        td.tdtitle
+        {
+            width: auto;
+        }
+
+    .tableDA
+    {
+        margin-top: 0;
+    }
+
+    .tableDA1:nth-child(1), .tableDA1:nth-child(2)
+    {
+        margin-bottom: 0!important;
+    }
+</style>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.File' != '') {
+            alert("File không đúng định dạng xml");
+        }
+        $("#duAn").val('@Model.MaDuAn');
+        $("#loaiHopDong").val('@Model.MaLoaiVanBan');
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "MauIn")";
+        });
+
+
+        $("#btnSubmit").click(function (e) {
+        });
+
+        $(".lnkDeleteFile").click(function () {
+            var value = $(this).data("value");
+            bootbox.confirm("Bạn có chắc chắn xóa không!", function (result) {
+                if (result) {
+                    var url = '@Url.Action("DeleteFile/")' + value,
+                        form = document.getElementById('form-submit');
+                    form.action = url;
+                    form.submit();
+                }
+            });
+            @*if (!window.confirm("Bạn có chắc chắn không?"))
+                return;
+            $.post('@Url.Action("DeleteFile/")' + $(this).attr("alt"), function (data) {
+                if (data == true)
+                    window.location.reload();
+                else
+                    alert(data);
+            });*@
+        });
+
+        $(".btnGuiDuyet").click(function () {
+            chonNguoiDuyet();
+        });
+
+        $(".btnDuyetPhieu").click(function () {
+            duyetPhieu();
+        });
+
+
+        $(".btnTraLai").click(function () {
+            TraLai();
+        });
+    });
+
+    function chonNguoiDuyet() {
+        var url = ('@Url.Action("SelectCapDuyet/", "DMNguoiDuyet")' + $('#MaMauIn').val() + '?maCongViec=MAUIN' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function duyetPhieu() {
+        var url = ('@Url.Action("DuyetPhieu/", "DMNguoiDuyet")' + $('#MaMauIn').val() + '?maCongViec=MAUIN' + '&maQuiTrinhDuyet=' + $('#MaQuiTrinhDuyet').val() + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+
+    }
+
+    function TraLai() {
+        var tenBD = $('#tenBuocDuyet').val().replace(/\ /g, '');
+        var url = ('@Url.Action("TraLai/", "DMNguoiDuyet")' + $('#MaMauIn').val() + '?tenBuocDuyet=' + tenBD + '&maQuiTrinhDuyet=' + $('#MaQuiTrinhDuyet').val() + '&maCongViec=MAUIN' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "MauIn")' + $('#MaMauIn').val();
+    }
+</script>
+
+@{
+   
+}
+
+<form method="post" id="form-submit" enctype="multipart/form-data">
+    @*@using (Html.BeginForm("Create", "MauIn", FormMethod.Post, new { id = "CountryStateFormID", @enctype = "multipart/form-data" }))
+{
+    *@<div>
+        <fieldset>
+            <legend style="display: inline">Cập nhật mẫu in văn bản</legend>
+            <div id="content">
+                <table style="position: relative" class="table table-striped table-hover table-condensed">
+                    
+
+                    <tr>
+                        <td class="tdtitle">Mã mẫu in
+                        </td>
+                        <td class="form-inline">
+                            @Html.TextBoxFor(model => model.MaMauIn, new { @class = "form-control", @style = "width:99%", @required = "true", @readonly = "readonly" })
+                            <input type="hidden" id="url" value="@ViewBag.URL" />
+                            <input type="hidden" id="tenBuocDuyet" value="@ViewBag.TenBuocDuyet " />
+                            @Html.HiddenFor(model => model.MaQuiTrinhDuyet, new { @readonly = true, @class = "form-control", maxlength = "500" })
+                        </td>
+
+                        <td class="tdtitle">Tên mẫu in
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.TenMau, new { @class = "form-control", @style = "width:99%", @required = "true" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Loại hợp đồng                            
+                        </td>
+                        <td>
+                            @Html.HiddenFor(model => model.MaLoaiVanBan, new { @class = "form-control", @style = "width:99%", @required = "true" })
+                            @Html.TextBoxFor(model => model.TenLoaiVanBan, new { @class = "form-control", @style = "width:99%", @required = "true", @readonly = true })
+                        </td>
+                       
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">File đính kèm
+                        </td>
+                        <td>
+                            @if (!String.IsNullOrEmpty(Model.TenFileDinhKem))
+                            {
+                                <span id="actionFileDK">
+                                    <a style="color:#519ee5" href="@Url.Action("Download", "MauIn", new { id = Model.MaMauIn })" title="Click để mở file">
+                                        @Model.TenFileDinhKem</a>
+                                    <a href="javascript:void(0);" style="color: red" data-value="@Model.MaMauIn" title="Click để xóa file" class="lnkDeleteFile"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </span>
+                            }
+                            else
+                            {
+                                <input type="file" id="fileDinhKem" required="required" name="files" class="btn btn-file" />   
+                            }
+                            <span style="color: red; font-style: italic">@TempData["mssg"]</span>
+                        </td>
+                        <td class="tdtitle">Ngày áp dụng
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.NgayApDung, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="text-align: right">
+                <button class="btn btn-info" type="submit" id="btnSubmit">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+    </div>
+</form>@*
+}*@

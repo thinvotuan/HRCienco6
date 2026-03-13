@@ -1,0 +1,186 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_ThongBao
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+ <script type="text/javascript">
+     $().ready(function () {
+         $("#btnSave").click(function () {
+             if($("#tenThongBao").val()==null || $("#tenThongBao").val()==""){
+                 alert("Nhập tên thông báo");
+                 $("#tenThongBao").focus();
+                 return false;
+             }
+                 $("form").submit();
+             
+         });
+    
+
+  
+
+         setTimeout(function () { $("#divMsg").hide() }, 5000);
+     });
+   
+     
+     function ValidateKeypress(numcheck, e) {
+         var keynum, keychar, numcheck;
+         if (window.event) {//IE
+             keynum = e.keyCode;
+         }
+         else if (e.which) {// Netscape/Firefox/Opera
+             keynum = e.which;
+         }
+         if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+         keychar = String.fromCharCode(keynum);
+         var result = numcheck.test(keychar);
+         return result;
+     }
+
+    </script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckfinder/ckfinder.js"></script>
+<script>
+    $(document).ready(function () {
+        //setting phong ban//
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+        
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+
+        $('#txtsearch').on("input", function () {
+
+            $('#phongban-div #navigation1').filterLink($('#phongban-div #txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", "#phongban-div #phongban-dropdown-menu li a", function () {
+            $("#saveIDPhongBan").val($(this).attr('id'));
+            $("#btnPhongBan").val($(this).attr('id'));
+            $("#maPhongBan").val($(this).attr('id'));
+            
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+
+        });
+        var newCKEdit=  CKEDITOR.replace("noiDungThongBao", {
+            toolbar: 'DauThau',
+        });
+        CKFinder.setupCKEditor(newCKEdit, '@Url.Content("~/Scripts/ckfinder")');
+    });
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+     #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+    }
+     #phongban-dropdown-menu
+    {
+        width: 500px;
+    }
+
+</style>
+@using (Html.BeginForm())
+{
+<div class="myatable03 mtxxs">
+        <fieldset class="fieldset1">
+            <legend class="legend">Thêm mới thông báo </legend>
+            <div id="divMsg" style="color: Red; width: 900px; text-align: center">
+                @{if ((string)ViewBag.Message != "")
+                  { 
+               <span>@ViewBag.Message</span>
+               } 
+               }
+            </div>
+           
+            <table border="0" cellpadding="0" cellspacing="0"  style="width: 100%;">
+                <tr>
+                    <td style="width: 150px"  class="tdtitle">Tên thông báo
+                    </td>
+                    <td >
+                        <input type="text" id="tenThongBao" name="tenThongBao" class="form-control" value="" 
+                           maxlength="250" required="required" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Phòng ban 
+                         @Html.TextBoxFor(model => model.maPhongBan, new { @class = "form-control", required = "required", @style="display:none" })
+                    </td>
+                    <td><div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                               Chọn phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nội dung thông báo
+                    </td>
+                    <td >
+
+                        <textarea id="noiDungThongBao" name="noiDungThongBao"  class="form-control"  required="required"></textarea>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>&nbsp;
+                    </td>
+                    <td colspan="2">
+                        <input type="button" class="btnBlack" id="btnSave" value="Lưu" />                        
+                        <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "QuanLyThongBao")'" />                        
+                    </td>
+                </tr>
+            </table>
+               
+        </fieldset>
+    </div>
+}

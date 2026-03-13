@@ -1,0 +1,167 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_PrintTemplate
+@{    
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script src="~/Content/summernote/summernote.js"></script>
+<style>
+
+    #editor
+    {
+        overflow: scroll;
+        max-height: 300px;
+    }
+
+    table
+    {
+        margin: 0px;
+    }
+
+    #form-submit .dropdown-submenu:hover > a:after
+    {
+        border-left-color: #fff;
+    }
+
+    #form-submit .dropdown-submenu > a:after
+    {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    #form-submit .dropdown-menu > li > a:hover
+    {
+        background: #3276b1!important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "PrintTemplate")";
+        })
+
+        $('#editor').summernote({
+            height: 300,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: true                  // set focus to editable area after initializing summernote
+        });
+
+        $(".dropdown li a").click(function () {
+            var sel, range;
+            $(".note-editable").attr("contenteditable", true);
+            var id = this.id;
+            var keyword = $(this).attr("data-keyword");
+            $(".note-editable").focus();
+            if (window.getSelection) {
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    range = sel.getRangeAt(0);
+                    range.deleteContents();
+
+                    var lines = keyword.replace("\r\n", "\n").split("\n");
+                    var frag = document.createDocumentFragment();
+                    for (var i = 0, len = lines.length; i < len; ++i) {
+                        frag.appendChild(document.createTextNode(lines[i]));
+                    }
+                    range.insertNode(frag);
+                }
+            }
+        })
+
+        $("#btnSubmit").click(function () {
+            if ($(".note-editable").text().trim() != "") {
+                var noidung = $(".note-editable").text().trim();
+                var html = $(".note-editable").html();
+                $("#noiDung").val(noidung);
+                $("#html").val(html);
+            }
+        })
+    });
+</script>
+<form class="form-horizontal" id="form-submit" role="form" method="post">
+    <fieldset>
+        <legend style="display: inline">Tạo mẫu in</legend>
+        <div id="filter-panel" class="collapse" style="display: block">
+            <div class="panel panel-default">
+                <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                        <td class="tdtitle">Tên mẫu in        
+                        </td>
+                        <td colspan="3">
+                            @Html.TextBoxFor(model => model.tenMauIn, new { @class = "form-control", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle col-md-2">Mã mẫu in        
+                        </td>
+                        <td class="col-md-4" style="color: red">
+                            @Html.TextBoxFor(model => model.maMauIn, new { @class = "form-control", required = "required" })
+                            @TempData["Exist"]
+                        </td>
+                        <td class="tdtitle col-md-2">Loại mẫu in        
+                        </td>
+                        <td class="col-md-4" style="color: red">
+                            @Html.DropDownListFor(model => model.loaiMauIn, ViewBag.LoaiMauIns as SelectList, new { @class = "form-control", required = "required" })                            
+                        </td>
+                    </tr>          
+                    <tr>
+                        <td class="tdtitle">Nội dung        
+                        </td>
+                        <td colspan="3">
+                            <div id="editor">
+                                @Html.Raw(Model.html)
+                            </div>
+                            @Html.TextBoxFor(model => model.noiDung, new { @class = "form-control", type = "hidden", required = "required" })
+                            @Html.TextBoxFor(model => model.html, new { type = "hidden", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle"></td>
+                        <td colspan="3">
+                            <div class="dropdown form-inline">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" data-target="#">
+                                    Chèn các đối tượng <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                                    @foreach (var item in ViewBag.Bases as IQueryable<Sys_BaseTemplate>)
+                                    {
+                                        <li><a href="#" data-keyword="@item.keyWord" id="@item.id">@item.doiTuong</a></li> 
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle"></td>
+                        <td colspan="3">
+                            <div class="alert alert-info">
+                                <h5>HƯỚNG DẪN</h5>
+                                <p>Các ký tự {$***} sẽ được hệ thống tượng động thay đổi</p>
+                                Ví dụ: {$khachhang} <span style="font-weight: 700">&#8680;</span> Trương Ngọc Việt, {$hanthanhtoan} <span style="font-weight: 700">&#8680;</span> 12/12/2016                                        
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: right; margin-bottom: 10px">
+            <button class="btn btn-info" id="btnSubmit">Lưu </button>
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+</form>

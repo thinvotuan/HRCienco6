@@ -1,0 +1,99 @@
+﻿@using BatDongSan.Models.VIP;
+@model IPagedList<sp_NhanVienVip_IndexResult>
+@{
+    Layout = null;
+    int i = 1;    
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th>Mã nhân viên</th>
+            <th>Tên nhân viên</th>
+            <th>Email</th>
+            <th>Lương cơ bản</th>
+            <th>Tổng lương</th>
+            <th>Lương Net</th>
+             <th>Không chấm công</th>
+            <th>Ngày vào làm</th>
+
+
+            <th style="width: 100px"></th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {                                                        
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td><a style="color:#519ee5" href="@Url.Action("Details", "NhanVienVip", new { id = item.MaNhanVien })">@item.MaNhanVien</a></td>
+                <td style="text-align:left">@item.TenNhanVien</td>
+                <td>@item.Email</td>
+                <td class="numberinput" style="text-align:right">@item.LuongCoBan</td>
+                <td class="numberinput" style="text-align:right">@item.TongLuong</td>
+                <td>
+                    @{
+            if (item.Net == false) { 
+            <i class="fa fa-ban" aria-hidden="true" style="color: red; font-size:20px"></i>
+            }
+            else { 
+            <i class="fa fa-check" aria-hidden="true" style="color: green; font-size:20px"></i>
+            }
+                        }
+                  </td>
+                  <td>
+                    @{
+            if (item.khongChamCong == false) { 
+            <i class="fa fa-ban" aria-hidden="true" style="color: red; font-size:20px"></i>
+            }
+            else { 
+            <i class="fa fa-check" aria-hidden="true" style="color: green; font-size:20px"></i>
+            }
+                        }
+                  </td>
+                <td>
+                  @item.NgayVaoLam.Value.ToString("dd/MM/yyyy")  
+                </td>
+                <td style="text-align: center">
+                    <div class="buttons">
+                        <a href="@Url.Action("Edit", "NhanVienVip", new { id = item.MaNhanVien })" title ="Sửa nhân viên"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true"></i></a>
+                    
+          
+                            <span style="font-size: 30px; color: orange;">|</span><a class="btnDelete" alt="@item.MaNhanVien" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+            
+                    </div>
+                    
+                 
+                </td>
+
+
+            </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "NhanVienVip", action = "Index", searchString = ViewBag.searchString, loaiHopDong = ViewBag.loaiHopDong, maPhongBan = ViewBag.maPhongBan }))
+    </ul>
+</div>
+

@@ -1,0 +1,92 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_PhepNamNhanVien_IndexResult>
+@{
+    int i = 1;
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+</script>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead class="fixheader">
+        <tr>
+            <th style="width: 45px" rowspan="2">STT</th>
+            <th style="width: 130px" rowspan="2">Mã nhân viên</th>
+            <th style="width: 200px" rowspan="2">Phòng ban/Chức vụ</th>
+            <th colspan="5" style="background-color: #d9534f!important;">Phép chính</th>
+            <th colspan="2" style="background-color: #f0ad4e!important;">Phép năm nghỉ lễ</th>
+            <th colspan="2" style="background-color: #5cb85c!important;">Nghỉ phép</th>
+            <th style="width: 80px; background-color: #337ab7!important;" rowspan="2">Phép năm<br />
+                còn lại</th>
+        </tr>
+        <tr>
+            <th style="width: 80px; background-color: #d9534f!important;">Phép tồn</th>
+            <th style="width: 80px; background-color: #d9534f!important;">Phép năm<br />
+                theo quy định</th>
+            <th style="width: 80px; background-color: #d9534f!important;">Thâm niên
+            </th>
+            <th style="background-color: #d9534f!important;">Ngày phép bổ sung</th>
+            <th style="background-color: #d9534f!important;">Tổng số ngày phép</th>
+            <th style="width: 80px; background-color: #f0ad4e!important;">Trước
+                <br />
+                tháng 3</th>
+            <th style="width: 80px; background-color: #f0ad4e!important;">Sau
+                <br />
+                tháng 3</th>
+            <th style="width: 80px; background-color: #5cb85c!important;">Trước
+                <br />
+                tháng 3</th>
+            <th style="width: 80px; background-color: #5cb85c!important;">Sau
+                <br />
+                tháng 3</th>
+
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center">@i</td>
+
+                <td style="text-align: left"><a style="color:#519ee5" href="/NhanVien/Details/@item.maNhanVien">@item.maNhanVien</a><br />
+                    <i class="fa fa-user" aria-hidden="true"></i>@item.tenNhanVien</td>
+                <td>@item.tenBoPhan<br />
+                    <i class="fa fa-ticket" aria-hidden="true"></i>@item.tenCapBac</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.phepTonDuocDuyet)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepTheoQuiDinh)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepThamNien)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepBoSung) <i style="cursor:pointer;" class="fa fa-edit" aria-hidden="true" onclick="functionUpdateNghiPhep('@item.maNhanVien', '@item.tenNhanVien', @item.soNgayPhepBoSung)"></i></td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayPhepNamHienTai)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soPhepNamNgayNghiLeTT3)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soPhepNamNgayNghiLeST3)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayNghiPhepTruocThangBa)</td>
+                <td style="text-align: right">@String.Format("{0:#,#0.#}", item.soNgayNghiPhepSauThang3)</td>
+                <td style="text-align: right; font-weight: 600">@String.Format("{0:#,#0.#}", item.soNgayPhepConLaiTrongNam)</td>
+            </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }
+        , Model.PageSize, Model.PageNumber, Model.TotalItemCount
+        , new { controller = "PhepNamNhanVien", action = "Index", searchString = ViewBag.searchString, maPhongBan = ViewBag.maPhongBan, Nam = ViewBag.Nam }))
+    </ul>
+</div>

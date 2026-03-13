@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="LinqDMSDataContext">
+  <DataContextMoniker Name="/LinqDMSDataContextDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1e5d14a6-16a8-445e-b184-856fd681bf19" absoluteBounds="4.75, 3, 2, 4.0785139973958326">
+      <DataClassMoniker Name="/LinqDMSDataContextDataContext/tbl_DMS_NhanVienHR" />
+      <nestedChildShapes>
+        <elementListCompartment Id="cb71403b-1e46-4a54-b549-38c9f4088794" absoluteBounds="4.765, 3.46, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a2a24a6f-105d-4308-9963-f3b4dd1ad888" absoluteBounds="1.375, 4.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/LinqDMSDataContextDataContext/tbl_DMS_PhongBan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1123d37b-929f-44cf-8911-2461e654061d" absoluteBounds="1.3900000000000001, 5.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a2b075f7-d0d6-42a1-a20a-d42b66242a34" absoluteBounds="8.5, 3.75, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/LinqDMSDataContextDataContext/Sys_User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="883d860d-28f4-4029-b424-50c4a8e3adcd" absoluteBounds="8.515, 4.21, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

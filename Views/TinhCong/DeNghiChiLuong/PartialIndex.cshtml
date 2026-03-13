@@ -1,0 +1,57 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model List<DeNghiChiLuong>
+@{
+    Layout = null;
+    int i = 1;    
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="text-align: center; width: 45px">STT</th>
+            <th>Số phiếu</th>
+            <th>Tháng</th>
+            <th>Người lập</th>
+            <th>Ngày lập</th>
+            <th>Nội dung</th>
+            <th>Số tiền thực chuyển</th>
+            <th style="width: 80px">Trạng thái</th>
+            <th style="width: 100px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td><a style="color:#519ee5" href="@Url.Action("Details", "DeNghiChiLuong", new {id=item.soPhieu })">@item.soPhieu</a></td>
+                <td style="text-align:center">@item.thang</td>
+                <td>@item.tenNguoiLap</td>
+                <td style="text-align: center">@string.Format("{0:dd/MM/yyyy}", item.ngayLap)</td>
+                <td>@item.noiDung</td>
+                <td style="text-align: right">@string.Format("{0:#,##0}",item.tongTienThucChuyen)</td>
+                <td style="text-align:center"><a href="javascript:void(0);">@item.tenBuocDuyet</a></td>
+                <td style="text-align: center">
+                    @if (item.maNguoiLap == user1.manv && item.trangThai == 0)
+                    { 
+                        <a href="@Url.Action("Edit", "DeNghiChiLuong", new { id = item.soPhieu })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true">| </i></a>
+                        <a class="btnDelete" alt="@item.soPhieu" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+                </td>
+            </tr>
+                    ++i;
+        }
+    </tbody>
+</table>

@@ -1,0 +1,150 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ 
+   
+}
+
+<link rel="stylesheet" href="~/Content/table.css" />
+<style>
+     header
+    {
+        z-index: 1;
+    }
+     header:hover {
+   
+    z-index:2;
+   
+}
+</style>
+ <script type="text/javascript">
+     $(document).ready(function () {
+         $(document).on('mouseover', '.mouseOverImgCDSNV img.Avatar', function () {
+
+             $(".Img1").remove();
+
+             var valImg = $(this).attr("src");
+
+             $(this).after('<img src="' + valImg + '" class="Img1">');
+         });
+
+            
+            $("#DanhSach").addClass("setActiveDiv");
+            $("#CreateDanhGia").removeClass("setActiveDiv");
+            var BuocDuyet = '@Session["BuocDanhGiaNew"]';
+        if (BuocDuyet == 2) {
+            $(".btn_wrapper_line").hide();
+            $("#DanhSach").removeClass("setActiveDiv");
+            $("#CreateDanhGia").addClass("setActiveDiv");
+            $('#CreateDanhGia').load('@Url.Action("Create")', function () { });
+
+            }
+            else if (BuocDuyet == 3) {
+                $(".btn_wrapper_line").hide();
+                $("#DanhSach").removeClass("setActiveDiv");
+                $("#CreateDanhGia").addClass("setActiveDiv");
+
+                var Url = '@Url.Action("Edit/","DanhGiaTinNhiem")' + $("#maPhieuTinNhiemLoad").val();
+                $('#CreateDanhGia').load(Url, function () { });
+            }
+            else {
+                $(".btn_wrapper_line").show();
+                $("#DanhSach").addClass("setActiveDiv");
+                $("#CreateDanhGia").removeClass("setActiveDiv");
+            }
+        });
+    function TiepTuc() {
+
+        $(".titleBuoc").html("Bước 2: Thực hiện đánh giá nhân viên đã chọn");
+
+        var dem = 0;
+        dem = $("#DanhSach").find(".box_capbac").length;
+        if (dem == 0) {
+            alert("Vui lòng chọn nhân viên để đánh giá.");
+        }
+        else {
+           
+                $.post('@Url.Action("ChonDanhSachNhanVien")', ($('#frm').serialize()), function (data) {
+
+                    $("#DanhSach").removeClass("setActiveDiv");
+                    $(".btn_wrapper_line").hide();
+                    $("#CreateDanhGia").addClass("setActiveDiv");
+                    
+                    if (data == "create") {
+                        $('#CreateDanhGia').load('@Url.Action("Create")', function () {
+
+                        });
+                    }
+                    else {
+                        // alert($("#maPhieuTinNhiem").val());
+                        var Url = '@Url.Action("Edit/","DanhGiaTinNhiem")' + $("#maPhieuTinNhiemLoad").val();
+                        $('#CreateDanhGia').load(Url, function () { });
+                    }
+                });
+            }
+
+        }
+
+        function ChonNhanVienKhac() {
+            var url = '@Url.Action("DanhSachNhanVien","DanhGiaTinNhiem")';
+            showPopup(url, 980, 550);
+        }
+        function TroVe() {
+            $(".btn_wrapper_line").show();
+            location.href = '@Url.Action("Index","Home")';
+        }
+        function Delete(obj) {
+            $(obj).parent().parent().remove();
+
+        }
+        
+        
+    </script>
+
+
+    <div class="custome_fieldSet WrapperPhieuDG">
+        <div class="titleBuoc">Bước 1: Chọn nhân viên đánh giá</div>
+        <fieldset class="removeBorderFieldset">
+
+            <div class="titleBorderPhieu">
+                <div class="colorCommonBieuNgu">
+                    Phiếu đánh giá nhân viên<br />
+                    <span>Trách Nhiệm</span> – <span>Công Tâm</span> – <span>Đúng Sự Thật</span>
+                </div>
+            </div>
+
+            <form method="post" id="frm">
+
+                <div style="width: 100%; height: auto; border: none; float: right; text-align: right; box-sizing: border-box;" class="btn_wrapper_line">
+
+                    <button type="button" onclick="ChonNhanVienKhac()"><i class="fa fa-user-plus" aria-hidden="true"></i>Chọn thêm nhân viên để đánh giá</button>
+                    <button type="button" onclick="TroVe()"><i class="fa fa-reply-all" aria-hidden="true"></i>Quay về</button>
+                    <button type="button" onclick="TiepTuc()"><i class="fa fa-arrow-right" aria-hidden="true"></i>Tiếp tục</button>
+                </div>
+                <div class="wrapper_line" id="DanhSach" style="display: block">
+
+                    @{Html.RenderPartial("_ChonDanhSachNhanVien"); }
+                </div>
+                <div style="width: 100%; height: auto; border: none; float: right; text-align: right; box-sizing: border-box;" class="btn_wrapper_line">
+
+                    <button type="button" onclick="ChonNhanVienKhac()"><i class="fa fa-user-plus" aria-hidden="true"></i>Chọn thêm nhân viên để đánh giá</button>
+                    <button type="button" onclick="TroVe()"><i class="fa fa-reply-all" aria-hidden="true"></i>Quay về</button>
+                    <button type="button" onclick="TiepTuc()"><i class="fa fa-arrow-right" aria-hidden="true"></i>Tiếp tục</button>
+                </div>
+            </form>
+            @Html.Hidden("maPhieuTinNhiemLoad", ViewData["maPhieuTinNhiemEdit"])
+            <div id="Loadding" style="display: none">
+                <div>
+                    <img src="@Url.Content("~/Content/Images/loading.gif") " /><br />
+                    <i>Hệ thống đang xử lý....</i></div>
+            </div>
+            <div id="Finishing" style="display: none">
+                <div>
+                    <img src="@Url.Content("~/Content/Images/finishing.png") " /><br />
+                    <i>Đã lưu thành công....</i></div>
+            </div>
+            <div id="CreateDanhGia">
+            </div>
+        </fieldset>
+    </div>

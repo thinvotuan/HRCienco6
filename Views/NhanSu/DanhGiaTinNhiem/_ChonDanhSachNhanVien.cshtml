@@ -1,0 +1,56 @@
+﻿@{
+    var listDaChon = ViewBag.ListNhanVien as List<BatDongSan.Models.NhanSu.DanhSachNhanVienDaChonModel>;
+
+    if (listDaChon != null && listDaChon.Count > 0)
+    {
+        var stt = 0;
+
+        int soCapBacTruoc = 0;
+        if (listDaChon[0].CapBac != null)
+        {
+            soCapBacTruoc = (int)listDaChon[0].CapBac;
+        }
+        int soCapBacHienTai = 0;
+        foreach (var item in listDaChon)
+        {
+            if (item.CapBac == null) { soCapBacHienTai = 1; }
+            else { soCapBacHienTai = (int)item.CapBac; }
+
+            if (soCapBacHienTai < soCapBacTruoc)
+            {
+                soCapBacTruoc = soCapBacHienTai;
+                              
+    <div class="line_capbac"></div>
+                               
+            }
+            var HinhAnh = item.MaNhanVien + ".jpg"; 
+   
+    <div class="box_capbac">
+        @Html.Hidden("maNhanVien", item.MaNhanVien)
+        @Html.Hidden("maPhongBan", item.MaPhongBan)
+        @Html.Hidden("hinhNhanVien", item.Avatar)
+        @Html.Hidden("capBac", item.CapBac)
+        @Html.Hidden("ngaySinh", Html.Encode(String.Format("{0:dd/MM/yyyy}", item.NgaySinh)))
+        @Html.Hidden("tenChucDanh", item.TenChucDanh)
+        @Html.Hidden("tenNhanVien", item.TenNhanVien)
+        @Html.Hidden("tenPhongBan", item.TenPhongBan)
+        <span class="clsXoa" title="Xóa khỏi danh sách"><a href="javascript:void(0)" alt="@item.MaPhongBan" style="font-size: 18px;" onclick="Delete(this)"><i class="fa fa-times" aria-hidden="true"></i></a></span>
+        <div class="box_cp_img mouseOver mouseOverImgCDSNV">
+            <img class="Avatar" onerror="imgError(this);" accept="image/*" src="/UploadFiles/QLNV/@HinhAnh" />
+        </div>
+        <ul>
+            <li><i class="fa fa-user-secret" aria-hidden="true"></i>@item.TenChucDanh
+            </li>
+            <li><i class="fa fa-user" style="color: blue"></i>@item.TenNhanVien
+            </li>
+            <li><i class="fa fa-calendar"></i>@Html.Encode(String.Format("{0:dd/MM/yyyy}", item.NgaySinh))</li>
+            <li><i class="fa fa-object-group" aria-hidden="true"></i>@item.TenPhongBan
+            </li>
+
+        </ul>
+    </div>
+    
+        }
+
+    }
+}

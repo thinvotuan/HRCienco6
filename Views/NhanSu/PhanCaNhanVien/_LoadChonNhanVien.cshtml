@@ -1,0 +1,142 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<script>
+    $(document).ready(function () {
+        $('#btnSearchNhanVienPhongBan').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("LoadNhanVien", "PhanCaNhanVien")" + "?searchString=" + searchText + "&maPhongBan=" + '@ViewBag.maPhongBan' + "&maPhanCa=" + $("#maPhanCa").val();
+            beginPaging();
+            $('#TabNV').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('#checkAllLK').click(function (e) {
+            $('[name="ChekChonLK"]').prop('checked', this.checked);
+        });
+
+        $('[name="ChekChonLK"]').click(function (e) {
+            if ($('[name="ChekChonLK"]:checked').length == $('[name="ChekChonLK"]').length || !this.checked)
+                $('#checkAllLK').prop('checked', this.checked);
+        });
+
+        $("#btnThemNVLK").click(function () {
+
+            if ($("[name='ChekChonLK']:checked").length == 0) {
+                Alert.error("Không có nhân viên nào được chọn.", "Thông báo", { displayDuration: 2000 });
+                return;
+            }
+
+            if ($("[name='ChekChonLK']:checked").length >= 1) {
+                var i = 0;
+                var strString;
+                var arrMaNV = [];
+                //Get value
+                jQuery("input[name='ChekChonLK']:checked").each(function (index, element) {
+                    strString = jQuery(this).attr("data-manhanvien");
+                    arrMaNV[i] = strString.split(',');
+                    i++;
+                });
+                $.ajax({
+                    url: "@Url.Action("DanhSachNhanVienChon", "PhanCaNhanVien")",
+                    type: "POST",
+                    dataType: "html",
+                    data: $.param({ MaNV: arrMaNV }, true) + "&" + $('#form-submit').serialize(),
+                    success: function (data) {
+                        $("#load").html(data);
+                        $('#myModalChonPhongBan').modal("toggle");
+                    },
+
+                    error: function () {
+                    }
+                });
+            }
+
+        });
+
+    });
+    function beginPaging(args) {
+        // Animate        
+        $('.popupChonNVLienKet #container').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('.popupChonNVLienKet #container').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchNhanVienPhongBan").click();
+    }
+</script>
+<div class="panel-body">
+    <div style="position: relative; margin-bottom: 5px;">
+        <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:100%; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh(event);" />
+        <i class="fa fa-search" id="btnSearchNhanVienPhongBan" style="position: absolute; top: 12px; right: 7px; cursor: pointer"></i>
+        <button type="button" class="btn btn-info" style="float: right; margin-top: 10px;" id="btnThemNVLK">Thêm</button>
+    </div>
+</div>
+<div id="container">
+    <table class="table table-striped table-hover table-condensed">
+        <thead style="font-size: 13px">
+            <tr>
+                <th style="width: 45px">STT</th>
+               @* <th>Hình ảnh
+                </th>*@
+                <th>Nhân viên
+                </th>
+                <th>Phòng ban
+                </th>
+                <th>Chức danh
+                </th>
+                <th style="width: 45px; text-align: center">
+                    @Html.CheckBox("checkAllLK", false)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var HinhAnh = item.maNhanVien + ".jpg";          
+                <tr>
+                    <td style="text-align: center">@i</td>
+                   @* <td style="text-align: center">
+                        <img id="Avatar"  accept="image/*" onerror="imgError(this);" src="/UploadFiles/QLNV/@HinhAnh" />
+
+                    </td>*@
+                    <td><i class="fa fa-user" style="color: blue"></i>@item.hoVaTen
+                        @if (item.birthday != null)
+                        { 
+                            <p>
+                                Ngày sinh: 
+                                    @String.Format("{0:dd/MM}", item.birthday)
+                            </p>
+                        }
+
+                    </td>
+                    <td>@item.phongBan</td>
+                    <td>@item.chucDanh</td>
+                    <td style="color: #0b74d5; text-align: center">
+                        @Html.CheckBox("ChekChonLK", false, new { data_maNhanVien = item.maNhanVien })
+                    </td>
+                </tr>
+                        i++;
+            }
+        </tbody>
+    </table>
+    <div>
+        Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+    </div>
+    <div>
+        <ul class="pagination">
+            @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "TabNV", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhanCaNhanVien", action = "LoadNhanVien", searchString = ViewBag.Search,maPhongBan=ViewBag.maPhongBan , maPhanCa= ViewBag.maPhanCa}))
+        </ul>
+    </div>
+</div>

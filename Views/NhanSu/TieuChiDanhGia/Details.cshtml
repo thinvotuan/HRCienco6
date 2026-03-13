@@ -1,0 +1,101 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    // var List = ViewBag.lsTieuChi as List<tbl_NS_TieuChi>;
+    tbl_NS_TieuChi item = ViewBag.data;
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+       
+       
+
+        setTimeout(function () { $("#divMsg").hide() }, 5000);
+    });
+
+    
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <fieldset class="fieldset1">
+        
+        <legend class="legend">Sửa nhóm tiêu chí đánh giá nhân viên </legend>
+        <div id="divMsg" style="color: Red;text-align: left">
+            @{if ((string)ViewBag.Message != "")
+              {
+               <span>@ViewBag.Message.ToString()</span>
+              }
+            }
+        </div>
+       
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 600px;">
+                    <tr>
+                        <td style="width: 15%" class="tdtitle">Mã nhóm tiêu chí
+                        </td>
+                        <td style="width: 35%">
+                            @item.maNhom
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Tên nhóm tiêu chí
+                        </td>
+                        <td style="width: 35%">
+                           @item.tenTieuChi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Hệ số điểm
+                        </td>
+                        <td style="width: 35%">
+                           @item.heSoDiem
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Ghi chú
+                        </td>
+                        <td style="width: 35%">
+                            @item.ghiChu
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>&nbsp;
+                        </td>
+                        <td colspan="2">
+                          
+                            <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "TieuChiDanhGia")    '" />
+                        </td>
+                    </tr>
+                   
+                </table>
+            </div>
+        </div>
+    </fieldset>
+}

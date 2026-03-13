@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Đánh giá nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+<script>
+    $(document).ready(function () {
+        $("#btnXemKetQua").click(function () {
+            var Url = '@Url.Action("XemKetQua/", "DanhGiaTinNhiem")';
+             location.href = Url;
+         });
+
+     });
+     function ShowQuiDinhDanhGia() {
+
+         var url = '@Url.Content("~/UploadFiles/TaiLieu/QuyDinhDanhGia.pdf")';
+         showPopup(url, 1000, 500);
+     }
+</script>
+<div id="main">
+
+
+    <!--body-->
+    <div id="erp_body">
+        @{
+            int StatusDanhGia = (int)ViewBag.StatusDanhGia;
+            int showThongBao = (int)ViewBag.showThongBao;
+            if (showThongBao == 1)
+            {
+            <div id="DanGiaTinNhiem" class="wrapper_danhgia_home">
+                <div class="pricing-table group effect5">
+                    <h1 class="title-box">Đánh giá nhân viên 6 tháng đầu năm 2016
+                    </h1>
+                    <div id="ThongBao">
+                        <a href="javascript:void(0)" onclick="ShowQuiDinhDanhGia()" style="font-size: 15px; color: #ea4e01; font-weight: bold; text-transform: uppercase;"><span id="FileAtt"><i class="fa fa-paperclip" aria-hidden="true"></i></span>
+                            <br>
+                            Thông báo</a>
+                    </div>
+                    <div class="title_bieungu">
+                        Để Kết quả đánh giá phản ánh đúng năng lực cũng như mức độ đóng góp của mỗi Nhân viên cho Công ty thì Ban Giám đốc yêu cầu<br />
+                        toàn thể Nhân viên đánh giá trên tình thần<br />
+                        <span class="colorCommonBieuNgu"><span>Trách Nhiệm</span> – <span>Công Tâm</span> – <span>Đúng Sự Thật</span></span>
+                        <br />
+                        <span style="color: #e4a106; font-weight: bold;">@ViewBag.NgayDanhGia</span>
+                    </div>
+                    <div class="block-danhgia chonNhanVien ">
+                        <i class="fa fa-arrows-h muiten" aria-hidden="true"></i>
+                        <h2 class="title">Chọn nhân viên đánh giá</h2>
+
+                        <div class="content">
+                            <div style="padding: 20px 30px 10px 30px;">
+                                <span class="content-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="pt-footer effect2">
+                            <div>&nbsp;</div>
+                            Bước 1
+                        </div>
+                    </div>
+                    <div class="block-danhgia thuHienDanhGia ">
+
+                        <i class="fa fa-arrow-circle-right muiten" aria-hidden="true"></i>
+                        <h2 class="title">Thực hiện đánh giá nhân viên đã chọn</h2>
+                        <div class="content">
+                            <div style="padding: 20px 30px 10px 30px;">
+                                <span class="content-icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pt-footer">
+                            <div>&nbsp;</div>
+                            Bước 2
+                        </div>
+                    </div>
+                    <div class="block-danhgia ketQua " style="padding-right: 10px;">
+                        <h2 class="title">Kết quả đánh giá</h2>
+                        <div class="content">
+                            <div style="padding: 20px 30px 10px 30px;">
+                                <span class="content-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                        <div class="pt-footer">
+                            <div style="font-weight: bold">@ViewBag.NgayCongBo &nbsp;</div>
+                            @{
+                               
+                                
+                if (StatusDanhGia == 2)
+                {
+                               
+                            
+                                <button type="button" class="clsXemKetQua" id="btnXemKetQua" style="background-color: #732a37;"><i class="fa fa-pie-chart" aria-hidden="true"></i>Xem Kết Quả</button>
+                            
+                }
+                else
+                {
+                                <span>Bước 3</span>
+                             
+                            
+                }
+                            }
+                        </div>
+                    </div>
+                    <div style="clear: both">
+                    </div>
+                    <div class="backImg">
+                        <div class="txtThongBao">
+                            <i class="fa fa-quote-left" aria-hidden="true"></i>Dữ liệu đánh giá của nhân viên<br />
+                            sẽ được bảo mật tới Tổng giám đốc.<i class="fa fa-quote-right" aria-hidden="true"></i><br />
+                            <i class="fa fa-quote-left" aria-hidden="true"></i>Ban Tổng giám đốc sẽ xem xét tất cả những hành vi tiêu cực.<i class="fa fa-quote-right" aria-hidden="true"></i>
+                        </div>
+                        <img src="@Url.Content("~/Content/images/can_congly.jpg")" />
+                        <div class="videoYou">
+                            <i class="fa fa-quote-left" aria-hidden="true"></i>Nếu có phát hiện nhầm lẫn, sai sót, tiêu cực vui lòng liên hệ email: <span>danhgianhanvien@thuanviet.com.vn</span> <i class="fa fa-quote-right" aria-hidden="true"></i>
+
+                        </div>
+                        <div class="btnButtonStart">
+                            @{
+                             
+                var TrangThaiDanhGia = Convert.ToInt32(ViewBag.TrangThaiDanhGia);
+               
+                    if (TrangThaiDanhGia == 0 && StatusDanhGia == 1)
+                {
+
+                                <div onclick="BatDauDanhGia()" class="btnActive colorCommon1"><span><i class="fa fa-hand-o-right" aria-hidden="true"></i>Bắt đầu</span></div>
+                }
+                    if (TrangThaiDanhGia == 1 && StatusDanhGia ==1)
+                {
+
+                                <div onclick="BatDauDanhGia()" class="btnActive colorCommon2"><span><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Tiếp tục</span></div>
+                }
+                if (TrangThaiDanhGia == 2)
+                { 
+                                <div onclick="XemPhieuDanhGia('@ViewBag.maPhieuDanhGia')" class="btnActive colorCommon3"><span><i class="fa fa-paper-plane" aria-hidden="true"></i>Đã hoàn thành</span></div>
+             
+                }
+                            
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+            else
+            {
+            <h3>Chưa đến ngày đánh giá!</h3>}
+        }
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        function BatDauDanhGia() {
+            location.href = '@Url.Action("ChonDanhSachNhanVien", "DanhGiaTinNhiem")';
+            }
+            function XemPhieuDanhGia(maPhieu) {
+                var Url = '@Url.Action("Details/", "DanhGiaTinNhiem")' + maPhieu;
+                location.href = Url;
+            }
+    </script>

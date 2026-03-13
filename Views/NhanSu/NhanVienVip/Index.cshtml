@@ -1,0 +1,179 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+
+    #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+    }
+
+    #phongban-dropdown-menu
+    {
+        width: 500px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //setting phong ban//
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+            $("#saveIDPhongBan").val($(this).attr('alt'));
+            $("#btnPhongBan").val($(this).attr('alt'));
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+
+        })
+        //End
+        //$("#phongban-dropdown-menu").removeAttr("style");
+
+
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "/HopDongLaoDong/Edit/" + this.value;
+            location.href = url;
+        })
+
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "NhanVienVip")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+") + "&loaiHopDong=" + $("#loaiHopDong").val() + "&maPhongBan=" + $("#saveIDPhongBan").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+        $("#trangThaiDuyet").change(function () {
+            var url = "@Url.Action("Index", "NhanVienVip")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+") + "&loaiHopDong=" + $("#loaiHopDong").val() + "&maPhongBan=" + $("#saveIDPhongBan").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+        $("#loaiHopDong").change(function () {
+            $("#btnSearch").click();
+        })
+
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "NhanVienVip")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-submit");
+                    form.action = url;
+                    form.submit();
+                }
+            })
+        });
+    });
+
+
+        function them() {
+            var url = "@Url.Action("Create", "NhanVienVip")";
+            location.href = url;
+        }
+
+        function beginPaging(args) {
+            // Animate        
+            $('#content').fadeOut('fast');
+        }
+
+        function successPaging() {
+            // Animate
+            $('#content').fadeIn('fast');
+        }
+
+        function failurePaging() {
+            alert("Không thể tải dữ liệu");
+        }
+
+        function enterToSeacrh(event) {
+            if (event.keyCode == 13)
+                $("#btnSearch").click();
+        }
+
+        //Lịch sử duyệt
+        function ViewDetailHistory(soPhieu, maQuiTrinh) {
+            var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + soPhieu + '?maQuiTrinh=' + maQuiTrinh;
+            PopUpManager(url, "DUYET", 700, 200);
+        }
+
+        function PopUpManager(url, title, w, h) {
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
+            var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+        }
+</script>
+<form id="form-submit" method="post">
+    <input type="hidden" value="" id="saveIDPhongBan" />
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách nhân viên VIP</span></a></li>
+                </ul>
+            </div>
+            <div class="panel-body background_top" style="padding-bottom: 2px !important; padding-top: 2px !important;">
+                <div class="form-inline">
+
+                  
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" id="pref-search" onkeypress="enterToSeacrh(event)" value="@ViewBag.Search" style="width:200px" />
+                    </div>
+                    <div class="form-group">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style=""></span>Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info btnThemeAdd" type="button" onclick="them()">Thêm </button>
+                       @* <div style="float: left">
+                            <span>Trạng thái:</span>
+                            @Html.DropDownList("trangThaiDuyet", ViewBag.TrangThaiDuyet as SelectList, new { @class = "form-control", @style = "width:250px" })
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("PartialIndex");}
+            </div>
+        </fieldset>
+    </div>
+</form>

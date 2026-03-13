@@ -1,0 +1,449 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .infor_THCT, .infor_CCChiTiet {
+        padding: 5px;
+        background: rgb(226, 144, 72);
+        border-radius: 3px;
+        color: #fff;
+        box-sizing: border-box;
+        margin: 5px auto;
+        line-height: 1.7;
+    }
+
+    .txtLyDo {
+        display: block;
+        width: 100%;
+        line-height: 1.7;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSearch").click(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search();
+        });
+        $("#thang,#nam").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+
+            Search();
+        });
+
+
+    });
+
+
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+        $("#btnSearchTC").click(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+            SearchTC();
+        });
+        $("#thangtc,#namtc,#trangThai").change(function () {
+            $(".infor_THCT,.infor_CCChiTiet").html('').css('display', 'none');
+            SearchTC();
+        });
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+            $("#btnPhongBan").val(this.id);
+
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            SearchTC();
+        })
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+
+
+
+
+        SearchTC();
+        $(document).on('click', '#btnTinhTHCT', function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('.infor_THCT').html(imageUrl).css('display', 'block');
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("UpdateBangChamCongTH", "DieuChinhCongVip")',
+                data: {
+                    'nam': $("#namtc").val(),
+                    'thang': $("#thangtc").val()
+
+                },
+                success: function (result) {
+                    $(".infor_THCT").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_THCT").html('Cập nhật thành công tháng: ' + $("#thangtc").val() + " năm: " + $("#namtc").val());
+                    }
+                    else {
+                        $(".infor_THCT").html('Cập nhật thất bại tháng: ' + $("#thangtc").val() + " năm: " + $("#namtc").val());
+                    }
+
+                    SearchTC();
+                }
+            });
+        });
+        $(document).on("click", "[name=checkeds]", function () {
+
+            if (false == $(this).prop("checked")) { //if this item is unchecked
+                $("[name=check-all]").prop('checked', $(this).prop("checked")); //change "select all" checked status to false
+            }
+        });
+        $(document).on("click", "[name=check-all]", function () {
+            $('#content input:checkbox').not(this).prop('checked', this.checked);
+        });
+        $(document).on("keyup", ".txtCongDieuChinh", function () {
+            if ($(this).val() != "") {
+                var attrThang = $(this).attr("attrThang");
+                var attrNV = $(this).attr("attrNV");
+                var parent = $(this).parent().parent();
+                var cong = (this);
+                $.ajax({
+                    type: "POST",
+                    url: '/DieuChinhCongVip/GetCongChuan/',
+                    data: {
+                        thang: attrThang,
+                        nam: $("#namtc").val(),
+                        congDieuChinh: $(this).val(),
+                        change: 0,
+                        maNhanVien: attrNV
+                    },
+                    success: function (result) {
+
+                        if (result.trangThaiGet == 0) {
+                            Alert.warning("Không tìm thấy dữ liệu!", "Thông báo", { displayDuration: 2000 });
+
+                        }
+                        else if (result.chapNhan == 1) {
+
+                            $(parent).find(".tongCongSauKhiDC").html(result.tongCongSauKhiDC);
+                           // $(cong).val(result.congDieuChinh);
+                        }
+                        else {
+                            Alert.warning("Tổng công điều chỉnh không được vượt quá công chuấn!", "Thông báo", { displayDuration: 2000 });
+                            $(cong).val(result.giaTriMax);
+                            $(parent).find(".tongCongSauKhiDC").html(result.ngayCongChuan);
+                        }
+                    }
+                });
+            }
+
+        });
+        $(document).on("change", ".txtCongDieuChinh", function () {
+            if ($(this).val() != "") {
+
+                var attrThang = $(this).attr("attrThang");
+                var attrNV = $(this).attr("attrNV");
+                $.ajax({
+                    type: "POST",
+                    url: '/DieuChinhCongVip/GetCongChuan/',
+                    data: {
+                        thang: attrThang,
+                        nam: $("#namtc").val(),
+                        congDieuChinh: $(this).val(),
+                        change: 1,
+                        maNhanVien: attrNV
+                    },
+                    success: function (result) {
+                        
+                        if (result.chapNhan == 1) {
+                            Alert.success("Đã cập nhật dữ liệu thành công!", "Thông báo", { displayDuration: 2000 });
+
+                        }
+
+                    }
+                });
+            }
+
+
+        });
+        $(document).on("change", ".textLyDo", function () {
+
+            var textLyDo = $(this).val();
+            var attrThang = $(this).attr("attrThang");
+            var attrNV = $(this).attr("attrNV");
+            $.ajax({
+                type: "POST",
+                url: '/DieuChinhCongVip/CapNhatLyDo/',
+                data: {
+                    thang: attrThang,
+                    nam: $("#namtc").val(),
+                    textLyDo: textLyDo,
+                    maNhanVien: attrNV
+                },
+                success: function (result) {
+
+                    if (result.chapNhan == 1) {
+                        Alert.success("Đã cập nhật lý do thành công!", "Thông báo", { displayDuration: 2000 });
+
+                    }
+                    else {
+                        Alert.error("Có lỗi xãy ra trong quá trình xử lý.", "Thông báo", { displayDuration: 2000 });
+                        location.reload();
+                    }
+
+                }
+            });
+
+
+
+        });
+    });
+    function DuyetPhieu(thang, nam, maNhanVien) {
+
+     
+
+            bootbox.confirm("Duyệt nhân viên đã chọn?", function (result) {
+                if (result) {
+                    $.ajax({
+                        url: "/DieuChinhCongVip/DuyetNhieuPhieu",
+                        type: "POST",
+                        dataType: "json",
+                        data: { maNhanVien: maNhanVien, thang: thang, nam: nam },
+                        success: function (data) {
+
+                            if (data == "true" || data == true) {
+                                Alert.success("Cập nhật duyệt nhân viên thành công!", "Thông báo", { displayDuration: 2000 });
+                                SearchTC();
+                            }
+                            else {
+                                Alert.error("Có lỗi xãy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                                SearchTC();
+                            }
+
+                        },
+
+                        error: function () {
+                            Alert.error("Có lỗi xãy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                            SearchTC();
+                        }
+                    });
+                }
+
+
+            });
+            
+        
+    }
+    function TraPhieu(thang, nam, maNhanVien) {
+        bootbox.confirm("Trả lại nhân viên đã chọn?", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/DieuChinhCongVip/TraNhieuPhieu",
+                    type: "POST",
+                    dataType: "json",
+                    data: { maNhanVien: maNhanVien, thang: thang, nam: nam },
+                    success: function (data) {
+
+                        if (data == "true" || data == true) {
+                            Alert.success("Cập nhật trả nhân viên thành công!", "Thông báo", { displayDuration: 2000 });
+                            SearchTC();
+                        }
+                        else {
+                            Alert.error("Có lỗi xãy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                            SearchTC();
+                        }
+
+                    },
+
+                    error: function () {
+                        Alert.error("Có lỗi xãy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                        SearchTC();
+                    }
+                });
+            }
+
+
+        });
+    }
+    function OnCriteriaPCTC(page) {
+        var giatri = $("#qSearchTC").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+        var url = '@Url.Action("LoadBangChamCongTongHop", "DieuChinhCongVip")' + "?thang=" + $("#thangtc").val() + "&nam=" + $("#namtc").val() + "&trangThai=" + $("#trangThai").val() + "&qSearch=" + giatri + "&_page=" + page;
+        var imageUrl = '<div id="divMsgTC" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbodyTC').html(imageUrl);
+        $('#tbodyTC').load(url, function () {
+        });
+    }
+
+    function SearchTC() {
+
+        var giatri = $("#qSearchTC").val().trim();
+        giatri = giatri.replace(/ /gi, '+');
+
+
+
+        var url = '@Url.Action("LoadBangChamCongTongHop", "DieuChinhCongVip")' + "?thang=" + $("#thangtc").val() + "&nam=" + $("#namtc").val() + "&trangThai=" + $("#trangThai").val() + "&qSearch=" + giatri + "&_page=0";
+
+        var imageUrl = '<div id="divMsgTC" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbodyTC').html(imageUrl);
+        $('#tbodyTC').load(url, function () {
+        });
+    }
+
+
+    function ResetTC() {
+        location.href = '@Url.Action("LoadBangChamCongTongHop", "DieuChinhCongVip")';
+    }
+    function enterToSeacrhTC(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchTC").click();
+    }
+    function beginPaging() {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+
+
+
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab tabToggle">
+                    <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Bảng tổng hợp công tháng NV VIP</span></a>
+
+                </li>
+
+
+            </ul>
+
+        </ul>
+    </div>
+    <div id="container">
+
+        <div class="contentToggle" id="content">
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float: left">
+                            Tháng:@Html.DropDownList("thangtc", ViewData["lstThang"] as SelectList, new { @style = "width:150px" })
+                            Năm:@Html.DropDownList("namtc", ViewData["lstNam"] as SelectList, new { @style = "width:150px" })
+                            Trạng thái:
+                            <select id="trangThai" name="trangThai" style="width: 150px">
+                                <option value="" selected>Tất cả</option>
+                                <option value="0">Chưa duyệt</option>
+                                <option value="1">Đã duyệt</option>
+                            </select>
+                        </div>
+
+                        <div style="float: right">
+                            <input type="text" id="qSearchTC" value="@ViewBag.SearchTC" class="form-control" style="width:200px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrhTC(event);" />
+                            <button class="btn btn-info" id="btnSearchTC" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                           
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="infor_THCT" style="display: none"></div>
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                <thead>
+                    <tr>
+                        <th style="width: 35px; text-align: center">STT
+                        </th>
+                        <th style="text-align: center">Nhân viên
+                        </th>
+                        <th style="text-align: center">Công chuẩn
+                        </th>
+                        <th style="text-align: center">Số ngày quét</th>
+                        <th style="text-align: center">Nghỉ phép<br />
+                            có lương</th>
+                        <th style="text-align: center">Nghỉ phép<br />
+                            không lương</th>
+                        <th style="text-align: center">Nghỉ lễ</th>
+                        <th style="text-align: center">Lũy kế<br />
+                            tháng trước</th>
+                        <th style="text-align: center"><b>Công điều chỉnh</b></th>
+                        <th style="text-align: center"><b>Tổng công
+                            <br />
+                            đều chỉnh</b></th>
+                        <th style="text-align: center">
+               </th>
+
+
+                    </tr>
+                </thead>
+                <tbody id="tbodyTC">
+                </tbody>
+
+               
+            </table>
+
+
+        </div>
+    </div>
+</fieldset>

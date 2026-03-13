@@ -1,0 +1,78 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_NghiLe
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="/Scripts/additional-methods.min.js"></script>
+<script src="/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(document).on("dp.change", "#holidayDate", function (e) {
+            $("#compensatoryLeaveDate").val(moment(e.date).format("DD/MM/YYYY"));
+        });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cập nhật ngày lễ</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-condensed" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Tên ngày lễ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenNgayNghiLe, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Năm <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.DropDownListFor(model => model.nam, ViewBag.Nams as SelectList, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Loại ngày nghỉ</td>
+            <td class="form-inline">
+                <div class="radio">
+                    <label class="radio" style="font-size: 13px">
+                        @Html.RadioButtonFor(model => model.loaiNgayNghi, "true", new { style = "width:auto", required = "required" }) Dương lịch
+                    </label>
+                </div>
+                <div class="radio">
+                    <label class="radio" style="font-size: 13px">
+                        @Html.RadioButtonFor(model => model.loaiNgayNghi, "false", new { style = "width:auto", required = "required" }) Âm lịch
+                    </label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày dương lịch</td>
+            <td>@Html.TextBoxFor(model => model.ngayDuongLich, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày âm lịch</td>
+            <td>@Html.TextBoxFor(model => model.ngayAmLich, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày nghĩ</td>
+            <td>@Html.TextBoxFor(model => model.ngayNghiLe, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

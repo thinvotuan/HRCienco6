@@ -1,0 +1,160 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model IList<tbl_DM_ThangLuongCongTy>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-999999999' });
+
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "ThangLuongCongTy")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "ThangLuongCongTy")" + "?bac=" + $(this).data("bac")
+                                                                + "&bacChucVu=" + $(this).data("bacchucvu")
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "ThangLuongCongTy")" + "?bac=" + $(this).data("bac")
+                                                                  + "&bacChucVu=" + $(this).data("bacchucvu")
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+    });
+
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav" style="text-align: center">
+                    <li class="ui-tabs-selected ui-state-active">
+                        <a><span><i class="fa fa-list" aria-hidden="true">Danh mục thang lương</i></span></a>
+                    </li>
+                    <span style="color: red">@TempData["TonTai"]</span>
+                </ul>
+            </div>
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px" rowspan="2">Bậc</th>
+                            <th rowspan="2">Cấp bậc chức vụ</th>
+                            <th colspan="3">Tổng lương</th>
+                            <th colspan="3">Lương căn bản</th>
+                            <th colspan="3">Lương thành tích</th>
+                            <th rowspan="2" style="width: 100px"></th>
+                        </tr>
+                        <tr>
+                            <th>Khởi điểm</th>
+                            <th>Chính thức</th>
+                            <th>Thực thụ</th>
+                            <th>Khởi điểm</th>
+                            <th>Chính thức</th>
+                            <th>Thực thụ</th>
+                            <th>Khởi điểm</th>
+                            <th>Chính thức</th>
+                            <th>Thực thụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.GroupBy(s => new { s.bac }))
+                        {
+                            int i = 0;
+                            foreach (var item1 in item)
+                            {
+                            <tr>
+                                @if (i == 0)
+                                {
+                                    <td class="numberinputInt" rowspan="@item.Count()">@item.Key.bac</td>
+                                }
+                                <td class="numberinputInt">@item1.capBacChucVu</td>
+                                <td class="numberinputInt">@item1.tongLuongKhoiDiem</td>
+                                <td class="numberinputInt">@item1.tongLuongChinhThuc</td>
+                                <td class="numberinputInt">@item1.tongLuongThucThu</td>
+                                <td class="numberinputInt">@item1.luongCanBanKhoiDiem</td>
+                                <td class="numberinputInt">@item1.luongCanBanChinhThuc</td>
+                                <td class="numberinputInt">@item1.luongCanBanThucThu</td>
+                                <td class="numberinputInt">@item1.luongCanBanKhoiDiem</td>
+                                <td class="numberinputInt">@item1.luongThanhTichChinhThuc</td>
+                                <td class="numberinputInt">@item1.luongThanhTichThucThu</td>
+                                <td>
+                                    <a class="btnEdit" data-bac="@item1.bac" data-bacchucvu="@item1.capBacChucVu" data-toggle="modal" data-target="#customModal"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange; cursor: pointer;" aria-hidden="true">| </i></a>
+                                    <a class="btnDelete" data-bac="@item1.bac" data-bacchucvu="@item1.capBacChucVu" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>   
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>            
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

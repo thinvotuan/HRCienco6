@@ -1,0 +1,39 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model List<DMPhanCaNhanVien>
+@{
+    Layout = null;
+    int i = 1;
+}
+
+@foreach (var item in Model)
+{
+    if(!string.IsNullOrEmpty(item.maNhanVien)){
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.maNhanVien
+            @Html.Hidden("maNhanVien",item.maNhanVien)
+        </td>
+        <td>@item.hoVaTen</td>
+        <td style="text-align:center">@String.Format("{0:dd/MM/yyyy}",item.ngayVaoLam)</td>
+        <td>@item.tenPhongBan</td>
+        <td>@item.tenChucDanh</td>
+        <td>@Html.TextBox("ngayApDung",String.Format("{0:dd/MM/yyyy}",item.ngayApDung), new { @class = "form-control datepicker"})</td>
+        <td style="text-align:center">
+            <button class="btn btn-warning btn-xs btnDelete" type="button" onclick="Delete(this)">Xóa</button>
+        </td>
+    </tr>
+    i++;
+    }
+}
+<script>
+    $(".datepicker").datetimepicker({
+        locale: 'vi',
+        format: 'DD/MM/YYYY'
+    });
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>

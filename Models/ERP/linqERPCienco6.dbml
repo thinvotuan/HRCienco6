@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TestERPCienco61" Class="linqERPCienco6DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.tbl_NhanVienHR" Member="tbl_NhanVienHRs">
+    <Type Name="tbl_NhanVienHR">
+      <Column Name="userName" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="matKhau" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="soDienThoai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="hoTen" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="maPhongBan" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="soCapBac" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="tenCapBac" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ngaySinh" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="tenChucDanh" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="trangThai" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="maNhanVien" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="maCongTrinh" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="maChucDanh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="choPhepVaoERPKhac" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="nvERP" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="nvCienco6" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NS_TBL_NhanVien" Member="NS_TBL_NhanViens">
+    <Type Name="NS_TBL_NhanVien">
+      <Column Name="Manv" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MaSoThe" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="HinhAnh" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Ho" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Ten" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="TenThuongGoi" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Phai" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="SoCMND" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="NgayCap" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="NoiCap" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NgaySinh" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="NoiSinh" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NguyenQuan" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="QuocTich" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TonGiao" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DanToc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TDVH" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NgayVaoHTX" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="SoTheHTX" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="VonGop" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NgayVaoCongDoan" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="NoiVaoCongDoan" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SoTheCongDoan" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="NgayVaoDoan" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="NoiVaoDoan" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SoTheDoan" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="NgayVaoDang" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="NoiVaoDang" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SoTheDang" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="DiaChiThuongTru" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DiaChiTamTru" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="DienThoai" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DienThoai1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Email1" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="HonNhan" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="ChuyenMon" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="BangCap" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="TrinhDoNgoaiNgu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="TrinhDoTinHoc" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="ThongTinKhac" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="NgayVaoLam" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="MaUngVien" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="SoTaiKhoan" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MaNganHang" Type="System.String" DbType="Char(3)" CanBeNull="true" />
+      <Column Name="Trangthai" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ChuKy" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="DuongDanChuKy" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="nvCienco6" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="NS_TBL_NhanVien_NS_TBL_ChucDanhNhanVien" Member="NS_TBL_ChucDanhNhanViens" ThisKey="Manv" OtherKey="Manv" Type="NS_TBL_ChucDanhNhanVien" />
+      <Association Name="NS_TBL_NhanVien_NS_TBL_PhongBanNhanVien" Member="NS_TBL_PhongBanNhanViens" ThisKey="Manv" OtherKey="Manv" Type="NS_TBL_PhongBanNhanVien" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NS_TBL_ChucDanhNhanVien" Member="NS_TBL_ChucDanhNhanViens">
+    <Type Name="NS_TBL_ChucDanhNhanVien">
+      <Column Name="Manv" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MaChucDanh" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NgayCapNhat" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="NS_TBL_NhanVien_NS_TBL_ChucDanhNhanVien" Member="NS_TBL_NhanVien" ThisKey="Manv" OtherKey="Manv" Type="NS_TBL_NhanVien" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="NS_DM_ChucDanh_NS_TBL_ChucDanhNhanVien" Member="NS_DM_ChucDanh" ThisKey="MaChucDanh" OtherKey="MaChucDanh" Type="NS_DM_ChucDanh" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NS_TBL_PhongBanNhanVien" Member="NS_TBL_PhongBanNhanViens">
+    <Type Name="NS_TBL_PhongBanNhanVien">
+      <Column Name="Manv" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NgayCapNhat" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MaPhongBan" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="NS_TBL_NhanVien_NS_TBL_PhongBanNhanVien" Member="NS_TBL_NhanVien" ThisKey="Manv" OtherKey="Manv" Type="NS_TBL_NhanVien" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="NS_DM_PhongBan_NS_TBL_PhongBanNhanVien" Member="NS_DM_PhongBan" ThisKey="MaPhongBan" OtherKey="MaPhongBan" Type="NS_DM_PhongBan" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.HT_Users" Member="HT_Users">
+    <Type Name="HT_User">
+      <Column Name="userId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="userName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="telephone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="note" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="status" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="manv" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="fileDinhKem" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="fileDinhKemLuu" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_PhongBan" Member="tbl_PhongBans">
+    <Type Name="tbl_PhongBan">
+      <Column Name="maPhongBan" Type="System.String" DbType="NVarChar(150) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="tenPhongBan" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="maCha" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NS_DM_PhongBan" Member="NS_DM_PhongBans">
+    <Type Name="NS_DM_PhongBan">
+      <Column Name="MaPhongBan" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Ten" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="ChucNang" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CapBac" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MaCha" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="NS_DM_PhongBan_NS_TBL_PhongBanNhanVien" Member="NS_TBL_PhongBanNhanViens" ThisKey="MaPhongBan" OtherKey="MaPhongBan" Type="NS_TBL_PhongBanNhanVien" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NS_DM_ChucDanh" Member="NS_DM_ChucDanhs">
+    <Type Name="NS_DM_ChucDanh">
+      <Column Name="MaChucDanh" Type="System.String" DbType="VarChar(100) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TenChucDanh" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="NhiemVu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MaLoaiDanhGia" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="NS_DM_ChucDanh_NS_TBL_ChucDanhNhanVien" Member="NS_TBL_ChucDanhNhanViens" ThisKey="MaChucDanh" OtherKey="MaChucDanh" Type="NS_TBL_ChucDanhNhanVien" />
+    </Type>
+  </Table>
+</Database>

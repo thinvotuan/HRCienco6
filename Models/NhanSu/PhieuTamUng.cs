@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using BatDongSan.Models.HeThong;
+using BatDongSan.Models.NhanSu;
+
+namespace BatDongSan.Models.NhanSu
+{
+    public class PhieuTamUng
+    {
+        public string maPhieu { get; set; }
+
+        public string maNhanVien { get; set; }
+
+        public System.Nullable<System.DateTime> ngayLap { get; set; }
+        public System.Nullable<System.DateTime> ngayTamUng { get; set; }
+
+        public System.Nullable<System.Decimal> soTien { get; set; }
+
+        public int? trangThaiDaThu { get; set; }
+
+        public int? trangThaiDaXacNhan { get; set; }
+        
+        public int? tamUngThang { get; set; }
+
+        public int? tamUngNam { get; set; }
+
+        public string ghiChu { get; set; }
+
+        public byte trangThai { get; set; }        
+
+        public string nguoiLap { get; set; }
+
+        public int? TrangThaiDuyet { get; set; }
+
+        public NhanVienModel NhanVien { get; set; }
+
+        public NhanVienModel NhanVienLapPhieu { get; set; }      
+
+        public DMNguoiDuyet Duyet { get; set; }
+
+        public int maQuiTrinhDuyet { get; set; }
+
+        public PhieuTamUng()
+        {
+            Duyet = new DMNguoiDuyet();
+        }
+    }
+}

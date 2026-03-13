@@ -1,0 +1,350 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+   
+
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    .btnXemChiTiet{
+		color:green;
+		cursor:pointer;
+        font-size:15px;
+	}
+        .btnXemChiTiet:hover
+        {
+            color:#d2790b;
+        }
+        .infor_capnhat, .infor_LuongNV, .infor_DuyetLuongNV,.infor_SendBLLuongNV
+    {
+        padding: 5px;
+        background: rgb(226, 144, 72);
+        border-radius: 3px;
+        color: #fff;
+        box-sizing: border-box;
+        margin: 5px auto;
+        line-height: 1.7;
+    }
+  .table-hover > tbody > tr:hover {
+    background-color: #ffffff;
+}
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSearch").click(function () {
+            $(".infor_SendBLLuongNV,.infor_DuyetLuongNV,.infor_LuongNV").css('display', 'none').html('');
+            Search();
+        });
+        $("#nam,#thang").change(function () {
+            $("#btnSearch").click();
+        });
+        $(document).on('click', '.btnXemChiTiet', function () {
+            
+            var parentId = $(this).parent().attr('id');
+            var clsParentId = "." + parentId + " .showDetailLuong";
+            var idParentId = "#" + parentId;
+           
+            if ($(clsParentId).css('display') == 'none') {
+               
+                $(clsParentId).show('fast');
+                
+                $(this).html('<i class="fa fa-arrow-circle-up" aria-hidden="true"></i>Ẩn').css('color', 'red');
+                
+                var thangCurent = $(idParentId + " .thangCurrent").val();
+                var maNhanVienCurrent = $(idParentId + " .maNhanVienCurrent").val();
+
+                var url = '@Url.Action("ViewChiTietLuong", "BangLuongNVVIP")' + "?nam=" + $("#nam").val() + "&thang=" + $("#thang").val() + "&maNhanVien=" + maNhanVienCurrent;
+                var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+                $(clsParentId).html(imageUrl);
+                $(clsParentId).load(url, function () {
+                });
+            }
+            else{
+                $(clsParentId).hide('fast');
+                $(this).html('<i class="fa fa-arrow-circle-down" aria-hidden="true"></i>Xem chi tiết').css('color', 'green');
+                
+            }
+           
+        });
+        // Cap nhat bang luong chi tiet
+        $(document).on('click', '#btnTinhluongNV', function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+            $('.infor_LuongNV').html(imageUrl).css('display', 'block');
+            $.ajax({
+
+                type: "POST",
+                url: '/BangLuongNVVIP/UpdateLuongNV',
+                data: {
+                    'nam': $("#nam").val(),
+                    'thang': $("#thang").val()
+
+                },
+                success: function (result) {
+                    $(".infor_LuongNV").css('display', 'block');
+
+                    if (result.kq == true) {
+                        $(".infor_LuongNV").html('Cập nhật thành công bảng lương nhân viên VIP tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+                    else {
+                        $(".infor_LuongNV").html('Cập nhật thất bại bảng lương nhân viên VIP tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                    }
+
+                    Search();
+                }
+            });
+
+        });
+        $(document).on('click', '#btnXuatFileBLNV', function () {
+            var url = '/BangLuongNVVIP/XuatFileBLNV' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val();
+
+            window.location = url;
+
+        });
+        $(document).on('click', '#btnXuatFileBLNVBoPhan', function () {
+
+            var url = '/BangLuongNVVIP/XuatFileBLNVBoPhan' + "?thang=" + $("#thangBP").val() + "&nam=" + $("#namBP").val();
+
+            window.location = url;
+
+        });
+        $(document).on('click', '#btnDuyetBLNV', function () {
+            bootbox.confirm("Bạn có chắc chắn duyệt bảng lương? Sau khi duyệt bảng lương sẽ được đóng.", function (result) {
+                if (result) {
+                    var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+                    $('.infor_DuyetLuongNV').html(imageUrl).css('display', 'block');
+                    $.ajax({
+
+                        type: "POST",
+                        url: '/BangLuongNVVIP/DuyetLuongNV',
+                        data: {
+                            'nam': $("#nam").val(),
+                            'thang': $("#thang").val()
+
+                        },
+                        success: function (result) {
+                            $(".infor_DuyetLuongNV").css('display', 'block');
+
+                            if (result.kq == true) {
+                                $(".infor_DuyetLuongNV").html('Đã duyệt bảng lương nhân viên VIP tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                            }
+                            else {
+                                $(".infor_DuyetLuongNV").html('Duyệt bảng lương nhân viên VIP thất bại tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                            }
+
+                            Search();
+                        }
+                    });
+                }
+            });
+        });
+        $(document).on('click', '#btnSendMailNV', function () {
+
+            var checkSend = $("#checkSend").val();
+            if (checkSend == 1) {
+                bootbox.confirm("Tháng này đã send mail, bạn có muốn tiếp tục gửi nữa không?", function (result) {
+                    if (result) {
+                        sendMail();
+                    }
+                });
+            }
+            else {
+                bootbox.confirm("Bạn có chắc chắn gửi mail cho nhân viên không?", function (result) {
+                    if (result) {
+                        sendMail();
+                    }
+                });
+            }
+            
+            
+        });
+        $(document).on('click', '#btnXuatFileBLNV', function () {
+           
+            var url = '@Url.Action("XuatFileBLNV", "BangLuongNVVIP")' + "?thang=" + $("#thang").val() + "&nam=" + $("#nam").val();
+
+            window.location = url;
+           
+         });
+
+        Search();
+      
+        
+
+    });
+    function sendMail() {
+        var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+        $('.infor_SendBLLuongNV').html(imageUrl).css('display', 'block');
+        $.ajax({
+
+            type: "POST",
+            url: '/BangLuongNVVIP/SendBangLuongNV',
+            data: {
+                'nam': $("#nam").val(),
+                'thang': $("#thang").val()
+
+            },
+            success: function (result) {
+                $(".infor_SendBLLuongNV").css('display', 'block');
+
+                if (result.kq == true) {
+                    $(".infor_SendBLLuongNV").html('Đã gửi mail nhân viên tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                }
+                else {
+                    $(".infor_SendBLLuongNV").html('Gửi mail nhân viên thất bại tháng: ' + $("#thang").val() + " năm: " + $("#nam").val());
+                }
+
+               Search();
+            }
+        });
+    }
+    function OnCriteriaPC(page) {
+      
+        var url = '@Url.Action("LoadXemBangLuong", "BangLuongNVVIP")' + "?nam=" + $("#nam").val() + "&thang=" + $("#thang").val() + "&qSearch=" + $("#qSearch").val()+ "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+     
+        var url = '@Url.Action("LoadXemBangLuong", "BangLuongNVVIP")' + "?nam=" + $("#nam").val() + "&thang=" + $("#thang").val() + "&qSearch=" + $("#qSearch").val() + "&_page=0";
+
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#tbody').html(imageUrl);
+            $('#tbody').load(url, function () 
+            {
+                //Check Duyet
+                var checkDuyet = $("#checkDuyet").val();
+
+                if (checkDuyet == 1) {
+                    $("#btnTinhluongNV,#btnDuyetBLNV").css("display", "none");
+                    $("#btnSendMailNV").css("display", "block");
+                }
+                else {
+                    $("#btnTinhluongNV,#btnDuyetBLNV").css("display", "block");
+                    $("#btnSendMailNV").css("display", "none");
+                }
+                // End Check Duyet
+                
+            });
+        }
+
+
+        function Reset() {
+            location.href = '@Url.Action("XemBangLuong", "BangLuongNVVIP")';
+        }
+   
+   
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+        
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active"><a><span>Bảng lương nhân viên VIP</span></a></li>
+        </ul>
+    </div>
+    <div id="container">
+        <div id="filter-panel" class="collapse filter-panel" style="display: block;position:relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 26px; float:left">
+                            
+                             Tháng:@Html.DropDownList("thang", ViewData["lstThang"] as SelectList, new  {@style="width:150px" })
+                              Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new  {@style="width:150px" })
+                           
+                            
+                        </div>
+                        <div style="float: right">
+                            <input type="text" id="qSearch" class="form-control" style="width:200px;float:left;margin-right:5px" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);">
+                            <button class="btn btn-info" id="btnSearch" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+                            <button class="btn btn-info" id="btnTinhluongNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important; display: block;">Tính lương nhân viên</button>
+                            <button class="btn btn-info" id="btnDuyetBLNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important; display: block;">Duyệt</button>
+                            @*<button class="btn btn-info" id="btnXuatFileBLNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>*@
+                             <button class="btn btn-info" id="btnXuatFileBLNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>
+
+                            <button class="btn btn-info" id="btnSendMailNV" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important; display: none;">Send mail NV</button>
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        <div class="infor_LuongNV" style="display:none"></div>
+        <div class="infor_DuyetLuongNV" style="display:none"></div>
+        <div class="infor_SendBLLuongNV" style="display:none"></div>
+        
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+                        <thead>
+                            <tr>
+                                <th style="width: 35px; text-align:center">STT
+                                </th>
+                                <th style="text-align:center">Nhân viên
+                                </th>
+                               
+                                <th style="text-align:center">Tháng
+                                </th>
+                                 <th style="text-align:center">Tổng lương
+                                </th>
+                               
+                                 <th style="text-align:center">Ngày công chuẩn</th>
+                                <th style="text-align:center">Tổng ngày công</th>
+                                <th style="text-align:center">Thuế</th>
+                                <th style="text-align:center">Bảo hiểm</th>
+                                <th style="text-align:center">Thực lãnh</th>
+                                <th style="min-width:100px;"></th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+
+                   
+        </table>
+
+    </div>
+</fieldset>

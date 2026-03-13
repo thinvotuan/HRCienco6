@@ -1,0 +1,177 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDiLamLai
+@{
+    ViewBag.Title = "Cập nhật phiếu đề nghị đi làm lại";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#ghiChu").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+    });
+
+    function CheckForm() {
+        var flag = true;
+        if ($("#ngayDiLamLai").val() == "") {
+            $("#ngayDiLamLai").addClass("error").attr("title", "Vui lòng nhập ngày đi làm lại.");
+            flag = false;
+
+        }
+        return flag;
+    }
+
+
+    function closePopup_onclick() {
+        $('#divUploadFile').hide();
+        $('.jqmOverlay').remove();
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+    function chonNguoiDuyet() {
+        @* Không duyệt động var lyDo = "";
+        var url = ('@Url.Action("SelectCapDuyet1/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $("#NhanVienLapPhieu_maNhanVien").val() + '&lyDo=' + lyDo + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 800, 500);*@
+
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhieuDiLamLai")' + $('#maPhieu').val();
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+}
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Cập nhật phiếu đề nghị đi làm lại</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+
+                <tr>
+                    <td class="tdtitle">Số phiếu
+                            <input type="hidden" id="url" value="@ViewBag.URL" />
+                        @Html.HiddenFor(m => m.maQuiTrinhDuyet)
+                    </td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", @readonly = true })</td>
+                    <td class="tdtitle">Người lập</td>
+                    <td>@Html.TextBoxFor(model => model.NhanVienLapPhieu.hoVaTen, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(m => m.NhanVienLapPhieu.maNhanVien)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Nhân viên</td>
+                    <td style="width: 35%">
+                        @Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(m => m.NhanVien.maNhanVien)
+
+
+                    </td>
+                    <td style="width: 15%" class="tdtitle">Ngày đi làm lại</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.ngayDiLamLai, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ghi chú</td>
+                    <td colspan="3">
+                        <div id="editor">@Html.Raw(Model.ghiChu)</div>
+                        @Html.HiddenFor(model => model.ghiChu, new { @class = "form-control" })
+                    </td>
+
+                </tr>
+            </table>
+            <div style="text-align: right; margin-bottom: 10px">
+
+                @if (ViewBag.TenTrangThaiDuyet != "KDD")
+                {
+                    if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.NhanVienLapPhieu.maNhanVien == user1.manv && Model.Duyet.maBuocDuyet != "KDD" && Model.Duyet.maBuocDuyet != "DD")
+                    {
+                    <button class="btn btn-info" type="button" onclick="chonNguoiDuyet();">Gửi duyệt </button>
+                    }
+                }
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+
+    </div>
+    <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+        <div class="modal-dialog  modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 98%">
+                        <div class="row">
+                            <div id="filter-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

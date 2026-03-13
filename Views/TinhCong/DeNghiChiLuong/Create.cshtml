@@ -1,0 +1,326 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model DeNghiChiLuong
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $().ready(function () {
+        $("#btnTroVe").click(function () {
+            location.href = '@Url.Action("Index", "DeNghiChiLuong")';
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                $("#form-submit").submit();
+            }
+        });
+    });
+    function CheckForm() {
+        var flag = true;
+        if ($("#noiDung").val() == "") {
+            $("#noiDung").addClass("error").attr("title", "Vui lòng nhập nội dung.");
+            flag = false;
+
+        }
+        var lenghtChid = $("#tbody").find("tr").length;
+        if (lenghtChid == 0) {
+            Alert.error("Không có bộ phận nào được chọn.", "Thông báo", { displayDuration: 3000 });
+            flag = false;
+        }
+        $.each($("[name='TenBoPhanTinhLuong']"), function () {
+            var index = $("[name='TenBoPhanTinhLuong']").index(this);
+            if ($("[name='TenBoPhanTinhLuong']:eq(" + index + ")").val() == "") {
+                $("[name='TenBoPhanTinhLuong']:eq(" + index + ")").addClass("error").attr("title", "Vui lòng nhập tên bộ phận tính lương.");
+                flag = false;
+            }
+            if ($("[name='LuongThang']:eq(" + index + ")").val() == "") {
+                $("[name='LuongThang']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='PhuCapCT']:eq(" + index + ")").val() == "") {
+                $("[name='PhuCapCT']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='PhuCapKhac']:eq(" + index + ")").val() == "") {
+                $("[name='PhuCapKhac']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='BHXH']:eq(" + index + ")").val() == "") {
+                $("[name='BHXH']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='ThueTNCN']:eq(" + index + ")").val() == "") {
+                $("[name='ThueTNCN']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='TruyLanhTruyThu']:eq(" + index + ")").val() == "") {
+                $("[name='TruyLanhTruyThu']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='ChuyenKhoan']:eq(" + index + ")").val() == "") {
+                $("[name='ChuyenKhoan']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+            if ($("[name='DoanPhi']:eq(" + index + ")").val() == "") {
+                $("[name='DoanPhi']:eq(" + index + ")").addClass("error").attr("title", "Số tiền không được rỗng.");
+                flag = false;
+            }
+        });
+        return flag;
+    }
+    function AddNewRow() {
+        var number = 1 + Math.floor(Math.random() * 10000);
+        var table = document.getElementById("tbody");
+        var stt = table.rows.length;
+        var stringBuilder = "";
+        stringBuilder += "<tr>";
+        stringBuilder += "<td align='center'>" + (stt + 1) + "</td>";
+        stringBuilder += "<td><input name='TenBoPhanTinhLuong' type='text' value='' style='width:100%'></td>";
+        stringBuilder += "<td><input name='LuongThang' id='LuongThang" + number + "' class='numberinputNega' type='text' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='PhuCapCT' id='PhuCapCT" + number + "' type='text' class='numberinputNega' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='PhuCapKhac' id='PhuCapKhac" + number + "' type='text' class='numberinputNega' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='BHXH' id='BHXH" + number + "'  type='text' value='0' class='numberinputNega' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='ThueTNCN' id='ThueTNCN" + number + "' type='text' class='numberinputNega' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='TruyLanhTruyThu' id='TruyLanhTruyThu" + number + "' class='numberinputNega' type='text' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='DoanPhi' id='DoanPhi" + number + "' type='text' class='numberinputNega' value='0' style='width:100%;text-align:right'></td>";
+        stringBuilder += "<td><input name='ChuyenKhoan' id='ChuyenKhoan" + number + "' type='text' class='numberinputNega' value='0' style='width:100%;text-align:right'></td>";
+        
+
+        stringBuilder += "<td align ='center'><a href='javascript:void(0)' style='font-size:18px;' onclick='Delete(this)'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+        stringBuilder += "</tr>";
+        if ($("#tbody tr").length > 0) {
+            $("#tbody").find("tr").end().append(stringBuilder)
+        } else {
+            $("#tbody").html(stringBuilder);
+        }
+        setEvent();
+    }
+    function setEvent() {
+        $(".numberinputNega").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-9999999999' });
+
+        //Lương tháng
+        $("[name='LuongThang']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='LuongThang']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblLuongThang").autoNumeric("set", tongLuongThang);
+        });
+        //phụ cấp công trình
+        $("[name='PhuCapCT']").keyup(function () {
+            var tongPCCT = 0;
+            $.each($("[name='PhuCapCT']"), function () {
+                tongPCCT += getNumber($(this).val());
+            });
+            $("#lblPhuCapCT").autoNumeric("set", tongPCCT);
+        });
+        $("[name='PhuCapKhac']").keyup(function () {
+            var tongPCK = 0;
+            $.each($("[name='PhuCapKhac']"), function () {
+                tongPCK += getNumber($(this).val());
+            });
+            $("#lblPhuCapKhac").autoNumeric("set", tongPCK);
+        });
+        $("[name='BHXH']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='BHXH']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblBHXH").autoNumeric("set", tongLuongThang);
+        });
+        $("[name='ThueTNCN']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='ThueTNCN']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblThueTNCN").autoNumeric("set", tongLuongThang);
+        });
+        $("[name='TruyLanhTruyThu']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='TruyLanhTruyThu']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblTruyLanhTruyThu").autoNumeric("set", tongLuongThang);
+        });
+        $("[name='ChuyenKhoan']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='ChuyenKhoan']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblChuyenKhoan").autoNumeric("set", tongLuongThang);
+        });
+        $("[name='DoanPhi']").keyup(function () {
+            var tongLuongThang = 0;
+            $.each($("[name='DoanPhi']"), function () {
+                tongLuongThang += getNumber($(this).val());
+            });
+            $("#lblDoanPhi").autoNumeric("set", tongLuongThang);
+        });
+
+    }
+    function Delete(obj) {
+        $(obj).parent().parent().remove();
+        var table = document.getElementById("tbody");
+        for (var i = 0; i < table.rows.length; i++) {
+            $('#tbody' + ' tr:eq(' + i + ')').find("td:first").html(i + 1);
+        }
+        TinhTongLuong();
+    }
+    function TinhTongLuong() {
+
+        var tongLuongThang = 0;
+        $.each($("[name='LuongThang']"), function () {
+            tongLuongThang += getNumber($(this).val());
+        });
+        $("#lblLuongThang").autoNumeric("set", tongLuongThang);
+
+        //phụ cấp công trình
+
+        var tongPCCT = 0;
+        $.each($("[name='PhuCapCT']"), function () {
+            tongPCCT += getNumber($(this).val());
+        });
+        $("#lblPhuCapCT").autoNumeric("set", tongPCCT);
+
+
+        var tongPCK = 0;
+        $.each($("[name='PhuCapKhac']"), function () {
+            tongPCK += getNumber($(this).val());
+        });
+        $("#lblPhuCapKhac").autoNumeric("set", tongPCK);
+
+
+        var tongBHXH = 0;
+        $.each($("[name='BHXH']"), function () {
+            tongBHXH += getNumber($(this).val());
+        });
+        $("#lblBHXH").autoNumeric("set", tongBHXH);
+
+
+        var tongThueTNCN = 0;
+        $.each($("[name='ThueTNCN']"), function () {
+            tongThueTNCN += getNumber($(this).val());
+        });
+        $("#lblThueTNCN").autoNumeric("set", tongThueTNCN);
+
+
+        var tongTruyLanhTruyThu = 0;
+        $.each($("[name='TruyLanhTruyThu']"), function () {
+            tongTruyLanhTruyThu += getNumber($(this).val());
+        });
+        $("#lblTruyLanhTruyThu").autoNumeric("set", tongTruyLanhTruyThu);
+
+
+        var tongChuyenKhoan = 0;
+        $.each($("[name='ChuyenKhoan']"), function () {
+            tongChuyenKhoan += getNumber($(this).val());
+        });
+        $("#lblChuyenKhoan").autoNumeric("set", tongChuyenKhoan);
+
+        var tongDoanPhi = 0;
+        $.each($("[name='DoanPhi']"), function () {
+            tongDoanPhi += getNumber($(this).val());
+        });
+        $("#lblDoanPhi").autoNumeric("set", tongDoanPhi);
+
+    }
+</script>
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Thêm bổ sung phiếu đề nghị chi lương</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Số phiếu</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.soPhieu, new { @class = "form-control", @readonly = true })</td>
+                    <td style="width: 15%" class="tdtitle">Ngày lập</td>
+                    <td style="width: 35%">
+                        @Html.TextBoxFor(model => model.ngayLap, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker", @readonly = true })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Tháng, năm</td>
+                    <td>
+                        @Html.DropDownList("thang", ViewBag.Thangs as SelectList, new { @class = "btn btn-sm btn-default btn-select btn-select-light", @style = "padding:2px !important;" })/
+                        @Html.DropDownList("nam", ViewBag.Nams as SelectList, new { @class = "btn btn-sm btn-default btn-select btn-select-light", @style = "padding:2px !important;" })
+                    </td>
+                    <td class="tdtitle">Người lập</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.tenNguoiLap, new { @class = "form-control datepicker", @readonly = true })
+                        @Html.Hidden("maNguoiLap", Model.maNguoiLap)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nội dung</td>
+                    <td colspan="3">
+                        @Html.TextAreaFor(model => model.noiDung, new { @class = "form-control", @style = "font-size:13px;resize:vertical;" })
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-striped table-hover table-condensed tableThemeCustome" id="tbl-child-create">
+                <thead>
+                    <tr>
+                        <td colspan="10" style="text-align: right">
+                            <button id="btnCreate" onclick="AddNewRow()" type="button" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-plus"></span>Thêm
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 35px">STT</th>
+                        <th>Bộ phận tính lương</th>
+                        <th>Lương tháng</th>
+                        <th>Phụ cấp Công trình</th>
+                        <th>Phụ cấp khác</th>
+                        <th>BHXH</th>
+                        <th>Thuế TNCN</th>
+                        <th>Truy lãnh, truy thu</th>
+                        <th>Đoàn phí</th>
+                        <th>Chuyển khoản</th>
+                        
+                        <th style="width: 45px"></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+                <tfoot>
+                    <tr style="font-weight: bold">
+                        <td colspan="2" style="text-align: center">Tổng</td>
+                        <td style="text-align: right"><span id="lblLuongThang" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblPhuCapCT" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblPhuCapKhac" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblBHXH" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblThueTNCN" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblTruyLanhTruyThu" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblDoanPhi" class="numberinputNega">0</span></td>
+                        <td style="text-align: right"><span id="lblChuyenKhoan" class="numberinputNega">0</span></td>
+                        
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="text-align: right; margin-bottom: 10px; margin-top: 10px">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+    </div>
+</form>
+

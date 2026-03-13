@@ -1,0 +1,147 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model tbl_NS_PhuCapTheoCongTrinh
+@{
+    ViewBag.Title = "Chi tiết phụ cấp theo công trình";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });       
+
+        $("#btnGuiDuyet").click(function () {
+            chonNguoiDuyet();
+        });
+
+        $("#btnDuyetPhieu").click(function () {
+            duyetPhieu();
+        });
+
+
+        $("#btnTraLai").click(function () {
+            TraLai();
+        });
+    })
+
+    function chonNguoiDuyet() {
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#maPhuCap').val() + '?maCongViec=PhuCapTheoCongTrinh' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function duyetPhieu() {
+        var url = ('@Url.Action("DuyetPhieu/", "DMNguoiDuyet")' + $('#maPhuCap').val() + '?maCongViec=PhuCapTheoCongTrinh' + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function TraLai() {
+        var tenBD = $('#tenBuocDuyet').val().replace(/\ /g, '');
+        var url = ('@Url.Action("TraLaiDong/", "DMNguoiDuyet")' + $('#maPhuCap').val() + '?tenBuocDuyet=' + tenBD + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&maCongViec=PhuCapTheoCongTrinh' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhuCapTheoCongTrinh")' + $('#id').val();
+    }
+</script>
+@{    
+    BatDongSan.Models.HeThong.Sys_User user = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+    var duyet = ViewBag.Duyet as BatDongSan.Models.HeThong.DMNguoiDuyet;
+}
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Chi tiết phụ cấp theo công trình</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã phụ cấp<span style="font-style: italic; color: red">*</span></td>
+            <td>
+
+                @Html.TextBoxFor(model => model.maPhuCap, new { @class = "form-control", required = "required", @readonly = "readonly" })
+                <input type="hidden" id="url" value="@ViewBag.URL" />
+                @Html.HiddenFor(m => m.maQuiTrinhDuyet)
+                @Html.HiddenFor(m => m.id)
+                <input type="hidden" id="tenBuocDuyet" value="@ViewBag.TenBuocDuyet " />
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên phụ cấp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenPhuCap, new { @class = "form-control", required = "required" })
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Phòng ban <span style="font-style: italic; color: red">*</span>
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.maPhongBan, new { @class = "form-control", required = "required", @readonly = "readonly" })
+            </td>
+
+
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Ngày áp dụng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.ngayApDung, "{0:dd/MM/yyyy}", new { @class = "form-control", required = "required" })</td>
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Số tiền <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.soTien, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                @if ((duyet == null || duyet.tinhTrang == 0) && Model.nguoiLap == user.manv)
+                {                         
+                    <button class="btn btn-info" type="button" id="btnGuiDuyet">Gửi duyệt </button>
+                }
+                else if (duyet != null && (duyet.maBuocDuyet != "DTN" && duyet.maBuocDuyet != "DD") && duyet.nguoiDuyet.maNhanVien == user.manv)
+                {                         
+                    <button class="btn btn-info" type="button" id="btnDuyetPhieu">Duyệt phiếu này</button>
+                    <button class="btn btn-info" type="button" id="btnTraLai">Trả lại</button>
+                }
+                <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "PhuCapTheoCongTrinh")    '" />
+            </td>
+        </tr>
+
+
+    </table>
+</div>
+
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+
+    #tbl-mota td
+    {
+        border: none;
+    }
+</style>

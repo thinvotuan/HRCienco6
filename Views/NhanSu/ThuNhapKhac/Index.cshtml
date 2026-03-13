@@ -1,0 +1,146 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_NS_ThuNhapKhac_IndexResult>
+@{
+    ViewBag.Title = "Danh sách phiếu thu nhập khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            location.href = "@Url.Action("Create", "ThuNhapKhac")";
+        });
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "ThuNhapKhac")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn chắc chắn xoá phiếu này không ?", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        });
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "ThuNhapKhac")" + "/" + this.value;
+            location.href = url;
+        });
+        $(document).on("click", ".btnDetails", function () {
+            var url = "@Url.Action("Details", "ThuNhapKhac")" + "/" + this.value;
+            location.href = url;
+        });
+        $('#btnTimKiem').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("ViewIndex", "ThuNhapKhac")" + "?qSearch=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $('#content').load(url);
+            successPaging();
+        });
+
+        $('#trangThaiDuyet').change(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("ViewIndex", "ThuNhapKhac")" + "?qSearch=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&trangThai=" + $("#trangThaiDuyet").val();
+            beginPaging();
+            $('#content').load(url);
+            successPaging();
+         });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $("#btnCreateTrucTiep").click(function () {
+            location.href = "@Url.Action("CreateTrucTiep", "ThuNhapKhac")";
+        });
+    });
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+    function ToWeek() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(7, "day"));
+    }
+    function ToMonth() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(1, "month"));
+    }
+
+    //Lịch sử duyệt
+    function ViewDetailHistory(soPhieu, maQuiTrinh) {
+        var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + soPhieu + '?maQuiTrinh=' + maQuiTrinh;
+        PopUpManager(url, "DUYET", 800, 300);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+</script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+     #content th
+    {
+        text-align:center
+    }
+    #filter-panel td
+    {
+        border: none;
+    }
+</style>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Danh sách phiếu thu nhập khác</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block;position:relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="line-height: 28px;">
+                            <input type="text" id="tuNgay" class="form-control datepicker" placeholder="Từ ngày" style="width: 80px; float: left;margin-right:5px" />
+                            <input type="text" id="denNgay" class="form-control datepicker" placeholder="Đến ngày" style="width: 80px; float: left;margin-right:5px" />
+                            <div style="float:left">
+                                <a href="javascript:void(0)" onclick="ToWeek()"><i class="fa fa-calendar" aria-hidden="true"></i> 7 ngày</a> <a href="javascript:void(0)" onclick="ToMonth()"><i class="fa fa-calendar" aria-hidden="true"></i> 30 ngày</a>
+                            </div>
+                              @Html.DropDownList("trangThaiDuyet", ViewBag.TrangThaiDuyet as SelectList, new { @class = "form-control", @style = "float:right;width:270px" })
+                            <span style="float: right">Trạng thái:</span>
+                        </div>
+                        <div style="clear: both"></div>
+                        <div>
+                            <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:40%;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnTimKiem" type="button" style="margin-top: 2px;margin-left:2px; float: left">Tìm kiếm</button>
+                        </div>
+                        <div class="form-group" style="float: right;margin-top:2px;">
+                            <button class="btn btn-info" id="btnModalCreate" type="button">Thêm</button>
+                            @*<button class="btn btn-info" id="btnCreateTrucTiep" type="button">Tạo phiếu trực tiếp</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("ViewIndex");}
+            </div>
+
+
+        </fieldset>
+    </div>
+</form>

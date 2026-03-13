@@ -1,0 +1,159 @@
+﻿@model IPagedList<BatDongSan.Models.ChamCong.sp_XemNhanVienRaVaoNewResult>
+@{    
+    //int page_ = Convert.ToInt32(ViewData["page"]);
+    //int total_ = Convert.ToInt32(ViewData["total"]);
+    string[] parameters = TempData["Params"].ToString().Split(',');
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+</script>
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style="width: 45px">STT</th>
+            <th style="width: 105px">Mã nhân viên</th>
+            <th style="width: 120px">Tên nhân viên</th>
+            <th style="width: 120px">Mã chấm công</th>
+            <th style="width: 120px">Mã máy quét</th>
+            <th style="width: 120px">Tên máy quét</th>
+            <th style="width: 80px">Ngày quét</th>
+            <th style="width: 80px">Thứ</th>
+            <th style="width: 80px">Giờ quét</th>
+        </tr>
+    </thead>
+    <tbody id="load">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+            <tr>
+                <td style="text-align: center">@item.NUMBER</td>
+                <td style="text-align: center">@item.employeeId</td>
+                <td style="text-align: center">@item.fullName</td>
+                <td style="text-align: center">@item.badgenumber</td>
+                <td style="text-align: center">@item.SN</td>
+                <td style="text-align: center">@item.MachineName</td>
+                <td style="text-align: center">@String.Format("{0: dd/MM/yyyy}", item.checktime)</td>
+                <td style="text-align: center">@item.checktime.Value.DayOfWeek.ToString()</td>
+                <td style="text-align: center">@item.checktime.Value.ToString("HH:mm:ss")</td>
+            </tr>               
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new { controller = "ChamCong", action = "IndexUser", searchString = parameters[0], tuNgay = parameters[1], denNgay = parameters[2] }))
+    </ul>
+</div>
+
+@*<style>
+    .TongSoDong
+    {
+        float: left;
+        line-height: 32px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        padding: 0 10px;
+        border-radius: 4px;
+        background: #0F4C99;
+        color: #fff;
+    }
+
+    .Page
+    {
+        float: left;
+        line-height: 32px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #fff;
+    }
+
+        .Page .pageActive
+        {
+            background: #0F4C99;
+        }
+
+        .Page a
+        {
+            padding: 9px 15px;
+            transition: all 300ms;
+            margin: -2px;
+            color: #337ab7;
+        }
+
+        .Page span
+        {
+            padding: 9px 15px;
+            transition: all 300ms;
+            margin: -2px;
+            color: #fff;
+        }
+
+        .Page a:hover
+        {
+            text-decoration: none;
+            background: #337ab7;
+            color: #fff;
+        }
+
+        .Page .pageFirst:hover
+        {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .Page .pageLast:hover
+        {
+            border-radius: 0px 4px 4px 0px;
+        }
+</style>*@
+
+@*<div style="margin-top: 10px">
+    <div class="TongSoDong">
+        Tổng số dòng: <strong>@ViewData["totalRow"]</strong>
+    </div>
+    <div class="Page">    
+        @if (page_ > 1)
+        {
+       
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(1);">First</a>
+            <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@(page_ - 1));">Previous</a>
+       
+        }       @if (page_ - 2 >= 1)
+                { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@page_-2));">
+                @(page_ - 2)</a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@(page_ - 1));">
+                    @(page_ - 1)</a>
+                }<span class="pageActive">@page_</span>
+        @if (page_ + 2 <= total_)
+        { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@(page_ + 1));">
+                @(page_ + 1)</a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@(page_ + 2));">
+                    @(page_ + 2)</a>
+        }
+        @if (page_ < total_)
+        {        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaTU(@(page_ + 1));">Next</a>
+            <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaTULast(@total_);">Last</a>
+       
+        }
+
+    </div>
+</div>*@

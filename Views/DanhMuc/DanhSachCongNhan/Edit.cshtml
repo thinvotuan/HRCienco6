@@ -1,0 +1,195 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_NS_DanhSachCongNhan
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<style>
+    .successOk
+    {
+        color:green;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#maChamCong").on("input", function () {
+            var maCCBanDau = $("#maCCBanDau").val();
+            if ($("#maChamCong").val() != maCCBanDau && $("#maChamCong").val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/DanhSachCongNhan/CheckMaChamCong",
+                    data: {
+
+                        maChamCong: $("#maChamCong").val()
+
+                    },
+                    error: function () {
+                        alert("Error");
+                        return false;
+                    },
+                    success: function (result) {
+
+                        if (result == 1) {
+
+                            $(".maCCInfor").html('Mã chấm công này đã tồn tại').addClass('error').removeClass("successOk");
+                            $("#maChamCong").addClass("error");
+
+                            $("#btnSubmit").hide();
+                            
+                        }
+                        else {
+                            $(".maCCInfor").html('Mã chấm công này có thể sử dụng').removeClass('error').addClass("successOk");
+                            $("#maChamCong").removeClass("error");
+                            if ($("#maCongNhan").hasClass("error") == false && $("#maChamCong").hasClass("error") == false) {
+                                $("#btnSubmit").show();
+                            }
+                        }
+
+
+                    }
+                });
+            }
+            else {
+                $(".maCCInfor").html('').removeClass('error').addClass("successOk");
+                $("#maChamCong").removeClass("error");
+                if ($("#maCongNhan").hasClass("error") == false && $("#maChamCong").hasClass("error") == false) {
+                    $("#btnSubmit").show();
+                }
+            }
+
+        });
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0', vMax: '10' });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Sửa công nhân</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã công nhân<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maCongNhan, new { @class = "form-control", required = "required", @readonly="readonly" })
+                <input type="hidden" value="@Model.maChamCong" name="maCCBanDau" id="maCCBanDau"/>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Mã chấm công <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maChamCong, new { @class = "form-control", required = "required"})
+                <span class="maCCInfor"></span>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Họ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.ho, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.ten, new { @class = "form-control", required = "required" })</td>
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Điện thoại<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.phoneNumber, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Giới tính<span style="font-style: italic; color: red">*</span></td>
+            <td>
+                <label class="radio-inline" style="font-size: 13px">
+                    @Html.RadioButtonFor(model => model.gioiTinh, true, new { style = "width:auto", required = "required" }) Nam
+                </label>
+                <label class="radio-inline" style="font-size: 13px">
+                    @Html.RadioButtonFor(model => model.gioiTinh, false, new { style = "width:auto", required = "required" }) Nữ
+                </label>
+
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Email<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.email, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày sinh <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.ngaySinh, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })</td>
+        </tr>
+
+        <tr>
+             <td class="tdtitle">Nơi sinh <span style="font-style: italic;  color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.noiSinh, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+             <td class="tdtitle">Số CMND <span style="font-style: italic;color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.CMNDSo, new { @class = "form-control", required = "required" })
+                            <span style="color: red; font-style: italic">@TempData["CMND"]</span>
+                        </td> 
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày cấp CMND <span style="font-style: italic; color: red">*</span></td>
+             <td>@Html.TextBoxFor(model => model.CMNDNgayCap, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })</td>
+                        
+        </tr>
+        <tr>
+              <td class="tdtitle">Nơi cấp CMND <span style="font-style: italic;  color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.CMNDNoiCap, new { @class = "form-control", required = "required" })</td>
+
+        </tr>
+        <tr>
+            <td class="tdtitle">Bộ phận<span style="font-style: italic;  color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.boPhan, new { @class = "form-control", required = "required" })</td> 
+        </tr>
+         <tr>
+            <td class="tdtitle">Ngày vào làm <span style="font-style: italic;  color: red">*</span></td>
+              <td>@Html.TextBoxFor(model => model.ngayVaoLam, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })</td>
+                    
+        </tr>
+        
+       
+        <tr>
+        <td class="tdtitle">Thông tin khác</td>
+                        <td>@Html.TextBoxFor(model => model.thongTinKhac, new { @class = "form-control" })</td> 
+            </tr>
+
+    </table>
+</div>
+@*<div style="margin-top: 15px" class="col-sm-5">
+    <div style="float: right">
+        <table class="table table-responsive" id="tbl-mota">
+            <tr class="headrow">
+                <td style="width:75px;">Số cấp bậc</td>
+                <td>Mô tả</td>
+            </tr>
+            @foreach (var item in capBacs)
+            {
+                <tr>
+                    <td style="text-align:center !important"  class="tdtitle">@item.soCapBac</td>
+                    <td>@item.tenCapBac</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>*@
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+
+    #tbl-mota td
+    {
+        border: none;
+    }
+</style>

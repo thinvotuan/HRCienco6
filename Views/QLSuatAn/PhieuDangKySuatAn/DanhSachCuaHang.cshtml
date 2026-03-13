@@ -1,0 +1,68 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model List<sp_SA_PhieuDangKySuatAn_CuaHang_LuuVet_PhanBoResult>
+@{
+    ViewBag.Title = "Danh sách cửa hàng";
+    Layout = "";
+}
+
+<div class="groupCuaHang">
+
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            int stt = 1;
+            int k = 0;
+            int sttMonAn = 1;
+            foreach (var itemCH in Model)
+            {
+
+                int book = 0;
+                string clsItemCH = "itemCH";
+                k++;
+                if (itemCH.tongSoSuatConLaiCuaCuaHangTrongNgay <= 0 || itemCH.soLanNhanVienDuocDangKyTrongThang <= 0)
+                {
+                    book = 1;
+                }
+                if (book == 1)
+                {
+                    clsItemCH = "disableItemCH";
+                }
+                String chkSA = "chkSA" + clsItemCH;
+        <div class="item @clsItemCH col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <label>
+                <div class="clsPadding">
+                    <div class="form-check">
+
+                        <div class="img">
+                            <img src="@itemCH.hinhAnh" />
+                        </div>
+                        <h3>@itemCH.tenCuaHang</h3>
+                        <h3 class="des">@itemCH.moTa</h3>
+                        <h4>Số lần NV được đăng ký / tháng: @(itemCH.soLanNhanVienDaDangKy) / @itemCH.soLanAnCuaNhanVienTrongThang</h4>
+                        <h5>Tổng suất ăn phục vụ trong ngày của quán: @itemCH.tongSoSuatDaDangKyCuaCuaHangTrongNgay / @itemCH.tongSoSuatCuaCuaHangTrongNgay</h5>
+                        <h5>Số thứ tự phiếu ăn: @itemCH.tongSoSuatDaDangKyCuaCuaHangTrongNgay</h5>
+                        <h6>
+                            @if (book == 0)
+                            {
+                                if (itemCH.tinhTrangHetHieuLuc == true)
+                                {
+                                <span style="font-size: 13px; color: red;">Cửa hàng này không thể đăng ký ngày hôm nay.</span>
+                                }
+                                else
+                                {
+                                <input type="radio" class="form-check-input" id="@chkSA" name="chkSA123" value="@itemCH.maCuaHang" />
+                                }
+                            }
+                        </h6>
+                    </div>
+                </div>
+            </label>
+
+
+
+
+        </div>
+            }
+        }
+    }
+</div>

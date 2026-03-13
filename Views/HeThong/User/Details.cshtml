@@ -1,0 +1,116 @@
+﻿@using BatDongSan.Models.HeThong;
+@model UserModel
+@{    
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";     
+}
+<link rel="stylesheet" href="~/Content/bootstrap-switch/bootstrap3/bootstrap-switch.min.css" />
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    .main-tbl td
+    {
+        border: none !important;
+        line-height: 2.428571 !important;
+        vertical-align: middle !important;
+    }
+
+    .tdtitle
+    {
+        font-weight: 600;
+    }
+
+        .tdtitle:after
+        {
+            content: ":";
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnReset").click(function () {
+            bootbox.confirm("Bạn có muốn reset mật khẩu người dùng này không", function (result) {
+                if (result) {
+                    var id = $("#UserId").val();
+                    $.ajax({
+                        url: "@Url.Action("ResetPassword", "User")" + "/" + id,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            Alert.success("Mật khẩu đã được tạo lại. Vui lòng kiểm tra email để biết thông tin đăng nhập hệ thống", "Thông báos");
+                        },
+                        error: function () {
+                            Alert.error("Có lỗi xảy ra", "Thông báo");
+                        }
+                    })
+                }
+            });
+        })
+
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "User")";
+        })
+    });
+
+</script>
+<form>
+    <div>
+        <fieldset style="width: 750px">
+            <legend style="display: inline">@Model.HoTenNV</legend>
+            <div class="panel-body">
+                <div>
+                    <table class="table main-tbl">
+                        <tr>
+                            <td class="col-md-1 tdtitle">Tên đăng nhập</td>
+                            <td class="col-md-2">
+                                @Html.DisplayFor(model => model.UserName)
+                                @Html.HiddenFor(model => model.UserId)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Nhân viên</td>
+                            <td>
+                                @Html.DisplayFor(model => model.HoTenNV, new { @class = "form-control", required = "required", disabled = "disabled" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Email</td>
+                            <td>
+                                @Html.DisplayFor(model => model.Email, new { @class = "form-control", required = "required" })
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td class="tdtitle">Trạng thái kích hoạt</td>
+                            <td>
+                                @Html.CheckBox("status", Model.Status == true ? true : false, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Ghi chú</td>
+                            <td>
+                                @Html.DisplayFor(model => model.Note, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Reset Mật khẩu
+                            </td>
+                            <td colspan="3">
+                                @*<input type="button" class="btn btn-warning" id="btnReset" value="Reset" />*@
+                                <div class="buttons">
+                                    <button type="button" id="btnReset" style="background-image: url(/Images/rotation-icon.png); background-size: 25px 25px; width: 30px; height: 30px; background-repeat: no-repeat; border: none; box-shadow: 0px 0px;">
+                                    </button>
+                                   
+                                    @*<input type="button" class="btn btn-warning" id="btnReset" value="Reset" />*@
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="text-align: center">
+                    <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

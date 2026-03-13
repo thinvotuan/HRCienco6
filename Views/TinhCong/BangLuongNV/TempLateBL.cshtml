@@ -1,0 +1,292 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    ViewBag.Title = "Chi tiết bảng lương";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+    });
+
+
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhieuCongTac")' + $('#maPhieu').val();
+    }
+
+    function KhongDuyet() {
+
+        if (window.confirm('Bạn có chắc chắn không duyệt phiếu công tác này hay không?')) {
+            var lyDo = "";
+            //$('#lyDo').val().replace(/\ /g, ' ');
+            $.post('@Url.Action("TraLaiNew", "DMNguoiDuyet")', { lyDo: lyDo, maNhanVien: $('#maNV').val(), maPhieu: $('#maPhieu').val(), soNgayNghiPhep: $('#soNgayNghiPhep').val(), maCongViec: "PhieuCongTac", tenNhanVien: $('#tenNhanVien').val(), idQuiTrinh: $("#maQuiTrinhDuyet").val(), sendMail: false, sendSMS: false }, function (data) {
+                if (data.length == 0) {
+                    location.href = '@Url.Action("Details/", "PhieuCongTac")' + $('#maPhieu').val();
+                }
+                else {
+                    jAlert(data);
+                    //$(this).attr("disabled", false);
+                }
+            });
+        }
+    }
+
+    function TraLai(status, employeeId) {
+        var url = ('@Url.Action("TraLai/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuCongTac' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $("#maNVD").val() + '&lyDo=' + "" + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 700, 200);
+    }
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+@{
+    string noiCongTac = string.Empty;
+    string loaiCongTac = string.Empty;
+    var item = ViewData["chiTiet"] as tbl_BangLuongNhanVien;
+
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+    
+}
+<div id="container" class="custome_fieldSet">
+    <fieldset class="removeBorderFieldset">
+        <div class="wrapper_salary">
+            <div class="header_salary">
+                <ul>
+                    <li>Phiếu lương cá nhân</li>
+                    <li>Tháng @item.thang Năm @item.nam</li>
+                    @* <li>Họ Và Tên :<span style="color: #660033"> @item.hoTen</span></li>*@
+                </ul>
+
+            </div>
+            <div class="detail_salary">
+                <table class="tbl colorize">
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b></b>Họ &amp; và tên <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;"><b></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b></b>Cấp bậc chức vụ <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;"><b></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>A.</b> Tổng Lương <span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+
+                        <td style="text-align: right; font-size: large;"><b>@String.Format("{0:###,##0}", item.tongLuong)</b></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 50px;"></td>
+                        <td style="font-size: 15px">Lương cơ bản (lương đóng bảo hiểm + khoản bổ sung lương):</td>
+                        <td style="font-weight: 700; text-align: right">@String.Format("{0:###,##0}", (double)item.ngayCongChuan)</td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 50px;"></td>
+                        <td style="font-size: 15px">Lương thỏa thuận:</td>
+                        <td style="font-weight: 700; text-align: right">@String.Format("{0:###,##0}", (double)item.ngayCongChuan)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>B.</b> Ngày Công<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50px;"></td>
+                        <td style="font-size: 15px">B1. Ngày công chuẩn:</td>
+                        <td style="font-weight: 700;">@String.Format("{0:###,##0}", (double)item.ngayCongChuan)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="font-size: 15px">B2. Ngày công tính lương:</td>
+                        <td>@String.Format("{0:###,##0}", (double)item.tongNgayCong)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: left; padding-left: 50px;">B2.1 Ngày công:</td>
+                        <td style="text-align: left; font-weight: 700;">@String.Format("{0:###,##0}", (double)item.soNgayQuet)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: left; padding-left: 50px;">B2.2 Nghỉ phép:</td>
+                        <td style="text-align: left;">@String.Format("{0:###,##0}", (double)item.soNgayNghiPhep)</td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td style="text-align: left; padding-left: 50px;">B2.3 Nghỉ lễ tết:</td>
+                        <td style="text-align: left;">@String.Format("{0:###,##0}", item.soNgayNghiLe ?? 0)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>1.</b> Lương theo ngày công (A*B2/B1)<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+
+                        </td>
+                        <td style="text-align: right; font-size: large;">
+                            <b>@String.Format("{0:###,##0}", (double)item.luongThang)</b></td>
+                    </tr>                   
+                    <tr>
+                        <td colspan="2">
+
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>3.</b> Chờ việc<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;">
+                            <b></b></td>
+                    </tr>
+                       <tr>
+                        <td></td>
+                        <td style="">Công chờ việc:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.phuCapKhac)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">Lương chờ việc:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.truyThu)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>4.</b> Các khoản phụ cấp<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;">
+                            <b>@String.Format("{0:###,##0}", (double)(item.phuCapKhac + item.truyLanh - item.truyThu))</b></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td style="">Tiền ăn giữa ca:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.phuCapKhac)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">Tiền điện thoại:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.truyThu)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>5.</b> Các khoản khấu trừ<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">BHXH (10.5%):</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.baoHiem)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">BHYT (10.5%):</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.baoHiem)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">BHTN (10.5%):</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.baoHiem)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="font-size: 15px">Thuế TNCN tháng:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.thue)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="font-size: 15px">Đoàn phí:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.thue)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="font-size: 15px">Đảng phí:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.thue)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>6.</b> Phụ Cấp Khác Và Truy Lĩnh<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                        <td style="text-align: right; font-size: large;">
+                            <b>@String.Format("{0:###,##0}", (double)(item.phuCapKhac + item.truyLanh - item.truyThu))</b></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td style="">Phụ cấp khác:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.phuCapKhac)</td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="">Truy thu:</td>
+                        <td style="">@String.Format("{0:###,##0}", (double)item.truyThu)</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e"><b>7.</b> Thực Nhận Lương Tháng @item.thang.@item.nam (C-D+E)<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+
+                        </td>
+                        <td style="text-align: right; font-size: large;">
+                            <b>@String.Format("{0:###,##0}", (double)item.thucLanh)</b></td>
+                    </tr>
+                </table>
+            </div>           
+        </div>
+
+    </fieldset>
+
+</div>
+<style>
+    td
+    {
+            border: 1px solid #ccc;
+    }
+    .bs-callout {
+    padding: 2px;
+    border: 0px solid #eee;
+    border-left-width: 3px;
+    border-radius: 0px;
+    border-left-color: #e8a1a1;
+}
+    .form-horizontal .form-group
+    {
+        margin:0px 0px !important;
+    }
+</style>
+

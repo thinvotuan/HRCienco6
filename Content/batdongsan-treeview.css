@@ -1,0 +1,150 @@
+﻿body
+{
+}
+
+.batdongsan-treeview ul,
+.batdongsan-treeview li
+{
+	padding: 0;
+	margin: 0;
+	list-style: none;	
+}
+
+	.batdongsan-treeview li
+	{
+		background: url(/Images/treeview-default-line.gif) 0 0 no-repeat !important; /*Update 16-7-2016*/
+		background-position: 0 -176px; /*Update 16-7-2016*/
+	}
+
+	.batdongsan-treeview ul ul:nth-last-child(n) > li ~ li
+	{
+		background: url(/Images/treeview-default-line.gif) 0 0 no-repeat; /*Update 16-7-2016*/
+		background-position: 0 -1763px; /*Update 16-7-2016*/
+	}
+
+
+.batdongsan-treeview input
+{
+	position: absolute;
+	opacity: 0;
+}
+
+.batdongsan-treeview
+{
+	font: normal 11px "Segoe UI", Arial, Sans-serif !important;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+	.batdongsan-treeview a
+	{
+		color: #00f;
+		text-decoration: none;
+	}
+
+		.batdongsan-treeview a:hover
+		{
+			text-decoration: underline;
+		}
+
+	.batdongsan-treeview input + label + ul
+	{
+		margin: 0 0 0 22px;
+	}
+
+	.batdongsan-treeview input ~ ul
+	{
+		display: none;
+	}
+
+	.batdongsan-treeview label,
+	.batdongsan-treeview label::before
+	{
+		cursor: pointer;
+		font-weight: normal;
+	}
+
+	.batdongsan-treeview input:disabled + label
+	{
+		cursor: default;
+		opacity: .6;
+	}
+
+	.batdongsan-treeview input:checked:not(:disabled) ~ ul
+	{
+		display: block;
+	}
+
+	.batdongsan-treeview label,
+	.batdongsan-treeview label::before
+	{
+		background: url("/Images/treeview-icons.png") no-repeat;
+	}
+
+		.batdongsan-treeview label,
+		.batdongsan-treeview a,
+		.batdongsan-treeview label::before
+		{
+			display: inline-flex;
+			max-height: 36px;
+			line-height: 16px;
+			vertical-align: middle;
+		}
+
+	.batdongsan-treeview label
+	{
+		background-position: 18px 0;
+	}
+
+	.batdongsan-treeview ul label:last-child
+	{
+		background-position: 18px -46px;
+	}
+
+		.batdongsan-treeview ul label:last-child::before
+		{
+			content: "";
+			/*width: 16px;*/
+			width: 0px;
+			/*margin: 0 22px 0 0;*/
+			margin: 0 22px 0 14px;
+			vertical-align: middle;
+			background-position: 0 -70px;
+		}
+
+	.batdongsan-treeview label::before
+	{
+		content: "";
+		width: 16px;
+		margin: 0 22px 0 0;
+		vertical-align: middle;
+		background-position: 0 -32px;
+	}
+
+	.batdongsan-treeview input:checked + label::before
+	{
+		background-position: 0 -16px;
+	}
+
+/* webkit adjacent element selector bugfix */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+	.batdongsan-treeview
+	{
+		-webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+	}
+
+	@-webkit-keyframes webkit-adjacent-element-selector-bugfix
+	{
+		from
+		{
+			padding: 0;
+		}
+
+		to
+		{
+			padding: 0;
+		}
+	}
+}

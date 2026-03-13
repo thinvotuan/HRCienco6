@@ -1,0 +1,64 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_PhuCap
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="/Scripts/additional-methods.min.js"></script>
+<script src="/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Thêm mới phụ cấp</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã phụ cấp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maPhuCap, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên phụ cấp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenPhuCap, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Loại phụ câp <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.DropDownListFor(model => model.loaiPhuCap, ViewBag.LoaiPhuCaps as SelectList, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Thuộc bộ phận <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.DropDownListFor(model => model.maPhongBan, ViewBag.PhongBans as SelectList, new { @class = "form-control", required = "required" })</td>
+        </tr>        
+        <tr>
+            <td class="tdtitle">Số tiền</td>
+            <td>@Html.TextBoxFor(model => model.soTien, new { @class = "form-control numberinput" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle"></td>
+             <td>
+             <label class="radio-inline" style="font-size: 13px">
+                                @Html.CheckBoxFor(model => model.coTinhThueTNCN, new { }) Tính thuế TNCN
+                            </label>
+                            <label class="radio-inline" style="font-size: 13px">
+                               @Html.CheckBoxFor(model => model.coTinhBaoHiem, new { }) Tính bảo hiểm
+                            </label>
+            </td>
+        </tr>        
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

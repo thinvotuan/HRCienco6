@@ -1,0 +1,632 @@
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\BatDongSan.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\BatDongSan.pdb
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Antlr3.Runtime.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.AspNet.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.Core.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\EntityFramework.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Newtonsoft.Json.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Helpers.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Http.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Mvc.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Optimization.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Razor.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\WebGrease.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\WebMatrix.Data.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\WebMatrix.WebData.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\EntityFramework.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Newtonsoft.Json.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Helpers.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Http.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Mvc.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.Razor.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\WebMatrix.Data.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\WebMatrix.WebData.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.AspNet.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.Core.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\obj\Debug\BatDongSan.dll
+D:\CodeLapTrinh\BatDongSan\BatDongSan\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\Viet2\BatDongSan\bin\BatDongSan.dll
+D:\Viet2\BatDongSan\bin\BatDongSan.pdb
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.AspNet.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.Core.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OAuth.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OpenId.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+D:\Viet2\BatDongSan\bin\EntityFramework.dll
+D:\Viet2\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\Viet2\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\Viet2\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\Viet2\BatDongSan\bin\System.Web.Helpers.dll
+D:\Viet2\BatDongSan\bin\System.Web.Http.dll
+D:\Viet2\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\Viet2\BatDongSan\bin\System.Web.Mvc.dll
+D:\Viet2\BatDongSan\bin\System.Web.Optimization.dll
+D:\Viet2\BatDongSan\bin\System.Web.Razor.dll
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.dll
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\Viet2\BatDongSan\bin\WebGrease.dll
+D:\Viet2\BatDongSan\bin\WebMatrix.Data.dll
+D:\Viet2\BatDongSan\bin\WebMatrix.WebData.dll
+D:\Viet2\BatDongSan\bin\Org.Mentalis.Security.Cryptography.dll
+D:\Viet2\BatDongSan\bin\Mono.Math.dll
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.AspNet.xml
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.Core.xml
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OAuth.xml
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.xml
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OpenId.xml
+D:\Viet2\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+D:\Viet2\BatDongSan\bin\System.Web.Optimization.xml
+D:\Viet2\BatDongSan\bin\EntityFramework.xml
+D:\Viet2\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\Viet2\BatDongSan\bin\System.Web.Helpers.xml
+D:\Viet2\BatDongSan\bin\System.Web.Http.xml
+D:\Viet2\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\Viet2\BatDongSan\bin\System.Web.Mvc.xml
+D:\Viet2\BatDongSan\bin\System.Web.Razor.xml
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.xml
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\Viet2\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\Viet2\BatDongSan\bin\WebMatrix.Data.xml
+D:\Viet2\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\Viet2\BatDongSan\bin\WebMatrix.WebData.xml
+D:\Viet2\BatDongSan\bin\Org.Mentalis.Security.Cryptography.xml
+D:\Viet2\BatDongSan\bin\Mono.Math.xml
+D:\Viet2\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\Viet2\BatDongSan\obj\Debug\BatDongSan.dll
+D:\Viet2\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\BatDongSan.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\BatDongSan.pdb
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.AspNet.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.Core.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\EntityFramework.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\PagedList.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Helpers.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Http.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Mvc.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Optimization.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Razor.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\WebGrease.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\WebMatrix.Data.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\WebMatrix.WebData.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Org.Mentalis.Security.Cryptography.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Mono.Math.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.AspNet.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.Core.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OAuth.Consumer.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\PagedList.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Optimization.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\EntityFramework.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Helpers.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Http.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Mvc.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.Razor.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\WebMatrix.Data.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\WebMatrix.WebData.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Org.Mentalis.Security.Cryptography.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\bin\Mono.Math.xml
+D:\QuocHuy\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.dll
+D:\QuocHuy\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\QuocHuy\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\BatDongSan.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\BatDongSan.pdb
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Helpers.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Http.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Mvc.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Razor.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\WebMatrix.Data.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\WebMatrix.WebData.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Helpers.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Http.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Mvc.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.Razor.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\WebMatrix.Data.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\bin\WebMatrix.WebData.xml
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.dll
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\CodeLapTrinh\QLBatDongSan\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\BatDongSan.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\BatDongSan.pdb
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\log4net.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Helpers.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Http.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Mvc.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Razor.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\WebMatrix.Data.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\WebMatrix.WebData.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\log4net.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Helpers.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Http.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Mvc.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.Razor.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\WebMatrix.Data.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\bin\WebMatrix.WebData.xml
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\obj\Debug\BatDongSan.dll
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\CodeLapTrinh\BatDongSan_New\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\BatDongSan.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\BatDongSan.pdb
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\CKFinder.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\EPPlus.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\log4net.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Helpers.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Http.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Mvc.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Razor.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\WebMatrix.Data.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\WebMatrix.WebData.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\CKFinder.pdb
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\log4net.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Helpers.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Http.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Mvc.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.Razor.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\WebMatrix.Data.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\bin\WebMatrix.WebData.xml
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\obj\Debug\BatDongSan.dll
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\CodeLapTrinh\12_07\NhanSuNew\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+E:\NhanSu_Cienco6_MVC4\BatDongSan\obj\Debug\BatDongSan.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\obj\Debug\BatDongSan.pdb
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\BatDongSan.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\BatDongSan.pdb
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\EPPlus.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\log4net.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Net.Http.Formatting.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Helpers.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Http.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Http.WebHost.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Mvc.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Razor.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.Razor.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\WebMatrix.Data.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\WebMatrix.WebData.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\log4net.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Net.Http.Formatting.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Helpers.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Http.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Http.WebHost.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Mvc.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.Razor.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\System.Web.WebPages.Razor.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\WebMatrix.Data.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\WebMatrix.WebData.xml
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\Ionic.Zip.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\bin\NPOI.dll
+E:\NhanSu_Cienco6_MVC4\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+C:\SourceCode\HR_Cienco6\BatDongSan\obj\Debug\BatDongSan.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\BatDongSan.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\BatDongSan.pdb
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\ClosedXML.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\EPPlus.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\Ionic.Zip.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\log4net.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\NPOI.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Helpers.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Http.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Mvc.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Razor.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\WebMatrix.Data.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\WebMatrix.WebData.dll
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\log4net.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Helpers.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Http.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Mvc.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.Razor.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\WebMatrix.Data.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\WebMatrix.WebData.xml
+C:\SourceCode\HR_Cienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+C:\SourceCode\HR_Cienco6\BatDongSan\bin\DocumentFormat.OpenXml.dll
+C:\Source\HRCienco6\BatDongSan\bin\BatDongSan.dll
+C:\Source\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+C:\Source\HRCienco6\BatDongSan\bin\ClosedXML.dll
+C:\Source\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+C:\Source\HRCienco6\BatDongSan\bin\log4net.dll
+C:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+C:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+C:\Source\HRCienco6\BatDongSan\bin\NPOI.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Mvc.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+C:\Source\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+C:\Source\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+C:\Source\HRCienco6\BatDongSan\bin\DocumentFormat.OpenXml.dll
+C:\Source\HRCienco6\BatDongSan\bin\log4net.xml
+C:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Mvc.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+C:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+C:\Source\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+C:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+C:\Source\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+C:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+C:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+C:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+F:\Source\HRCienco6\BatDongSan\bin\BatDongSan.dll
+F:\Source\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+F:\Source\HRCienco6\BatDongSan\bin\ClosedXML.dll
+F:\Source\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+F:\Source\HRCienco6\BatDongSan\bin\log4net.dll
+F:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+F:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+F:\Source\HRCienco6\BatDongSan\bin\NPOI.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Mvc.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+F:\Source\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+F:\Source\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+F:\Source\HRCienco6\BatDongSan\bin\DocumentFormat.OpenXml.dll
+F:\Source\HRCienco6\BatDongSan\bin\log4net.xml
+F:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Mvc.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+F:\Source\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+F:\Source\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+F:\Source\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+F:\Source\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+F:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+F:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+F:\Source\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+F:\Source\HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\BatDongSan.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\BatDongSan.pdb
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\Ionic.Zip.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\log4net.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\NPOI.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Helpers.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Http.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Mvc.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Razor.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\WebMatrix.Data.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\WebMatrix.WebData.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\log4net.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Helpers.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Http.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Mvc.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.Razor.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\WebMatrix.Data.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\WebMatrix.WebData.xml
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\obj\Debug\BatDongSan.dll
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+F:\SourceMoi\NhanSu\Cienco6\BatDongSan\bin\DocumentFormat.OpenXml.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\BatDongSan.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\log4net.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\NPOI.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Mvc.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\DocumentFormat.OpenXml.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\log4net.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Mvc.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+F:\SourceSVN\NhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\BatDongSan.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\BatDongSan.pdb
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\log4net.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\NPOI.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\log4net.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+E:\Tổng hợp code Thuận Việt\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\BatDongSan.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\BatDongSan.pdb
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\log4net.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\NPOI.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Mvc.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\log4net.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Mvc.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+D:\Tổng hợp hệ thống Thuận Việt\Tổng hợp code Thuận Việt 2020\CodeNhanSu_HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\BatDongSan.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\log4net.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\NPOI.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Http.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\log4net.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Http.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+D:\Code Nhân Sự 1811\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\BatDongSan.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\log4net.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\NPOI.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Mvc.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\log4net.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Mvc.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+E:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+E:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb
+E:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\BatDongSan.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\BatDongSan.pdb
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\ICSharpCode.SharpZipLib.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\Ionic.Zip.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\log4net.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\NPOI.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\log4net.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.Infrastructure.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Net.Http.Formatting.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Helpers.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Http.WebHost.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.Razor.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Deployment.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\System.Web.WebPages.Razor.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.Data.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\Microsoft.Web.WebPages.OAuth.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\bin\WebMatrix.WebData.xml
+D:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.csprojResolveAssemblyReference.cache
+D:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.dll
+D:\CodeNhanSu\HRCienco6\BatDongSan\obj\Debug\BatDongSan.pdb

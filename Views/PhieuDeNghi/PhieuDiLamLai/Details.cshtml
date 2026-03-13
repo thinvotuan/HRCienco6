@@ -1,0 +1,204 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDiLamLai
+@{
+    ViewBag.Title = "Chi tiết phiếu đề nghi đi làm lại";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+
+        $("#btnGuiDuyet").click(function () {
+            chonNguoiDuyet();
+        });
+
+        $("#btnDuyetPhieu").click(function () {
+            duyetPhieu();
+        });
+
+
+        $("#btnTraLai").click(function () {
+            TraLai();
+        });
+    });
+
+    @* Không duyệt động function chonNguoiDuyet() {
+        var lyDo = "";
+        var url = ('@Url.Action("SelectCapDuyet1/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $("#maNVD").val() + '&lyDo=' + lyDo + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 800, 500);
+    }
+
+    function chonNguoiDuyet2() {
+        var lyDo = "";
+        var url = ('@Url.Action("SelectCapDuyet/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $("#maNVD").val() + '&lyDo=' + lyDo + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 800, 500);
+    }
+
+    function DuyetPhieu() {
+        if (window.confirm('Bạn có chắc chắn duyệt phiế này hay không?')) {         
+            var lyDo = "";
+            $.post('@Url.Action("DuyeTheoQuiTrinhDong", "DMNguoiDuyet")', { lyDo: lyDo, maNhanVien: $('#maNhanVien').val(), maPhieu: $('#maPhieu').val(), soNgayNghiPhep: $('#soNgayNghiPhep').val(), maCongViec: "PhieuDiLamLai", tenNhanVien: $('#tenNhanVien').val(), idQuiTrinh: $("#maQuiTrinhDuyet").val(), sendMail: false, sendSMS: false }, function (data) {
+                if (data.length == 0) {
+                    location.href = '@Url.Action("Details/", "PhieuDiLamLai")' + $('#maPhieu').val();
+                }
+                else {
+                    alert(data);                  
+                }
+            });
+        }
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+
+    function LoadLaiTrang() {
+        location.href = '@Url.Action("Details/", "PhieuDiLamLai")' + $('#maPhieu').val();
+    }
+
+    function KhongDuyet() {
+
+        if (window.confirm('Bạn có chắc chắn không duyệt phiếu này hay không?')) {
+            var lyDo = "";
+            $.post('@Url.Action("TraLaiNew", "DMNguoiDuyet")', { lyDo: lyDo, maNhanVien: $('#maNVD').val(), maPhieu: $('#maPhieu').val(), soNgayNghiPhep: $('#soNgayNghiPhep').val(), maCongViec: "PhieuDiLamLai", tenNhanVien: $('#tenNhanVien').val(), idQuiTrinh: $("#maQuiTrinhDuyet").val(), sendMail: false, sendSMS: false }, function (data) {
+                if (data.length == 0) {
+                    location.href = '@Url.Action("Details/", "PhieuDiLamLai")' + $('#maPhieu').val();
+                }
+                else {
+                    alert(data);                   
+                }
+            });
+        }
+    }
+
+    function TraLai(status, employeeId) {
+        var url = ('@Url.Action("TraLai/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&trangThai=' + 0 + '&title=' + "" + '&maNhanVien=' + $("#maNVD").val() + '&lyDo=' + "" + "&idQuiTrinh=" + $("#maQuiTrinhDuyet").val() + '&url=' + $("#url").val());
+        PopUpManager(url, "DUYET", 800, 300);
+    }*@
+
+
+    function chonNguoiDuyet() {
+        var url = ('@Url.Action("SelectCapDuyetDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function duyetPhieu() {
+        var url = ('@Url.Action("DuyetPhieu/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?maCongViec=PhieuDiLamLai' + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&url=' + $('#url').val());
+        PopUpManager(url, "DUYET", 1000, 300);
+    }
+
+    function TraLai() {
+        var tenBD = $('#tenBuocDuyet').val().replace(/\ /g, '');
+        var url = ('@Url.Action("TraLaiDong/", "DMNguoiDuyet")' + $('#maPhieu').val() + '?tenBuocDuyet=' + tenBD + '&maQuiTrinhDuyet=' + $('#maQuiTrinhDuyet').val() + '&maCongViec=PhieuDiLamLai' + '&url=' + $('#url').val());
+           PopUpManager(url, "DUYET", 1000, 300);
+       }
+
+       function PopUpManager(url, title, w, h) {
+           var left = (screen.width / 2) - (w / 2);
+           var top = (screen.height / 2) - (h / 2);
+           var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+       }
+
+       function LoadLaiTrang() {
+           location.href = '@Url.Action("Details/", "PhieuDiLamLai")' + $('#maPhieu').val();
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+@{
+    
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+    
+}
+<div id="container" class="custome_fieldSet">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                    <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Chi tiết phiếu đề nghị đi làm lại</span></a></li>
+            </ul>
+        </div>
+        <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+            <tr>
+                <td class="tdtitle">Số phiếu</td>
+                <td>@Model.maPhieu
+                    <input type="hidden" id="url" value="@ViewBag.URL" />
+                    @Html.HiddenFor(model => model.maQuiTrinhDuyet)
+                    <input type="hidden" id="tenBuocDuyet" value="@ViewBag.TenBuocDuyet " />
+                </td>
+                <td class="tdtitle">Người lập</td>
+                <td><i>@Model.NhanVienLapPhieu.hoVaTen - Ngày lập: @String.Format("{0: dd/MM/yyyy}", Model.ngayLap)</i>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%" class="tdtitle">Nhân viên</td>
+                <td style="width: 35%">@Model.NhanVien.hoVaTen
+                </td>
+                <td style="width: 15%" class="tdtitle">Ngày đi làm lại </td>
+                <td style="width: 35%">@String.Format("{0: dd/MM/yyyy}", Model.ngayDiLamLai)</td>
+            </tr>
+            <tr>
+                <td class="tdtitle">Ghi chú</td>
+                <td colspan="3">@Html.Raw(Model.ghiChu)</td>
+
+            </tr>
+        </table>
+        <div style="text-align: right; margin-bottom: 10px">
+            <input type="hidden" name="maNVD" id="maNVD" value="@user1.manv" />
+            <input type="hidden" name="tenNhanVien" id="tenNhanVien" value="@ViewBag.HoTen" />
+            @Html.HiddenFor(model => model.maPhieu)
+            @* Không duyệt động  @if (ViewBag.TenTrangThaiDuyet != "KDD")
+            {
+                if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.NhanVienLapPhieu.maNhanVien == user1.manv && Model.Duyet.maBuocDuyet != "KDD")
+                {
+                <button class="btn btn-info" type="button" onclick="chonNguoiDuyet();">Gửi duyệt </button>
+                }
+                else if (Model.Duyet != null && (Model.Duyet.nguoiDuyet.maNhanVien == null ? string.Empty : Model.Duyet.nguoiDuyet.maNhanVien.Trim()) == user1.manv && Model.Duyet.maBuocDuyet != "DTN" && Model.Duyet.maBuocDuyet != "CDL2" && Model.Duyet.maBuocDuyet != "CD")
+                {
+                <button class="btn btn-info" type="button" onclick="chonNguoiDuyet2();">Duyệt phiếu </button>
+                <button class="btn btn-info" type="button" onclick="KhongDuyet();">Không duyệt</button>
+                <button class="btn btn-info" type="button" onclick="TraLai();">Trả lại</button>
+                }
+                else if (Model.Duyet != null && (Model.Duyet.maBuocDuyet == "CDL2" || Model.Duyet.maBuocDuyet == "CD") && (Model.Duyet.nguoiDuyet.maNhanVien == null ? string.Empty : Model.Duyet.nguoiDuyet.maNhanVien.Trim()) == user1.manv && Model.Duyet.maBuocDuyet != "DTN")
+                {
+                <button class="btn btn-info" type="button" onclick="DuyetPhieu();">Duyệt</button>
+                <button class="btn btn-info" type="button" onclick="KhongDuyet();">Không duyệt</button>
+                <button class="btn btn-info" type="button" onclick="TraLai();">Trả lại</button>
+                }
+                else if (Model.Duyet != null && user1.manv != Model.NhanVien.maNhanVien && Model.Duyet.maBuocDuyet == "CTN" && Model.Duyet.maBuocDuyet != "DTN")//Tất cả nhân viên ở phòng nhân sự đều được duyệt ở đấy
+                {
+                <button class="btn btn-info" type="button" onclick="DuyetPhieu();">Duyệt</button>
+                <button class="btn btn-info" type="button" onclick="KhongDuyet();">Không duyệt</button>
+                <button class="btn btn-info" type="button" onclick="TraLai();">Trả lại</button>
+                }
+            }*@
+            @if ((Model.Duyet == null || Model.Duyet.tinhTrang == 0) && Model.NhanVienLapPhieu.maNhanVien == user1.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnGuiDuyet">Gửi duyệt </button>
+            }
+            else if (Model.Duyet != null && (Model.Duyet.maBuocDuyet != "DTN" && Model.Duyet.maBuocDuyet != "DD") && Model.Duyet.nguoiDuyet.maNhanVien == user1.manv)
+            {                         
+                <button class="btn btn-info" type="button" id="btnDuyetPhieu">Duyệt phiếu này</button>
+                <button class="btn btn-info" type="button" id="btnTraLai">Trả lại</button>
+            }
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+
+</div>
+

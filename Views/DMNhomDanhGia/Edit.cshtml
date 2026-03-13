@@ -1,0 +1,193 @@
+﻿@model BatDongSan.Models.DanhMuc.tbl_DM_NhomDanhGia
+@{    
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var chiTiet = ViewBag.DanhSachiPB as List<BatDongSan.Models.DanhMuc.PhongBanModel>;
+    var i = 1;
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<style>
+    .main-tbl td
+    {
+        border: none !important;
+        line-height: 2.428571 !important;
+        vertical-align: middle !important;
+    }
+</style>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/uploadfilehopdongncc.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinputInt").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "DMNhomDanhGia")";
+        });
+
+        $(document).on("click", ".vtt", function () {
+            var url = '@Url.Action("DanhSachPhongBan", "DMNhomDanhGia")';
+            showPopup(url, 980, 550);
+        });
+    });
+
+    function chonQuiTrinh(stt) {
+        var url = '@Url.Action("ChonQuiTrinh", "QuiTrinhDuyet")' + "?stt=" + stt;
+        PopUpManager(url, 100, 100);
+    }
+
+   @* function chonNhanVien(stt) {
+        $("#btnNhanVien").click();
+        var url = '@Url.Action("GetNhanVienInfo", "QuiTrinhDuyet")' + "?stt=" + stt;
+        $('#filter-panel .panel-default').load(url, function () {
+            if ($('#filter-panel >:first').html().trim() == '') {
+                $('#filter-panel').toggleClass('in');
+            }
+        });
+    }*@
+
+
+    function chonNhanVien(stt) {
+        var url = '@Url.Action("DanhSachNVPB/", "QuiTrinhDuyet")' + "?stt=" + stt;
+        PopUpManagerNV(url, "DUYET", 1000, 500);
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (900 / 2);
+        var top = (screen.height / 2) - (350 / 2);
+        var targetWin = window.open(url, title, 'width=' + 900 + ', height=' + 350 + ', top=' + top + ', left=' + left);
+    }
+
+
+    function PopUpManagerNV(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+    var getBuocDuyet = (function (maBuocDuyet, tenBuocDuyet, stt) {
+
+        $("#maQuiTrinh" + stt).val(maBuocDuyet);
+        $("#tenQuiTrinhDuyet" + stt).val(tenBuocDuyet);
+    });
+
+    var getNhanVien = (function (maNhanVien, tenNhanVien, stt) {
+        $("#maNhanVienDuyet" + stt).val(maNhanVien);
+        $("#tenNhanVien" + stt).val(tenNhanVien);
+    });
+
+    function DeleteRow(id_tbody, index, sTT) {
+        var table = document.getElementById(id_tbody);
+        table.deleteRow(index);
+        for (var i = 0; i < table.rows.length; i++) {
+            if (sTT == null)
+                $('#' + id_tbody + ' tr:eq(' + i + ')').find("td:last").html("<a href='javascript:void(0);' onclick='DeleteRow(\"" + id_tbody + "\"," + i + ")'>Xóa</a>");
+            else {
+                $('#' + id_tbody + ' tr:eq(' + i + ')').find("td:first").html(i + 1);
+                $('#' + id_tbody + ' tr:eq(' + i + ')').find("td:last").html("<a href='javascript:void(0);' onclick='DeleteRow(\"" + id_tbody + "\"," + i + ", true)'>Xóa</a>");
+            }
+        }
+    }
+</script>
+<form id="form-submit" method="post" action="@Url.Action("Edit", "DMNhomDanhGia")">
+    <div style="width: 100%">
+        <fieldset>
+            <legend style="display: inline">Cập nhật danh mục nhóm đánh giá</legend>
+            <div class="panel-body">
+                <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                    <tr>
+                        <td style="width: 15%">Mã nhóm đánh giá
+                        </td>
+                        <td style="width: 35%">
+                            @Html.TextBoxFor(model => model.maNhomDanhGia, new { @class = "form-control", required = "required", @readonly = "true" })
+                            <span style="color: red; font-style: italic">@TempData["Error"]</span>
+                        </td>
+
+                        <td style="width: 15%">Tên nhóm đánh giá</td>
+                        <td style="width: 35%">
+                            @Html.TextBoxFor(model => model.tenNhomDanhGia, new { @class = "form-control", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Người lập</td>
+                        <td>
+                            @Html.TextBox("hoTen", (string)ViewBag.TenNhanVien, new { @class = "form-control", required = "required", @readonly = "true" })
+                        </td>
+                        <td style="width: 15%">Ngày lập phiếu<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td style="width: 35%">
+                            @Html.TextBoxFor(model => model.ngayLap, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ghi chú</td>
+                        <td colspan="3">
+                            @Html.TextBoxFor(model => model.ghiChu, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <table class="table table-striped table-hover table-condensed tbl-3" id="kythanhtoantbl">
+                    <thead>
+                        <tr class="headrow">
+                            <td class="col-sm-2" style="text-align: center">STT</td>
+                            <td style="text-align: center">Mã phòng ban</td>
+                            <td style="text-align: center">Tên phòng ban</td>
+                            <td style="vertical-align: middle; text-align: right">
+                                <button type="button" class="btn btn-primary btn-xs vtt">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @if (chiTiet != null)
+                        {
+                            foreach (var item in chiTiet)
+                            {
+                            <tr>
+                                <td class="sothutu" style="text-align: center">@i</td>
+                                <td>@item.MaPhongBan
+                                    <input type="hidden" id="maPhongBan" name="maPhongBan" value="@item.MaPhongBan"/>
+                                </td>
+
+                                <td>@item.Ten</td>
+                                <td style="text-align: center">
+                                    <a href="javascript:void(0);" onclick="DeleteRow('tbody',@(i - 1),'true');"
+                                        style="color: Blue">Xóa</a>
+                                </td>
+                            </tr> 
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div style="text-align: right">
+                    @if (Model.nguoiLap == user1.manv)
+                    {
+                        <button value="Chọn" type="submit" id="btnSubmit" class="btn btn-info">Lưu</button>
+                    }
+                    <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

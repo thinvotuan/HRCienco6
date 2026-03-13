@@ -1,0 +1,484 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+
+    string numberFormat = "#,###,###,##0.####";
+   
+}
+<style>
+    #maPhieuTinNhiem
+    {
+    	border:none;
+    	background:transparent !important;
+    	text-align:center;
+    	}
+     header {
+   
+    z-index:1;
+   
+}
+     header:hover {
+   
+    z-index:2;
+   
+}
+     
+    </style>
+<script type="text/javascript">
+   
+    $().ready(function () {
+        
+        $(".mouseOver2 img.smallImg").hover(function () {
+            $(".Img1").remove();
+          
+            var valImg = $(this).attr("src");
+            $(this).after('<img src="' + valImg + '" class="Img1">');
+           
+        });
+        $(".titleBuoc").html("Bước 2: Thực hiện đánh giá nhân viên đã chọn");
+        //alert("edit");
+        $(".btnBlack").click(function () {
+            $(".btnBlack").hide();
+            $("#Loadding").show();
+            $.post('@Url.Action("Edit")', ($('#frmEdit').serialize()), function (data) {
+                $("#maPhieuTinNhiemLoad").val(data);
+                $("#maPhieuTinNhiem").val(data);
+                $("#Finishing").show();
+
+                
+                var Url = '@Url.Action("Edit/", "DanhGiaTinNhiem")' + data;
+                $('#CreateDanhGia').load(Url, function () {
+                    $("#Loadding").hide(); $("#Finishing").hide();
+                    //Tro ve
+                    $(".titleBuoc").html("Bước 1: Chọn nhân viên đánh giá");
+                    $.post('@Url.Action("UpdateBuocDuyet")', function (data) {
+                        $(".btn_wrapper_line").show();
+                        $("#DanhSach").addClass("setActiveDiv");
+                        $("#CreateDanhGia").removeClass("setActiveDiv");
+                    });
+                    //End
+                });
+            });
+
+
+        });
+
+        $(".btnSave").click(function () {
+
+            if (checkForm()) {
+                var co = true;
+                $.each($("[class='diem']"), function () {
+                    if ($(this).val() == "0") {
+                        $(this).css("background-color", "yellow");
+                        co = false;
+                    }
+                });
+                if (co == false) {
+                  
+                    bootbox.confirm("Bạn vẫn còn một số Ô chưa đánh giá,\n Bạn có muốn tiếp tục lưu không ! ?", function (result) {
+                        if (result) {
+                            $(".btnSave").hide();
+                            $("#Loadding").show();
+                            $.post('@Url.Action("Edit")', ($('#frmEdit').serialize()), function (data) {
+                             
+                                $("#maPhieuTinNhiemLoad").val(data);
+                                $("#maPhieuTinNhiem").val(data);
+                                $("#Finishing").show();
+
+                              
+                                var Url = '@Url.Action("Edit/", "DanhGiaTinNhiem")' + data;
+                                $('#CreateDanhGia').load(Url, function () {
+                                    $("#Loadding").hide(); $("#Finishing").hide();
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    $(".btnSave").hide();
+                    $("#Loadding").show();
+                    $.post('@Url.Action("Edit")', ($('#frmEdit').serialize()), function (data) {
+                        $("#maPhieuTinNhiemLoad").val(data);
+                        $("#maPhieuTinNhiem").val(data);
+                        $("#Finishing").show();
+
+                        
+                        var Url = '@Url.Action("Edit/", "DanhGiaTinNhiem")' + data;
+                        $('#CreateDanhGia').load(Url, function () { $("#Loadding").hide(); $("#Finishing").hide(); });
+                    });
+                }
+            }
+        });
+      
+     
+        setTimeout(function () { $("#divMsg").hide() }, 5000);
+        $(".diem").bind("change keyup", function () {
+            
+            if ($(this).val() > 100)
+                $(this).val(100);
+            var maNV = $(this).attr("alt").trim();
+            var tong1 = getNumber($("#" + maNV +"_xepLoai_1").val()) * 2;
+            var tong2 = getNumber($("#" + maNV + "_xepLoai_2").val()) * 2;
+            var tong3 = getNumber($("#" + maNV + "_xepLoai_3").val());
+            var tong4 = getNumber($("#" + maNV + "_xepLoai_4").val()) * 1.5;
+            var tong5 = getNumber($("#" + maNV + "_xepLoai_5").val());
+            var tongDiem = 0;
+            var heSo = 0;
+            if (tong1 > 0) {
+                heSo += 2;
+                tongDiem += tong1;
+            }
+            if (tong2 > 0) {
+                heSo += 2;
+                tongDiem += tong2;
+            }
+            if (tong3 > 0) {
+                heSo += 1;
+                tongDiem += tong3;
+            }
+            if (tong4 > 0) {
+                heSo += 1.5;
+                tongDiem += tong4;
+            }
+            if (tong5 > 0) {
+                heSo += 1;
+                tongDiem += tong5;
+            }
+            if (tongDiem == 0) {
+                $("#" + maNV + "_diemTong").val(0);
+            }
+            else {
+                $("#" + maNV + "_diemTong").val(parseFloat(tongDiem / heSo).toFixed(2));
+            }
+        });
+    });
+
+    function checkForm() {
+        var flag = true;
+        //            if (isEmpty($("#Name"), ""))
+        //                flag = false;
+        return flag;
+    }
+
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+    function moveScroll() {
+        var scroll = $(window).scrollTop();
+        var header_top = $("header").height();
+        
+        var anchor_top = $("#gridSource").offset().top;
+        var anchor_bottom = $("#bottom_anchor").offset().top;
+        if (scroll > anchor_top && scroll < anchor_bottom) {
+            clone_table = $("#clone");
+            if (clone_table.length == 0) {
+                clone_table = $("#gridSource").clone();
+                clone_table.attr('id', 'clone');
+                clone_table.css({
+                    position: 'fixed',
+                    'pointer-events': 'none',
+                    top: 0,
+
+                });
+                clone_table.width($("#gridSource").width());
+                $("#table-container").append(clone_table);
+                $("#clone").css({ visibility: 'hidden' });
+                $("#clone thead").css({ visibility: 'visible' });
+            }
+        } else {
+            $("#clone").remove();
+        }
+    }
+    $(window).scroll(moveScroll);
+
+    function HoanThanhDanhGia() {
+
+        // Update Truoc moi update hoan thanh sau
+        if (checkForm()) {
+            var co = true;
+            $.each($("[class='diem']"), function () {
+                if ($(this).val() == "0") {
+                    $(this).css("background-color", "yellow");
+                    co = false;
+                }
+            });
+            if (co == false) {
+            
+             
+                        bootbox.confirm("Bạn vẫn còn một số Ô chưa đánh giá,\n Bạn có muốn tiếp tục lưu không ! ?", function (result) {
+                            if (result) {
+                        $("#Loadding").show();
+                        $.post('@Url.Action("Edit")', ($('#frmEdit').serialize()), function (data) {
+                            $("#maPhieuTinNhiemLoad").val(data);
+                            $("#maPhieuTinNhiem").val(data);
+                            
+                            CompleteDanhGia();
+                            
+                            var Url = '@Url.Action("Edit/", "DanhGiaTinNhiem")' + data;
+                            $('#CreateDanhGia').load(Url, function () {
+                                $("#Loadding").hide(); $("#Finishing").hide();
+                            });
+                        });
+                    }
+                });
+            } else {
+                $("#Loadding").show();
+                $.post('@Url.Action("Edit")', ($('#frmEdit').serialize()), function (data) {
+                    $("#maPhieuTinNhiemLoad").val(data);
+                    $("#maPhieuTinNhiem").val(data);
+
+                    CompleteDanhGia();
+                    var Url = '@Url.Action("Edit/", "DanhGiaTinNhiem")' + data;
+                    $('#CreateDanhGia').load(Url, function () { $("#Loadding").hide(); $("#Finishing").hide(); });
+                });
+            }
+        }
+        // End
+
+
+    }
+    function CompleteDanhGia() {
+        bootbox.confirm("Khi xác nhận phiếu đánh giá bạn sẽ không được hiệu chỉnh phiếu này.\nBạn có chắc chắn hoàn thành đánh giá này không?", function (result) {
+            if (result) {
+       
+                $("#Loadding").show();
+                $.post('@Url.Action("HoanThanhDanhGia", "DanhGiaTinNhiem")', { id: $('#maPhieuTinNhiem').val() }, function (data) {
+                    $("#maPhieuTinNhiemLoad").val(data);
+                    $("#maPhieuTinNhiem").val(data);
+
+                    bootbox.alert("Cảm ơn bạn đã tham gia đánh giá!", function () {
+                        var Url = '@Url.Action("ThongBao/", "DanhGiaTinNhiem")';
+                        location.href = Url;
+                    });
+                });
+            }
+        });
+    }
+    </script>
+
+    <style type="text/css">
+        #clone thead
+        {
+               background: #bcd475;
+        }
+    </style>
+    <form method="post" id="frmEdit">
+    
+    <div class="myatable03 mtxxs">
+    <div style="float: right">
+     <button type="button" class="btnBlack"><i class="fa fa-reply-all" aria-hidden="true"></i> Quay về</button> 
+           @{if (ViewData["TrangThaiHoanThanh"] == "0")
+             {
+        <button type="button" class="btnSave"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu tạm</button>
+        <button type="button" class="btnHoanThanh" onclick="HoanThanhDanhGia()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Hoàn thành đánh giá</button>
+             }}
+       
+    </div>
+    <table style="width: 100%" class="WorkTicketForm">
+               @{
+                   var CapUser = Convert.ToInt32(ViewData["CapBacUser"]);
+                   var lsCapBac = ViewData["lsCapBac"] as List<DanhSachNhanVienDaChonModel>; ;
+                   var lsNV = ViewData["lsNhanVienPhongBan"] as List<DanhSachNhanVienDaChonModel>;
+                   List<tbl_NS_TieuChi> lsTieuChi = ViewData["lsDanhMucTieuChi"] as List<tbl_NS_TieuChi>;
+                   List<sp_NS_PhieuDanhGia_EditResult> lsDanhGiaChiTiet = ViewData["lsDanhGiaChiTiet"] as
+                                      List<sp_NS_PhieuDanhGia_EditResult>;
+                                       }
+                <tr style="display:none">
+                   
+                    <td colspan="4">
+                        @Html.TextBox("maPhieuTinNhiem", lsDanhGiaChiTiet.Select(d => d.maPhieuDanhGia).FirstOrDefault(), new { @readonly = "readonly" })
+                        @Html.Hidden("id", lsDanhGiaChiTiet.Select(d => d.maPhieuDanhGia).FirstOrDefault())
+                    </td>
+                   
+                    
+                </tr>
+                 <tr style="background: #C17A7A;color: #fff;font-size: 14px;">
+                    
+                    <td style="width: 50%" colspan="2">
+                        Phiếu Đánh giá 6 tháng đầu năm 2016
+                    </td>
+                    
+                    <td style="width: 25%">
+                        Người lập: @ViewData["tenNguoiLap"]
+                    </td>
+                    <td style="width: 25%">
+                        Ngày lập:  @(lsDanhGiaChiTiet.Select(d => d.ngayLap).FirstOrDefault().HasValue ? lsDanhGiaChiTiet.FirstOrDefault().ngayLap.Value.ToString("dd/MM/yyyy") : string.Empty)
+                    </td>
+                </tr>
+                
+            </table>
+            @{
+                     
+                var stt = 1;
+                Dictionary<int, string> lsDiem = new Dictionary<int, string>();
+                lsDiem[0] = "0";
+                lsDiem[1] = "10";
+                lsDiem[2] = "20";
+                lsDiem[3] = "30";
+                lsDiem[4] = "40";
+                lsDiem[5] = "50";
+                lsDiem[6] = "60";
+                lsDiem[7] = "70";
+                lsDiem[8] = "80";
+                lsDiem[9] = "90";
+                lsDiem[10] = "100";
+          
+                }
+            <div class="noteDanhGia">
+                <div>
+                    <span>Lưu ý:</span><span>Thang điểm đánh giá là 100/ 1 tiêu chí.</span></div>
+            </div>
+           
+            <div id="table-container">
+                <table id="gridSource" class="tbl WorkTicket" style="width: 100%">
+                    <thead>
+                        <tr style="color: #000099; font-weight: 700">
+                            <td style="width:30px; text-align:center">
+                                STT
+                            </td>
+                            <td style="width: 260px">
+                                Tên NV
+                            </td>
+                            <td style="width: 400px">
+                                Phòng ban / Chức danh
+                            </td>
+                            
+                            @{foreach (var tc in lsTieuChi)
+                              {
+                            
+                            <td style="width: 220px">
+                                <b style="color: red;">
+                                    @tc.tenTieuChi
+                                </b>
+                                <br />
+                                <p style="margin: 0px;">
+                                    (Hệ số :
+                                    @tc.heSoDiem )</p>
+                                @Html.Hidden("maTieuChi", tc.id)
+                            </td>
+                              }
+                            }
+                            <td style="width: 90px; text-align: right">
+                                Điểm TB
+                            </td>
+                        </tr>
+                        <tr>
+                   
+                    </thead>
+                    <tbody>
+                       @{   
+                           stt = 1;
+                           var dem = 1;
+                           foreach (var it in lsCapBac)
+                           {
+                               int count = 1;
+                               foreach (var nv in lsNV.Where(t => t.CapBac == it.CapBac))
+                               {
+                                   dem++;
+                                   var HinhAnh = nv.MaNhanVien + ".jpg"; 
+                        <tr>
+                            <td data-label="STT" style="text-align:center" rowspan="2">
+                                @(count++)
+                            </td>
+                            <td style="color: #006600; font-weight: 700" data-label="Tiêu chí"  rowspan="2">
+                                <div class="asideMNV">
+                                @nv.TenNhanVien
+                                @Html.Hidden("maNhanVien", nv.MaNhanVien)
+                                @Html.Hidden("maPhongBan", it.CapBac)
+                                </div>
+                                
+                                <div  class="asideImg">
+                                <div class="mouseOver2 mouseOver"><img class="smallImg" onerror="imgError(this);" accept="image/*"  src="/UploadFiles/QLNV/@HinhAnh"/>
+                                   
+                                    
+                                </div>
+                                </div>
+                            </td>
+                            <td data-label="Phòng ban" class="customePhongBan"  rowspan="2">
+                                <span><i class="fa fa-object-group" aria-hidden="true"></i> @nv.TenPhongBan </span><br />
+                                <span><i class="fa fa-user-secret" aria-hidden="true"></i> @nv.TenChucDanh</span>
+                            </td>
+                            @{var countTieuChi = 1;
+                              foreach (var tc in lsTieuChi)
+                              {
+                                  countTieuChi++;
+                                  
+                            <td data-label="@tc.tenTieuChi (Hệ số : @tc.heSoDiem )">
+                                @{
+                                  double key = 0;
+                                  var diemSo1 = lsDanhGiaChiTiet.Where(dt => dt.maNhanVienDanhGia.Equals(nv.MaNhanVien) && dt.idTieuChi == tc.id).
+                                 FirstOrDefault();
+                                  if (diemSo1 != null)
+                                  {key = (double)diemSo1.diemSo;}
+                                }
+                                <input type="text" class="diem" id="@(nv.MaNhanVien)_xepLoai_@(tc.id)" name="@(nv.MaNhanVien)_xepLoai_@(tc.id)"
+                                    alt="@nv.MaNhanVien " value="@key" style="text-align: right; width: 100%"
+                                    onkeypress="return ValidateKeypress(/\d/,event);" />
+                            </td>
+                               
+                              }
+                            }
+                            @{double tongDiem = 0;
+                              var td1 = lsDanhGiaChiTiet.Where(dt => dt.maNhanVienDanhGia.Equals(nv.MaNhanVien)).
+                                        FirstOrDefault();
+                              if (td1 != null)
+                              {tongDiem = (double)td1.tongDiem;}
+                                  }
+                            <td align="right" data-label="Điểm TB" class="clsDiemTB">
+                                @Html.TextBox(nv.MaNhanVien + "_diemTong", tongDiem, new { @readonly = "readonly", @style = "text-align:right;width:100%" })
+                            </td>
+                            @Html.Hidden(nv.MaNhanVien + "_heSoCap", it.CapBac)
+                        </tr>
+                        <tr>
+                       @{
+                              string txtNhanXet = "";
+                              var NhanXet = lsDanhGiaChiTiet.Where(dt => dt.maNhanVienDanhGia.Equals(nv.MaNhanVien)).FirstOrDefault();
+                              if (NhanXet != null) { txtNhanXet = NhanXet.nhanXet; }
+                              
+                              } 
+                         <td colspan="@countTieuChi" class="txtNXValue">@Html.TextArea(nv.MaNhanVien + "_nhanXet", txtNhanXet, new { @style = "width:100%; font-style:italic", @placeholder = "Thêm nhận xét", @rows = "1", @maxlength = "200" })  </td>
+                     
+                           </tr>
+                               }
+                       
+                       
+                        <tr>
+                            <td colspan="9">
+                                <hr style="text-align: center; height: 6px; width: 100%; margin: 5px auto;
+                                    border-radius: 10px;" class="getLine"/>
+                            </td>
+                        </tr>
+                                
+                           }}
+                        
+                    </tbody>
+                    @{stt++;}
+                                    
+                </table>
+            </div>
+            <div id="bottom_anchor">
+            </div>
+            <br />
+            <div style="float: left; width:50%; text-align:left; line-height:1.7">
+            <i><i class="fa fa-quote-left" aria-hidden="true"></i> Nếu có phát hiện nhầm lẫn, sai sót, tiêu cực vui lòng liên hệ email: <span>danhgianhanvien@thuanviet.com.vn</span> <i class="fa fa-quote-right" aria-hidden="true"></i> </i>
+                </div>
+    <div style="float: right; width:40%; text-align:right">
+     <button type="button" class="btnBlack"><i class="fa fa-reply-all" aria-hidden="true"></i> Quay về</button> 
+           @if (ViewData["TrangThaiHoanThanh"] == "0")
+           {
+        <button type="button" class="btnSave"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu tạm</button>
+        <button type="button" class="btnHoanThanh" onclick="HoanThanhDanhGia()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Hoàn thành đánh giá</button>
+           }
+       
+    </div>
+    </div>
+    </form>

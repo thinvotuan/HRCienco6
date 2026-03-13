@@ -1,0 +1,218 @@
+﻿@model BatDongSan.tbl_ThongTinDangNhap
+@{
+    ViewBag.Title = "Đăng ký thông tin";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+ <link rel="stylesheet" href="~/Content/menuMobile.css" type="text/css" />
+ <link rel="stylesheet" href="~/Content/common.css" type="text/css" />
+ <script src="/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+@Styles.Render("~/Content/css")
+<script type="text/javascript">
+    $(document).ready(function () {       
+        $("#mailNguoiDaiDien").keyup(function () {
+            $("#userName").val($(this).val());
+        });
+        $("#mailNguoiDaiDien").change(function () {
+            $("#userName").val($(this).val());
+        });
+        $("#btnTroVe").click(function () {
+            location.href = '@Url.Action("Index","Home")';
+        });
+        $("#btnSubmit").click(function (event) {
+            if ($("#gioiThieuCongTy").val() == "") {
+                $("#cke_contents_gioiThieuCongTy iframe").addClass("error");
+            }
+            else {
+                $("#cke_contents_gioiThieuCongTy iframe").removeClass("error");
+            }
+            if ($("#linhVucHoatDong").val() == "") {
+                $("#cke_contents_linhVucHoatDong iframe").addClass("error");
+
+            }
+            $("#error-message").find("ul").empty();
+            var usname = $("#userName").val();
+            var pass = $("#matKhau").val();
+            var passlen = pass.length;
+
+            if (passlen > 0 && passlen < 6) {
+                $("#error-message").find("ul").html(function () {
+                    $(this).append("<li>Mật khẩu phải ít nhất 6 ký tự</li>");
+                    $('html, body').animate({
+                        scrollTop: $("#tabschild").offset().top
+                    }, 500);
+                });
+                event.preventDefault();
+
+            }
+            else {
+                if (pass != $("[name='rePassword']").val()) {
+                    $("#error-message").find("ul").html(function () {
+                        $(this).append("<li>Xác nhận mật khẩu không đúng</li>");
+                        $('html, body').animate({
+                            scrollTop: $("#tabschild").offset().top
+                        }, 500);
+                        event.preventDefault();
+
+                    });
+                }
+            }
+
+            if ($("#error-message").find("ul").html() != "") {
+                $("#error-message").fadeIn("fast");
+                var counter = 5;
+                var timer = setInterval(function () {
+                    counter--;
+                    if (counter == 0) {
+                        $("#error-message").fadeOut("slow");
+                        clearInterval(timer);
+                    }
+                }, 1500);
+            }
+        });
+    });
+    function goReset() {
+        $('#form-submit').trigger('reset');
+    }
+
+</script>
+
+<style>
+    .require
+    {
+        color: red;
+    }
+    table td
+    {
+        border:none;
+    }
+    .removeBoldFornt label:nth-child(2n+1)
+    {
+        font-weight:normal;
+    }
+</style>
+<fieldset class="removeBorderFieldset">    
+    <div id="error-message" class="form-error alert alert-danger" style="display: none">
+        <strong>Đăng ký không thành công!</strong>
+        <ul>
+        </ul>
+    </div>
+    <div class="filter-panel removeBoldFornt" id="custom-panel">
+        <form method="post" id="form-submit">
+
+            <div class="form-group bs-callout bs-callout-info " style="overflow: hidden; margin-top: 10px">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin công ty <span style="color: red; font-style: italic">@TempData["TenDangNhap"]</span></h4>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-md-3">Tên công ty/Đội thi công<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.tenCongTy, new { @class = "form-control", @required = "required",@maxlength="300" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mã số thuế</label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.maSoThue, new { @class = "form-control",@maxlength="25" })
+                </label>
+            </div>              
+            <div class="form-group">
+                <label class="col-md-3">Địa chỉ công ty<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.diaChiCongTy, new { @class = "form-control", @required = "required",@maxlength="400" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Điện thoại cố định<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.dienThoaiCongTy, new { @class = "form-control", @required = "required",@maxlength="30" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Fax công ty</label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.faxCongTy, new { @class = "form-control",@maxlength="30" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mail công ty</label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.mailCongTy, new { @class = "form-control", @type = "email" ,@maxlength="40"})
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3">Website</label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.webSite, new { @class = "form-control" ,@maxlength="50"})
+                </label>
+            </div>           
+
+            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-top: 10px">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin người đại diện</h4>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Tên người đại diện<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.tenNguoiDaiDien, new { @class = "form-control", @required = "required",@maxlength="100" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Số điện thoại liên hệ <span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.soDienThoaiNguoiDaiDien, new { @class = "form-control", @required = "required",@maxlength="30" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Email liên hệ <span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.mailNguoiDaiDien, new { @class = "form-control", @required = "required", @type = "email",@maxlength="40" })
+                </label>
+            </div>
+            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-top: 10px">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin đăng nhập</h4>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Tên đăng nhập<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.TextBoxFor(m => m.userName, new { @class = "form-control", @readonly = true, @style = "pointer-events: none;",@maxlength="30" })
+                </label>
+
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mật khẩu<span class="require">*</span></label>
+                <label class="col-md-9">
+                    @Html.PasswordFor(m => m.matKhau, new { @class = "form-control", @required = "required",@maxlength="50" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Xác nhận lại mật khẩu<span class="require">*</span></label>
+                <label class="col-md-9">
+                    <input type="password" class="form-control" name="rePassword" required="required" maxlength="50">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-12" style="text-align: right">
+                    <button type="button" class="btn btn-info" onclick="goReset()">Nhập lại</button>
+                    <button id="btnSubmit" type="submit" class="btn btn-info">Đăng ký</button>
+                    <button id="btnTroVe" type="button" class="btn btn-info">Trở về</button>
+
+                </label>
+            </div>
+
+        </form>
+    </div>
+</fieldset>
+

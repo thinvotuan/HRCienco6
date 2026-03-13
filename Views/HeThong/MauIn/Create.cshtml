@@ -1,0 +1,145 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_MauIn
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+<style>
+    label
+    {
+        font-size: 15px;
+        height: 16px;
+    }
+
+    td
+    {
+        padding: 3px;
+        vertical-align: middle;
+        border-bottom: 1px inset #ADC2D6;
+        border: none;
+    }
+
+        td.tdtitle
+        {
+            width: auto;
+        }
+
+    .tableDA
+    {
+        margin-top: 0;
+    }
+
+    .tableDA1:nth-child(1), .tableDA1:nth-child(2)
+    {
+        margin-bottom: 0!important;
+    }
+</style>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script>
+    $(document).ready(function () {
+
+        if ('@ViewBag.File' != '') {
+            alert("File không đúng định dạng xml");
+        }
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-99999999999999999' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ' ', aDec: ',' });
+        $("#dialog").hide();
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "MauIn")";
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ' ', aDec: ',' });
+
+        //MODAL FORM CHỌN HỢP ĐỒNG//
+        $('#btnHopDong').click(function () {
+            var url = '@Url.Action("GetHopDongList", "HopDongVay")';
+            $('#hopdong-panel').load(url);
+        })
+
+
+        $("#btnSubmit").click(function (e) {
+        });
+
+
+    });
+</script>
+
+
+
+<form method="post" id="form-submit" enctype="multipart/form-data">
+    @*@using (Html.BeginForm("Create", "MauIn", FormMethod.Post, new { id = "CountryStateFormID", @enctype = "multipart/form-data" }))
+{
+    *@<div>
+        <fieldset>
+            <legend style="display: inline">Thêm mới mẫu in văn bản</legend>
+            <div id="content">
+                <table style="position: relative" class="table table-striped table-hover table-condensed">
+                    
+
+                    <tr>
+                        <td class="tdtitle ">Mã mẫu in
+                        </td>
+                        <td class="form-inline ">
+                            @Html.TextBoxFor(model => model.MaMauIn, new { @class = "form-control", @style = "width:99%", @required = "true", @readonly = "readonly" })
+                        </td>
+                        <td class="tdtitle ">Tên mẫu in
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.TenMau, new { @class = "form-control", @style = "width:99%", @required = "true" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Loại văn bản                            
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.MaLoaiVanBan, ViewBag.LoaiMauIns as SelectList, new { @class = "form-control", style = "width:100%" })
+                        </td>
+                       
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">File đính kèm
+                        </td>
+                        <td>
+                            <input type="file" id="fileDinhKem" required="required" name="files" class="btn btn-file" />
+                            <span style="color: red; font-style: italic">@TempData["mssg"]</span>
+                        </td>
+                        <td class="tdtitle">Ngày áp dụng
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.NgayApDung, new { @class = "form-control datepicker", required = "required" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-body">
+                <div style="text-align: right">
+                    @*<button class="btn btn-info" type="submit" id="btnSubmit">Đăng ký </button>*@
+                    <button class="btn btn-info" type="submit" id="btnSubmit">Lưu </button>
+                    <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>@*
+}*@

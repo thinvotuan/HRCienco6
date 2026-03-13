@@ -1,0 +1,184 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model IPagedList<sp_NS_PhieuDanhGia_LamViecTaiNha_IndexResult>
+@{
+    ViewBag.Title = "Danh sách phiếu đăng ký tăng ca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#btnModalCreate,#btnModalCreateTN").click(function () {
+            location.href = "@Url.Action("Create", "PhieuDanhGiaNhanVienPhongBan")";
+           });
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "PhieuDanhGiaNhanVienPhongBan")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn chắc chắn xoá phiếu này không ?", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        });
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "PhieuDanhGiaNhanVienPhongBan")" + "/" + this.value;
+            location.href = url;
+        });
+        $(document).on("click", ".btnDetails", function () {
+            var url = "@Url.Action("Details", "PhieuDanhGiaNhanVienPhongBan")" + "/" + this.value;
+            location.href = url;
+        });
+        $('#btnTimKiem').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("ViewIndex", "PhieuDanhGiaNhanVienPhongBan")" + "?qSearch=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&trangThai=" + $("#trangThaiDuyet").val() + "&_page=0";
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#content').html(imageUrl);
+            $('#content').load(url);
+
+        });
+
+        $('#trangThaiDuyet').change(function () {
+
+            $('#btnTimKiem').click();
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        ToMonth();
+        $('#btnTimKiem').click();
+
+
+    });
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+    function enterToSeacrhTN(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiemTN").click();
+    }
+    function ToWeek() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(7, "day"));
+    }
+    function ToMonth() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(1, "month"));
+    }
+
+
+
+    function OnCriteriaPC(page) {
+        var searchText = $('#searchString').val().replace(/\ /g, '+');
+        var url = '@Url.Action("ViewIndex", "PhieuDanhGiaNhanVienPhongBan")' + "?qSearch=" + searchText + "&tuNgay=" + $("#tuNgay").val() + "&denNgay=" + $("#denNgay").val() + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content').html(imageUrl);
+        $('#content').load(url, function () {
+        });
+    }
+
+</script>
+<style>
+    #content td {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        font-size: 13px;
+        font-weight: normal;
+    }
+
+    #content th {
+        text-align: center;
+    }
+
+    #filter-panel td {
+        border: none;
+    }
+
+    .responTangCa table {
+        width: 100% !important;
+    }
+</style>
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+</style>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active "><a><span>Danh sách phiếu đánh giá nhân viên</span></a></li>
+
+                </ul>
+            </div>
+            <div class="">
+                <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                    <div class="panel panel-default background_top">
+                        <div class="panel-body">
+                            <div style="line-height: 28px;">
+                                <input type="text" id="tuNgay" class="form-control datepicker" placeholder="Từ ngày" style="width: 80px; float: left; margin-right: 5px" />
+                                <input type="text" id="denNgay" class="form-control datepicker" placeholder="Đến ngày" style="width: 80px; float: left; margin-right: 5px" />
+                                <div style="float: left">
+                                    <a href="javascript:void(0)" onclick="ToWeek()"><i class="fa fa-calendar" aria-hidden="true"></i>7 ngày</a> <a href="javascript:void(0)" onclick="ToMonth()"><i class="fa fa-calendar" aria-hidden="true"></i>30 ngày</a>
+                                </div>
+                                <div style="float: right; margin-left: 5px" class="clrFullMobile">
+                                </div>
+                            </div>
+                            <div style="clear: both"></div>
+                            <div style="display: inline-flex; width: 350px" class="clrFullMobile">
+                                <input type="text" class="form-control input-sm" style="width: 100%" id="searchString" value="" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event)">
+                                <div style="float: right">
+                                    <button id="btnTimKiem" type="button" class="btn btn-primary btn-sm" style="border: 1px double; margin-left: 5px">
+                                        <span class="glyphicon glyphicon-search"></span>Tìm kiếm
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="float: right; margin-top: 2px;">
+                                <button class="btn btn-info" id="btnModalCreate" type="button">Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content">
+                    @{Html.RenderPartial("ViewIndex");}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

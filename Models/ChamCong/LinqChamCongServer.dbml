@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BDChamCong" Class="LinqChamCongServerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=w7-pc;Initial Catalog=BDChamCong;Persist Security Info=True;User ID=tv" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="BDChamCongConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.checkinout" Member="checkinouts">
+    <Type Name="checkinout">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="userid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="checktype" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="verifycode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="sensorid" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="WorkCode" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Reserved" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.userinfo" Member="userinfos">
+    <Type Name="userinfo">
+      <Column Name="userid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="badgenumber" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="defaultdeptid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Card" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Privilege" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AccGroup" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TimeZones" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="Birthday" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="street" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="zip" Type="System.String" DbType="VarChar(6)" CanBeNull="true" />
+      <Column Name="ophone" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="FPHONE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="pager" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="minzu" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="title" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="SSN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="UTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="State" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="SECURITYFLAGS" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="DelTag" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="RegisterOT" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AutoSchPlan" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MinAutoSchInterval" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Image_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sys_ParameterTemp" Member="Sys_ParameterTemps">
+    <Type Name="Sys_ParameterTemp">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="recordMoi" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.sp_ChamCong_DuLieuCanInsert" Method="sp_ChamCong_DuLieuCanInsert">
+    <Parameter Name="top" Type="System.Int32" DbType="Int" />
+    <ElementType Name="sp_ChamCong_DuLieuCanInsertResult">
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="badgenumber" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_XemNhanVienRaVao" Method="sp_XemNhanVienRaVao">
+    <Parameter Name="maNhanVien" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="qSearch" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="tuNgay" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="denNgay" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="indexRowStart" Type="System.Int32" DbType="Int" />
+    <Parameter Name="indexRowEnd" Type="System.Int32" DbType="Int" />
+    <ElementType Name="sp_XemNhanVienRaVaoResult">
+      <Column Name="NUMBER" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="employeeId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="badgenumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="fullName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MachineName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_XemNhanVienRaVao_Count" Method="sp_XemNhanVienRaVao_Count">
+    <Parameter Name="maNhanVien" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="qSearch" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="tuNgay" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="denNgay" Type="System.DateTime" DbType="Date" />
+    <ElementType Name="sp_XemNhanVienRaVao_CountResult">
+      <Column Name="count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_XemNhanVienRaVaoNew" Method="sp_XemNhanVienRaVaoNew">
+    <Parameter Name="maNhanVien" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="qSearch" Type="System.String" DbType="NVarChar(250)" />
+    <Parameter Name="tuNgay" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="denNgay" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="page" Type="System.Int32" DbType="Int" />
+    <Parameter Name="rowNumber" Type="System.Int32" DbType="Int" />
+    <ElementType Name="sp_XemNhanVienRaVaoNewResult">
+      <Column Name="NUMBER" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="employeeId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="badgenumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="fullName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MachineName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="tongDong" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_NS_XemTinhHinhRaVao" Method="sp_NS_XemTinhHinhRaVao">
+    <Parameter Name="maChamCong" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="thang" Type="System.Int32" DbType="Int" />
+    <Parameter Name="nam" Type="System.Int32" DbType="Int" />
+    <Parameter Name="qSearch" Type="System.String" DbType="NVarChar(250)" />
+    <ElementType Name="sp_NS_XemTinhHinhRaVaoResult">
+      <Column Name="hoTen" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="maChamCong" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="maNhanVien" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="checktime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>

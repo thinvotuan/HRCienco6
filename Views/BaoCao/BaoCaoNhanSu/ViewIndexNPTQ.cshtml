@@ -1,0 +1,114 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_BC_NghiPhep_IndexResult>
+@{
+    int i = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+</script>
+<table class="table table-striped table-hover table-condensed TableMobile" id="maintable">
+    <thead>
+        <tr>
+            <th style="width: 45px" rowspan="2">STT</th>
+            <th style="width: 130px" rowspan="2">Nhân viên</th>
+            <th style="width: 200px" rowspan="2">Phòng ban</th>
+            <th style="width: 80px"  rowspan="2">Số ngày phép năm hiện tại</th>
+            <th style="background-color: #a79a56 !important;font-size: 16px;" colspan="7">Ngày Nghỉ</th>
+            <th style="width: 80px" rowspan="2">Phép năm còn lại</th>
+
+        </tr>
+        <tr>
+            <th style="width: 80px">Phép năm</th>
+            <th style="width: 80px">Phép cưới</th>
+            <th style="width: 80px">Phép tang</th>
+            <th style="width: 80px">Nghỉ bù</th>
+            <th style="width: 80px">Khám thai sinh con</th>
+            <th style="width: 80px">Nghỉ bệnh</th>
+            <th style="width: 80px">Nghỉ không lương</th>
+
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @{
+            
+            var ls = ViewData["lsDanhSach"] as List<sp_BC_NghiPhep_IndexResult>;
+            if (ls != null)
+            {
+                foreach (var item in ls.ToList())
+                {                                      
+            <tr>
+                <td style="text-align: center">@i</td>
+
+                <td style="text-align: left"><a style="color:#519ee5" href="/NhanVien/Details/@item.maNhanVien" target="_blank">@item.maNhanVien</a><br />
+                    <i class="fa fa-user" aria-hidden="true"></i>@item.hoTen</td>
+                <td>@item.tenPhongBan</td>
+                <td style="text-align: right">@item.soNgayPhepNamHienTai</td>
+                <td style="text-align: right">@item.phepNam</td>
+                <td style="text-align: right">@item.phepCuoi</td>
+                <td style="text-align: right">@item.phepTang</td>
+                <td style="text-align: right">@item.nghiBu</td>
+                <td style="text-align: right">@item.khamThaiSinhCon</td>
+                <td style="text-align: right">@item.nghiBenh</td>
+                 <td style="text-align: right">@item.nghiKhongLuong</td>
+                 <td style="text-align: right">@item.phepNamConLai</td>
+
+            </tr> 
+                    i++;
+                }
+            }}
+        <tr>
+            <td colspan="12" style="text-align: left">
+                @{
+                
+                    if (page_ > 1)
+                    {
+        
+                    <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+                    }
+
+
+                    if (page_ - 2 >= 1)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                        @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                            @(page_ - 1) </a>
+                    } <span class="pageActive">@page_</span>
+                    if (page_ + 2 <= total_)
+                    { 
+                    <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                        @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                            @(page_ + 2) </a>
+                    }
+
+                    if (page_ < total_)
+                    { 
+        
+                    <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+                    }
+        
+                    <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

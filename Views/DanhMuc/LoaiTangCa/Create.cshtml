@@ -1,0 +1,45 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_LoaiTangCa
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(document).on("dp.change", "#ngayDuongLich", function (e) {
+            $("#ngayNghiLe").val(moment(e.date).format("DD/MM/YYYY"));
+        });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Thêm mới loại tăng ca</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td  class="tdtitle">Tên ngày lễ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.loaiTangCa, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Hệ số tăng ca<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.heSoTangCa, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

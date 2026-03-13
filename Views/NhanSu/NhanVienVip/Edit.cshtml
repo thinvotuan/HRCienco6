@@ -1,0 +1,362 @@
+﻿@using BatDongSan.Models.VIP;
+@model NhanVienVIPModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $(".childSum").keypress(function () {
+            var tongLuong = 0;
+            $(".childSum").each(function (index) {
+
+                tongLuong = tongLuong + getNumber($(this).val());
+            });
+            $("#tongLuong").val(tongLuong);
+        });
+        $("#btnPhanBo").click(function () {
+
+            var luongThoaThuan = parseFloat($("#luongThoaThuan").autoNumeric("get")),
+                maNhanVien = $("#maNhanVien").val();
+
+            if (maNhanVien == undefined || maNhanVien == "") {
+                bdsConfirm.alert("Vui lòng chọn nhân viên", "Thông báo");
+                return false;
+            }
+
+            if (isNaN(luongThoaThuan) || luongThoaThuan <= 0) {
+                bdsConfirm.alert("Vui lòng nhập mức lương thỏa thuận", "Thông báo");
+                return false;
+            }
+            var url = "@Url.Action("PhanBoLuong", "HopDongLaoDong")" + "?luongThoaThuan=" + luongThoaThuan + "&maNhanVien=" + maNhanVien;
+            $("#phanbo-div").load(url, function (data) {
+
+                //if (data != "") {
+                //    bdsConfirm.alert(JSON.parse(data).mucLuong, "Thông báo");
+                //    $("#phanbo-div").html("");
+                //    return;
+                //}
+                var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get"),
+                        luongCoBan = $("#luongCoBan").autoNumeric("get"),
+                        tyLeHuong = $("#tyLeHuong").autoNumeric("get");
+
+                var tongLuong = parseFloat(luongThoaThuan) * parseFloat(tyLeHuong) / 100;
+
+                $("#tongLuong").autoNumeric("set", tongLuong);
+                $("#luongHopDong").autoNumeric("set", luongCoBan);
+            });
+        });
+
+        $("#btnNhanVien").click(function () {
+            $("#customModal .modal-dialog").addClass("modal-lg");
+            var url = "@Url.Action("NhanVienDuyet", "NhanVienVip")";
+            $("#custom-panel").load(url);
+        });
+
+        $(document).on("click", ".btnChonNVPB", function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var hoten = selected.find('#hotenNVPB').val(),
+                    manv = selected.find('#maNVPB').val(),
+                    chucDanh = selected.find("#chucVuNVPB").val();;
+                $('#tenNhanVien').val(hoten);
+                $('#maNhanVien').val(manv);
+                $("#tenChucDanh").val(chucDanh);
+                //$('.panel-default').html('');
+            }
+        });
+        $(document).on("click", ".btnTroVe", function () {
+
+            location.href = "/NhanVienVip";
+        });
+
+        $("#tyLeNhanVienVip").on("keyup keydown", function () {
+            var tyLeNhanVienVip = $("#tyLeNhanVienVip").autoNumeric("get");
+            var luongDongBH = $("#luongDongBH").autoNumeric("get");
+
+            var luongChoViec = (parseFloat(luongDongBH) * parseFloat(tyLeNhanVienVip)) / 100;
+            $("#luongChoViec").autoNumeric("set", luongChoViec.toFixed(2));
+        });
+
+        $("#luongChoViec").on("keyup keydown", function () {
+            var luongChoViec = $("#luongChoViec").autoNumeric("get");
+            var luongDongBH = $("#luongDongBH").autoNumeric("get");
+
+            var tyLeNhanVienVip = parseFloat(luongChoViec) * 100 / parseFloat(luongDongBH);
+            if (tyLeNhanVienVip > 100) {
+                $("#tyLeNhanVienVip ").autoNumeric("set", 0);
+                $("#luongChoViec ").autoNumeric("set", 0);
+            }
+            else {
+                $("#tyLeNhanVienVip ").autoNumeric("set", tyLeNhanVienVip.toFixed(2));
+            }
+        });
+
+        //$("#luongDongBH, #khoanBoSungLuong").on("keyup keydown", function () {
+        //    var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get");
+        //    var tyLeHuong = $("#tyLeHuong").autoNumeric("get");
+
+        //    var tongLuong2 = parseFloat(tyLeHuong) * parseFloat(luongThoaThuan) / 100;
+        //    var luongDongBH = $("#luongDongBH").autoNumeric("get");
+        //    var khoanBoSungLuong = $("#khoanBoSungLuong").autoNumeric("get");
+
+        //    var tongLuong = tongLuong2 + parseFloat(luongDongBH) + parseFloat(khoanBoSungLuong);
+        //    $("#tongLuong").autoNumeric("set", tongLuong.toFixed(2));
+        //});
+
+
+        $("#btnSubmit").click(function (e) {
+            if ($("#form-submit").valid()) {
+                //if (checkValid() == false) {
+                //    e.preventDefault();
+                //}               
+            }
+        });
+
+
+        $("#idThoiHanHopDong").change(function () {
+            if ($("#idThoiHanHopDong").val() != 0) {
+                $("#idThoiHanHopDong").removeClass('error');
+            }
+        });
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $("#maLoaiHopDong").change(function () {
+            if (this.value == "THUVIEC") {
+                $("#tyLeHuong").autoNumeric("set", 85);
+            } else {
+                $("#tyLeHuong").autoNumeric("set", 100);
+            }
+            $("#tyLeHuong").trigger("keyup");
+        });
+
+        $("#idThoiHanHopDong").change(function () {
+            $.ajax({
+                url: "/HopDongLaoDong/GetThoiHanInfo/" + this.value,
+                type: "POST",
+                dataType: "json",
+                data: $("#phucap-form").serialize(),
+                success: function (data) {
+                    $("#soThang").val(data.soThang)
+                    var soThang = parseFloat(data.soThang),
+                        ngayKy = $("#ngayKy").val();
+                    var ngayKetThuc = moment(ngayKy, "DD-MM-YYYY").add(soThang, "month");
+                    $("#ngayKetThuc").val(moment(ngayKetThuc).format("DD/MM/YYYY"));
+                }
+            })
+        });
+
+    })
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    function checkValid() {
+
+        return true;
+    }
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+<form id="form-submit" method="post" action="/NhanVienVip/Edit" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Sửa nhân viên VIP</span></a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table class="table table-hover table-striped table-condensed" style="position: relative">
+                    <tr>
+                        <td class="tdtitle" style="width: 15%">Nhân viên <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td style="width: 35%">
+                            <div style="display: inline-flex; width: 100%;">
+                                <input type="hidden" name="maNhanVienOld" id="maNhanVienOld" value="@Model.maNhanVien"/>
+                                <input type="text" name="tenNhanVien" id="tenNhanVien" value="@Model.tenNhanVien" class="form-control" required="required" />
+                                <input type="hidden" name="maNhanVien" id="maNhanVien"  value="@Model.maNhanVien"  class="form-control" required="required" />
+
+                                <div style="width: 125px; float: right">
+                                    <button style="width: 100%;" type="button" class="btn btn-primary btn-sm" id="btnNhanVien" data-toggle="modal" data-target="#customModal">
+                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn nhân viên</button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="tdtitle">Lương cơ bản</td>
+                        <td>@Html.TextBoxFor(model => model.luongCoBan, new { @class = "form-control numberinput childSum" })</td>
+
+                    </tr>
+
+
+                    <tr>
+
+
+                        <td class="tdtitle">Ngày lập<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.TextBoxFor(model => model.ngayLap, "{0:dd/MM/yyyy}", new { @class = "form-control", required = "required" })
+
+                        </td>
+                        <td class="tdtitle">Ngày vào làm<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.TextBoxFor(model => model.ngayVaoLam, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Thời gian công tác(năm)</td>
+                        <td><span style="width: 150px; float: left">@Html.TextBoxFor(model => model.thoiGianCongTac, new { @class = "form-control numberinput" })</span><span style="width: 50px; float: left; padding-top: 2px; padding-left: 5px; color: #04828f;">(Năm)</span></td>
+                        <td class="tdtitle">Email <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.TextBoxFor(model => model.email, new { @class = "form-control" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Số tài khoản</td>
+                        <td>@Html.TextBoxFor(model => model.soTaiKhoan, new { @class = "form-control" })</td>
+                         <td class="tdtitle">Ngân hàng</td>
+                        <td>@Html.DropDownListFor(model => model.maChiNhanhNganHang, ViewBag.ChiNhanhNHs as SelectList, new { @class = "form-control" })</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4">
+                            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+                                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e; margin: 0px;"><b></b>Các khoản phụ cấp<span style="color: red; font-style: italic"></span></h4>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Phụ cấp thâm niên</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapThamNien, new { @class = "form-control numberinput childSum" })</td>
+
+                        <td class="tdtitle">Phụ cấp chức vụ</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapChucVu, new { @class = "form-control numberinput childSum" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Phụ cấp công trình</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapCongTrinh, new { @class = "form-control numberinput childSum" })</td>
+
+                        <td class="tdtitle">Phụ cấp thu hút</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapThuHut, new { @class = "form-control numberinput childSum" })</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Phụ cấp đặc biệt</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapDacBiet, new { @class = "form-control numberinput childSum" })</td>
+
+                        <td class="tdtitle">Phụ cấp phát sinh</td>
+                        <td>@Html.TextBoxFor(model => model.phuCapPhatSinh, new { @class = "form-control numberinput childSum" })</td>
+                    </tr>
+
+                    <tr>
+
+
+                        <td class="tdtitle">Truy lãnh</td>
+                        <td>@Html.TextBoxFor(model => model.truyLanh, new { @class = "form-control numberinput childSum" })</td>
+
+                        <td class="tdtitle">Truy thu</td>
+                        <td>@Html.TextBoxFor(model => model.truyThu, new { @class = "form-control numberinput childSum" })</td>
+
+
+                    </tr>
+                    <tr>
+
+
+                        <td class="tdtitle"></td>
+                        <td>
+                            <label class="radio" style="font-size: 13px; font-weight: normal">
+                               @Html.CheckBoxFor(model => model.Net, new { style = "width:auto" }) Lương net
+                                   </label>
+                            <label class="radio" style="font-size: 13px; font-weight: normal">
+                              @Html.CheckBoxFor(model => model.khongChamCong, new { style = "width:auto" }) Không cần chấm công
+                                </label>
+                        </td>
+                        <td class="tdtitle" style="background: #04828f; color: #fff; font-size: 15px;">Tổng lương</td>
+                        <td>@Html.TextBoxFor(model => model.tongLuong, new { @class = "form-control numberinput sumTongLuong" })</td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="tdtitle">Ghi chú</td>
+                        <td colspan="3">
+                            <textarea class="form-control" name="ghiChu" id="ghiChu">@Model.ghiChu</textarea>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-group" style="float: right">
+            <button class="btn btn-info" id="btnSubmit">Lưu </button>
+            <button class="btn btn-info btnTroVe" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+</form>
+<div id="customModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="custom-panel" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

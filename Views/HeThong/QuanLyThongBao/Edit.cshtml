@@ -1,0 +1,246 @@
+﻿@using BatDongSan.Models.HeThong;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    // var List = ViewBag.lsTieuChi as List<tbl_NS_TieuChi>;
+    Sys_ThongBao item = ViewBag.data;
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script type="text/javascript">
+    $().ready(function () {
+        //setting phong ban//
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+        
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+
+        $('#txtsearch').on("input", function () {
+
+            $('#phongban-div #navigation1').filterLink($('#phongban-div #txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", "#phongban-div #phongban-dropdown-menu li a", function () {
+           
+           
+            $("#btnPhongBan").val($(this).attr('id'));
+            $("#maPhongBan").val($(this).attr('id'));
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+
+        });
+        $("#btnSave").click(function () {
+            if($("#tenThongBao").val()==null || $("#tenThongBao").val()==""){
+                alert("Nhập tên thông báo");
+                $("#tenThongBao").focus();
+                return false;
+            }
+            $("form").submit();            
+        });     
+        setTimeout(function () { $("#divMsg").hide() }, 5000); 
+        $("#btnPhongBan").val();
+    });
+
+   
+
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }   
+    
+    function GuiEmailThongBao(id)
+    {
+        bootbox.confirm("Bạn có muốn gửi email đến tất cả nhân viên không", function(result){
+            if(result)
+            {
+                var daGuiEmail = $("#daGuiEmail").val();
+                if(daGuiEmail == 1){
+                    bootbox.confirm("Thông báo này đã được gửi email. Bạn có muôn tiếp tục gửi không?", function(result1){
+                        if(result1)
+                        {
+                            var url='@Url.Action("SendEmailThongBao", "QuanLyThongBao")'+'/'+id;
+                            $.ajax({
+                                url:url,
+                                type:'POST',
+                                data:'json',
+                                success: function () {
+                                    Alert.success("Gửi email thành công", "Thông báo", { displayDuration: 2000 });
+                                },
+                                error: function () {
+                                    Alert.error("Có lỗi xảy ra", "Thông báo", { displayDuration: 2000 });
+                                }
+                            })
+                        }
+                        else{
+                           
+                        }
+                    });
+                }
+                else{
+                    var url='@Url.Action("SendEmailThongBao", "QuanLyThongBao")'+'/'+id;
+                    $.ajax({
+                        url:url,
+                        type:'POST',
+                        data:'json',
+                        success: function () {
+                            Alert.success("Gửi email thành công", "Thông báo", { displayDuration: 2000 });
+                        },
+                        error: function () {
+                            Alert.error("Có lỗi xảy ra", "Thông báo", { displayDuration: 2000 });
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/ckfinder/ckfinder.js"></script>
+<script>
+    $(document).ready(function () {
+       
+        var newCKEdit=  CKEDITOR.replace("noiDungThongBao", {
+            toolbar: 'DauThau',
+        });
+        CKFinder.setupCKEditor(newCKEdit, '@Url.Content("~/Scripts/ckfinder")');
+    });
+</script>
+@using (Html.BeginForm())
+{
+    <fieldset class="fieldset1">
+
+        <legend class="legend">Sửa thông báo</legend>
+        <div id="divMsg" style="color: Red; text-align: left">
+            @{if ((string)ViewBag.Message != "")
+              {
+                <span>@ViewBag.Message.ToString()</span>
+              }
+            }
+        </div>
+
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+                    <tr>
+                        <td style="width: 150px" class="tdtitle">Tên
+                        </td>
+                        <td>
+                            <input type="text" id="tenThongBao" name="tenThongBao" value="@item.tenThongBao"
+                            maxlength="250"  />
+                            <input type="hidden" value="@(item.daGuiEmail == true ? 1 : 0)" name="daGuiEmail" id="daGuiEmail" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Phòng ban 
+                        
+                        </td>
+
+                        <td>
+                            <span style="float: left">
+                                <input type="text" readonly="readonly" name="maPhongBan" id="maPhongBan" value="@item.maPhongBan" />
+                            </span>
+                            <span style="float: left">
+                                <div class="form-group" id="phongban-div">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                            Chọn phòng ban&nbsp;<span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                            <li role="presentation">
+                                                <div class="form-group has-feedback" style="width: 90%; margin: 5px auto;">
+                                                    <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                                </div>
+                                            </li>
+                                            <li role="presentation">
+                                                @Html.Raw(ViewBag.PhongBans)
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </span></td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Nội dung
+                        </td>
+                        <td>
+
+                            <textarea id="noiDungThongBao" name="noiDungThongBao" class="form-control" required="required">@item.noiDungThongBao</textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>&nbsp;
+                        </td>
+                        <td colspan="2">
+                            <input type="button" class="btnBlack" id="btnSave" value="Lưu" />
+                            <input type="button" class="btn btn-primary" id="btnGuiEmail" value="Gửi email" onclick="GuiEmailThongBao(@item.id)">
+                            <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "QuanLyThongBao")    '" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<div class="modal fade" id="loadingModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>
+                    <img src="/Images/loader.gif" />
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

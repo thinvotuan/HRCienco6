@@ -1,0 +1,105 @@
+﻿@model IList<BatDongSan.Models.DanhMuc.sp_DanhMucNhomDanhGia_IndexResult>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;   
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+           @* var url = "@Url.Action("Create", "QuiTrinhDuyet")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)*@
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "DMNhomDanhGia")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+");
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "DMNhomDanhGia")" + "/" + this.value;
+            location.href = url;
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "DMNhomDanhGia")" + "/" + this.value;
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-submit");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+    });
+
+    function themMoi() {
+        var url = "@Url.Action("Create", "DMNhomDanhGia")";
+        window.location.href = url;
+    }
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+</script>
+<form id="form-submit">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách nhóm đánh giá</span></a></li>
+                </ul>
+            </div>
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="left: 50%; position: relative; float: left">
+                        <span style="color: red; font-style: italic">@TempData["Error"]</span>
+                    </div>
+                    <div class="form-group" style="float: right">
+                        <button type="button" class="btn btn-info" onclick="themMoi()">Thêm</button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("ViewIndex");}
+            </div>
+        </fieldset>
+    </div>
+</form>

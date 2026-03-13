@@ -1,0 +1,111 @@
+﻿@using BatDongSan.Models.NhanSu
+@model IList<tbl_NS_ThanhTinhThueTNCN>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+    var List = ViewBag.lsTieuChi as List<tbl_NS_TieuChi>;
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+    <script type="text/javascript">
+        $().ready(function () {
+            $(".lnkDelete").click(function () {
+                var cnf = window.confirm("Bạn chắc chắn xóa các dòng đã chọn?");
+                if (cnf) {
+                    $.post('@Url.Action("Delete")', { id: $(this).attr("alt") }, function (data) {
+                        if (data.length == 0)
+                            window.location.reload();
+                        else
+                            alert(data);
+                    });
+                    return;
+                };
+            });
+            setTimeout(function () { $("#divMsg").hide() }, 5000);
+        });
+    </script>
+    <fieldset class=" removeBorderFieldset">
+       
+        <div id="tabs" style="" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Tiêu chí đánh giá</span></a></li>
+                </ul>
+            </div>
+      <div id="container">
+        <table cellspacing="0" cellpadding="2" border="0" style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+            <tbody>
+                <tr class="background_tr">
+                    <td align="right" colspan="2" style="border: none;">
+                        <input type="button" onclick="location.href='@Url.Action("Create", "TieuChiDanhGia")'"
+                            title="Thêm" value="Thêm" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 0px !important;">
+                        <table id="gridSource" class="tbl colorize" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30px">
+                                        STT
+                                    </th>
+                                    <th>
+                                        Mã nhóm tiêu chí
+                                    </th>
+                                    <th>
+                                        Tên nhóm tiêu chí
+                                    </th>
+                                    <th>
+                                        Hệ số điểm
+                                    </th>
+                                    <th>
+                                        Ghi chú
+                                    </th>
+                                    <th style="width:120px;">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int j = 0;
+                                    foreach (var item in List)
+                                    {                                       
+                                     j  = j +1;
+                                <tr class="tblLine">
+                                    <td align="center">
+                                       @j
+                                    </td>
+                                    <td align="left">
+                                       @item.maNhom
+                                    </td>
+                                    <td align="left">
+                                       @item.tenTieuChi
+                                    </td>
+                                    <td align="center">
+                                        @item.heSoDiem
+                                    </td>
+                                    <td align="left">
+                                    @item.ghiChu
+                                    </td>
+                                    <td align="center">
+                                      
+                                        @Html.ActionLink("Xem", "Details", new { id =item.id })
+                                        |
+                                       
+                                        @Html.ActionLink("Sửa", "Edit", new { id =item.id })
+                                        | <a href="#" alt="@item.id" class="lnkDelete">Xóa</a>
+                                     
+                                    </td>
+                                </tr>
+                              }
+                              }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+              
+            </tbody>
+        </table>
+          </div>
+    </fieldset>

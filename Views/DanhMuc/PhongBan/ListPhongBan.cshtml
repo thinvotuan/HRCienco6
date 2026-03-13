@@ -1,0 +1,76 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@{
+    ViewBag.Title = "Danh sách phòng ban";
+}
+
+<script type="text/javascript">
+    var obj = window.opener;
+    $(document).ready(function () {
+
+    });
+    function CloseWindow() {
+        window.close();
+    }
+    function SearchDeparment() {
+        var giaTri = $("#searchText").val().replace(/ /gi, '+');;
+        var url = '@Url.Action("CapNhatPhongBanCha", "PhongBan")?qSearch=' + giaTri;
+            location.href = url;
+        }
+        function ChooseDepartment(parentID) {
+            obj.ChooseDepartment(parentID);
+            window.close();
+        }
+</script>
+
+<div style="width: 100%;">
+    <div style="font-weight: bold; text-align: center; font-size: 18px; text-transform: uppercase; padding: 5px;">
+        Danh sách các Bộ phận
+    </div>
+    <div>
+        <input type="text" value="@ViewData["qSearch"]" id="searchText" style="width: 250px" />
+        <input type="button" value="Tìm kiếm" onclick="SearchDeparment()" />
+        <input type="button" value="Đóng" onclick="CloseWindow()" style="float: right" />
+    </div>
+    <table id="gridSource" class="tbl colorize" width="100%">
+        <thead>
+            <tr>
+                <th style="width: 40px">STT
+                </th>
+                <th style="width: 100px">Mã phòng ban
+                </th>
+                <th>Tên phòng ban
+                </th>
+                <th style="width: 50px">Chọn
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var listDepartment = ViewData["ListGoc"] as IList<sp_DM_DanhSachBoPhanResult>;
+                if (listDepartment != null && listDepartment.Count > 0)
+                {
+                    var count = 0;
+                    foreach (var item in listDepartment)
+                    {
+                        count++;
+                
+                <tr>
+                    <td style="text-align: center">@count</td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="ChooseDepartment('@item.maPhongBan')">
+                            @item.maPhongBan</a>
+                    </td>
+                    <td>
+                        @item.tenPhongBan
+                    </td>
+                    <td style="text-align: center">
+                        <a href="javascript:void(0)" onclick="ChooseDepartment('@item.tenPhongBan')">Chọn</a>
+                    </td>
+                </tr>
+                
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

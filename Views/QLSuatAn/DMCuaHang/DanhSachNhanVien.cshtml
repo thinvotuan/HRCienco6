@@ -1,0 +1,62 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model List<sp_CuaHang_MonAn_NhanVien_IndexResult>
+
+<script src="/Scripts/jquery-2.1.4.min.js"></script>
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="/Scripts/additional-methods.min.js"></script>
+<script src="/Scripts/batdongsan.validate.js"></script>
+
+<script>
+    $(document).ready(function () {
+        
+        $(document).on("click", ".btnClose", function () {
+            $(this).parent().parent().remove();
+        });
+    });
+</script>
+
+<div class="lstMonAn">
+
+    <table class="table table-striped table-hover table-condensed TableMobile tblDanhSachMonAn" id="tblMonAnList">
+        <thead>
+            <tr>
+                <th style="width:3%">STT</th>
+                <th style="width:30%">Nhân viên</th>
+                <th style="width:30%">Phòng ban</th>
+                <th style="width:30%">Tên món ăn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = 1;
+
+                foreach (var item in Model)
+                { 
+                <tr>
+                    <td style="text-align: center">@(stt++)</td>
+                    <td>
+                        @(item.maNhanVien + "-" + item.tenNhanVien)
+                    </td>
+                    <td>
+                        @item.tenPhongBan
+                    </td>
+
+                     <td>
+                         @item.tenMonAn
+                    </td>
+                </tr>
+               
+                }}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>

@@ -1,0 +1,126 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+   
+}
+@{
+                                
+    int stt = 1;
+    //int page_ = Convert.ToInt32(ViewBag.page);
+    //int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSach"] as List<BatDongSan.Models.QLSuatAn.LuuVet.sp_SA_BC_ThongKeSuatAnTheoTungCuaHangResult>;
+    var nhanVienTatCas = ViewData["nhanVienTatCas"] as List<BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_NhanVienDangKySuatAnTrongThang>;
+    if (nhanVienTatCas == null)
+    {
+        nhanVienTatCas = new List<BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_NhanVienDangKySuatAnTrongThang>();
+    }
+    
+    var congTys = nhanVienTatCas.GroupBy(d=> new {d.thuocCongTy}).Select(d=> new {maCongTy = d.Key.thuocCongTy, soNhanVien = d.Count()}).ToList();
+
+    string chuoiCty = string.Empty;
+    foreach (var cty in congTys)
+    {
+        chuoiCty += cty.maCongTy + ": số nhân viên là : " + cty.soNhanVien + ", ";
+    }
+
+    var congChuans = nhanVienTatCas.GroupBy(d => new { d.congChuan }).Select(d => new { congChuan = d.Key.congChuan, soNhanVien = d.Count() }).ToList();
+
+
+    string chuoiCc = string.Empty;
+    foreach (var cty in congChuans)
+    {
+        chuoiCc += cty.congChuan + ": số nhân viên là : " + cty.soNhanVien + ", ";
+    }
+    
+    
+    if (ls != null && ls.Count() > 0)
+    {
+        foreach (var item in ls.ToList())
+        {
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td>@item.tenCuaHang</td>
+        <td>@item.ghiChu</td>
+
+        <td style="text-align: right">@item.soSuatAnNhapVaoTungCuaHang</td>
+        <td style="text-align: right">@item.tyLePhanBo</td>
+
+    </tr>
+        }
+        <tr style=" font-weight:bold">
+            <td colspan="3" style="text-align:right;">Tổng cộng : </td>
+            <td style="text-align: right">@ls.Sum(d=>d.soSuatAnNhapVaoTungCuaHang)</td>
+            <td style="text-align: right">@ls.Sum(d=>d.tyLePhanBo)</td>
+        </tr>
+    <tr>
+        <td colspan="7" style="color:blue;">
+             @("Tổng số nhân viên đăng ký trong ngày:" + nhanVienTatCas.Count().ToString() + ", chi tiết công ty : " + chuoiCty)
+             <br />
+             @("Tổng ngày công tất cả nhân viên trong tháng:" + (nhanVienTatCas.Select(d=>d.congChuan).Sum() ?? 0).ToString() + ", chi tiết công chuẩn : " + chuoiCc)
+            <br />
+            @("Tổng số suất ăn tất cả cửa hàng trong ngày:" + (ls.FirstOrDefault().tongSoSuatAnTatCaCuaHang ?? 0).ToString())
+            
+            <br />
+        </td>
+    </tr>
+    <tr>
+        <td style="font-style:italic;" colspan ="7">
+            Tỷ lệ phân bổ từng quán ăn nhân với ngày công chuẩn từng nhân viên sẽ làm tròn lên hoặc xuống dựa vào "tỷ lệ phân bổ làm tròn lên" được cài đặt tại từng quán ăn ưu tiên.
+            <br/>
+            Trường hợp số ngày ăn trong tháng của nhân viên vượt quá số ngày công chuẩn trong tháng thì sẽ giảm đi tương ứng suất ăn : cho cửa hàng có số lượng suất ăn giảm dần)
+            <br>Trường hợp số ngày ăn trong tháng của nhân viên ít hơn số ngày công chuẩn trong tháng thì sẽ tăng lên tương ứng suất ăn : cho cửa hàng có số lượng suất ăn tăng dần)
+        </td>
+    </tr>
+    }
+}
+
+@*<tr>
+    <td colspan="7" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>*@
+
+<script>
+    $(document).ready(function () {
+    
+    });
+</script>
+
+

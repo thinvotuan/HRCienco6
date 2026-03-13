@@ -1,0 +1,78 @@
+﻿@model IPagedList<BatDongSan.Models.PhieuDeNghi.sp_PhieuDeNghi_DanhSachNhanVienTheoPhongBan_IndexResult>
+@{    
+    int i = 1;
+    string[] parameters = TempData["Params"].ToString().Split(',');
+}
+<script>
+    $(document).ready(function () {
+        $("#btnAccept").click(function () {
+            var users = [];
+            $("#tbl-users [name=maNhanVien]").each(function () {
+                users.push(this.value);
+            })
+            var trs = $("#content .chon:checked").closest("tr").clone();
+            var filtered = trs.filter(function (i, n) {
+                var user = $(this).find(".chon").val();
+                $(this).find(".chon").parent().html("<button class='btn btn-warning btn-xs btnXoa' type='button'>Xóa</button>");
+                if ($.inArray(user, users) == -1)
+                    return n;
+            })
+            $("#tbl-users >tbody").append(filtered);
+            var i = 1;
+            $("#tbl-users .sothutu").each(function () {
+                $(this).html(i);
+                i++;
+            })
+        })
+    })
+</script>
+<div id="content">
+    <table class="table table-striped table-hover table-condensed" id="container">
+        <thead>
+            <tr>
+                <th style="width:15px">STT</th>
+                <th style="width:100px">Mã nhân viên</th>
+                <th style="width:150px">Họ và tên</th>
+                <th style="width:250px">Phòng ban</th>
+                <th style="width:100px">Chức danh</th>
+                <th style="width:100px">Email</th>               
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="sothutu">@i</td>
+                <td>@item.maNhanVien
+                    <input type="hidden" id="maNhanVien" name="maNhanVien" value="@item.maNhanVien"/>
+                    <input type="hidden" id="userId" name="userId" value="@item.userId"/>
+                </td>
+                <td>
+                    <i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>&nbsp;@item.hoTen
+                </td>               
+                <td>@item.tenPhongBan</td>
+                <td>@item.TenChucDanh</td>
+                <td><i class="fa fa-envelope-o" aria-hidden="true"></i>@item.email</td>               
+                <td>
+                    <input type="checkbox" class="chon" value="@item.maNhanVien"/></td>
+            </tr>
+            i++;
+        }
+    </table>
+    <div>
+        Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+    </div>
+    <div id="paper">
+        <ul class="pagination">
+            @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                            Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+                            new
+                            {
+                                controller = "PhieuTangCa",
+                                action = "GetMoreUsers",
+                                maPB = parameters[0],
+                                searchString = parameters[1]
+                            }))
+        </ul>
+    </div>
+</div>

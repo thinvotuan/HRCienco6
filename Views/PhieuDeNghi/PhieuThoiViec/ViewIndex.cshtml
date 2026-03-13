@@ -1,0 +1,90 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model IPagedList<sp_NS_PhieuDeNghiThoiViec_IndexResult>
+@{
+    int i = 1;
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+    
+</script>
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr>
+            <th style=" width: 45px">STT</th>
+            <th style="width: 130px">Số phiếu</th>
+            <th style="width: 120px">Nhân viên</th>
+            <th style="width: 135px">Phòng ban</th>
+            <th style="width: 100px">Lý do thôi việc</th>
+            <th style="width: 100px">Ghi chú</th>
+            <th style="width: 80px">Trạng thái</th>
+            <th style="width: 80px"></th>
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td><i class="fa fa-clipboard"></i><a style="color:blue" href="@Url.Action("Details", "PhieuThoiViec", new { id=item.soPhieu})">@item.soPhieu</a>
+                    <br />
+                      <i class="fa fa-calendar" aria-hidden="true"></i> @String.Format("{0: dd/MM/yyyy}", item.ngaylap)
+                    <br />
+                    <i class="fa fa-user"></i> @item.nguoiLap 
+                </td>
+                <td >
+                    <i class="fa fa-user"></i> @item.hoTen
+                    <br />
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i> @String.Format("{0: dd/MM/yyyy}", @item.ngayThoiViec)
+                </td>
+                <td>@item.tenPhongBan
+                    <br />
+                        <i class="fa fa-ticket" aria-hidden="true"></i> @item.TenChucDanh
+                </td>
+                  
+               <td>
+                   @item.tenLyDoThoiViec
+               </td>
+                <td>@Html.Raw(item.ghiChu)</td>
+                <td  style="text-align:center">
+                      <a href="javascript:void(0);" onclick="ViewDetailHistory('@item.soPhieu','@item.maQuiTrinhDuyet')">
+                        @item.tenTrangThaiDuyet</a>
+                </td>
+                <td style="text-align: center">
+                    @if (item.trangThai == 0 && item.maNVNL == user1.manv)
+                    {   <a href="@Url.Action("Edit", "PhieuThoiViec", new { id = item.soPhieu })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o"  style ="font-size :30px; color: orange;" aria-hidden="true"> | </i></a>                         
+                             <a class="btnDelete" alt="@item.soPhieu" title ="Xoá phiếu"><i class="fa fa-trash" style ="font-size :30px; color: red ; cursor: pointer;" aria-hidden="true"></i></a>                                               
+                    }                                            
+                </td>
+            </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhieuThoiViec", action = "ViewIndex", qSearch = ViewBag.Search, tuNgay = ViewBag.tuNgay, denNgay = ViewBag.denNgay,trangThai=ViewBag.trangThai }))
+    </ul>
+</div>

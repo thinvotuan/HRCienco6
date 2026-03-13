@@ -1,0 +1,169 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<script>
+    $(document).ready(function () {
+        $('#btnSearchNhanVienPhongBan').click(function () {
+            var searchText = $('#searchString123').val().replace(/\ /g, '+');
+            var url = "@Url.Action("LoadNhanVienSuatAn", "PhanQuyenSuatAn")" + "?searchString=" + searchText + '&maPhongBan=' + "@ViewBag.MaPhongBan";
+            beginPaging();
+            $('#TabNV').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('#checkAllLK').click(function (e) {
+            $('[name="ChekChonLK"]').prop('checked', this.checked);
+        });
+
+        $('[name="ChekChonLK"]').click(function (e) {
+            if ($('[name="ChekChonLK"]:checked').length == $('[name="ChekChonLK"]').length || !this.checked)
+                $('#checkAllLK').prop('checked', this.checked);
+        });
+
+        $("#btnThemNVLK").click(function () {
+
+            if ($("[name='ChekChonLK']:checked").length == 0) {
+                Alert.error("Không có nhân viên nào được chọn.", "Thông báo", { displayDuration: 2000 });
+                return;
+            }
+
+            if ($("[name='ChekChonLK']:checked").length >= 1) {
+                //
+                var users = [];
+                jQuery("input[name='ChekChonLK']:checked").each(function () {
+                    users.push(this.value);
+                })
+                var trs = $("#content .chon:checked").closest("tr").clone();
+                var filtered = trs.filter(function (i, n) {
+                    var user = $(this).find(".chon").val();
+                    $(this).find(".chon").parent().html("<button class='btn btn-warning btn-xs btnXoa' type='button'>Xóa</button>");
+                    if ($.inArray(user, users) == -1)
+                        return n;
+                })
+                $("#tbl-users >tbody").append(filtered);
+                var i = 1;
+                $("#tbl-users .sothutu").each(function () {
+                    $(this).html(i);
+                    i++;
+                });
+                //
+
+
+                var i = 0;
+                var strString;
+                var arrMaNV = [];
+                //Get value
+                jQuery("input[name='ChekChonLK']:checked").each(function (index, element) {
+                    strString = jQuery(this).attr("data-manhanvien");
+                    arrMaNV[i] = strString.split(',');
+                    i++;
+                });
+                var maNhomUser = $("#maNhomUser").val();
+               
+                $.ajax({
+                    url: "@Url.Action("updateListNVSuatAn", "PhanQuyenSuatAn")",
+                    type: "POST",
+                    dataType: "json",
+                    data: { MaNV: arrMaNV.toString(), maNhomUser: maNhomUser },
+                    success: function (data) {
+                        var url = "@Url.Action("LoadPartialNhanVienSuatAnSelected", "PhanQuyenSuatAn")" + "?maNhomUser=" + maNhomUser;
+                        $("#loadPartialNhanVien").load(url, function () {
+                            Alert.success("Thêm nhân viên thành công!", "Thông báo", { displayDuration: 2000 });
+                        });
+
+                    },
+
+                    error: function () {
+                        Alert.error("Thêm nhân viên thất bại., Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                    }
+                });
+            }
+
+        });
+
+    });
+    function beginPaging(args) {
+        // Animate        
+        $('.popupChonNVLienKet #container').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('.popupChonNVLienKet #container').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+    function enterToSeacrh123(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchNhanVienPhongBan").click();
+    }
+    
+</script>
+<div class="panel-body">
+            <div style="position: relative;margin-bottom: 5px;">
+                <input type="text" id="searchString123" value="@ViewBag.Search" class="form-control" style="padding-right: 30px;width:88%; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh123(event);" />
+                <i class="fa fa-search" id="btnSearchNhanVienPhongBan" style="position: absolute; top: 5px; right: 76px; cursor: pointer"></i>
+                <button type="button" class="btn btn-info" id="btnThemNVLK">Thêm</button>
+            </div>
+        </div>
+        <div id="container">
+            <table class="table table-striped table-hover table-condensed">
+                <thead style="font-size: 13px">
+                    <tr>
+                        <th style="width: 45px">STT</th>
+                        <th>Hình ảnh
+                        </th>
+                        <th>Nhân viên
+                        </th>
+                        <th>Phòng ban
+                        </th>
+                        <th>Chức danh
+                        </th>
+                        <th style="width: 45px;text-align:center">
+                             @Html.CheckBox("checkAllLK", false)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var HinhAnh = item.maNhanVien + ".jpg";          
+                        <tr>
+                            <td style="text-align:center">@i</td>
+                            <td style="text-align:center">
+                                <img id="Avatar" class="imgSmall" onerror="imgError(this);"  accept="image/*" src="/UploadFiles/QLNV/@HinhAnh" />
+
+                            </td>
+                            <td><i class="fa fa-user" style="color: blue"></i>@item.hoVaTen
+                                @if (item.birthday != null)
+                                  { 
+                                    <p>Ngày sinh: 
+                                    @String.Format("{0:dd/MM}", item.birthday)
+                                    </p>
+                                  }
+
+                            </td>
+                            <td>@item.phongBan</td>
+                            <td>@item.chucDanh</td>
+                            <td style="color: #0b74d5; text-align: center">  
+                                @Html.CheckBox("ChekChonLK", false, new { data_maNhanVien = item.userID})
+                            </td>
+                        </tr>
+                                  i++;
+                    }
+                </tbody>
+            </table>
+            <div>
+                Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+            </div>
+            <div>
+                <ul class="pagination">
+                    @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "TabNV", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhanQuyenSuatAn", action = "LoadNhanVienSuatAn", searchString=ViewBag.Search,maPhongBan=ViewBag.MaPhongBan }))
+                </ul>
+            </div>
+        </div>

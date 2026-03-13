@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>HR -  @System.Configuration.ConfigurationManager.AppSettings["tenHeThong"].ToString()</title>
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css" />
+    @*  <link href="~/Content/select2/4.0.3/css/select2.min.css" rel="stylesheet" />*@
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+    @*   <script src="~/Content/select2/4.0.3/js/select2.full.min.js"></script>*@
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+
+    <link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+    <script src="~/Scripts/batdongsan.generals.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/datetime-1.0.0.js"></script>
+    <script src="~/Scripts/Validate.js"></script>
+
+    <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/vi.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/autoNumeric.js"></script>
+    <script src="~/Scripts/batdongsan.uploadfile.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/additional-methods.min.js"></script>
+    <script src="~/Scripts/batdongsan.validate.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="~/Scripts/snowstorm.js"></script>*@
+    <link rel="stylesheet" href="~/Content/font/css/font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
+    @*<link rel="stylesheet" href="~/Content/Site.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/menuMobile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/common.css" type="text/css" />*@
+    
+    <link rel="stylesheet" href="~/Content/v1_20170419.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/votes.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+ 
+
+    @{Session["maMau"] = "4b6580";}
+    <script>function imgError(image) {
+    image.onerror = "";
+    image.src = "/Content/images/no-image.jpg";
+    return true;
+}
+        function imgErrorUser(image) {
+            image.onerror = "";
+            image.src = "/Content/images/no-image.jpg";
+            return true;
+        }</script>
+    <style>
+        
+        p.MK,div.help, div.logout, #container th,.btnMenuMobile, .hvr-underline-from-center:before
+        {
+           background-color: #@Session["maMau"] !important;
+            color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+        }
+        #wrapper.btn, #wrapper.btn{
+         background-color: #@Session["maMau"] !important;
+        }
+        #login i,fieldset legend{
+           color: #@Session["maMau"] !important;
+        }
+        p.MK,body fieldset{
+            border: 1px solid #@Session["maMau"] !important;
+        }
+        #tabs ul.ui-tabs-nav li.ui-tabs-selected.ui-state-active a{
+         
+        border-bottom-color: #@Session["maMau"] !important;
+        }
+        fieldset .btn-info,fieldset .btn-primary{
+          
+           background-color: #@Session["maMau"] !important;
+            border-color: #@Session["maMau"] !important;
+            background-image: linear-gradient(to bottom,#@Session["maMau"] 0,#@Session["maMau"] 100%);
+        }
+         .fa-times-circle:before
+        {
+            content: "\f057" !important;
+        }
+
+        .OpenBackg
+        {
+        }
+
+        .showMenuNav
+        {
+            display: block !important;
+        }
+
+       
+        
+       
+    </style>
+    @{
+        string tenMau = (string)Session["tenMau"];
+        string positionVal = (string)Session["positionVal"];
+
+
+        positionVal = "-168px";
+        tenMau = "colorTheme";
+        if (tenMau == "colorTheme")
+        {
+        <style>
+     input[value="Tìm kiếm"], input[value="Search"], button[value="Tìm kiếm"], button[value="Search"],input[value="Tìm"], button[value="Tìm"],input[id="btnSearch"],
+     input[value="Thêm"],button[value="Thêm"], input[value="Sửa"], button[value="Sửa"],
+     input[value="Xóa"], button[value="Xóa"], input[value="Gửi duyệt"], button[value="Gửi duyệt"],.btnPrint, #btnPrint, 
+     input[value="Thêm dòng"],button[value="Thêm dòng"], input[value="Lưu"], button[value="Lưu"],
+     input[value="In"],button[value="In"],input[value="Print"],button[value="Print"],input[value="Print View"],
+     button[value="Print View"],input[value="Trở về"], button[value="Trở về"], input[value="Thêm file"], button[value="Thêm file"],input[value="Import file"], button[value="Import file"], 
+     input[value="Xuất File"], button[value="Xuất File"],input[value="Xuất file"], button[value="Xuất file"],input[value="Export file"], button[value="Export file"],input[value="Xuất Excel"], button[value="Xuất Excel"],#btnTroVe,#btnSubmit,.btnDelete,#btnDelete,.btnUpdate,#btnUpdate,.btnThemeAdd,#btnThem,.btnThemeAddFile,.btnTroVe,.btnThemeSave,.btnUpdate,input[value="Gửi duyệt"], button[value="Gửi duyệt"],.btnEdit
+    {
+        background-position: 0px @positionVal !important;
+        border: 1px solid #fff !important;
+    }
+    
+</style>
+
+        }
+    }
+    <!-- End Icon -->
+
+     <style>
+        .iconTB
+        {
+            animation: colorText 20s linear 5s infinite alternate;
+        }
+        .note-editor table
+        {
+               max-width: 100% !important;
+    width: 100% !important;
+        }
+        #editor table,.formatTable table{
+        max-width:100% !important;
+        width: 100% !important;
+        }
+    </style>
+    <script>
+        //Set Time
+        //var startTime = 2100;    //  Sau 35p, Time, tính bằng giây 1 = 1s
+        var startTime = 300; // 5 phut request 1 lan
+        var s = startTime;
+        var countTime = 0;
+        var status = false;
+
+        var timeout = null; // Timeout
+
+        function start() {
+
+            if (s == -1) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/CheckSession/',
+                    data: {
+
+                    },
+                    success: function (result) {
+
+                        if (result) {
+
+
+                            s = startTime;
+                            // Reset Time
+                            countTime = 0;
+                            clearTimeout(timeout);
+                            start();
+                        }
+                        else {
+                            window.location = '/Home/Index';
+                        }
+                    }
+                });
+
+
+
+            }
+            else {
+                timeout = setTimeout(function () {
+                    s--;
+                    start();
+                }, 1000);
+            }
+        }
+
+        function doSetTimeout(i) {
+            setTimeout(function () { alert(i); }, 1000);
+        }
+        start();
+
+        //End Set Time
+
+
+    </script>
+</head>
+
+<body>
+    @* class="container-fluid" *@
+    <div class="wrapper_all">
+        <div class="headerDestopk">
+            <div class="content-wrapper">
+                <div class="group_header setwrapper">
+
+                    <div class="float-left" id="logoDesk">
+                        <a href="@Url.Action("Index", "Home")">
+                            <img class="img-logo" src="/Images/logo.png" /></a>
+                    </div>
+                    <div class="float-right">
+
+
+
+                        <section id="loginDesk" class="hideMobile">
+                            @Html.Partial("_LoginDeskPartial")
+                        </section>
+                    </div>
+                    
+                </div>
+
+                <div class="main-menu hideMobile">
+                    <section id="main-menu">
+                        @Html.Partial("_MenuPartial")
+                    </section>
+                </div>
+
+
+
+                <div class="clr"></div>
+
+            </div>
+        </div>
+        <header class="showMobile">
+
+            <div class="content-wrapper">
+                <div class="group_header setwrapper">
+
+                    <div class="float-left" id="logo">
+                        @*<a href="@Url.Action("Index", "Home")">
+                            <img class="img-logo" src="/Images/logo.png" /></a>*@
+                    </div>
+                    <div class="float-right">
+
+
+
+                        <section id="login">
+                            @Html.Partial("_LoginPartial")
+                        </section>
+                    </div>
+                </div>
+
+                @*<div class="main-menu hideMobile" style="display: none">
+                    <section id="main-menu">
+                        @Html.Partial("_MenuPartial")
+                    </section>
+                </div>*@
+
+
+                <div class="clr"></div>
+
+            </div>
+        </header>
+        <div class="pageLoading" style="display: none">
+            <img src="/Content/images/loadingPage.gif" />
+        </div>
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix setwrapper" style="padding-top: 10px">
+            @RenderBody()
+        </section>
+        <footer>
+            <div class="content-wrapper">
+                <div>
+                    <p>&copy; @*@DateTime.Now.Year*@ 2016 - Nhân Sự @System.Configuration.ConfigurationManager.AppSettings["tenHeThong"].ToString()</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <div class="newMenu showMobile">
+        <div class="logoHomeMenu ActiveLogo">
+            <div class="homestt1">
+                <a href="@Url.Action("Index", "Home")" >
+                    <img class="img-logo" src="/Images/logo.png"></a>
+            </div>
+            <div class="iconstt1">
+                <a id="toggle" href="#"><i class="fa fa-list"></i></a>
+            </div>
+            <div class=" AddcloseXMobile"><i class="fa fa-reply-all" aria-hidden="true"></i></div>
+        </div>
+
+        <div id="overlay"></div>
+        <nav id="menuMobile" style="display: none">
+            <ul>
+
+                @*<li class="home">
+                    <a href="@Url.Action("Index", "Home")" class="SaveItemActive"><i class="fa fa-home" aria-hidden="true"></i>Trang chủ</a>
+
+                </li>*@
+                @Html.Partial("_MenuMobilePartial")
+            </ul>
+        </nav>
+    </div>
+    @RenderSection("scripts", required: false)
+    @*@Scripts.Render("~/bundles/jquery")*@
+    
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+
+            // end GH
+            $(".box-cd .content_chude div").click(function () {
+                var index = $(".box-cd .content_chude div").index(this);
+                var url = window.location.href;
+                var valClass = $(".box-cd .content_chude div").eq(index).attr("class");
+
+                arrColor = valClass.split(" ");
+
+                // setTimeout(function() {
+
+                window.location = '/Home/changeTheme?maMau=' + arrColor[0] + '&tenMau=' + arrColor[1] + '&positionVal=' + arrColor[2] + '&url=' + url;
+                //  },);
+            });
+            //HOtline
+            $('#HotLineSupport').click(function () {
+                $("#ShowHotLine").fadeIn(200);
+            }).mouseleave(function () {
+                $("#ShowHotLine").fadeOut(200);
+            });
+            //End hotLine
+            // Set Download
+            $(".box-cd").hide();
+            $('.txt-download').click(function () {
+                $(".box-download").fadeIn(200);
+            }).mouseleave(function () {
+                $(".box-download").fadeOut(200);
+            });
+
+            // End download
+            // Set Chu De
+            $(".box-cd").hide();
+            $('.txt-cd').click(function () {
+                $(".box-cd").fadeIn(200);
+            }).mouseleave(function () {
+                $(".box-cd").fadeOut(200);
+            });
+
+            //End Chu De
+            $('#menu li.responsive > a').click(function () {
+                $('li.responsive').removeClass('active');
+                $(this).parent().addClass('active');
+            });
+
+            $(".mo-rong").click(function () {
+                $("#res-menu").toggleClass("show-res");
+            });
+            $("#inForHover,#inForHover2").click(function () {
+                $("#popUpUser,#popUpUser2").toggleClass("addHeightWidth");
+                $(".gb_u").toggle();
+            });
+            $('#ToBackTop').hide();
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+                    $('#ToBackTop').fadeIn();
+                } else {
+                    $('#ToBackTop').fadeOut();
+                }
+            });
+            $('#ToBackTop').click(function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 500);
+                return false;
+            });
+            $(document).on("click", "ul.pagination li", function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 0);
+            });
+
+        });
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            var ico = $('<i class="fa fa-caret-right"></i>');
+            $('nav#menuMobile li:has(ul) > a').append(ico);
+            $('nav#menuMobile li:has(ul)').addClass('parentMenuID');
+            $('nav#menuMobile li li:has(ul)').addClass('parentMenu').removeClass('parentMenuID');
+            $(document).on("click", ".parentMenu", function () {
+                //$('.parentMenu').on('click', function () {
+                var clsMenuParent = $(this).parent().parent().attr('id');
+
+                var idclsMenuParent = "#" + clsMenuParent;
+
+                if ($(this).hasClass('open')) {
+
+
+                    $(this).removeClass('open');
+                }
+                else {
+                    $(this).addClass('open');
+
+                }
+            });
+
+            $(document).on("click", ".parentMenuID a", function () {
+                // $('.parentMenuID a').on('click', function () {
+                var clsMenuParent = $(this).parent().attr('id');
+
+                var idclsMenuParent = "#" + clsMenuParent;
+
+                if ($(idclsMenuParent).hasClass('open')) {
+                    $(idclsMenuParent).removeClass('open');
+                }
+                else {
+                    $(idclsMenuParent).addClass('open');
+                }
+            });
+            $(document).on("click", "a#toggle .fa-times-circle", function () {
+                $(".logoHomeMenu .iconstt1").removeClass("hideIconLogoMobile");
+                $("a#toggle").removeClass("toggleMenuGimp");
+                $(".logoHomeMenu").addClass("ActiveLogo");
+                $('a#toggle i').removeClass('fa-times-circle').addClass('fa-list');
+                $("section").removeClass("OpenBackg")
+                $('html').removeClass('open-menu');
+                $("#menuMobile").removeClass("showMenuNav");
+                $(".wrapper_all").removeClass('claGimpWrapp');
+                $("div.modal").removeClass('claGimpWrapp');
+                $("header .float-right").removeClass("gimpHear");
+                SaveStatusMenu("no");
+            });
+            $(document).on("click", "a#toggle .fa-list", function () {
+                $(".logoHomeMenu").removeClass("ActiveLogo");
+                $(".logoHomeMenu .iconstt1").addClass("hideIconLogoMobile");
+                $("a#toggle").addClass("toggleMenuGimp");
+                $(".wrapper_all").addClass('wrapper_allGimp');
+
+                $(".AddcloseXMobile").addClass('closeXMobile');
+                $('a#toggle i').removeClass('fa-list fa-times-circle').addClass('fa-thumb-tack');
+                $("section").addClass("OpenBackg");
+                $('html').addClass('open-menu');
+                $("#menuMobile").addClass("showMenuNav");
+                SaveStatusMenu("no");
+
+            });
+            $(document).on("click", ".wrapper_allGimp,.AddcloseXMobile", function () {
+                $(".logoHomeMenu .iconstt1").removeClass("hideIconLogoMobile");
+                $(".logoHomeMenu").addClass("ActiveLogo");
+                $(".wrapper_all").removeClass('wrapper_allGimp');
+                $("a#toggle").removeClass("toggleMenuGimp");
+                $('a#toggle i').removeClass('fa-times-circle  fa-thumb-tack').addClass("fa-list");
+                $("section").removeClass("OpenBackg")
+                $('html').removeClass('open-menu');
+                $("#menuMobile").removeClass("showMenuNav");
+                $(".wrapper_all").removeClass('claGimpWrapp');
+                $(".AddcloseXMobile").removeClass('closeXMobile');
+                $("div.modal").removeClass('claGimpWrapp');
+                $("header .float-right").removeClass("gimpHear");
+                SaveStatusMenu("no");
+
+            });
+            $(document).on("click", ".SaveItemActive,.homestt1", function () {
+                var MaCVActive = $(this).parent().attr("class");
+
+                SaveMaCVMenuActive(MaCVActive);
+            });
+
+            $('div#overlay').on('click', function () {
+                $('html').removeClass('open-menu');
+            })
+            // Get height
+            //Setting
+            $(".iconSetting").click(function () {
+                $(".contentSetting").slideToggle();
+            });
+            // End setting
+        });
+        function SaveStatusMenu(statusMenu) {
+            var contentMenu = $(".newMenu").html();
+            $.ajax({
+                type: "POST",
+                url: '/Home/SaveStatusMenu/',
+                data: {
+                    statusMenu: statusMenu,
+                    contentMenu: contentMenu
+                },
+                success: function (result) {
+
+                    if (result) {
+
+                    }
+                    else {
+                        window.location = '/Home/Index';
+                    }
+                }
+            });
+
+        }
+
+        function SaveMaCVMenuActive(MaCVActive) {
+
+            var contentMenu = $(".newMenu").html();
+
+            $.ajax({
+                type: "POST",
+                url: '/Home/SaveMaCVMenuActive/',
+                data: {
+                    MaCVActive: MaCVActive
+                },
+                success: function (result) {
+
+                    if (result) {
+
+                    }
+                    else {
+                        window.location = '/Home/Index';
+                    }
+                }
+            });
+        }
+
+        </script>
+    @{
+        string statusMenu = (string)Session["statusMenu"];
+        if (statusMenu != "")
+        {
+            if (statusMenu == "fa-times-circle")
+            {
+        <script>
+            $("a#toggle").addClass("toggleMenuGimp");
+            $(".logoHomeMenu").removeClass("ActiveLogo");
+            $('a#toggle i').removeClass('fa-list fa-thumb-tack').addClass('fa-times-circle');
+            $("section").addClass("OpenBackg");
+            $('html').addClass('open-menu');
+            $("#menuMobile").addClass("showMenuNav");
+            $(".wrapper_all").removeClass('wrapper_allGimp');
+            $(".wrapper_all").addClass('claGimpWrapp');
+            $("div.modal").addClass('claGimpWrapp');
+            $("header .float-right").addClass("gimpHear");
+        </script>
+            }
+        }
+        
+       
+    }
+
+
+
+    <script>
+        $(document).ready(function () {
+            // Code process event
+
+            // End code process event
+            //Active menu
+            var MaCVActive = $(".MaCVActive span").html();
+            var classActive = "." + MaCVActive;
+            classActive = classActive.split(" ")[0];
+
+            $(classActive).addClass("activeMenuFocus");
+            $(classActive).parent().parent().addClass("open");
+            $(classActive).parent().parent().parent().parent().addClass("open");
+            //End Active menu
+            var heigWin = $(window).innerHeight() + 10;
+            $(".wrapper_all,.main-content").css("min-height", heigWin);
+            // Add component mobile
+            $(document).on("click", "ul.pagination li", function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 0);
+            });
+
+        });
+    </script>
+
+    <div id="ToBackTop" class="hvr-icon-bob">
+        <i class="fa fa-chevron-up"></i>
+    </div>
+     <div class="MaCVActive" style="display: none">
+        @{
+            string MaCVActive = (string)Session["MaCVActive"];
+            if (MaCVActive != null)
+            { 
+            <span>@MaCVActive</span>
+            }
+            else
+            {
+            <span>NoActive</span>
+            }
+        }
+    </div>
+
+</body>
+</html>

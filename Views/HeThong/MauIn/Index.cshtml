@@ -1,0 +1,258 @@
+﻿@using BatDongSan.Utils.Paging;
+@using BatDongSan.Models.HeThong;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var buocDuyet = ViewBag.BuocDuyet as List<BatDongSan.Models.HeThong.sp_QuiTrinhDuyet_ListBuocDuyetResult>;
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $('#btnUpdate').click(function (id) {
+            var idArray = [];
+            $("#container input:checkbox:checked").each(function () {
+                idArray.push(this.value);
+            });
+            var url = '@Url.Action("Edit", "MauIn", new { id = "maKH" })';
+            if (idArray.length > 0) {
+                var ma = idArray[0]
+                url = url.replace("maKH", ma);
+                // url = url.replace("PDC1603-001", "PDC1603-001");
+                window.location.href = url;
+            }
+            else {
+                bootbox.alert("Vui lòng chọn mẫu in để cập nhật");
+            }
+        });
+
+        $('#btnSearch').click(function () {
+            var url = "@Url.Action("Index", "MauIn")" + "?pageSize=" + $('#pref-perpage').val() + "&qSearch=" + $("#pref-search").val().replace(/\ /g, "+") + "&tuNgay=" + $("#fromDate").val() + "&denNgay=" + $("#toDate").val() + "&trangThaiDuyet=" + $("#TrangThai").val();
+            beginPaging();
+            $('#maintable >tbody').html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            });
+        })
+
+        $('#TrangThai').change(function () {
+            $("#btnSearch").click();
+        });
+
+        $('#btnDelete').click(function (e) {
+            if ($('input:checkbox:checked').length <= 0) {
+                bdsConfirm.alert("Không có mẫu in nào được chọn!", "Xóa");
+                e.preventDefault();
+            }
+            else {
+                var cnf = window.confirm("Bạn có muốn xóa không?");
+                if (!cnf) {
+                    e.preventDefault();
+                }
+            }
+        })
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#btnThem').click(function (e) {
+            var url = "@Url.Action("Create", "MauIn")";
+            window.location.href = url;
+        });
+    });
+
+        function themMoi() {
+            var url = "@Url.Action("Create", "PhieuDangKy")";
+            window.location.href = url;
+        }
+
+        function beginPaging(args) {
+            // Animate    
+            noRecordToGet = false;
+            offset = 50;
+            $('#maintable >tbody').fadeOut('fast');
+        }
+
+        function successPaging() {
+            // Animate
+            $('#maintable >tbody').fadeIn('fast');
+        }
+
+        function failurePaging() {
+            alert("Không thể tải dữ liệu");
+        }
+
+        function toDay() {
+            $("#fromDate").data("DateTimePicker").date(moment());
+            $("#toDate").data("DateTimePicker").date(moment());
+        }
+        function toWeek() {
+            $("#toDate").data("DateTimePicker").date(moment());
+            $("#fromDate").data("DateTimePicker").date(moment().subtract(7, "day"));
+        }
+        function toMonth() {
+            $("#toDate").data("DateTimePicker").date(moment());
+            $("#fromDate").data("DateTimePicker").date(moment().subtract(1, "month"));
+        }
+
+        function enterToSeacrh(event) {
+            if (event.keyCode == 13)
+                $("#btnSearch").click();
+        }
+
+        //Load more page when hitting the bottom of page 
+        var loading = false, noRecordToGet = false, fetchNext = 50, offset = 50, searchString = "";
+        $(window).on("scroll", function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                if (loading == false && noRecordToGet == false) {
+                    var url = "@Url.Action("LoadMore", "MauIn")" + "?offset=" + offset + "&fetchNext=" + fetchNext + "&qSearch=" + $("#pref-search").val().replace(/\ /g, "+")
+                                                                             + "&tuNgay=" + $("#fromDate").val() + "&denNgay=" + $("#toDate").val() + "&trangThaiDuyet=" + $("#TrangThai").val();
+                    loading = true;
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        dataType: "html",
+                        success: function (data) {
+                            offset = offset + fetchNext;
+                            $("#loader").show();
+                            setTimeout(function () {
+                                $("#maintable >tbody").append(data);
+                                if (data.trim() == "") {
+                                    noRecordToGet = true;
+                                    $("#loader").hide();
+                                }
+                                loading = false;
+                            }, 1000);
+                        },
+                        error: function () {
+                            bdsConfirm.alert("Có lỗi xảy ra", "Thông báo");
+                        }
+                    })
+                }
+            }
+        });
+
+        function ViewDetailHistory(soPhieu, maQuiTrinh) {
+            var url = '@Url.Action("LichSuDuyetPhieu/", "DMNguoiDuyet")' + soPhieu + '?maQuiTrinh=' + maQuiTrinh;
+            PopUpManager(url, "DUYET", 1000, 300);
+        }
+
+        function PopUpManager(url, title, w, h) {
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
+            var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+        }
+
+</script>
+<style>
+    #maintable td
+    {
+        vertical-align: middle;
+        border-right: 2px solid #ADC2D6;
+        position: relative;
+    }
+
+    #filterPanel td
+    {
+        border: none;
+        vertical-align: middle;
+    }
+
+    #content td
+    {
+        border: none;
+    }
+
+    .tdtitle
+    {
+        font-weight: bold;
+    }
+</style>
+
+@using (Html.BeginForm("Delete", "MauIn", FormMethod.Post, new { @class = "form-inline", @role = "form", @id = "form-submit" }))
+{
+    <div>
+        <fieldset class="removeBorderFieldset">
+
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Danh sách mẫu in văn bản</span></a></li>
+                </ul>
+            </div>
+            <div>
+                <div id="dialog" class="alert alert-info" style="display: none">
+                    <strong>Thông tin!</strong> Vui lòng chọn mẫu in để cập nhật
+                </div>
+            </div>
+            <div class="panel panel-default" style="border-color: #ddd">
+                <div id="filterPanel">
+                    <table class="table table-condensed">
+                        <tr class="background_tr">
+                            <td style="position: relative; width: 100px">
+                                <input class="form-control datepicker" style="width: 100%" id="fromDate" placeholder="từ ngày" />
+                            </td>
+                            <td style="position: relative; width: 100px">
+                                <input class="form-control datepicker" style="width: 100%" id="toDate" placeholder="đến ngày" />
+                            </td>
+                            <td style="font-size: 12px;" class="font-link-time ">
+                                <a href="javascript:void(0);" onclick="toDay()">Today</a> | <a href="javascript:void(0);" onclick="toWeek()">Last 7 days</a> |                                    
+                                <a href="javascript:void(0);" onclick="toMonth()">Last 30 days</a>
+                            </td>
+                            <td></td>
+                            
+                        </tr>
+                        <tr class="background_tr">
+                            <td colspan="2">
+                                <input type="text" style="width: 100%" class="form-control" id="pref-search" onkeydown="enterToSeacrh(event)" />
+                            </td>
+                            <td>
+                                <button id="btnSearch" type="button" class="btn btn-primary btn-sm" style="border: 1px double; margin-left: 5px">
+                                    <span class="glyphicon glyphicon-search"></span>Tìm kiếm
+                                </button>
+                            </td>
+                            <td>
+                                <div style="float: right">
+                                    <button class="btn btn-info" type="button" id="btnThem">Thêm </button>
+                                    <button class="btn btn-info" type="button" id="btnUpdate">Sửa </button>
+                                    <button class="btn btn-info" id="btnDelete">Xóa </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- End Table -->
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div id="container">
+                    <div id="content">
+                        <table class="table table-striped table-hover table-condensed" id="maintable">
+                            <thead>
+                                <tr id="trtop">
+                                    <th style="text-align: center; min-width: 45px">STT</th>
+                                    <th style="text-align: center">Mã mẫu in</th>
+                                    <th style="text-align: center">Tên mẫu in</th>
+                                    <th style="text-align: center">Loại mẫu in</th>
+                                    <th style="text-align: center">Ngày áp dụng</th>
+                                    <th style="text-align: center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{Html.RenderPartial("ViewIndex");}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="text-align: center; display: none" id="loader">
+                        <img src="/Images/loader.gif" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>    
+}

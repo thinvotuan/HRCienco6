@@ -1,0 +1,144 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model tbl_NS_QuanHeGiaDinh
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+
+        $("#btnThem").click(function () {
+            var form = $("#form-modal");
+            form.validate({
+                rules: {
+                    idLoaiQuanHe: {
+                        greaterThanZero: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    $(error).remove();
+                },
+            });
+
+            var url = "@Url.Action("QuanHeGiaDinh", "NhanVien")";
+
+            if (form.valid()) {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "html",
+                    data: form.serialize(),
+                    success: function (html) {
+                        $("#btnCloseQuanHeGD").click();
+                        $("#tab3").html(html);
+                        Alert.success("Lưu thông tin thành công!", "Thông báo", { displayDuration: 2000 });
+                        location.reload();
+                        
+                    },
+                    error: function () {
+                        location.reload();
+                        //Alert.error("Có lỗi xảy ra", "Lỗi", { displayDuration: 2000 });
+                    }                    
+                })
+            }
+        });
+    })
+</script>
+
+
+<div id="quanhe-panel" class="filter-panel">
+    <script>
+        $(document).ready(function () {
+            $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        })
+    </script>
+    <div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+        <h4 style="color: #1b809e; margin-left: 10px">Thông tin quan hệ gia đình</h4>
+    </div>
+    <div style="margin-top: 15px">
+        <table class="table table-responsive" id="tbl-create">
+            <tbody>
+                <tr>
+                    <td class="col-sm-4 tdtitle" >Tên người quan hệ <span style="font-style: italic; color: red">*</span></td>
+                    <td class="col-sm-8">
+                        @Html.TextBoxFor(model => model.tenNguoiQuanHe, new { @class = "form-control", required = "required" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Mối quan hệ <span style="font-style: italic; color: red">*</span></td>
+                    <td>
+                    @Html.DropDownListFor(model => model.idLoaiQuanHe, ViewBag.LoaiQuanHeGDs as SelectList, new { @class = "form-control", required = "required" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày sinh <span style="font-style: italic; color: red">*</span></td>
+                    <td>
+                    @Html.TextBoxFor(model => model.ngaySinh, new { @class = "form-control datepicker", required = "required" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nghề nghiệp</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.ngheNghiep, new { @class = "form-control" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số CMND</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.CMNDSo, new { @class = "form-control" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày cấp</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.ngayCap, new { @class = "form-control datepicker" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nơi cấp</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.noiCap, new { @class = "form-control" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Chỗ ở hiện tại</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.diaChiHienTai, new { @class = "form-control" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Giảm trừ phụ thuộc</td>
+                    <td>
+                    @Html.CheckBoxFor(model => model.giamTruPhuThuoc, new { @class = "form-control" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số tiền giảm trừ</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.soTienGiam, new { @class = "form-control numberinput" })
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày bắt đầu giảm trừ</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.ngayBatDauGiam, new { @class = "form-control datepicker" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày kết thúc giảm trừ</td>
+                    <td>
+                    @Html.TextBoxFor(model => model.ngayKetThucGiam, new { @class = "form-control datepicker" })
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <style>
+        #tbl-create td
+        {
+            border: none;
+        }
+
+        #tbl-create
+        {
+            margin: 0;
+        }
+    </style>
+</div>

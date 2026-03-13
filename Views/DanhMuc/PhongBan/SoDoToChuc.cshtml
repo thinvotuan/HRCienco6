@@ -1,0 +1,350 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var listPhanCa = ViewBag.shiftType as IList<tbl_NS_PhanCa>;
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    .box_capbac li
+    {
+        line-height:1.7;
+    }
+    .box_capbac li i
+    {
+        width:15px;
+    }
+    .navigation1 a:hover,.navigation1 a:link, .navigation1 a:visited, .navigation1 a:active, .navigation1 a:hover
+    {
+        text-decoration:none !important;
+    }
+</style>
+<script type="text/javascript">
+
+    var sIndex = 0, offSet = 39, limit = 40, isPreviousEventComplete = true, isDataAvailable = true;
+    $().ready(function () {
+      
+        $(document).on('mouseover', '.mouseOver2 img.Avatar', function () {
+           
+            $(".Img1").remove();
+
+            var valImg = $(this).attr("src");
+           
+            $(this).after('<img src="' + valImg + '" class="Img1">');
+        });
+       
+        $("#btnReload").click(function () {
+            location.href = '/PhongBan/SoDoToChuc/';
+
+        });
+
+
+        //Add
+        $(".custome_fieldSet li a").addClass("hvr-underline");
+        var heightBrowser = $(window).height();
+        var heightWrapper = $(".wrapper").height();
+
+        var heightSet = heightBrowser - heightWrapper;
+        heightSet = parseInt(heightSet);
+        heightSet = heightSet - 50;
+
+        $("#divTreeCongViec").css("height", heightSet);
+        $("#navigation1").treeview({
+            persist: "location",
+            collapsed: false,
+            unique: false
+        });
+        var parentId = "";
+        //khi click vào công viêc tren tree
+        $("#navigation1 a").click(function () {
+
+            $.each($("#navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            parentId = $(this).attr("alt");
+            
+            $("#currentParentID").val(parentId);
+            sIndex = 0;
+            offSet = 39;
+            isPreviousEventComplete = true;
+            isDataAvailable = true;
+            DisableWithCursorElementForm();
+            $("#tbody").html("");
+
+            getData();
+
+
+
+
+        });
+        $("#selectCapBac").change(function () {
+            DisableWithCursorElementForm();
+            $('#btnSearch').click();
+        });
+        $('#btnSearch').click(function () {
+            sIndex = 0;
+            offSet = 39;
+            isPreviousEventComplete = true;
+            isDataAvailable = true;
+            DisableWithCursorElementForm();
+            $("#tbody").html("");
+            getData();
+        });
+
+        $("#searchText").keyup(function (e) {
+
+            if (event.keyCode == 13) {
+                DisableWithCursorElementForm();
+                $('#btnSearch').click();
+            }
+        });
+    });
+    var loading = false, noRecordToGet = false;
+
+    $(window).scroll(function () {
+        if (sIndex != 0) {
+            if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
+                if (isPreviousEventComplete && isDataAvailable) {
+
+                    isPreviousEventComplete = false;
+
+                    $("#progress").show();
+
+                    getData();
+
+
+
+
+                }
+            }
+        }
+    });
+
+    
+    function Search() {
+        $('#btnSearch').click();
+    }
+    function getData() {
+
+        $("#progress").show();
+        var giatri = $("#currentParentID").val();
+        var qsearch = $("#searchText").val();
+        var capBac = $("#selectCapBac").val();
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@Url.Action("LoadTreeNhanVien","PhongBan")',
+            data: { "parrentId": giatri.trim(), "qSearch": qsearch, "soCapBac": capBac, "pageIndex": sIndex, "pageSize": offSet },
+            success: function (result) {
+                UnDisableWithCursorElementForm();
+                $("#progress").hide();
+                $(".bindTotal b").html(result.count);
+                if (result != null) {
+                   
+                    var html = '';
+                    var soCapBacTruoc = result.lists[0].soCapBac;
+                    var soCapBacHienTai;
+                    for (var i = 0; i < result.lists.length; i++) {
+                        soCapBacHienTai = result.lists[i].soCapBac;
+
+                        if (soCapBacHienTai < soCapBacTruoc) {
+                            soCapBacTruoc = soCapBacHienTai;
+
+                            html = html + '<div class="line_capbac"></div>';
+                        }
+                        html = html + '<div class="box_capbac">';
+                        html = html + '<div class="box_cp_img mouseOver mouseOver2">';
+                        html = html + '<img class="Avatar" onerror="imgError(this);" accept="image/*" src="/UploadFiles/QLNV/' + result.lists[i].maNhanVien + '.jpg" />';
+                        html = html + '</div>';
+                        html = html + '<ul>';
+                        html = html + '<li><i class="fa fa-user-secret" aria-hidden="true"></i> ' + result.lists[i].chucDanh + '</li>';
+
+                        html = html + '<li><i class="fa fa-user" style="color:blue"></i> ' + result.lists[i].hoVaTen + '</li>';
+                        html = html + '<li><i class="fa fa-calendar"></i> ' + ConvertDateTime(result.lists[i].birthday) + '</li>';
+                        html = html + '<li><i class="fa fa-object-group" aria-hidden="true"></i> ' + result.lists[i].phongBan + '</li>';
+                        html = html + '<li><i class="fa fa-phone" aria-hidden="true"></i> ' + result.lists[i].telephone + '</li>';
+                        html = html + '<li style="font-size: 10px;"><i class="fa fa-envelope-o" aria-hidden="true"></i> ' + result.lists[i].email + '</li>';
+                        html = html + '</ul>';
+                        html = html + '</div>';
+                    }
+                    if (sIndex == 0) {
+                        $("#tbody").html("");
+                        $("#tbody").html(html);
+                    }
+                    else {
+                        $("#tbody").append(html);
+                    }
+
+                    sIndex = sIndex + limit;
+                    offSet = offSet + limit;
+                    isPreviousEventComplete = true;
+                    $(this).data('requestRunning', false);
+                }
+                if (result == '')  //When data is not available
+                    isDataAvailable = false;
+                $("#progress").hide();
+
+            },
+            complete: function () {
+                UnDisableWithCursorElementForm();
+            },
+            error: function (error) {
+                UnDisableWithCursorElementForm();
+                jAlert(error, 'Lỗi');
+            }
+
+        });
+    }
+    function ConvertDateTime(date) {
+        if (date != null) {
+            var dateString = date.substr(6);
+            var currentTime = new Date(parseInt(dateString));
+            var month = currentTime.getMonth() + 1;
+            if (month < 10) month = "0" + month;
+            var day = currentTime.getDate();
+            if (day < 10) day = "0" + day;
+            var year = currentTime.getFullYear();
+            var date = day + "/" + month + "/" + year;
+        }
+        return date;
+    }
+    function DisableWithCursorElementForm() {
+
+        $("*").css("cursor", "progress");
+        $("body").addClass("DisablePointerEvent");
+        $("body").bind("keydown", function () { return false });
+    }
+
+    function UnDisableWithCursorElementForm() {
+        $("*").css("cursor", "auto");
+        $("body").removeClass("DisablePointerEvent");
+        $("body").unbind("keydown");
+    }
+    
+
+    </script>
+<style>
+    .tbl-create td
+    {
+        border: none;
+    }
+
+    input.form-control
+    {
+        display: inline;
+    }
+
+    #navigation1 a:link
+    {
+        color: #0000FF;
+    }
+</style>
+<form id="form-submit">
+    <div id="container" class="custome_fieldSet wrapper_sodotochuc">
+        <input type="hidden" id="currentParentID" value="" />
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Sơ đồ tổ chức</span></a></li>
+                </ul>
+            </div>
+            <div id="tabs" style="width: 70%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                  
+
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                        <a href="#"><span><i class="fa fa-users" aria-hidden="true"></i>Danh sách nhân viên</span></a></li>
+                </ul>
+            </div>
+            <table width="100%" class="tbl-create">
+                <tr>
+                    <td style="width: 30%; box-shadow: 0 10px 30px rgba(0,0,0,.3); box-sizing: border-box; vertical-align: top">
+                        <div style="overflow: auto; margin-left: 5px;" id="divTreeCongViec">
+                            @Html.Raw(ViewBag.departments)
+                        </div>
+                        <div style="text-align: center; padding: 10px 0;">
+                         @*   <button class="btn btn-info btn-xs" type="button" id="btnReload">Tải lại</button>*@
+                            
+                            <input type="hidden" id="flag" name="flag" />
+                        </div>
+                    </td>
+                    <td style="width: 70%; padding-left: 3px; box-sizing: border-box; vertical-align: top">
+                      
+                            <div style="padding: 5px; padding-right: 0px; background-color: #DADEE4; overflow:hidden;">
+                                <div style="width: 389px;float: left;">
+                                <div style="float:left;">Nhập mã hoặc tên:</div>
+                               
+                               
+                                 <div class="input-group">
+                                  <input type="text" class="form-control" id="searchText" name="searchText" style="width: 200px;">
+                                  <span class="input-group-btn" style="width:0%">
+                                    <button class="btn btn-sm" type="button"  id="btnSearch">Tìm kiếm</button>
+                                  </span>
+                                </div><!-- /input-group -->
+                                    </div>
+                                <span style="display:none">
+                                Cấp bậc: 
+                                <select style="width:100px;" id="selectCapBac">
+                                 <option>Chọn cấp bậc</option>
+                                 	<option value="8">Tổng Giám đốc</option>
+                                    <option value="7">	CTHĐTV : Chị hồng</option>
+                                    <option value="6">	Phó Tổng Giám đốc</option>
+                                    <option value="5">	Ban Giám đốc</option>
+                                    <option value="4">	Phó Giám Đốc : GĐPTDA, PGĐKT, TP.ME, KTT</option>
+                                    <option value="3">	Trưởng phòng - CHT - Phó Ban ME</option>
+                                    <option value="2">	Phó Phòng - CHP- Trưởng Bộ phận</option>
+                                    <option value="1">	Nhân viên</option>
+                                 
+                                </select>
+                                    </span>
+                                <div style="float:right" class="bindTotal"><i class="fa fa-users" aria-hidden="true"></i> Tổng số: <b></b> Nhân viên</div>
+                            </div>
+                            <div id="progress" style="text-align: center; position: fixed; top: 50%; width: 45%; display: none;">
+                                <img src="/Content/images/loading.gif">
+                            </div>
+                            <div class="wrapper_line" id="tbody">
+                             
+                            </div>
+                        
+                       
+                    </td>
+                </tr>
+            </table>
+            <!-- Modal -->
+            <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+                <div class="modal-dialog  modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                        <div class="modal-body">
+                            <div class="container" style="width: 98%">
+                                <div class="row">
+                                    <div id="filter-panel" class="filter-panel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

@@ -1,0 +1,294 @@
+﻿
+<style>
+.Wrapper_TimeLine {
+        float: none;
+    position: relative;
+    clear: both;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0px auto;
+}
+#contentTimeLine .boxTimeLine .TLRight
+    {
+        width:100%;
+        padding-left: 37px;
+    }
+    #contentTimeLine .boxTimeLine .iconTL {
+    position: absolute;
+    
+}
+    #contentTimeLine .boxTimeLine .TLRight .ngayLapTL
+    {
+        color: red;
+    font-size: 13px;
+    font-weight: bold;
+    }
+    .noidungTL
+    {
+        padding-left:40px;
+    }
+     #contentTimeLine .boxTimeLine .TLRight .TimeLapTL
+    {
+         padding-left: 21px;
+    color: rgb(81, 144, 50);
+    font-weight: bold;
+    }
+    .ngLapTL
+    {
+         color: #c4161c;
+    padding-right: 10px;
+    float: right;
+    }
+    .soPhieuTL
+    {
+      color:#404041;
+      padding-left: 10px;
+    }
+    .wrapper_website .main
+    {
+        min-width:100%;
+    }
+    .viewDetail
+    {
+        cursor:pointer;
+    }
+</style>
+ <script type="text/javascript">
+     var countParent = 0;
+     var parent = "parent0";
+     var flashIndex = 0,ngayQuery = 0,
+  isPreviousEventComplete = true,
+  isDataAvailable = true;
+     var flashNgay = 0;
+     var ngayCurr = "";
+     var sttClick = 0;
+     var ngayHienTai = "";
+     $(document).ready(function () {
+         //btnRefreshTL//
+         $("#btnSearch").click(function () {
+             flashIndex = 0;
+             $("#currentDateTL").val('');
+             $("#contentTimeLine").html("");
+             $("#progress").show();
+
+             isPreviousEventComplete = true;
+             isDataAvailable = true;
+             getData();
+         });
+
+         //End btnRefreshTL//
+         //-------------------------------------------------------
+
+        
+         $(document).on("click", ".viewDetail", function () {
+            
+             var idParent = $(this).parent().parent().attr('id');
+             var classChild = "." + idParent;
+             if ($(classChild).css('display') == 'none') {
+                 $(this).html('<i class="fa fa-sort-asc"></i>Ẩn').css('color', 'red');
+             }
+             else {
+                 $(this).html('<i class="fa fa-sort-desc"></i>Xem tất cả').css('color', 'green');
+             }
+             $(classChild).slideToggle();
+         });
+         
+         $("#currentDateTL").val(now());
+          ngayHienTai = $("#currentDateTL").val();
+         $("#contentTimeLine").html("");
+             $("#progress").show();
+            
+             isPreviousEventComplete = true;
+             isDataAvailable = true;
+             getData();
+             
+         if ($('#back-to-top').length) {
+             var scrollTrigger = 100, // px
+                 backToTop = function () {
+                     var scrollTop = $(window).scrollTop();
+                     if (scrollTop > scrollTrigger) {
+                         $('#back-to-top').addClass('show');
+                     } else {
+                         $('#back-to-top').removeClass('show');
+                     }
+                 };
+             backToTop();
+             $(window).bind('scroll', function () {
+                 backToTop();
+             });
+             $('#back-to-top').bind('click', function (e) {
+                 e.preventDefault();
+                 $('html,body').animate({
+                     scrollTop: 0
+                 }, 700);
+             });
+         }
+     });
+     var loading = false,
+         noRecordToGet = false;
+     
+     $(window).scroll(function () {
+         
+         if (flashIndex != 0) {
+             if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
+                 
+                
+                   
+                 if (isPreviousEventComplete && isDataAvailable) {
+                   
+                         isPreviousEventComplete = false;
+
+                         $("#progress").show();
+
+                         getData();
+                     }
+
+
+                 }
+             }
+         });
+     function enterToSeacrh(event) {
+         if (event.keyCode == 13)
+             $("#btnSearch").click();
+     }
+     function getData() {
+         
+         if (flashIndex == 0) {
+             ngayQuery ="";
+            
+         }
+         else {
+             ngayQuery = $("#currentDateTL").val();
+             
+         }
+         
+         var giatri = $("#pref-search").val().trim();
+         giatri = giatri.replace(/ /gi, '+');
+         $.ajax({
+             type: "POST",
+             url: "@Url.Action("GetTimeLine", "GhiNhanLog")" + "?maTL=" + ngayQuery + "&tuNgay=" + $("#fromDate").val()
+                                                            + "&denNgay=" + $("#toDate").val() + "&qsearch=" + giatri,
+            
+             success: function (result) {
+                 
+                 if (result != null && result != "") {
+                     var html = '';
+                    
+                     if (flashIndex == 0) {
+                         ngayCurr = ConvertDateTime(result[0].ngayLap);
+                     }
+                    
+                     for (var i = 0; i < result.length; i++) {
+                         flashNgay = 0;
+                         if (flashIndex ==0 && i ==0) {
+                             ngayCurr = ConvertDateTime(result[0].ngayLap);
+                             flashNgay = 1;
+                             parent = "parent" + "" + countParent;
+                            
+                             countParent++;
+                         }
+                         else if (ngayCurr != ConvertDateTime(result[i].ngayLap)) {
+                             ngayCurr = ConvertDateTime(result[i].ngayLap);
+                             flashNgay = 1;
+                             parent = "parent" + "" + countParent;
+                             countParent++;
+
+                         }
+                         if (flashNgay == 1) {
+
+
+                             html += '<div class="boxTimeLine"  id="'+parent+'">';
+                         }
+                         else {
+                             html += '<div class="boxTimeLine '+parent+'" style="display:none;">';
+
+                         }
+                         html += '<div class="lineBox"></div>';
+                         if (flashNgay == 1) {
+                             html += '<div class="iconTL iconRed"><i class="fa fa-share-square-o"></i></div>';
+                         }
+                         html += '<div class="TLRight">';
+                         if (flashNgay == 1) {
+                             html += '<div class="ngayLapTL"><i class="fa fa-map-o" aria-hidden="true"></i> ' + ngayCurr + '</div>';
+                         }
+                         html += '<div class="TimeLapTL"><span class="datetimeLapPhieu"><i class="fa fa-leaf" aria-hidden="true"></i> ' + getUTCTime(result[i].ngayLap) + '</span><span class="soPhieuTL"><i class="fa fa-file-text-o" aria-hidden="true"></i>Controller: ' + result[i].controller + ' <i class="fa fa-tags" aria-hidden="true"></i>Action: ' + result[i].action + '</span><span class="ngLapTL"><i class="fa fa-user-secret" aria-hidden="true"></i> ' + result[i].hoTenNhanVien + '</span></div>';
+                         html += '<div class="noidungTL">' + result[i].noiDung + '</div>';
+                         if (flashNgay == 1) { html += '<span class="viewDetail"><i class="fa fa-sort-desc"></i>Xem tất cả</span>'; }
+                         html += '</div>';
+
+                         html += '</div>';
+                         $("#currentDateTL").val(result[i].id);
+                         
+                     }
+
+                     $("#contentTimeLine").append(html);
+                     flashIndex = 1;
+                     //var heightWD = $("#contentTimeLine").height()+100;
+                     //$(".main-content").css("min-height", heightWD);
+                  
+                     isPreviousEventComplete = true;
+                 }
+                 if (result == '')  //When data is not available
+                     isDataAvailable = false;
+                 $("#progress").hide();
+
+             },
+             error: function (error) {
+                 $("#progress").hide();
+             }
+         });
+     }
+     function ConvertDateTime(date) {
+         if (date != null) {
+             var dateString = date.substr(6);
+             var currentTime = new Date(parseInt(dateString));
+             var month = currentTime.getMonth() + 1;
+             if (month < 10) month = "0" + month;
+             var day = currentTime.getDate();
+             if (day < 10) day = "0" + day;
+             var year = currentTime.getFullYear();
+             var date = day + "/" + month + "/" + year;
+         }
+         return date;
+     }
+     function getUTCTime(date) {
+         if (date != null) {
+             var dateString = date.substr(6);
+             var currentTime = new Date(parseInt(dateString));
+
+             var hh = currentTime.getHours();
+             var mm = currentTime.getMinutes();
+             var ss = currentTime.getSeconds();
+             if (hh < 10) hh = "0" + hh;
+             if (mm < 10) mm = "0" + mm;
+             if (ss < 10) ss = "0" + ss;
+             var time = hh + ":" + mm + ":" + ss;
+         }
+         return time;
+     }
+     function now() {
+         var d = new Date();
+         var month = d.getMonth() + 1;
+         var day = d.getDate();
+
+         var output = (day < 10 ? '0' : '') + day + "/"
+                     + (month < 10 ? '0' : '') + month + '/'
+                     + d.getFullYear();
+
+         return output;
+     }
+    </script>
+
+
+    <input type="hidden" id="currentDateTL" />
+    <div id="progress" style="display: none; text-align: center; position: fixed; top: 50%;
+                            width: 45%">
+                            <img src="../../../Content/images/loading.gif" />
+                        </div>
+                        <div id="contentTimeLine">
+
+                           
+                        </div>
+
+
+   

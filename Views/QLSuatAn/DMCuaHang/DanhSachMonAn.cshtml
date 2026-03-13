@@ -1,0 +1,146 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model List<tbl_SA_CuaHang_MonAn>
+@{
+    var tblCuaHang = ViewBag.tblCuaHang as tbl_SA_CuaHang; 
+}
+<script src="/Scripts/jquery-2.1.4.min.js"></script>
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="/Scripts/additional-methods.min.js"></script>
+<script src="/Scripts/batdongsan.validate.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //$(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnAddMCC").click(function () {
+            var row = $("#noiDungCopy table tr").clone();
+            var rowCount = $("#tblMonAnList >tbody>tr").length + 1;
+            row.find("input").val("");
+            row.find("td:eq(0)").html(rowCount);
+            row.find("td:last").find("button").addClass("btnXoaMCC");
+            $("#tblMonAnList >tbody").prepend(row);
+
+        });
+        $(document).on("click", ".btnClose", function () {
+            $(this).parent().parent().remove();
+        });
+        $(document).on("click", ".btnDeleteMonAn", function () {
+            $(this).parent().parent().remove();
+        });
+       
+
+
+    });
+</script>
+<div id="noiDungCopy" style="display: none">
+    <table>
+        <tr>
+            <td style="text-align: center"></td>
+            <td>
+                <input type="text" value="" class=" form-control" name="tenMonAn" />
+                <input type="hidden" value="" class=" form-control" name="maMonAn" />
+            </td>
+            <td>
+                <input type="text" value="" class=" form-control" name="soLuongMonAn"  style="text-align:right" />
+                <input type="hidden" value="" class=" form-control" name="duongDanHinh" />
+            </td>
+            <td></td>
+            <td>
+                <input type="file" name="fileMonAn" />
+            </td>
+
+
+            <td style="text-align: center">
+
+                <button type="button" class="btn btn-primary btn-xs btnDeleteMonAn">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+
+
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div class="loadDelete"></div>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cửa hàng</h4>
+</div>
+<div class="thongTinCuaHang">
+    <ul>
+        <li>@tblCuaHang.tenCuaHang</li>
+        <li>@tblCuaHang.ghiChu</li>
+    </ul>
+</div>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Danh sách món ăn</h4>
+</div>
+<div class="lstMonAn">
+
+    <table class="table table-striped table-hover table-condensed TableMobile tblDanhSachMonAn" id="tblMonAnList">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên món ăn</th>
+                <th>Số lượng món ăn</th>
+                <th>Hình đại diện</th>
+                <th>Chọn hình mới</th>
+
+
+                <th style="width: 100px">
+                    <button type="button" id="btnAddMCC" class="btn btn-primary btn-xs">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = 1;
+
+                foreach (var item in Model)
+                { 
+                <tr>
+                    <td style="text-align: center">@(stt++)</td>
+                    <td>
+                        <input type="text" value="@item.tenMonAn" class=" form-control" name="tenMonAn" />
+                        <input type="hidden" value="@item.maMonAn" class=" form-control" name="maMonAn" />
+                    </td>
+                    <td>
+                        <input type="text" value="@item.soLuongMonAn" class=" form-control" name="soLuongMonAn" style="text-align:right" />
+                        <input type="hidden" value="@item.avatar" class=" form-control" name="duongDanHinh" />
+                    </td>
+                    <td>
+                        <img id="imgCK" src="@item.avatar" alt="Avatar"  style="    width: 50px;
+    height: auto;
+    object-fit: contain;"/></td>
+                    <td>
+                        <input type="file" name="fileMonAn" />
+
+                    </td>
+
+
+                    <td style="text-align: center">
+
+                        <button type="button" class="btn btn-primary btn-xs  btnDeleteServer" attrMaMonAn="@item.maMonAn">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+
+
+                    </td>
+
+                </tr>
+               
+                }}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>

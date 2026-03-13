@@ -1,0 +1,89 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_LoaiNghiPhep
+@{
+    bool ischecked = true;
+    
+    }
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<link href="~/Content/bootstrap-switch.css" rel="stylesheet">
+<script src="~/Scripts/bootstrap-switch.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $("[name='trangThai']").bootstrapSwitch();
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Thêm mới loại nghỉ phép</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã nghỉ phép <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maLoaiNghiPhep, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên ngày phép <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenLoaiNghiPhep, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Số ngày nghỉ tối đa <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.soNgayNghiToiDa, new { @class = "form-control datepicker numberinput", data_v_max = "100", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">(%) Được hưởng lương <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.phanTramLuongHuong, new { @class = "form-control datepicker numberinput", data_v_max = "100", required = "required" })</td>
+        </tr>
+        <tr >
+            <td colspan="2" class="tdtitle"><span style="float:left; padding-right:5px;">Làm phép trước </span><span style="float:left; width:50px">@Html.TextBoxFor(model => model.soNgayRangBuoc, new { @class = "form-control", data_v_max = "100", required = "required" })</span><span style="float:left;padding-left:5px;"> ngày đăng ký nghỉ phép</span></td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tính công<span style="font-style: italic; color: red">*</span></td>
+            <td>
+                <label class="radio-inline" style="font-size: 13px">
+                    @Html.RadioButtonFor(model => model.tinhCong, true, new { style = "width:auto", required = "required" }) Tính công
+                </label>
+                <label class="radio-inline" style="font-size: 13px">
+                    @Html.RadioButtonFor(model => model.tinhCong, false, new { style = "width:auto", required = "required" }) Không tính công
+                </label>
+
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Trạng thái<span style="font-style: italic; color: red">*</span></td>
+            <td>
+                 
+                @Html.CheckBox("trangThai", ischecked, new { @class = "form-control" })
+
+
+            </td>
+        </tr>
+        
+         
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+    .bootstrap-switch:nth-child(2)
+    {
+        display:none;
+    }
+</style>

@@ -1,0 +1,87 @@
+﻿@{
+    var luuVetDatas = ViewBag.luuVetData as List<BatDongSan.Models.QLSuatAn.LuuVet.sp_SA_BC_ThongKeSuatAnTungNhanVienResult>;
+    var nhanViens = ViewBag.suatAnData as List<BatDongSan.Models.QLSuatAn.sp_SA_DangKySuatAn_CongChuanNhanVien_Cienco6Result>;
+    int i = 1;
+    int tongSoSuat = 0;
+    int tongCongChuan = 0;
+}
+
+
+@if (nhanViens != null && nhanViens.Count() > 0)
+{
+    foreach (var item in nhanViens)
+    {
+        
+        foreach (var luuVetData in luuVetDatas.Where(d => d.maNhanVien == item.maNhanVien))
+        {
+
+            if (string.IsNullOrEmpty(luuVetData.maCuaHang))
+            {
+                tongCongChuan += item.congChuan ?? 0;
+                
+    <tr style="color: blue;font-weight: bold;">
+        <td style="text-align: center">@(i.ToString())</td>
+
+        <td style="text-align: left">@item.maNhanVien</td>
+        <td style="text-align: left">@item.tenNhanVien</td>
+        <td style="text-align: left">@item.tenPhongBan</td>
+        <td style="text-align: center;">@item.congChuan</td>
+        <td style="text-align: center;@((luuVetData.soPhieuDangKyTuNgayDenNgay ?? 0) > 0 ? "" : "background:red;")">@luuVetData.soPhieuDangKyTuNgayDenNgay</td>
+    </tr> 
+                i++;
+            }
+            else
+            {
+                tongSoSuat += luuVetData.soPhieuDangKyTuNgayDenNgay ?? 0;
+    <tr>
+        <td style="text-align: right" colspan="2">@luuVetData.maCuaHang</td>
+
+        <td style="text-align: left; color:red;" colspan="3">@(luuVetData.tenCuaHang)</td>
+        <td style="text-align: center;">@luuVetData.soPhieuDangKyTuNgayDenNgay</td>
+    </tr> 
+            }
+        }
+
+        
+    }
+}
+<tr style="font-weight:bold; color:blue;">
+    <td colspan="4" style="text-align: right;">
+        Tổng cộng
+    </td>
+    <td style="text-align: center;">@tongCongChuan</td>
+    <td style="text-align: center;">@tongSoSuat</td>
+</tr>
+@*<tr>
+    <td colspan="7">
+        <div class="TongSoDong">
+            Trang @page_ của @total_ / @ViewData["totalRow"]
+        </div>
+        <div class="Pages">
+            @if (page_ > 1)
+            {
+                <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteria(1);">Đầu</a>
+                <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ - 1));">Trước</a>
+            }
+            @if (page_ - 2 >= 1)
+            {
+                <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ - 2));">@(page_ - 2)</a> 
+                <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ - 1));">@(page_ - 1)</a>
+            }
+            <span class="pageActive">@page_</span>
+            @if (page_ + 2 <= total_)
+            {
+                <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ + 1));">@(page_ + 1)</a> 
+                <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ + 2));">@(page_ + 2)</a>
+            }
+
+            @if (page_ < total_)
+            { 
+                <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteria(@(page_ + 1));">Sau</a>
+                <a class="pageLast" href="javascript:void(0)"  onclick="javascript:OnCriteria(@total_);">Cuối</a>
+            }
+        </div>
+    </td>
+</tr>*@
+
+

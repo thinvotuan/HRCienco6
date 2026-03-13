@@ -1,0 +1,108 @@
+﻿@using BatDongSan.Models.QLSuatAn;
+@model List<PhieuDangKySuatAnModel>
+@{
+    ViewBag.Title = "Danh sách cửa hàng";
+    Layout = "";
+    var lstMenu = ViewBag.lstMenu as List<PhieuDangKySuatAnModel>;
+}
+
+<div class="groupCuaHang">
+
+    <table class="table table-striped table-hover table-condensed TableMobile" id="maintable">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Thông tin cửa hàng</th>
+                <th>Menu cửa hàng</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null && Model.Count > 0)
+                {
+                    int stt = 1;
+                    int k = 0;
+                    int sttMonAn = 1;
+                    foreach (var itemCH in Model)
+                    {
+
+                        int book = 0;
+                        string clsItemCH = "itemCH";
+                        k++;
+                        if (itemCH.soSuatAnConLaiTrongNgayCH <= 0 || itemCH.soLanAnConLaiTaiCuaHangNV <= 0)
+                        {
+                            book = 1;
+                        }
+                        if (book == 1)
+                        {
+                            clsItemCH = "disableItemCH";
+                        }
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>
+                        <div class="item @clsItemCH" style="width:250px;">
+                            <label>
+                                <div class="clsPadding">
+                                    <div class="form-check">
+
+                                        <div class="img">
+                                            <img src="@itemCH.avartar" />
+                                        </div>
+                                        <h3>@itemCH.tenCuaHang</h3>
+                                        <h3 class="des">@itemCH.ghiChu</h3>
+                                        <h4>Số lần NV được đăng ký / tháng: @(itemCH.soLanAnCuaNhanVienTrongThang) / @itemCH.suatAnTrenNhanVien</h4>
+                                        <h5>Tổng suất ăn phục vụ trong ngày của quán: @itemCH.soSuatAnTrongNgayDaDangKyCH / @itemCH.soSuatAnTrongNgayCuaCuaHang</h5>
+
+                                        <h6>
+                                            @if (book == 0)
+                                            {
+
+                                            }
+                                        </h6>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="lstMonAn">
+                            @{
+                                            var lstMonAnCuaHang = lstMenu.Where(d => d.maCuaHangMonAn == itemCH.maCuaHang).ToList();
+                                            foreach (var itemMonAn in lstMonAnCuaHang)
+                                            {
+
+                                                String chkSA = "chkSA" + sttMonAn;
+                                                sttMonAn++;
+                                <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-6 boxMonAn">
+                                    <div class="itemMonAn">
+                                        <label class="form-check-label" for="@chkSA">
+                                            <ul>
+                                                <li>
+                                                    <img src="@itemMonAn.hinhMonAn" /></li>
+                                                <li>@itemMonAn.tenMonAn</li>
+                                                <li>Số lượng đã đặt: @itemMonAn.soLuongMonAnDaDat / @itemMonAn.soLuongMonAnBanDau</li>
+                                                <li>
+                                                    @if (book == 0 && (itemMonAn.soLuongMonAnDaDat < itemMonAn.soLuongMonAnBanDau))
+                                                    {
+                                                        <input type="radio" class="form-check-input" id="@chkSA" name="chkSA123" 
+                                                    value="@itemCH.maCuaHang" attrMaMonAn="@itemMonAn.maMonAn">
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </label>
+                                    </div>
+
+                                </div>
+                 
+                                            }
+                            }
+                        </div>
+                    </td>
+                </tr>   
+        
+                    }
+                }
+            }
+        </tbody>
+</div>

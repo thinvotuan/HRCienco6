@@ -1,0 +1,151 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model IList<tbl_DM_TaiLieu>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    tbl_DM_TaiLieu taiLieu = ViewBag.TaiLieu;
+}
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<style>
+    #content td, th
+    {
+        text-align: center;
+    }
+
+    #tbl-uploading td
+    {
+        border: none;
+        text-align: center;
+    }
+
+    .imgTaiLieu{
+        width: 16px;
+        height: 16px;
+        background-position: center center;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "TaiLieuAdmin")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+        })
+
+        $(document).on("click", ".btnDownload", function () {
+            var url = "@Url.Action("Download", "TaiLieuAdmin")" + "/" + this.value;
+            location.href = url;
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#input-upload").val("");
+            $("#tbl-uploading >tbody").html("");
+        });
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "TaiLieuAdmin")" + "/" + this.value;
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+    });
+
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách tài liệu</span></a></li>
+                </ul>
+            </div>
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="float: right">
+                        <input type="hidden" id="nguoiUpLoad" name="nguoiUpLoad" value="@taiLieu.tenNguoiUpload" />
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px">STT</th>
+                            <th>Tên tài liệu</th>
+                            <th>Người upload</th>
+                            <th>Ngày upload</th>
+                            <th style="width: 80px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="text-align: center">@i</td>
+                                <td style="text-align: left; color: #519ee5">
+                                    <img class="imgTaiLieu" src="@item.thumbnailURL"/>
+                                    @item.tenTaiLieu</td>
+                                <td>@item.tenNguoiUpload</td>
+                                <td>@item.ngayLap.Value</td>
+                                <td style="text-align: right">
+                                    <button class="btn btn-link btn-xs btnDownload" type="button" value="@item.id"><i class="fa fa-download" aria-hidden="true"></i></button>
+                                    <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.id">Xóa</button>
+                                </td>
+                            </tr> 
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post" enctype="multipart/form-data">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                                <div id="container">
+                                    <label>
+                                        <input type="file" name="files" id="input-upload" class="form-control" multiple="multiple" /></label>
+                                    <table class="table table-striped table-hover table-condensed table-condensed table-responsive" id="tbl-uploading">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Tên tài liệu</th>
+                                                <th>Người upload</th>
+                                                <th colspan="2">Ngày upload</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                            <button class="btn btn-primary" id="btnSubmit">Tải lên</button>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>

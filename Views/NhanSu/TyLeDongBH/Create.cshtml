@@ -1,0 +1,67 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model tbl_NS_TyLeDongBH
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0', vMax: '100'});
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Tỷ lệ đóng bảo hiểm</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">BHXH - Doanh nghiệp đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemXHDoanhNghiep, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>        
+        <tr>
+            <td class="tdtitle">BHYT - Doanh nghiệp đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemYTeDoanhNghiep, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">BHTN - Doanh nghiệp đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemTNDoanhNghiep, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">BHXH - Nhân viên đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemXHNhanVien, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">BHYT - Nhân viên đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemYTeNhanVien, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">BHTN - Nhân viên đóng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.baoHiemTNNhanVien, new { @class = "form-control numberinput", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ngày áp dụng</td>
+            <td>@Html.TextBoxFor(model => model.ngayApDung, new { @class = "form-control datepicker", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+       </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

@@ -1,0 +1,100 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model IPagedList<sp_NS_PhieuDangKyCongTac_IndexResult>
+@{
+    int i = 1;
+}
+<script>
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+</script>
+@{
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }
+}
+<table class="table table-striped table-hover table-condensed  TableMobile TablePhieuCongTac" id="maintable">
+    <thead>
+        <tr>
+            <th style="width: 45px">STT</th>
+            <th style="width: 105px">Số phiếu</th>
+            <th style="width: 120px">Tên nhân viên</th>
+            <th style="width: 135px">Phòng ban</th>
+            <th style="width: 135px">Nội dung</th>
+            <th style="width: 100px">Công tác</th>
+            <th style="width: 80px">Trạng thái</th>
+            <th style="width: 80px"></th>
+        </tr>
+    </thead>
+    <tbody id="load">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center">@i</td>
+                <td><i class="fa fa-clipboard"></i><a style="color:blue" href="@Url.Action("Details", "PhieuCongTac", new { id = item.maPhieu })">@item.maPhieu</a>
+                    <br />
+                    <i class="fa fa-calendar" aria-hidden="true"></i>@String.Format("{0: dd/MM/yyyy}", item.ngayTao)
+                </td>
+                <td><i class="fa fa-user"></i>@item.tenNhanVien
+                    <br />
+                    <i class="fa fa-credit-card" aria-hidden="true"></i>@item.maNhanVien
+                </td>
+                <td>@item.tenPhongBan
+                    <br />
+                    <i class="fa fa-ticket" aria-hidden="true"></i>@item.tenChucDanh
+                </td>
+                <td>@Html.Raw(item.noiDung)</td>
+                <td>@*@{
+                        if (item.loaiCongTac == false)
+                        {
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i> <span>@item.tinhCongTac</span><br />
+                        }
+                        else
+                        {
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i> <span>@item.quocGiaCongTac</span><br />
+                        }
+                    }*@
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i>Fr: @String.Format("{0: dd/MM/yyyy}", @item.ngayBatDau)
+                    <br />
+                    <i class="fa fa-calendar" aria-hidden="true"></i>To: @String.Format("{0: dd/MM/yyyy}", @item.ngayKetThuc)</td>
+
+
+                <td style="text-align: center">
+                    <a href="javascript:void(0);" onclick="ViewDetailHistory('@item.maPhieu','@item.maQuiTrinhDuyet')">
+                        @item.tenTrangThaiDuyet</a>
+                </td>
+                <td style="text-align: center">
+
+                    @if ((item.trangThai == 0 && item.nguoiLap == user1.manv) || ((string)ViewBag.Administrator == "true"))
+                    {   <a href="@Url.Action("Edit", "PhieuCongTac", new { id = item.maPhieu })" title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true"> | </i></a>                         
+                        <a class="btnDelete" alt="@item.maPhieu" title ="Xoá phiếu"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+                    }
+
+                </td>
+            </tr> 
+                    i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhieuCongTac", action = "ViewIndex", qSearch = ViewBag.Search, tuNgay = ViewBag.tuNgay, denNgay = ViewBag.denNgay, trangThai = ViewBag.trangThai }))
+    </ul>
+</div>

@@ -1,0 +1,24 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    ViewBag.Title = "Chi tiết bảng lương";
+    Layout = null;
+}
+
+@{
+    var noiDung = (string)ViewBag.NoiDung;
+    string noiCongTac = string.Empty;
+    string loaiCongTac = string.Empty;
+    var item = ViewData["chiTiet"] as tbl_NS_BangLuongNhanVien;
+
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+    
+}
+<div id="print-preview" style="width: 99%; padding: 5px">
+    @Html.Raw(noiDung)
+</div>
+
+

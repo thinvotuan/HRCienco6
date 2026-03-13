@@ -1,0 +1,80 @@
+﻿@*Author Viet-Truong*@
+@using BatDongSan.Models.HeThong;
+@model IPagedList<sp_Sys_User_IndexResult>
+@{    
+    int i = 1;
+    string[] parameters = TempData["Params"].ToString().Split(',');
+}
+<script>
+    $(document).ready(function () {
+        $("#btnAccept").click(function () {
+           
+            var users = [];
+            $("#tbl-users [name=userId]").each(function () {
+                users.push(this.value);
+            })
+            var trs = $("#content .chon:checked").closest("tr").clone();
+            var filtered = trs.filter(function (i, n) {
+                var user = $(this).find(".chon").val();
+                $(this).find(".chon").parent().html("<button class='btn btn-warning btn-xs btnXoa' type='button'>Xóa</button>");
+                if ($.inArray(user, users) == -1)
+                    return n;
+            })
+            $("#tbl-users >tbody").append(filtered);
+            var i = 1;
+            $("#tbl-users .sothutu").each(function () {
+                $(this).html(i);
+                i++;
+            })
+        })        
+    })
+</script>
+<div id="content">
+    <table class="table table-striped table-hover table-condensed" id="container">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã nhân viên</th>
+                <th>Họ và tên</th>
+                <th>Tên đăng nhập</th>
+                <th>Số điện thoại</th>                
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="sothutu">@i</td>
+                <td>@item.manv
+                    <input type="hidden" name="userId" value="@item.userId"/>
+                </td>
+                <td>
+                    <i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>&nbsp;@item.HovaTen
+                </td>
+                <td>
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;@item.userName<br />
+                </td>
+                <td><i class="fa fa-phone-square" aria-hidden="true"></i>&nbsp;@item.telephone</td>                
+                <td>
+                    <input type="checkbox" class="chon" value="@item.userId"/></td>
+            </tr>
+            i++;
+        }
+    </table>
+    <div>
+        Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+    </div>
+    <div id="paper">
+        <ul class="pagination">
+            @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                            Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+                            new
+                            {
+                                controller = "PhanQuyen",
+                                action = "GetMoreUsers",
+                                nhomUser = parameters[0],
+                                searchString = parameters[1]
+                            }))
+        </ul>
+    </div>
+</div>

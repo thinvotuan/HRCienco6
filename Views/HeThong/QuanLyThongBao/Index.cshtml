@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";     
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+        $(".lnkDelete").click(function () {
+            var cnf = window.confirm("Bạn chắc chắn xóa các dòng đã chọn?");
+            if (cnf) {
+                $.post('@Url.Action("Delete")', { id: $(this).attr("alt") }, function (data) {
+                    if (data.length == 0)
+                        window.location.reload();
+                    else
+                        alert(data);
+                });
+                return;
+            };
+        });
+        setTimeout(function () { $("#divMsg").hide() }, 5000);
+
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "QuanLyThongBao")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+                                                               + "&pageSize=" + $("#pref-perpage").val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+        $("#pref-perpage").change(function(){
+            $("#btnSearch").click();
+        })
+    });
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSearch(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+</script>
+<fieldset class=" removeBorderFieldset">
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active"><a><span>Quản lý thông báo</span></a></li>
+        </ul>
+    </div>
+    <div class="form-inline">
+        <div class="panel-body background_top">
+            <div class="form-group">
+                <input type="text" class="form-control" style="width: 250px" id="pref-search" onkeypress="enterToSearch(event)">
+            </div>
+            <div class="form-group">
+                <button id="btnSearch" type="button" class="btn btn-primary btn-sm" onclick="search()">
+                    <span class="glyphicon glyphicon-search" style="top: 2px;"></span>Tìm kiếm
+                </button>
+            </div>
+            <div class="form-group" style="float: right">
+                <select id="pref-perpage" class="form-control">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option selected="selected" value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="80">80</option>
+                </select>
+                <input type="button" onclick="location.href='@Url.Action("Create", "QuanLyThongBao")    '"
+                            title="Thêm" value="Thêm" />
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        @{Html.RenderPartial("PartialIndex");}
+    </div>
+</fieldset>

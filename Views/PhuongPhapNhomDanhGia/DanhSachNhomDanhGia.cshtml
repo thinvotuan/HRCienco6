@@ -1,0 +1,127 @@
+﻿@model IList<BatDongSan.Models.DanhMuc.sp_DanhMucNhomDanhGia_IndexResult>
+@{  
+    Layout = null;
+    Layout = "~/Views/Shared/_Popup.cshtml";
+    int i = 1;   
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    var obj = window.opener;
+    $(document).ready(function () {
+        $('#checkAll').click(function (e) {
+            $('[name="chk"]').prop('checked', this.checked);
+        });
+
+        $('[name="chk"]').click(function (e) {
+            if ($('[name="chk"]:checked').length == $('[name="chk"]').length || !this.checked)
+                $('#checkAll').prop('checked', this.checked);
+        });
+
+        $("#btnTimKiem").click(function () {
+            var url = "@Url.Action("DanhSachNhomDanhGia", "PhuongPhapNhomDanhGia")" + "?searchString=" + $("#searchString").val().replace(/\ /g, "+");
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+    });
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+
+    function ChonDG() {
+        var chks = document.getElementsByName("chk");
+        var maNhomDanhGias = document.getElementsByName("maNhomDanhGia");
+        var tenNhomDanhGias = document.getElementsByName("tenNhomDanhGia");
+        var table = obj.document.getElementById("tbody");
+        var idTbody = "tbody";
+        var stt = table.rows.length;
+        for (var i = 0; i < chks.length; i++) {
+            if (chks.item(i).checked && checkDanhGia(maNhomDanhGias.item(i).value)) {
+                var index = table.rows.length;
+                var row = table.insertRow(index);
+                var stt = row.insertCell(row.childNodes.length);
+                stt.innerHTML = (index + 1);
+                stt.setAttribute("align", "center");
+
+                var maNhomDanhGia = row.insertCell(row.childNodes.length);
+                maNhomDanhGia.innerHTML = "<input name='maNhomDanhGia' type='hidden' value='" + maNhomDanhGias.item(i).value + "' />" + maNhomDanhGias.item(i).value;
+                maNhomDanhGia.setAttribute("align", "left");
+
+                var tenNhomDanhGia = row.insertCell(row.childNodes.length);
+                tenNhomDanhGia.innerHTML = "<input name='tenNhomDanhGia' type='hidden' value='" + tenNhomDanhGias.item(i).value + "' />" + tenNhomDanhGias.item(i).value;
+                tenNhomDanhGia.setAttribute("align", "left");
+
+                var soDiem = row.insertCell(row.childNodes.length);
+                soDiem.innerHTML = "<input name ='soDiem' id='soDiem" + maNhomDanhGias.item(i).value + "' class='numberinputInt'  style='width: 100%; float:right; background-color:rgba(226, 226, 66, 0.26); text-align:right' Maxlength=3 type='text' value='0' />";
+                soDiem.setAttribute("align", "center");
+
+                var thuHang = row.insertCell(row.childNodes.length);
+                thuHang.innerHTML = "<input name ='thuHang' id='thuHang" + maNhomDanhGias.item(i).value + "' class='numberinputInt' onfocus='$(this).autoNumeric()'  style='width: 100%; float:right; background-color:rgba(226, 226, 66, 0.26); text-align:right' Maxlength=3 type='text' value='0' />";
+                thuHang.setAttribute("align", "center");
+
+
+                var del = row.insertCell(row.childNodes.length);
+                del.innerHTML = "<a href='javascript:void(0);'  style='color:blue;' onclick=\"DeleteRow('" + idTbody + "'," + index + ",'true');\">Xóa</a>";
+                del.setAttribute("align", "center");
+            }
+        }
+        obj.SetEvent();
+    }
+
+    function checkDanhGia(maNhomDanhGia) {
+        for (var i = 0; i < obj.$("[name='maNhomDanhGia']").length; i++) {
+            if (obj.$("[name='maNhomDanhGia']:eq(" + i + ")").val() == maNhomDanhGia) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>
+
+<div id="container">
+    <fieldset class="removeBorderFieldset">
+        <div class="panel-body background_top">
+            <div class="form-inline">
+                <div>
+                    <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:40%;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                    <button class="btn btn-info" id="btnTimKiem" type="button" style="margin-top: 2px; margin-left: 2px; float: left">Tìm kiếm</button>
+                </div>
+
+                <div class="form-group" style="float: right">
+                    <button type="button" class="btn btn-info" onclick="ChonDG()">Chọn</button>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+            @{Html.RenderPartial("LoadDanhGia");}
+        </div>
+    </fieldset>
+</div>
+

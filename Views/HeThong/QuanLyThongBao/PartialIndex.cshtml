@@ -1,0 +1,52 @@
+﻿@using BatDongSan.Models.HeThong
+@model IPagedList<sp_ThongBao_IndexResult>
+@{
+    int i = 1;
+    string[] parameters = TempData["Params"].ToString().Split(',');
+}
+<table class="table table-striped table-hover table-condensed tableThemeCustome">
+    <thead>
+        <tr>
+            <th style="width: 30px">STT</th>
+            <th>Tên thông báo</th>
+            <th>Ngày lập</th>
+            <th>Người lập</th>
+            <th>Trạng thái</th>
+            <th style="width: 120px;"></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {                      
+        <tr class="tblLine">
+            <td align="center">@i</td>
+            <td align="left"><a href="/QuanLyThongBao/Details/@item.id" target="_blank">@item.tenThongBao</a></td>
+            <td>@item.ngayLap</td>
+            <td align="left">@item.hoTenNguoiLap</td>
+            <td align="left">@item.trangThaiGuiEmail</td>
+            <td style="text-align: center">
+                    <div class="buttons">
+                        <a href="/QuanLyThongBao/Edit/@item.id"><i class="fa fa-pencil-square-o" style="font-size: 30px; color: orange;" aria-hidden="true"></i></a>
+                            <span style="font-size: 30px; color: orange;">|</span><a href="#" alt="@item.id" class="lnkDelete"><i class="fa fa-trash" style="font-size: 30px; color: red; cursor: pointer;" aria-hidden="true"></i></a>
+
+                    </div>
+                </td>
+           
+        </tr>
+        i++;
+    }
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new
+        {
+            controller = "QuanLyThongBao",
+            action = "Index",
+            searchString = parameters[0],
+            pageSize = parameters[1]
+        }))
+    </ul>
+</div>

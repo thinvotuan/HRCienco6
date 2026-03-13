@@ -1,0 +1,287 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+@{
+                                
+    int stt = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSach"] as List<sp_NS_PhieuDangKyTangCa_DuyetResult>;
+    foreach (var item in ls.ToList())
+    {
+      
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td><a style="color:#519ee5; text-align:center;" href="@Url.Action("Details", "PhieuTangCa", new { id = item.soPhieuTangCa })">@item.soPhieuTangCa</a> </td>
+
+        <td><a style="color:#519ee5" href="@Url.Action("Details", "NhanVien", new { id = item.maNhanVien })">@item.maNhanVien</a> / @item.maVanTay
+            <br />
+            <i class="fa fa-user" aria-hidden="true"></i> <span style="color:blue; font-weight:bold;">@item.tenNhanVien</span></td>
+
+        <td style="text-align: center">
+            <input type="hidden" name="soPhieu_Tab1" value="@item.soPhieuTangCa"/>
+            <input type="hidden" name="maNhanVien_Tab1" value="@item.maNhanVien"/>
+            <input type="hidden" name="ngayTangCa_Tab1" value="@string.Format("{0:dd/MM/yyyy}", item.ngayTangCa)"/>
+            <input type="hidden" name="heSoTangCa_Tab1" value="@item.heSoTangCa"/>
+            <input type="hidden" name="soGioTangCaHidden_Tab1" />
+            <input type="hidden" name="timeNghiGiuaCaHidden_Tab1" />
+            <input type="hidden" name="thoiGianNghiGiuaCa_Tab1" value="@string.Format("{0:HH\\:mm}", item.thoiGianNghiGiuaCa)"/>
+            <input type="hidden" name="thoiGianNghiKetThucGiuaCa_Tab1" value="@string.Format("{0:HH\\:mm}", item.thoiGianNghiKetThucGiuaCa)"/>
+            <span style="color:blue; font-weight:bold;">@string.Format("{0:dd/MM/yyyy}", item.ngayTangCa)</span> <br />
+            @(item.tenNgay + "(" + item.heSoTangCa + ")"))
+        </td>
+        
+        <td style="text-align: center">@string.Format("{0:HH\\:mm}", item.gioBatDau)</td>
+        <td style="text-align: center">@string.Format("{0:HH\\:mm}", item.gioKetThuc)</td>
+        <td style="text-align: center">
+            BĐ: @string.Format("{0:HH\\:mm}", item.thoiGianNghiGiuaCa)<br />
+            KT: @string.Format("{0:HH\\:mm}", item.thoiGianNghiKetThucGiuaCa)
+        </td>
+
+        <td style="text-align: center">@string.Format("{0:HH\\:mm}", item.gioQuetVanTayVao)</td>
+        <td style="text-align: center">@string.Format("{0:HH\\:mm}", item.gioQuetVanTayRa)</td>
+        <td style="text-align:center;">
+            <input type="text"  name="duyetGioVao_Tab1" class="form-control" style="width: 70px; text-align:center" value="@string.Format("{0:HH\\:mm}", item.duyetGioVao)" readonly="readonly"/></td>
+        <td>
+            <input type="text"  name="duyetGioRa_Tab1" class="form-control" style="width: 70px; text-align:center" value="@string.Format("{0:HH\\:mm}", item.duyetGioRa)" readonly="readonly"/></td>
+        <td style="text-align: center"><input type="text" name="soGioTangCa_Tab1" value="@item.soGioDuyet" style="width:50px; text-align:center;" class="form-control numberinputDec2" readonly="readonly"/></td>
+        @*<td style="text-align:center">
+            @if(item.ngayDuyetPhieu == null)
+            {
+                <input value="Duyệt" type="button" class="btn btn-info" name="btnDuyetPhieuTangCa" onclick="SaveDuyetTangCa(this);"/>
+            }
+            else
+            {
+                <input type="hidden" name="btnDuyetPhieuTangCa"/>
+                @(string.Format("{0:dd/MM/yyyy}", item.ngayDuyetPhieu))
+            }
+        </td>*@
+    </tr>
+                           
+    
+    }
+    <tr>
+        <td colspan="13" style="text-align:right;">
+        </td>
+    </tr>
+    
+     
+}
+
+@*<tr>
+    <td colspan="11" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteria_Tab1(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>*@
+
+<script>
+
+    jQuery(document).ready(function ($) {
+        $("#tbody_Tab1 tr").click(function () {
+            $("#tbody_Tab1 tr").css({ "background": "none" });
+            $(this).css({ "background": "yellow" });
+        });
+
+        //$("[name=duyetGioVao_Tab1]").timepicker({
+        //    showAnim: 'blind'
+        //});
+
+        //$("[name=duyetGioRa_Tab1]").timepicker({
+        //    showAnim: 'blind'
+        //});
+
+        $("[name=duyetGioVao_Tab1]").change(function () {
+            var index = $("[name=duyetGioVao_Tab1]").index($(this));
+            checkEndTime($("[name=duyetGioVao_Tab1]:eq(" + index + ")"), $("[name=duyetGioRa_Tab1]:eq(" + index + ")"), $("[name=thoiGianNghiGiuaCa_Tab1]:eq(" + index + ")"), $("[name=thoiGianNghiKetThucGiuaCa_Tab1]:eq(" + index + ")"), index);
+        });
+
+        $("[name=duyetGioRa_Tab1]").change(function () {
+            var index = $("[name=duyetGioRa_Tab1]").index($(this));
+            checkEndTime($("[name=duyetGioVao_Tab1]:eq(" + index + ")"), $("[name=duyetGioRa_Tab1]:eq(" + index + ")"), $("[name=thoiGianNghiGiuaCa_Tab1]:eq(" + index + ")"), $("[name=thoiGianNghiKetThucGiuaCa_Tab1]:eq(" + index + ")"), index);
+        });
+
+
+    });
+
+
+    function checkEndTime(objGioBatDau, objGioKetThuc, objBatDauGiuaCa, objKetThucGiuaCa, index) {
+        var valueStartTime = $(objGioBatDau).val();
+        var valueEndTime = $(objGioKetThuc).val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        if (parseFloat(endTimeSplit[0]) < parseFloat(startTimeSplit[0])) {
+            $(objGioKetThuc).val('');
+            $(objGioKetThuc).focus();
+            $(objGioKetThuc).addClass("error").attr("title", "Giờ kết thúc > giờ bắt đầu");
+        }
+        else {
+            if (parseFloat(endTimeSplit[0]) == parseFloat(startTimeSplit[0])) {
+                if (parseFloat(endTimeSplit[1]) < parseFloat(startTimeSplit[1])) {
+                    $(objGioKetThuc).val('');
+                    $(objGioKetThuc).focus();
+                    $(objGioKetThuc).addClass("error").attr("title", "Giờ kết thúc > giờ bắt đầu");
+                }
+            }
+        }
+        TinhThoiGianTangCa(objGioBatDau, objGioKetThuc, objBatDauGiuaCa, objKetThucGiuaCa, index);
+    }
+    function TinhThoiGianTangCa(objGioBatDau, objGioKetThuc, objBatDauGiuaCa, objKetThucGiuaCa, index) {
+        var valueStartTime = $(objGioBatDau).val();
+        var valueEndTime = $(objGioKetThuc).val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var starDateGio = parseFloat(startTimeSplit[0]);
+        var startDatePhut = parseFloat(startTimeSplit[1]);
+        var endDateGio = parseFloat(endTimeSplit[0]);
+        var endDatePhut = parseFloat(endTimeSplit[1]);
+        var soGio = 0;
+        var soPhut = 0;
+        var soPhutNew = 0;
+        if (endDateGio >= starDateGio) {
+            if (endDatePhut >= startDatePhut) {
+                soGio = endDateGio - starDateGio;
+                soPhut = endDatePhut - startDatePhut;
+                if (soPhut < 10) { soPhut = "0" + soPhut }
+                soPhutNew = soGio + ":" + soPhut;
+
+                var soGioTangCa = (parseFloat(soGio) + (parseFloat(soPhut) / 60)).toFixed(2);
+
+
+
+                $("[name=soGioTangCaHidden_Tab1]:eq(" + index + ")").val(soPhutNew);
+                $("[name=soGioTangCa_Tab1]:eq(" + index + ")").val(soGioTangCa);
+            }
+            else {
+                soGio = endDateGio - starDateGio - 1;
+                soPhut = 60 - startDatePhut + endDatePhut;
+                if (soPhut < 10) { soPhut = "0" + soPhut }
+
+                soPhutNew = soGio + ":" + +soPhut;
+
+                var soGioTangCa = (parseFloat(soGio) + (parseFloat(soPhut) / 60)).toFixed(2);
+
+                $("[name=soGioTangCaHidden_Tab1]:eq(" + index + ")").val(soPhutNew);
+                $("[name=soGioTangCa_Tab1]:eq(" + index + ")").val(soGioTangCa);
+            }
+
+        }
+        GenerateSoGioTangCaNew(objBatDauGiuaCa, objKetThucGiuaCa, index);
+    }
+
+    function GenerateSoGioTangCaNew(objBatDauGiuaCa, objKetThucGiuaCa, index) {
+        debugger;
+        var valueStartTime = $(objBatDauGiuaCa).val();
+        var valueEndTime = $(objKetThucGiuaCa).val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var starDateGio = parseFloat(startTimeSplit[0]);
+        var startDatePhut = parseFloat(startTimeSplit[1]);
+        var endDateGio = parseFloat(endTimeSplit[0]);
+        var endDatePhut = parseFloat(endTimeSplit[1]);
+        var soGio = 0;
+        var soPhut = 0;
+        var soPhutNew = 0;
+        if (endDateGio >= starDateGio) {
+            if (endDatePhut >= startDatePhut) {
+                soGio = endDateGio - starDateGio;
+                soPhut = endDatePhut - startDatePhut;
+
+                soPhutNew = soGio * 60 + soPhut;
+
+                var soPhut10 = soPhut;
+                if (soPhut < 10) { soPhut10 = "0" + soPhut }
+                var soPhutNew2 = soGio + ":" + soPhut10;
+                $("[name=timeNghiGiuaCaHidden_Tab1]:eq(" + index + ")").val(soPhutNew2);
+            }
+            else {
+                soGio = endDateGio - starDateGio - 1;
+                soPhut = 60 - startDatePhut + endDatePhut;
+                soPhutNew = soGio * 60 + soPhut;
+                var soPhut10 = soPhut;
+                if (soPhut < 10) { soPhut10 = "0" + soPhut }
+                var soPhutNew2 = soGio + ":" + soPhut10;
+                $("[name=timeNghiGiuaCaHidden_Tab1]:eq(" + index + ")").val(soPhutNew2);
+            }
+
+        }
+
+        GenerateSoGioTangCaNew_SetValue(index);
+    }
+    function GenerateSoGioTangCaNew_SetValue(index) {
+        var valueStartTime = $("[name=timeNghiGiuaCaHidden_Tab1]:eq(" + index + ")").val();
+        var valueEndTime = $("[name=soGioTangCaHidden_Tab1]:eq(" + index + ")").val();
+        var startTimeSplit = valueStartTime.split(':');
+        var endTimeSplit = valueEndTime.split(':');
+        var starDateGio = parseFloat(startTimeSplit[0]);
+        var startDatePhut = parseFloat(startTimeSplit[1]);
+        var endDateGio = parseFloat(endTimeSplit[0]);
+        var endDatePhut = parseFloat(endTimeSplit[1]);
+        var soGio = 0;
+        var soPhut = 0;
+        var soPhutNew = 0;
+        if (endDateGio >= starDateGio) {
+            if (endDatePhut >= startDatePhut) {
+                soGio = endDateGio - starDateGio;
+                soPhut = endDatePhut - startDatePhut;
+
+                var soGioTangCa = (parseFloat(soGio) + (parseFloat(soPhut) / 60)).toFixed(2);
+
+                $("[name=soGioTangCa_Tab1]:eq(" + index + ")").val(soGioTangCa);
+            }
+            else {
+                soGio = endDateGio - starDateGio - 1;
+                soPhut = 60 - startDatePhut + endDatePhut;
+
+                var soGioTangCa = (parseFloat(soGio) + (parseFloat(soPhut) / 60)).toFixed(2);
+
+                $("[name=soGioTangCa_Tab1]:eq(" + index + ")").val(soGioTangCa);
+            }
+
+        }
+    }
+
+</script>
+
+
+
+

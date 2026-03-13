@@ -1,0 +1,29 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<hgroup class="title" style="text-align: center;">
+    <div class="container">
+        <div style="text-align: center">
+            @{
+                var thongTinCuaHang = ViewBag.thongTinCuaHang as BatDongSan.Models.QLSuatAn.LuuVet.tbl_SA_CuaHang;
+                if (thongTinCuaHang != null)
+                {
+                <img id="imgCK" src="@thongTinCuaHang.avatar" alt="Avatar"  style="    width: 100%;
+    height: 300px;
+    object-fit: contain;"/>
+                <h3>@thongTinCuaHang.tenCuaHang</h3>
+                }
+            }
+
+            <div>
+                @*  <h1 style="color: #eece1d">Có lỗi xảy ra trong quá trình xử lý</h1><p></p>
+                <p>Vui lòng liên hệ với nhà quản trị để được hỗ trợ!</p>*@
+                <h3 class="error_suatAn">@ViewBag.errror</h3>
+            </div>
+        </div>
+
+    </div>
+
+</hgroup>

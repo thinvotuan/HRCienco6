@@ -1,0 +1,85 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+@{
+                                
+    int stt = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSachBP"] as List<sp_NS_BangLuongTheoBoPhanResult>;
+
+    foreach (var item in ls.ToList())
+    {
+
+
+      
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td>@item.boPhanTinhLuong</td>
+        <td style="text-align:center">@item.thang</td>
+        <td style="text-align:center">@item.nam</td>
+     
+        
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.tongLuong)</td>
+         <td style="text-align: right">@String.Format("{0:###,##0}", item.baoHiem)</td>
+         <td style="text-align: right">@String.Format("{0:###,##0}", item.thue)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.truyThu)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.truyLanh)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.doanPhi)</td>
+
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.thucLanh)</td>
+
+
+
+
+    </tr>
+                           
+    
+    }
+}
+
+<tr>
+    <td colspan="11" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>

@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+
+    #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+        display: none;
+    }
+
+    img.Avatar
+    {
+        width: 50px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        //$(".dropdown").on("show.bs.dropdown", function (event) {
+        //    $("#navigation1 .expandable-hitarea ").click();
+        //});
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "/NhanVien/Edit/" + this.value;
+            location.href = url;
+        })
+
+        $("#btnSearch").click(function () {
+            listFilter();
+        })
+
+        $(document).on("click", "#form-submit ul.dropdown-menu li a", function () {
+            $(this).closest('.dropdown').find("button").val(this.id);
+            $(this).closest(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            listFilter();
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "NhanVien")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-submit");
+                    form.action = url;
+                    form.submit();
+                }
+            })
+        });
+
+
+        $("#btnDownload").click(function () {
+            var url = "/NhanVien/DownloadImportFile"
+            location.href = url;
+        })
+
+        $("#btnSaveImport").click(function () {
+            var fd = new FormData();
+            fd.append("fileToUpload", document.getElementById('fileImport').files[0]);
+            $.ajax({
+                url: "/NhanVien/ImportExcelData",
+                type: 'POST',
+                dateType: 'json',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.success == true) {
+                        Alert.success("Lưu dữ liệu thành công", "Thông báo", { displayDuration: 2000 });
+                        $("#fileImport").val("");
+                    } else {
+                        Alert.warning("Định dạng file không được hỗ trợ", "Thông báo", { displayDuration: 0 });
+                    }
+                },
+                error: function (request, textStatus, errorThrown) {
+                    Alert.error("Lưu không thành công", "Thông báo", { displayDuration: 0 });
+                }
+            })
+        });
+        listFilterBegin();
+
+    });
+    function CapNhatLuyKeNB(maNhanVien, obj) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CapNhatLuyKeNB","NhanVien")',
+            data: {
+                'maNhanVien': maNhanVien,
+
+                'luyKeNghiBu': $(obj).prev().val(),
+            },
+            success: function (result) {
+                if (result.messageError == "") {
+                    Alert.success("Thành công.", "Thông báo", { displayDuration: 2000 });
+                }
+                else {
+                    Alert.error("Thất bại , " + result);
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                Alert.error("Vui lòng thao tác lại.", "Thông báo", { displayDuration: 2000 });
+            }
+        });
+    }
+
+
+        function them() {
+            var url = "@Url.Action("Create", "NhanVien")";
+            location.href = url;
+        }
+
+        function beginPaging(args) {
+            // Animate        
+            $('#content').fadeOut('fast');
+        }
+
+        function successPaging() {
+            // Animate
+            $('#content').fadeIn('fast');
+        }
+
+        function failurePaging() {
+            alert("Không thể tải dữ liệu");
+        }
+
+        function enterToSeacrh(event) {
+            if (event.keyCode == 13)
+                $("#btnSearch").click();
+        }
+
+        function listFilter() {
+            var url = "@Url.Action("Index", "NhanVien")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+                                                         + "&maPhongBan=" + $("#btnPhongBan").val()
+                                                         + "&trangThai=" + $('#btnTrangThai').val();
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        }
+    function listFilterBegin() {
+        var url = "@Url.Action("Index", "NhanVien")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+                                                     + "&maPhongBan=" + $("#btnPhongBan").val()
+                                                     + "&trangThai=0";
+        //beginPaging();
+        $("#content").html('<h4>Loading...</h4>').load(url, function () {
+        //    successPaging();
+        })
+    }
+
+
+        function XuatExcel() {
+            var url = '@Url.Action("XuatFileNhanVien/", "NhanVien")'
+            window.location = url;
+        }
+
+</script>
+<form id="form-submit" method="post">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span><i class="fa fa-list"></i>Danh sách nhân viên</span></a></li>
+                </ul>
+            </div>
+            <div class="form-inline">
+                <div class="panel-body background_top">
+                    <div class="form-group">
+                        <input type="text" class="form-control" style="width:250px" id="pref-search" onkeypress="enterToSeacrh(event)" value="@ViewBag.Search" />
+                    </div>
+                    <div class="form-group">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style="top: 2px;"></span>Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group" style="float: right">
+                        <button type="button" data-toggle="modal" data-target="#importModal" class="btn btn-info">Import Excel file</button>
+                        <button class="btn btn-info btnXuatEcel" type="button" onclick="XuatExcel()">Xuất Excel </button>
+                        <button class="btn btn-info btnXuatEcel" type="button" onclick="them()">Thêm </button>
+                    </div>
+                    <div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group" id="trangthai-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnTrangThai" type="button" data-toggle="dropdown">
+                                Đang làm việc&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="trangthai-dropdown-menu">
+                                <li role="presentation">
+                                    <a href="javascript:void(0)" id="">Tất cả nhân viên</a></li>
+                                <li role="presentation">
+                                    <a href="javascript:void(0)" id="0">Đang làm việc</a></li>
+                                <li role="presentation">
+                                    <a href="javascript:void(0)" id="1">Đã nghỉ việc</a></li>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("PartialIndex");}
+            </div>
+            <div class="buttons">
+                <a></a>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<div id="importModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="import-panel" class="filter-panel">
+                            <div id="dialog" class="alert alert-info" style="display: none">
+                                <strong>Thông báo!</strong> File đính kèm không đúng định dạng.  
+                            </div>
+                            <h4>Tải về mẫu phiếu nhập thông tin nhân viên: </h4>
+                            <button class="btn btn-link btn-sm" id="btnDownload" onclick="download()"><i style="color: #2e6da4" class="fa fa-download" aria-hidden="true"></i></button>
+                            <h4>Chọn file dữ liệu (*.xlsx, *.xls)</h4>
+                            <div class="panel panel-default">
+                                <input type="file" id="fileImport" name="fileImport" value="Chọn file" style="border: none" />
+                            </div>
+                            <div class="panel panel-default" style="float: right">
+                                <button type="button" id="btnSaveImport" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

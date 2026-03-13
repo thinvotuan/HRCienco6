@@ -1,0 +1,36 @@
+﻿@using BatDongSan.Utils.Paging;
+@using BatDongSan.Models.HeThong;
+@model IList<sp_KD_MauIn_IndexResult>
+@{    
+    int stt = 0;
+}
+
+@foreach (var item in Model)
+{
+    ++stt;
+    <tr>
+        <td style="text-align: center">
+            @stt
+        </td>
+        <td style="text-align: left">
+            <a style="color:#519ee5" href="@Url.Action("Details", "MauIn", new { id = item.MaMauIn })">@item.MaMauIn</a>
+        </td>
+        <td>
+            @item.TenMau <a href="@Url.Action("Download", "MauIn", new { id = item.MaMauIn })"
+                        title="Click để mở file"><i style="color: #2e6da4" class="fa fa-download" aria-hidden="true"></i></a>
+        </td>
+        <td>
+            @item.loaiMauIn
+        </td>
+        <td>
+            @String.Format("{0:dd/MM/yyyy}", item.NgayApDung)
+        </td>
+     
+        <td style="text-align: center">
+           <input name="checkeds" type="checkbox" value="@item.MaMauIn"/>
+           
+        </td>
+    </tr>
+             
+}
+

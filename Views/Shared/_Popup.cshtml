@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Hệ thống quản lý nhân sự</title>
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css" />
+    <link href="~/Content/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/select2/4.0.3/js/select2.full.min.js"></script>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+
+    <link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+    <script src="~/Scripts/batdongsan.generals.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/datetime-1.0.0.js"></script>
+    <script src="~/Scripts/Validate.js"></script>
+    <link rel="stylesheet" href="~/Content/font/css/font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/v1_20170418.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/votes.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    @{Session["maMau"] = "4b6580";}
+    <script>function imgError(image) {
+    image.onerror = "";
+    image.src = "/Content/images/no-image.jpg";
+    return true;
+}
+        function imgErrorUser(image) {
+            image.onerror = "";
+            image.src = "/Content/images/no-image.jpg";
+            return true;
+        }</script>
+    <style>
+        
+       
+        #nav, ul#menu,ul#menu li.parent,p.MK,div.help, div.logout, #container th,.btnMenuMobile, .hvr-underline-from-center:before
+        {
+           background-color: #@Session["maMau"] !important;
+            color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+        }
+        #wrapper.btn, #wrapper.btn{
+         background-color: #@Session["maMau"] !important;
+        }
+        #login i,fieldset legend{
+           color: #@Session["maMau"] !important;
+        }
+        p.MK,body fieldset{
+            border: 1px solid #@Session["maMau"] !important;
+        }
+        #tabs ul.ui-tabs-nav li.ui-tabs-selected.ui-state-active a{
+         
+        border-bottom-color: #@Session["maMau"] !important;
+        }
+        fieldset .btn-info,fieldset .btn-primary{
+          
+           background-color: #@Session["maMau"] !important;
+            border-color: #@Session["maMau"] !important;
+            background-image: linear-gradient(to bottom,#@Session["maMau"] 0,#@Session["maMau"] 100%);
+        }
+        
+       
+    </style>
+    <!--Icon button-->
+    @{
+        string tenMau = (string)Session["tenMau"];
+        string positionVal = (string)Session["positionVal"];
+
+
+        positionVal = "-168px";
+        tenMau = "colorTheme";
+        if (tenMau == "colorTheme")
+        {
+        <style>
+     input[value="Tìm kiếm"], input[value="Search"], button[value="Tìm kiếm"], button[value="Search"],input[value="Tìm"], button[value="Tìm"],input[id="btnSearch"],
+     input[value="Thêm"],button[value="Thêm"], input[value="Sửa"], button[value="Sửa"],
+     input[value="Xóa"], button[value="Xóa"], input[value="Gửi duyệt"], button[value="Gửi duyệt"],.btnPrint, #btnPrint, 
+     input[value="Thêm dòng"],button[value="Thêm dòng"], input[value="Lưu"], button[value="Lưu"],
+     input[value="In"],button[value="In"],input[value="Print"],button[value="Print"],input[value="Print View"],
+     button[value="Print View"],input[value="Trở về"], button[value="Trở về"], input[value="Thêm file"], button[value="Thêm file"],input[value="Import file"], button[value="Import file"], 
+     input[value="Xuất File"], button[value="Xuất File"],input[value="Xuất file"], button[value="Xuất file"],input[value="Export file"], button[value="Export file"],input[value="Xuất Excel"], button[value="Xuất Excel"],#btnTroVe,#btnSubmit,.btnDelete,#btnDelete,.btnUpdate,#btnUpdate,.btnThemeAdd,#btnThem,.btnThemeAddFile,.btnTroVe,.btnThemeSave,.btnUpdate,input[value="Gửi duyệt"], button[value="Gửi duyệt"]
+    {
+        background-position: 0px @positionVal !important;
+        border: 1px solid #fff !important;
+    }
+    
+</style>
+
+        }
+    }
+    <!-- End Icon -->
+
+</head>
+
+<body class="wrapper_Popup">
+    @* class="container-fluid" *@
+    <div id="wrapper">
+        <div class="pageLoading" style="display: none">
+            <img src="/Content/images/loadingPage.gif" />
+        </div>
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix" style="padding-top: 10px">
+            @RenderBody()
+        </section>
+
+    </div>
+    @RenderSection("scripts", required: false)
+    @*@Scripts.Render("~/bundles/jquery")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".box-cd .content_chude div").click(function () {
+                var index = $(".box-cd .content_chude div").index(this);
+                var url = window.location.href;
+                var valClass = $(".box-cd .content_chude div").eq(index).attr("class");
+
+                arrColor = valClass.split(" ");
+
+                // setTimeout(function() {
+
+                window.location = '/Home/changeTheme?maMau=' + arrColor[0] + '&tenMau=' + arrColor[1] + '&positionVal=' + arrColor[2] + '&url=' + url;
+                //  },);
+            });
+            //HOtline
+            $('#HotLineSupport').click(function () {
+                $("#ShowHotLine").fadeIn(200);
+            }).mouseleave(function () {
+                $("#ShowHotLine").fadeOut(200);
+            });
+            //End hotLine
+            // Set Download
+            $(".box-cd").hide();
+            $('.txt-download').click(function () {
+                $(".box-download").fadeIn(200);
+            }).mouseleave(function () {
+                $(".box-download").fadeOut(200);
+            });
+
+            // End download
+            // Set Chu De
+            $(".box-cd").hide();
+            $('.txt-cd').click(function () {
+                $(".box-cd").fadeIn(200);
+            }).mouseleave(function () {
+                $(".box-cd").fadeOut(200);
+            });
+
+            //End Chu De
+            $('#menu li.responsive > a').click(function () {
+                $('li.responsive').removeClass('active');
+                $(this).parent().addClass('active');
+            });
+
+            $(".mo-rong").click(function () {
+                $("#res-menu").toggleClass("show-res");
+            });
+            $("#inForHover").click(function () {
+                $("#popUpUser").toggle();
+                $(".gb_u").toggle();
+            });
+            $(document).on("click", "ul.pagination li", function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 0);
+            });
+        });
+    </script>
+    <script src="~/Scripts/scriptbreaker-multiple-accordion-1.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            //Begin Menu
+            $(".topnav").accordion({
+                accordion: false,
+                speed: 500,
+                closedSign: '<i class="fa fa-plus-circle"></i>',
+                openedSign: '<i class="fa fa-minus"></i>'
+            });
+            $(".btnMenuMobile").click(function () {
+
+                $("ul.topnav").slideToggle().toggleClass("fullWidthMenu");
+                if ($(".btnMenuMobile i").hasClass("fa-bars")) {
+                    $(".btnMenuMobile i").removeClass("fa-bars").addClass("fa-times");
+                }
+                else {
+                    $(".btnMenuMobile i").removeClass("fa-times").addClass("fa-bars");
+                }
+                if ($(".Menumobile").hasClass("addWidth")) {
+                    $(".Menumobile").removeClass("addWidth");
+                    $("ul.topnav ul").hide();
+                    $("ul.topnav i").removeClass("fa-minus").addClass("fa-plus-circle");
+                }
+                else {
+                    $(".Menumobile").addClass("addWidth");
+                }
+                if ($(".btnMenuMobile").hasClass("removeBorder")) {
+                    $(".btnMenuMobile").removeClass("removeBorder");
+                }
+                else {
+
+                    $(".btnMenuMobile").addClass("removeBorder");
+                }
+
+
+            });
+
+            //End Menu
+        }
+        );
+    </script>
+</body>
+</html>

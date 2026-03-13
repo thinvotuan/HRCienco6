@@ -1,0 +1,117 @@
+﻿@*Author Viet-Truong*@
+@using BatDongSan.Models.HeThong;
+@model IPagedList<sp_Sys_User_IndexResult>
+@{       
+    IList<Sys_NhomUser> userGroups = ViewBag.UserGroups;
+    IList<sp_Sys_UserThuocNhom_IndexResult> userOfNhoms = ViewBag.UserOfNhoms;
+    int i = 1;
+    int Admin = (int)ViewBag.Admin;
+                //if (ViewBag.OffSet != null)
+                //{
+                //    i = ViewBag.OffSet + 1;
+                //}
+}
+
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr id="toptitle">
+            <th>@Admin</th>
+            <th>Tên đăng nhập</th>
+            <th>Họ và tên</th>
+            @*--------------- Hiển hị tên nhóm -------------- *@
+            @{foreach (var item in userGroups)
+              {
+                  if (item.tenNhomUser == "Administrator")
+                  {
+                      if (Admin == 1)
+                      {
+                <th style="text-align: center">
+                    @item.tenNhomUser
+                </th>
+                      }
+                  }
+                  else
+                  {
+                <th style="text-align: center">
+                    @item.tenNhomUser
+                </th>
+                  }
+
+              }
+            }
+            <th style="width: 115px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Where(s => s.userId != null))
+        {                    
+            <tr>
+                <td class="stt">@i</td>
+                <td style="text-align: left">
+                    <a style="color:#519ee5" href="@Url.Action("Details", "User", new { id = user.userId })"><ins>@user.userName</ins></a>
+                </td>
+                <td>
+                    @user.HovaTen
+                </td>
+                @foreach (var userGroup in userGroups)
+                {
+                    var temp = userOfNhoms.Where(s => s.maNhomUser == userGroup.maNhomUser && s.userId == user.userId).FirstOrDefault();
+                    if (temp != null)
+                    {
+                        if (userGroup.maNhomUser == "Admin")
+                        {
+                            if (Admin == 1)
+                            { 
+                                 <td style="text-align: center">
+                        <input checked="checked" name="@userGroup.maNhomUser" class="@user.userId"  type="checkbox" />
+                    </td> 
+                            }
+                        }
+                        else
+                        {                          
+                          <td style="text-align: center">
+                        <input checked="checked" name="@userGroup.maNhomUser" class="@user.userId"  type="checkbox" />
+                    </td>    
+                        }
+                    }
+                    else
+                    {
+                        if (userGroup.maNhomUser == "Admin")
+                        {
+                            if (Admin == 1)
+                            { 
+                              <td style="text-align: center">
+                        <input type="checkbox" name="@userGroup.maNhomUser" class="@user.userId"/>
+                    </td>
+                            }
+                        }
+                        else
+                        {                          
+                              <td style="text-align: center">
+                        <input name="@userGroup.maNhomUser" class="@user.userId"  type="checkbox" />
+                    </td>    
+                        }
+                    }
+                }
+                <td style="text-align: right">
+                    <div class="buttons">
+                        <button class="edit-button btnEdit" type="button" value="@user.userId" name="editbtn">Sửa</button>
+                        <button class="remove-button btnDelete" type="button" name="mauser" title="@user.userName" value="@user.userId">Xóa</button>
+                    </div>
+                </td>
+
+            </tr>     
+                i++;
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div id="paper">
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                            Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+                            new { controller = "User", action = "Index", searchString = TempData["Search"] }))
+    </ul>
+</div>

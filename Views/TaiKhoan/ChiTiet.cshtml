@@ -1,0 +1,220 @@
+﻿@model BatDongSan.tbl_ThongTinDangNhap
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var fileDinhKem = ViewBag.FileDinhKem as List<BatDongSan.Models.DanhMuc.FileDinhKemModel>;
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            window.history.back();
+        });
+
+        $(".btnDownload").click(function () {
+            location.href = "/TaiKhoan/Download/" + this.value;
+        })
+    });
+
+</script>
+
+<style>
+    .require
+    {
+        color: red;
+    }
+
+    .table td
+    {
+        border: none;
+    }
+    .removeBorderFieldset label
+    {
+        font-weight:normal;
+    }
+     .removeBorderFieldset label:nth-child(2n+1)
+    {
+        font-weight:normal;
+    }
+</style>
+<fieldset class="removeBorderFieldset">
+    
+    <div class="filter-panel" id="custom-panel">
+        <form method="post" id="form-submit" action="/TaiKhoan/ThongTinTaiKhoan" enctype="multipart/form-data">
+
+            <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin: 3px auto !important;">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin công ty</h4>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-md-3">Tên công ty</label>
+                <label class="col-md-9">
+                    @Model.tenCongTy&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mã số thuế</label>
+                <label class="col-md-9">
+                    @Model.maSoThue&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Quy mô công ty</label>
+                <label class="col-md-9">
+                    @{
+                        
+                        if (!string.IsNullOrEmpty(ViewBag.tenQuiMo))
+                            {
+                               <span>@ViewBag.tenQuiMo</span>
+                            }
+                            else {
+                                <i>Đang cập nhật</i>
+                        }
+                        }
+                    @*@Model.quiMoCongTy*@&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Giới thiệu về công ty</label>
+                <label class="col-md-9">
+                    @Html.Raw(Model.gioiThieuCongTy)&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Lĩnh vực hoạt động</label>
+                <label class="col-md-9">
+                    @Html.Raw(Model.linhVucHoatDong)&nbsp;
+                </label>
+            </div>
+            <div class="form-group bs-callout bs-callout-info"  style="overflow: hidden; margin: 3px auto !important;">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Danh sách hồ sơ năng lực</h4>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3"></label>
+                <div class="col-md-9">
+                    <div id="container">
+                        <table class="table" id="tbl-uploading">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Tên hồ sơ</th>
+                                    <th>Ngày upload</th>
+                                    <th style="width: 100px">
+                                        <input type="file" style="height: 30px; display: none" name="fileDinhKems" id="input-upload-NangLuc" class="form-control" multiple="multiple" value="" />
+                                        <label class="btn btn-info btn-xs btn-link" style="font-size: 12px" for="input-upload-NangLuc">Chọn tập tin</label>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (fileDinhKem != null && fileDinhKem.Count > 0)
+                                {
+                                    foreach (var item in fileDinhKem)
+                                    {
+                                    <tr>
+                                        <td style="text-align: left">
+                                            <img style="width:32px; height: 32px" src="@item.ThumBailURL"></td>
+                                        <td>@item.TenFileDinhKem</td>
+                                        <td>@item.NgayUp.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                                        <td style="text-align: right">
+                                            <button class="btn btn-link btn-xs btnDownload" type="button" value="@item.Id"><i class="fa fa-download" aria-hidden="true"></i></button>
+
+                                        </td>
+                                    </tr> 
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group bs-callout bs-callout-info"  style="overflow: hidden; margin: 3px auto !important;">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin liên hệ</h4>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Giám đốc</label>
+                <label class="col-md-9">
+                    @Model.giamDoc&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Địa chỉ công ty</label>
+                <label class="col-md-9">
+                    @Model.diaChiCongTy&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Điện thoại cố định</label>
+                <label class="col-md-9">
+                    @Model.dienThoaiCongTy&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Fax công ty</label>
+                <label class="col-md-9">
+                    @Model.faxCongTy&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mail công ty</label>
+                <label class="col-md-9">
+                    @Model.mailCongTy&nbsp;
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3">Website</label>
+                <label class="col-md-9">
+                    @Model.webSite&nbsp;
+                </label>
+            </div>
+            
+            <div class="form-group bs-callout bs-callout-info"  style="overflow: hidden; margin: 3px auto !important;">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin người đại diện</h4>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-md-3">Tên người đại diện</label>
+                <label class="col-md-9">
+                    @Model.tenNguoiDaiDien&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Số điện thoại liên hệ </label>
+                <label class="col-md-9">
+                    @Model.soDienThoaiNguoiDaiDien&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Email liên hệ </label>
+                <label class="col-md-9">
+                    @Model.mailNguoiDaiDien&nbsp;
+                </label>
+            </div>
+            <div class="form-group bs-callout bs-callout-info"  style="overflow: hidden; margin: 3px auto !important;">
+                <h4 class="col-md-12 tieudeGroup" style="color: #1b809e">Thông tin đăng nhập</h4>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Tên đăng nhập</label>
+                <label class="col-md-9">
+                    @Model.userName&nbsp;
+                </label>
+
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Mật khẩu</label>
+                <label class="col-md-9">
+                    *********&nbsp;
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="col-md-12" style="text-align: right">
+                    <button id="btnTroVe" type="button" class="btn btn-info">Trở về</button>
+
+                </label>
+            </div>
+
+        </form>
+    </div>
+</fieldset>
+

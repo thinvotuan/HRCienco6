@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "PrintSuatAn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        //$(".dropdown").on("show.bs.dropdown", function (event) {
+        //    $("#navigation1 .expandable-hitarea ").click();
+        //});
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "/NhanVien/Edit/" + this.value;
+            location.href = url;
+        })
+        $("select").change(function () {
+            listFilter();
+        });
+
+        $("#btnSearch").click(function () {
+            listFilter();
+        })
+
+        $(document).on("click", "#form-submit ul.dropdown-menu li a", function () {
+            $(this).closest('.dropdown').find("button").val(this.id);
+            $(this).closest(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            listFilter();
+        });
+        listFilter();
+    });
+    function listFilter() {
+
+        var url = "@Url.Action("PartialPrintSuatAn", "PhieuDangKySuatAn")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+            // + "&thang=" + $("#thang").val() + "&nam=" + $("#nam").val()
+                                                     + "&maPhongBan=" + $("#maPhongBan").val() + "&_page=0";
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content').html(imageUrl);
+        $('#content').load(url, function () {
+        });
+    }
+    function listFilterBegin() {
+        var url = "@Url.Action("PartialPrintSuatAn", "PhieuDangKySuatAn")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+           // + "&thang=" + $("#thang").val() + "&nam=" + $("#nam").val()
+                                                     + "&maPhongBan=" + $("#maPhongBan").val() + "&_page=0";
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content').html(imageUrl);
+        $('#content').load(url, function () {
+        });
+    }
+    function OnCriteriaPC(page) {
+        var url = "@Url.Action("PartialPrintSuatAn", "PhieuDangKySuatAn")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+")
+                                                   + "&maPhongBan=" + $("#maPhongBan").val()
+                                                   // + "&thang=" + $("#thang").val() + "&nam=" + $("#nam").val()
+                                                   + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content').html(imageUrl);
+        $('#content').load(url, function () {
+        });
+    }
+    function PrintView() {
+        var el_style = document.getElementById('print-preview').style;
+        el_style.width = '100%';
+        $(".header_salary").css("margin-bottom", "0px");
+        $(".wrapper_salary").css({ margin: "0px", padding: "0px", "box-shadow": "none" });
+        $(".header_salary ul li,.bs-callout-info,.detail_salary").css("padding", "0px");
+        $(".bs-callout-info").css("padding-left", "2px");
+        $(".wrapper_salary tr td").css({ padding: "0px", border: "0px", "border-bottom": "1px solid #ccc", "border-right": "1px solid #ccc" });
+        $(".bs-callout-info").css("font-size", "12px");
+        $(".removePrint").remove();
+        var tt = $('#print-preview').html();
+        var t = window;
+        t.document.write(tt);
+        t.print();
+        var url = window.location.href;
+
+        location.href = url;
+    }
+
+</script>
+<form id="form-submit" method="post">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span><i class="fa fa-list"></i>Form in suất ăn</span></a></li>
+                </ul>
+            </div>
+            <div class="form-inline">
+                <div class="panel-body background_top">
+
+                    <div class="form-group" style="float: right">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="PrintView()">
+                            <span class="glyphicon glyphicon-search" style="top: 2px;"></span>Print
+                        </button>
+
+                    </div>
+                    <div class="form-group">
+                      @*  Tháng:@Html.DropDownList("thang", ViewData["lstThang"] as SelectList, new { @style = "" })
+                        Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new { @style = "" })*@
+                        @Html.DropDownList("maPhongBan", ViewBag.lstPhongBans as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <input type="text" class="form-control" style="width: 250px" id="pref-search" onkeypress="enterToSeacrh(event)" value="" />
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style="top: 2px;"></span>Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="print-preview" style="width: 99%; padding: 5px">
+                <style>
+                    @@media print {
+                        body {
+                            -webkit-print-color-adjust: exact;
+                        }
+                    }
+                </style>
+
+                <div id="content">
+                </div>
+            </div>
+            <div class="buttons">
+                <a></a>
+            </div>
+        </fieldset>
+    </div>
+</form>
+
+
+
+
+
+
+
+
+
+

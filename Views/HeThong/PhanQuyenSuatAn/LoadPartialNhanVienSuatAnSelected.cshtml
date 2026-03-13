@@ -1,0 +1,32 @@
+﻿@using BatDongSan.Models.HeThong;
+
+@{
+    int i = 1;
+    List<sp_Sys_User_IndexResult> nhanVienThuocNhoms = ViewBag.NhanVienThuocNhoms;
+}
+@if (nhanVienThuocNhoms != null)
+{
+    foreach (var item in nhanVienThuocNhoms.OrderBy(d=>d.tenPhongBan))
+    {
+    <tr>
+        <td class="sothutu">@i</td>
+        <td>@item.manv
+            <input type="hidden" name="userId" value="@item.userId"/>
+        </td>
+        <td>
+            <i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>&nbsp;@item.HovaTen
+        </td>
+        <td>
+            @item.tenPhongBan
+        </td>
+        <td>
+            <i class="fa fa-tag" aria-hidden="true"></i>&nbsp;@item.userName<br />
+        </td>
+        <td><i class="fa fa-phone-square" aria-hidden="true"></i>&nbsp;@item.telephone</td>
+        <td>
+            <button class="btn btn-warning btn-xs btnXoa" type="button">Xóa</button>
+        </td>
+    </tr> 
+        i++;
+    }
+}

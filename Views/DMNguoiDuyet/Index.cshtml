@@ -1,0 +1,89 @@
+﻿@*@using BatDongSan.Models.
+@model *@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    });  
+</script>
+
+<fieldset class="fieldset1">
+    <form name="form" action="" method="post">
+        @*   <input type="hidden" id="maPhieu" value="<%= ViewData["maPhieu"]%>" />
+        <input type="hidden" id="maCongViec" value="<%= ViewData["maCongViec"]%>" />
+        <input type="hidden" id="trangThai" value="<%= ViewData["trangThai"]%>" />*@
+        <input type="hidden" id="maNV" />
+        <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+            border="0">
+            <tr>
+                <td style="font-size: 25px; text-align: center;" colspan="2"></td>
+            </tr>
+            <tr>
+                <td>Send Email:<input type="checkbox" id="email" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send SMS:<input type="checkbox" id="sms" />
+                </td>
+                <td align="right">
+                       <input type="button" value="Gửi duyệt" id="btnGoiDuyet" />
+                    <input type="button" value="Đóng" onclick="window.close()" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="overflow-x: hidden; height: 250px">
+                        <table id="gridSource" width="100%" cellpadding="2" cellspacing="0" class="tbl colorize WorkTicket">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @*   <%=ApprovalRes.Approval.LblNumber %>*@
+                                    </th>
+                                    <th>
+                                        @*  <%=ApprovalRes.Approval.LblEmployeeCode%>*@
+                                    </th>
+                                    <th>
+                                        @*     <%=ApprovalRes.Approval.LblEmployeeName%>*@
+                                    </th>
+                                    <th>
+                                        @* <%=ApprovalRes.Approval.LblJobTitle%>*@
+                                    </th>
+                                    <th>
+                                        @*    <%=ApprovalRes.Approval.LblDepartment%>*@
+                                    </th>
+                                    <th style="width: 30px">&nbsp;
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*  <%
+                                    int count = 0;
+                                    foreach (var item in ViewData["records"] as List<Employee>)
+                                    {
+                                %>
+                                <tr>
+                                    <td align="center" data-label="<%=CommonRes.Common.LblNumber %>">
+                                        <%=++count%>
+                                    </td>
+                                    <td data-label="<%=ApprovalRes.Approval.LblEmployeeCode %>">
+                                        <%= item.employeeId%>
+                                    </td>
+                                    <td data-label="<%=ApprovalRes.Approval.LblEmployeeName %>">
+                                        <%= item.FullName%>&nbsp;
+                                    </td>
+                                    <td data-label="<%=ApprovalRes.Approval.LblJobTitle %>">
+                                        <%= item.jobtitleName%>&nbsp;
+                                    </td>
+                                    <td data-label="<%=ApprovalRes.Approval.LblDepartment %>">
+                                        <%= item.departmentName%>&nbsp;
+                                    </td>
+                                    <td align="center" data-label="">
+                                        <input type="radio" name="rdb" value="<%= item.employeeId%>" onclick="$('#maNV').val('<%= item.employeeId%>')" />
+                                    </td>
+                                </tr>
+                                <% } %>*@
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</fieldset>
+

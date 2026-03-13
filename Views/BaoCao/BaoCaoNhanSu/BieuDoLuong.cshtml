@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "BieuDoLuong";
+}
+<script src="@Url.Content("~/Scripts/loader.js")"></script>
+<script type="text/javascript">
+    var data;
+    var chart;
+    $(document).ready(function () {
+
+        var oTable;
+        $("#btnSearch").click(function () {
+            getData();
+        });
+        $("#thangFrom,#namFrom,#thangTo,#namTo").change(function () {
+            getData();
+
+
+        });
+        getData();
+
+
+    });
+    function getData() {
+        $("#columnchart_material").html('');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetListBieuDoLuong", "BaoCaoNhanSu")',
+            data: {
+                thangFrom: $("#thangFrom").val(),
+                namFrom: $("#namFrom").val(),
+                thangTo: $("#thangTo").val(),
+                namTo: $("#namTo").val()
+                },
+                success: function (result) {
+                    
+                    if (result.kq != null && result.kq != false) {
+                        google.charts.load('current', { 'packages': ['bar'] });
+                        google.charts.setOnLoadCallback(drawChart);
+                        function drawChart() {
+                            data = new google.visualization.DataTable();
+
+                            data.addColumn('string', 'Biểu đồ lương tháng');
+                            data.addColumn('number', 'Thực lãnh');
+                            data.addColumn('number', 'Bảo hiểm');
+                            data.addColumn('number', 'Thuế');
+                            for (var i = 0; i < result.kq.length; i++) {
+                                var thangNam = result.kq[i].thang + "/" + result.kq[i].nam
+                                data.addRows([
+                                [thangNam, result.kq[i].thucLanh / 1000000, result.kq[i].baoHiem / 1000000, result.kq[i].thue / 1000000]
+                                ]);
+
+                            }
+
+
+                            var options = {
+                                chart: {
+
+                                    //subtitle: 'Giá trị hợp đồng, hoàn thành, thu về',
+                                },
+                                vAxis: { format: 'decimal' },
+                                vAxis: {
+                                    title: 'Đơn vị: 1000,0000 VND'
+                                },
+                                //isStacked: true,
+
+                            };
+
+                            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                            chart.draw(data, options);
+
+                            options.vAxis.format = 'decimal';
+                            chart.draw(data, google.charts.Bar.convertOptions(options));
+
+                        }
+                    }
+                    else {
+                        $("#columnchart_material").html('Không có dữ liệu.');
+                    }
+
+
+                },
+                error: function (error) {
+                    alert('Lỗi');
+                }
+    });
+
+
+
+
+
+        }
+
+
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab">
+                    <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Biểu đồ lương tháng</span></a>
+
+                </li>
+
+
+            </ul>
+
+        </ul>
+    </div>
+    <div id="container">
+
+        <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+            <div class="panel panel-default background_top">
+                <div class="panel-body">
+                    <div style="line-height: 26px; float: left">
+                        <div style="float: left">
+                            Từ tháng:@Html.DropDownList("thangFrom", ViewData["lstThangFrom"] as SelectList, new { @style = "" })
+                            Từ năm:@Html.DropDownList("namFrom", ViewData["lstNamFrom"] as SelectList, new { @style = "" })
+                        </div>
+                        <div style="float: left">
+                            Đến tháng:@Html.DropDownList("thangTo", ViewData["lstThangTo"] as SelectList, new { @style = "" })
+                            Đến năm:@Html.DropDownList("namTo", ViewData["lstNamTo"] as SelectList, new { @style = "" })
+                        </div>
+
+
+
+                    </div>
+                    <div style="float: right">
+                        <button class="btn btn-info" id="btnSearch" type="button" style="margin-top: 2px; float: left; margin-left: 2px">Tìm kiếm</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="formatChart">
+            <div id="columnchart_material" style="width: 100%; height: 600px;">
+            </div>
+        </div>
+    </div>
+</fieldset>

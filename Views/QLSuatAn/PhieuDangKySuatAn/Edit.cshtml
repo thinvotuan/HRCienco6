@@ -1,0 +1,150 @@
+﻿@using BatDongSan.Models.QLSuatAn;
+@model PhieuDangKySuatAnModel
+@{
+    ViewBag.Title = "Sửa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-buttons.css" />
+<script>
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+
+        $("#btnDangKyCuaHang").click(function () {
+
+            var url = "@Url.Action("LoadDanhSachCuaHang/", "PhieuDangKySuatAn")";
+            $(".clsLoadDanhSachCuaHang").load(url, function () {
+
+            });
+        });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+             location.href = url;
+         });
+        $(".btnChon").click(function () {
+            $(".close").trigger("click");
+            var maCuaHang = $("input[name='chkSA']:checked").val();
+            var url = "@Url.Action("ChiTietCuaHang/", "PhieuDangKySuatAn")" + maCuaHang;
+            $(".thongTinCuaHangSeleted").load(url, function () {
+
+            });
+        });
+       
+    });
+</script>
+<form id="form-submit" method="post" action="/PhieuDangKySuatAn/Edit" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Sửa phiếu đăng ký suất ăn</span></a></li>
+
+            </ul>
+        </div>
+        <div class="form-group" style="float: right">
+            <button class="btn btn-info" id="btnSubmit">Lưu </button>
+            <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+        </div>
+
+        <div style="margin-top: 15px">
+            <table class="table table-hover table-striped table-condensed TableMobileChild" style="position: relative">
+                <tr>
+                     <td class="tdtitle">Mã phiếu<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", required = "required", @readonly="readonly" })</td>
+                    <td class="tdtitle">Họ và tên<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.hoTenNhanVien, new { @class = "form-control", required = "required", @readonly="readonly" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày lập<span style="font-style: italic; color: red">*</span></td>
+                    <td>@Html.TextBoxFor(model => model.ngayLapPhieu, "{0:MM/yyyy/dd}", new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+                            <button style="/* width: 100%; */float: right;" type="button" class="btn btn-primary btn-sm" id="btnDangKyCuaHang" data-toggle="modal" data-target="#customModal">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn cửa hàng</button>
+                            <h4 style="color: #1b809e; margin-left: 10px">Đăng ký cửa hàng
+
+                            </h4>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Cửa hàng</td>
+                    <td class="thongTinCuaHangSeleted" colspan="3">
+                        <div class="groupCuaHang">
+                            @{
+                               
+            
+           
+                        
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 item">
+                                    <div class="clsPadding">
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="">
+                                                <input type="hidden" value="@Model.maCuaHang" name="maCuaHang" id="maCuaHang" />
+                                                <img src="@Model.avatar" />
+                                                <h3>@Model.tenCuaHang</h3>
+                                                <h4>Số lần đăng ký: @Model.suatAnTrenNhanVien/@(Model.soLanNhanVienCuaHangDK)</h4>
+                                                <h5>Tổng suất: @Model.soSuatAnTrongNgay/@Model.tongSACuaHangDaDK</h5>
+                                            </label>
+                                            <h6></h6>
+                                        </div>
+                                    </div>
+                                </div>
+           
+                                
+                            }
+                        </div>
+                    </td>
+                </tr>
+
+
+
+            </table>
+        </div>
+    </fieldset>
+</form>
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>
+<!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+<div id="customModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="overflow: hidden">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Danh sách cửa hàng</h4>
+                <div class="groupbtnChon" style="float: right; overflow: hidden; clear: both;">
+                    <button class="btn btn-primary btnChon btn-sm" type="button"><i class="fa fa-save"></i>Chọn</button>
+
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="custom-panel" class="filter-panel clsLoadDanhSachCuaHang">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                   <button class="btn btn-primary btnChon btn-sm" type="button"><i class="fa fa-save"></i>Chọn</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

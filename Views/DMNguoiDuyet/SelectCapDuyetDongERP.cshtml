@@ -1,0 +1,112 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var obj = window.opener;
+        $("#btnGoiDuyet").click(function () {
+            if ($("input[name=quiTrinhDuyet]").is(":checked") == false) {
+                alert("Bạn vui lòng chọn qui trình duyệt bên dưới trước khi gửi duyệt !");
+            } else {
+                $("#loading").show();
+                $(this).attr("disabled", true);
+                $.post('@Url.Action("DuyetTheoQuiTrinhDongERP", "DMNguoiDuyet")', { maPhieu: $('#maPhieu').val(), maQuiTrinh: $('input[name=quiTrinhDuyet]:checked').val(), maCongViec: $("#maCongViec").val(), url: $("#url").val(), sendMail: document.getElementById('email').checked, sendSMS: document.getElementById('sms').checked }, function (data) {
+                    if (data == "Mail") {
+                        window.close();
+                        obj.LoadLaiTrang();
+                    }
+                    else if (data.length == 0) {
+                        window.close();
+                        obj.LoadLaiTrang();
+                    }
+                    else {
+                        alert(data);
+                        $(this).attr("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+</script>
+@{    
+    var ds = ViewData["lisQuiTrinhDuyet"] as List<BatDongSan.Models.NhanSu.QuiTrinhDuyet>;
+}
+<div id="container">
+    <fieldset class="fieldset1 quyTrinhDuyet">
+        <form name="form" action="" method="post">
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <tr>
+                    <input type="hidden" id="maPhieu" name="maPhieu" value="@ViewBag.MaPhieu"/>
+                    <input type="hidden" id="maCongViec" name="maCongViec" value="@ViewBag.MaCongViec"/>
+                    <input type="hidden" id="url" value="@ViewBag.URL" />
+                    @*//    <input type="hidden" id="idQuiTrinh" name="idQuiTrinh" value="@ViewBag.IDQuiTrinh"/>*@
+                    <td style="text-align: center; color: red;">
+
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="email" value="">Send Email</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="sms" value="">Send SMS</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="maintable" class="table table-striped table-hover table-condensed TableMobileChild">
+                            <tbody>
+                                @{
+                                    int count = 0;
+                                    if (ds != null && ds.Count > 0)
+                                    {
+                                        foreach (var it in ds)
+                                        {
+                                            count++;
+                                    <tr>
+                                        <td>
+                                            <span style="color: #0000FF">
+                                                @it.TenQuiTrinh </span>
+                                            <br />
+                                            @Html.Raw(it.ChuoiBuocDuyet)
+                                        </td>
+                                        <td style="width: 30px; text-align: center">
+                                            <input type="radio" name="quiTrinhDuyet" value="@it.Id" />
+                                        </td>
+                                    </tr>
+                                            break;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" style="padding: 7px 0;">
+                        <input type="button" class="btn btn-info" value="Gửi duyệt" id="btnGoiDuyet" />
+                        <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+
+</div>

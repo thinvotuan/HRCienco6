@@ -1,0 +1,50 @@
+﻿@using BatDongSan.Models.VIP
+@model BangLuongNVVIPModel
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+@{
+   
+    foreach (var item in Model.blVips)
+    {
+
+     
+        var thangParent = "thang"+item.thang+""+ item.maNhanVien;
+    <tr id="@thangParent">
+        <td style="text-align: center">@item.thang
+            <input type="hidden" value="@item.thang" class="thangCurrent"/>
+            <input type="hidden" value="@item.maNhanVien" class="maNhanVienCurrent"/>
+        </td>
+        <td><span style="color:green"><i class="fa fa-file-o" aria-hidden="true"></i>@item.maNhanVien</span>
+            <br />
+            <i class="fa fa-user" aria-hidden="true"></i>@item.tenNhanVien</td>
+
+       
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.tongLuong)</td>
+        <td style="text-align: right">@item.ngayCongChuan</td>
+        <td style="text-align: right">@item.ngayTinhLuong</td>
+
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.thueTNCN)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.baoHiemXH)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.conLaiPhaiChuyen)</td>
+        <td style="text-align: center" class="btnXemChiTiet">
+
+            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>Xem chi tiết</td>
+
+
+
+
+
+    </tr>
+    <tr class="@thangParent">
+        <td colspan="10" class="showDetailLuong" style="display: none"></td>
+
+    </tr>
+
+    
+    }
+}
+

@@ -1,0 +1,38 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_User
+<div class="inforLoginFailed">
+    @TempData["ErrorMessg"]
+</div>
+<form class="form-horizontal " method="post" action="@Url.Action("Login", "Home", new { returnUrl = ViewBag.ReturnUlr })"  id="Loginform">
+    <div class="form-group txtLoginUserID">
+        <div class="col-md-12">
+            @Html.TextBoxFor(model => model.userName, new { @class = "form-control txtname frm_logon_name", @required = "required", @placeholder = "Tên đăng nhập" })
+
+        </div>
+    </div>
+    <div class="form-group txtLoginPassword">
+        <div class="col-md-12">
+            @Html.PasswordFor(model => model.password, new { @class = "form-control txtpass frm_logon_name", @required = "required", @placeholder = "Mật khẩu" })
+
+        </div>
+    </div>
+    
+    <div class="form-group">
+
+        <div class="col-md-12">
+
+            <button value="Chọn" type="submit" id="btnSubmit" class="btn btn-danger btnLogin col-md-12" style="width: 100%">Đăng nhập</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <div class="border_newto">
+                <div class="newtomailtt" id="idForgetPass">Quên mật khẩu?</div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</form>

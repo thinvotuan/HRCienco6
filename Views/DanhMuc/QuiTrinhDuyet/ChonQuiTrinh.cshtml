@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var obj = window.opener;
+        $(".lnkChon").click(function () {
+            window.opener.getBuocDuyet($(this).attr("alt"), $(this).attr("id"), $("#stt").val());
+            window.close();
+            return;
+        });
+    });
+</script>
+@{     
+     
+    var bd = ViewBag.BuocDuyet as List<BatDongSan.Models.HeThong.tbl_HT_QuiTrinhDuyet_BuocDuyet>;
+    int count = 1;
+}
+<div id="container">
+    <fieldset class="fieldset1">
+        <form name="form" action="" method="post">
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <table class="tbl" style="width: 100%">
+                    <thead>
+                        <tr>
+                            @Html.Hidden("stt", (int)ViewData["stt"])
+                            <th style="text-align:center">STT
+                            </th>
+                            <th style="text-align:center">Tên bước duyệt
+                            </th>
+                            <th style="text-align:center">Chọn
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="tdright">
+                        @if (bd != null)
+                        {
+                            foreach (var item in bd)
+                            {
+                            <tr>
+                                <td style="text-align:center">
+                                    @count
+                                </td>
+                                <td style="text-align:center">
+                                    @item.tenBuocDuyet
+                                </td>
+                                <td style="text-align:center">
+                                    <a href="javascript:void(0)" alt="@item.maBuocDuyet" id="@item.tenBuocDuyet"
+                                    class="lnkChon">Chọn</a>
+                                </td>
+                            </tr>
+                                count += 1;
+                            }
+                        }
+                    </tbody>
+                    <tr>
+                        <td style="text-align: right" colspan="3">
+                            <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" /></td>
+                    </tr>
+                </table>
+            </table>
+        </form>
+    </fieldset>
+
+</div>

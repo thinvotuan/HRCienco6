@@ -1,0 +1,19 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model IList<tbl_NS_KhoiTinhLuong>
+
+@{int i =0;}
+@foreach (var item in Model)
+                        {
+                            i++;
+    <tr>
+        <td style="text-align: center">@i</td>
+        <td>@item.tenKhoiTinhLuong</td>
+        <td>@item.ghiChu</td>
+        <td style="text-align:center">@item.ngayCapNhat.Value.ToString("dd/MM/yyyy")</td>
+        <td style="text-align: center">
+            <button class="btn btn-warning btn-xs btnPhanCa" type="button" value="@item.maKhoiTinhLuong" style="display:none">Phân ca</button>
+            <button class="btn btn-warning btn-xs btnEdit" type="button" data-toggle="modal" data-target="#customModal" value="@item.maKhoiTinhLuong">Sửa</button>
+            <button class="btn btn-warning btn-xs btnDelete" type="button" value="@item.maKhoiTinhLuong">Xóa</button>
+        </td>
+    </tr> 
+                        }

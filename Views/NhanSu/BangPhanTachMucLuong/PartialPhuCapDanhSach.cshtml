@@ -1,0 +1,57 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model IList<PhuCapModel>
+@{
+    int i = 1;
+}
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+    })
+</script>
+<style>
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<div id="container">
+    <div id="content">
+        <table class="table table-striped table-hover table-condensed" id="maintable">
+            <thead>
+                <tr>
+                    <th style="text-align: center; width: 45px">STT</th>
+                    <th>Mã phụ cấp</th>
+                    <th>Tên phụ cấp</th>
+                    <th>Loại phụ cấp</th>
+                    <th>Số tiền</th>
+                    <th>Tính thuế TNCC</th>
+                    <th>Thuộc bộ phận</th>                    
+                    <th style="width: 40px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {                            
+                    <tr>
+                        <td>@i</td>
+                        <td style="text-align: left">@item.maPhuCap
+                            <input type="hidden" name="maPhuCap" value="@item.maPhuCap" />
+                        </td>
+                        <td style="text-align: left">@item.tenPhuCap</td>
+                        <td>@item.tenLoaiPhuCap</td>
+                        <td><span class="numberinput">@item.soTien</span></td>
+                        <td>@Html.CheckBoxFor(model => item.coTinhThueTNCN, new { disabled = "disabled" })</td>
+                        <td style="text-align: left">@item.tenPhongBan</td>                        
+                        <td style="text-align: center">
+                            <input type="checkbox" name="phucap" value="@item.soTien" />
+                        </td>
+                    </tr> 
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,61 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model tbl_SA_CuaHang
+
+<script>
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+    });
+</script>
+
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Tạo mới cửa hàng</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Tên cửa hàng <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenCuaHang, new { @class = "form-control", required = "required" })</td>
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Số suất ăn trong ngày</td>
+            <td>@Html.TextBox("soSuatAnTrongNgay", Model.soSuatAnTrongNgay, new { @class = "form-control numberinputInt", @style = "text-align: right" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Số suất ăn / nhân viên</td>
+            <td>@Html.TextBox("suatAnTrenNhanVien", Model.suatAnTrenNhanVien, new { @class = "form-control numberinputInt", @style = "text-align: right" })</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table class="table table-responsive">
+                    <tr>
+                        <td class="tdtitle">Nhà hàng cho cấp QL</td>
+                        <td>@Html.CheckBoxFor(model => model.capQuanLy, new { style = "width:auto" })</td>
+                        <td class="tdtitle">Làm tròn tỷ lệ phân bổ(ưu tiên cửa hàng)</td>
+                        <td>@Html.CheckBoxFor(model => model.lamTronLenTyLePhanBo, new { style = "width:auto" })</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextArea("ghiChu", Model.ghiChu, new { @rows = "2" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Avatar</td>
+            <td>
+                <input type="file" id="fileAvatar" name="files" class="btn btn-file" />
+            </td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>

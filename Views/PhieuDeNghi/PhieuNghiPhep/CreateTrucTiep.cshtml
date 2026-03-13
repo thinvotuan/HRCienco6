@@ -1,0 +1,418 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDeNghiNghiPhep
+@{
+    ViewBag.Title = "Tạo phiếu nghỉ phép trực tiếp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 1, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#lyDo").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+        $("#ChooseNV").click(function () {
+            $('#myModalChonPhongBan').modal();
+            //var Url = '@Url.Action("ChonNhanVien", "PhieuNghiPhep")';
+            var Url = '@Url.Action("ChonNhanVien", "PhieuDieuChuyen")';
+            $('#filter-panel').load(Url);
+        });
+        $("[name='thoiGianNghi']").click(function () {
+            fnChangeLeaveTime();
+            $('#ngayKetThuc').val('');
+            GenerateCountDayHoLiDay();
+        });
+        $("#loaiNghiPhep").change(function () {
+            xuathien();
+            $.post('@Url.Action("GetLoaiNghiPhep", "PhieuNghiPhep")', { maLoai: $("#loaiNghiPhep").val() }, function (data) {
+                $("#phanTramTinhHuong").val(data);
+            });
+
+        });
+
+        $(document).on("dp.hide", "#ngayBatDau", function (e) {
+            $("#ngayKetThuc").val("");
+            var expire = moment().subtract(3, "day");
+            $(this).data("DateTimePicker").minDate(expire, function () {
+                return;
+            });
+
+            var ngayBatDau = moment(this.value, 'DD-MM-YYYY');
+            $("#ngayKetThuc").data("DateTimePicker").minDate(ngayBatDau.add(1, "day"), function () {
+                return;
+            });
+            $.post('@Url.Action("checkNgayBatDau", "PhieuNghiPhep")', { ngayBatDau: moment(e.date).format("DD/MM/YYYY"), maNhanVien: $("#NhanVien_maNhanVien").val(), loaiNghi: $("#loaiNghiBatDau").val() }, function (data) {
+                if (data == 1) {
+                    $("#ngayBatDau").val("");
+                    Alert.error("Ngày bắt đầu không được nhỏ hơn ngày lập 2 ngày.", "Thông báo", { displayDuration: 3000 });
+                }
+                else if (data == 2) {
+                    $("#ngayBatDau").val("");
+                    Alert.error("Ngày này đã được tạo phiếu nghỉ phép, vui lòng chọn lại ngày nghỉ khác.", "Thông báo", { displayDuration: 3000 });
+
+                }
+            });
+            $('#loaiNghiBatDau').change();
+            xuathien();
+        });
+        $(document).on("dp.change", "#ngayKetThuc", function (e) {
+
+            var date = new Date();
+            var expire = moment().subtract(0, "day");
+            $(this).data("DateTimePicker").minDate(expire, function () {
+                return;
+            });
+            var ngayBD = $('#ngayBatDau').val();
+            var ngayKT = $('#ngayKetThuc').val();
+            var d1 = Date.parse(convertDate(ngayBD));
+            var d2 = Date.parse(convertDate(ngayKT));
+            if (d1 > d2) {
+                Alert.error("Ngày kết thúc lớn hơn ngày bắt đầu. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+                $("#ngayKetThuc").val("");
+            }
+            else if (d1 == d2) {
+                Alert.error("Ngày kết thúc phải khác ngày bắt đầu. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+                $("#ngayKetThuc").val("");
+            }
+            $('#loaiNghiKetThuc').change();
+        });
+        xuathien();
+        fnChangeLeaveTime();
+
+        $('#loaiNghiBatDau').change(function () {
+            GenerateCountDayHoLiDay();
+        });
+        $('#loaiNghiKetThuc').change(function () {
+            $('#loaiNghiBatDau').change();
+        });
+    });
+
+    var xuathien = (function () {
+
+        var valueXuatHien = $("#loaiNghiPhep").val();
+        var leaveValue = $("[name='thoiGianNghi']:checked").val();
+        if (valueXuatHien == '') {
+            $("#trSoNgayNghiPhepHide").hide();
+            $("#tr_PhepNam").hide();
+            $("#trHideTangCa").hide();
+        }
+        else {
+            if (valueXuatHien == 'SUBSIDYTREATMENT' || valueXuatHien == 'SUBSIDYSICKNESS' || valueXuatHien == 'SUBSIDYMATERITY') {
+                if (leaveValue == "true") {
+                    $("#trSoNgayNghiPhepHide").show();
+                    $("#tr_PhepNam").hide();
+                }
+                else {
+                    $("#trSoNgayNghiPhepHide").show();
+                    $("#tr_PhepNam").hide();
+                }
+            }
+            if (valueXuatHien == 'WEDLEAVE' || valueXuatHien == 'PROMISELEAVE' ||
+            valueXuatHien == 'UNPAIDLEAVE' || valueXuatHien == 'OTHERLEAVE' || valueXuatHien == 'FUNERALLEAVE' || valueXuatHien == 'SHOFTSICKNESSLEAVE' ||
+            valueXuatHien == 'LONGSICKNESSLEAVE' || valueXuatHien == 'CHILDSICKNESSLEAVE' || valueXuatHien == 'ANTENARALLEAVE' || valueXuatHien == 'MISCARRIAGELEAVE' || valueXuatHien == 'BIRTHCHILLEAVE' || valueXuatHien == 'PATERNITYLEAVE' || valueXuatHien == 'CHILDRENMARRIAGE') {
+                $("#trSoNgayNghiPhepHide").show();
+                $("#tr_PhepNam").hide();
+            }
+            if (valueXuatHien == 'YEARLEAVE') {
+                $("#trSoNgayNghiPhepHide").show();
+                $("#tr_PhepNam").show();
+                $.post('@Url.Action("CountDayPhepNam", "PhieuNghiPhep")', { code: $("#NhanVien_maNhanVien").val(), ngayNghi: $("#ngayBatDau").val() }, function (data) {
+                    $("#soPhepNamConLai").val(data.SoPhepNamCon);
+                    $("#soPhepTonConLai").val(data.SoPhepTonCon);
+                });
+            }
+
+            //Nghỉ bù phải tính được thời gian tăng ca
+            if (valueXuatHien == 'OTHERLEAVE') {
+                $("#trHideTangCa").show();
+                //Phải tính được số ngày tăng ca
+            }
+            else {
+                $("#trHideTangCa").hide();
+            }
+        }
+    });
+    function GenerateCountDayHoLiDay() {
+        var employeeId = $("#NhanVien_maNhanVien").val();
+        var fromDate = $("#ngayBatDau").val();
+        var toDate = $("#ngayKetThuc ").val();
+        var soNgayBatDau = "1";
+        var soNgayKetThuc = "1";
+
+        if ($("#loaiNghiBatDau").val() == "2" || $("#loaiNghiBatDau").val() == "3") {
+            soNgayBatDau = "0.5";
+        }
+        if ($("#loaiNghiKetThuc").val() == "2" || $("#loaiNghiKetThuc").val() == "3") {
+            soNgayKetThuc = "0.5";
+        }
+        if ($("#ngayBatDau").val() != "") {
+            $.post('@Url.Action("CountDayHoLiDay", "PhieuNghiPhep")', { code: employeeId, fromDateVDA: fromDate, toDateVDA: toDate, halftStartDay: soNgayBatDau, halfEndDay: soNgayKetThuc }, function (data) {
+                if (data.CountDay != null) {
+                    $("#soNgayNghiPhep").val(data.CountDay);
+                    $("#const_SoNgayNghi").val(data.CountDay);
+                }
+                else {
+                    Alert.error(data.strHtml, "Thông báo", { displayDuration: 2000 });
+                }
+            });
+        }
+
+    }
+    var fnChangeLeaveTime = (function () {
+        var leaveValue = $("[name='thoiGianNghi']:checked").val();
+        var valueXuatHien = $("#loaiNghiPhep").val();
+
+        if (leaveValue == "True") {
+            //Loại nữa buổi sáng
+            $("#loaiNghiBatDau option:eq(1)").hide();
+            $("#loaiNghiKetThuc option:eq(2)").hide();
+
+            if (valueXuatHien == 'SUBSIDYTREATMENT' || valueXuatHien == 'SUBSIDYSICKNESS' || valueXuatHien == 'SUBSIDYMATERITY') {
+                $("#trSoNgayNghiPhepHide").show();
+                $(".NgayKetThucHide").show();
+                $("#lblNgayNghi").html("Ngày bắt đầu nghỉ");
+                $("#const_SoNgayNghi").val(0);
+            }
+            else {
+                $(".NgayKetThucHide").show();
+                $("#lblNgayNghi").html("Ngày bắt đầu nghỉ");
+            }
+        } else {
+            //Loại nữa buổi sáng
+            $("#loaiNghiBatDau option:eq(1)").show();
+
+            if (valueXuatHien == 'SUBSIDYTREATMENT' || valueXuatHien == 'SUBSIDYSICKNESS' || valueXuatHien == 'SUBSIDYMATERITY') {
+
+                $(".NgayKetThucHide").hide();
+                $("#lblNgayNghi").html("Ngày nghỉ");
+                $("#soNgayNghiPhep").val(0);
+                $("#ngayKetThuc").val("");
+            }
+            else {
+                if (valueXuatHien == 'LEAVEYEAR') {
+                }
+                else {
+                    $(".NgayKetThucHide").hide();
+                    $("#lblNgayNghi").html("Ngày nghỉ");
+                    $("#soNgayNghiPhep").val(1);
+                    $("#ngayKetThuc").val("");
+                }
+            }
+        }
+    });
+    function CheckForm() {
+        var flag = true;
+
+        if ($("#NhanVien_maNhanVien").val() == "") {
+            $("#NhanVien_maNhanVien").addClass("error").attr("title", "Xin vui lòng chọn nhân viên.");
+            flag = false;
+
+        }
+
+        if ($("#ngayBatDau").val() == "") {
+            $("#ngayBatDau").addClass("error").attr("title", "Vui lòng chọn ngày nghỉ.");
+            flag = false;
+
+        }
+
+        if ($("#loaiNghiPhep").val() == "") {
+            $("#loaiNghiPhep").addClass("error").attr("title", "Vui lòng chọn loại nghỉ phép.");
+            flag = false;
+
+        }
+
+        //if ($("#lyDo").val() == "") {
+        //    $("#lyDo").addClass("error").attr("title", "Vui lòng nhập lý do.");
+        //    flag = false;
+
+        //}
+        var v1 = $('#ngayBatDau').val().split('/');
+        var v2 = $('#ngayKetThuc').val().split('/');
+        var ngayBD = $('#ngayBatDau').val();
+        var ngayKT = $('#ngayKetThuc').val();
+        var d1 = Date.parse(convertDate(ngayBD));
+        var d2 = Date.parse(convertDate(ngayKT));
+
+        if (v1 != "" && v1 != null && v2 != "" && v2 != null && v1[1] != v2[1]) {
+            flag = false;
+            $("#ngayKetThuc").addClass("error").attr("title", "Ngày kết thúc không hợp lệ.");
+
+        }
+        if ($("#loaiNghiPhep").val() == "YEARLEAVE") {
+            var phepNamConLai = parseFloat($("#soPhepNamConLai").val());
+            var soNgayNghiPhep = parseFloat($("#soNgayNghiPhep").val());
+            if (phepNamConLai < soNgayNghiPhep || phepNamConLai == 0) {
+                flag = false;
+                $("#soNgayNghiPhep").addClass("error").attr("title", "Số ngày nghỉ phép phải <= số ngày phép còn lại.");
+            }
+        }
+        return flag;
+    }
+</script>
+
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #PhanTram
+    {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Thêm mới phiếu nghỉ phép trực tiếp</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                <tr>
+                    <td style="width: 15%" class="tdtitle">
+                        <input type="hidden" id="const_SoNgayNghi">
+                        Mã nhân viên</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.maNhanVien, new { @class = "form-control", @readonly = true })</td>
+                    <td style="width: 15%"  class="tdtitle">Tên nhân viên </td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true, @style = "width:86%;float:left" })
+                        <button class="btn btn-info" id="ChooseNV" style="margin-top: 4px;" type="button">...</button></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%"  class="tdtitle">Phòng ban</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.tenPhongBan, new { @class = "form-control", @readonly = true })</td>
+                    <td style="width: 15%"  class="tdtitle">Chức danh </td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.tenChucDanh, new { @class = "form-control", @readonly = true })
+                        @Html.HiddenFor(model => model.NhanVien.tenChiNhanh, new { @class = "form-control", @readonly = true })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số phiếu đăng ký </td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", @readonly = true, @style = "font-weight:bold" })</td>
+                    <td class="tdtitle">Loại nghỉ</td>
+                    <td>@Html.DropDownList("loaiNghiPhep", ViewBag.LoaiNghi as SelectList, new { @class = "form-control" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Thời gian nghỉ</td>
+                    <td colspan="3">@Html.RadioButtonFor(model => model.thoiGianNghi, false, new { @id = "rad-1", @style = "width:auto", @checked = true }) Trong ngày @Html.RadioButtonFor(model => model.thoiGianNghi, true, new { @id = "rad-2", style = "width:auto" }) Nhiều ngày
+
+                    </td>
+                </tr>
+                <tr id="tr_PhepNam" style="display: none">
+                    <td class="tdtitle">Số phép năm còn lại</td>
+                    <td>@Html.TextBox("soPhepNamConLai", 1, new { @class = "form-control numberinput", @readonly = true })</td>
+                    <td class="tdtitle">Số phép tồn còn lại</td>
+                    <td>@Html.TextBox("soPhepTonConLai", 0, new { @class = "form-control numberinput", @readonly = true })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle"><span id="lblNgayNghi">Ngày nghỉ</span></td>
+                    <td>@Html.TextBoxFor(model => model.ngayBatDau, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker", @style = "width:48%;float:left" })
+                        @Html.DropDownList("loaiNghiBatDau", ViewBag.LoaiNghiBatDau as SelectList, new { @class = "form-control", @style = "width:48%;float:right" })
+                    </td>
+                    <td class="NgayKetThucHide tdtitle" style="display: none">Ngày kết thúc nghỉ</td>
+                    <td class="NgayKetThucHide" style="display: none">@Html.TextBoxFor(model => model.ngayKetThuc, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker", @style = "width:48%;float:left" })
+                        @Html.DropDownList("loaiNghiKetThuc", ViewBag.LoaiNghiKetThuc as SelectList, new { @class = "form-control", @style = "width:48%;float:right" })
+
+                    </td>
+                </tr>
+                <tr id="trSoNgayNghiPhepHide" style="display: none">
+                    <td class="tdtitle">Số ngày nghỉ phép</td>
+                    <td>@Html.TextBoxFor(model => model.soNgayNghiPhep, new { @class = "form-control numberinput", @readonly = true })</td>
+                    <td class="tdtitle">Phẩn trăm tính hưởng</td>
+                    <td>
+                        <div style="position: relative">
+
+                            @Html.TextBoxFor(model => model.phanTramTinhHuong, new { @class = "form-control numberinput", @readonly = true })
+                            <span id="PhanTram">%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="trHideTangCa" style="display: none">
+                    <td class="tdtitle">Số ngày còn lại nghỉ bù</td>
+                    <td>@Html.TextBoxFor(model => model.soNgayTangCa, new { @class = "form-control numberinput", @readonly = true })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Lý do</td>
+                    <td colspan="3">
+                        <div id="editor"></div>
+                        @*@Html.TextAreaFor(model => model.lyDo, new { @class = "form-control" })*@
+                        @Html.HiddenFor(model => model.lyDo, new { @class = "form-control" })
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="tdtitle">Người lập</td>
+                    <td colspan="3">@Model.nguoiLap</td>
+
+                </tr>
+            </table>
+            <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu và duyệt </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+            <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container" style="width: 98%">
+                                <div class="row">
+                                    <div id="filter-panel" class="filter-panel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</form>

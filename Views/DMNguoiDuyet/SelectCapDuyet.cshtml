@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<style>
+    #container #maintable td, #container #maintable th
+    {
+        border: none;
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        border-right: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    #container #maintable
+    {
+        border-top: 1px inset #ADC2D6;
+        border-left: 1px solid rgba(173, 194, 214, 0.4);
+    }
+
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var obj = window.opener;
+        $("#btnGoiDuyet").click(function () {
+            var maNV = $('input:radio[name=rdb]:checked').val();
+            if (maNV != '') {
+                if (window.confirm('Bạn có chắc chắn chọn người duyệt này ko?')) {
+                    $("#btnGoiDuyet").replaceWith("Đang xử lý...");
+                    $(".pageLoading").show();
+                    $(this).attr("disabled", true);
+                    $.post('@Url.Action("DuyeTheoQuiTrinhDong", "DMNguoiDuyet")', { lyDo: $('#lyDo').val(), maNhanVien: maNV, url: $("#url").val(), maPhieu: $('#maPhieu').val(), soNgayNghiPhep: $('#soNgayNghiPhep').val(), maCongViec: $('#maCongViec').val(), tenNhanVien: $('#tenNhanVien').val(), idQuiTrinh: $("#maQuiTrinhDuyet").val(), sendMail: document.getElementById('email').checked, sendSMS: document.getElementById('sms').checked }, function (data) {
+                        if (data.length == 0) {
+                            window.close();
+                            obj.LoadLaiTrang();
+                        }
+                        else {
+                            jAlert(data);
+                            $(this).attr("disabled", false);
+                        }
+                    });
+                }
+            }
+            else {
+                alert("Xin vui lòng chọn nhân viên duyệt");
+            }
+        });
+    });
+</script>
+@{    
+    var ds = ViewBag.DSNhanVienDuyet as List<BatDongSan.Models.NhanSu.NhanVienModel>;   
+}
+<div id="container">
+    <fieldset class="fieldset1">
+        <form name="form" action="" method="post">
+            <input type="hidden" id="maPhieu" value="@ViewData["maPhieu"]" />
+            <input type="hidden" id="maCongViec" value="@ViewData["maCongViec"]" />
+            <input type="hidden" id="trangThai" value="@ViewData["trangThai"]" />
+            <input type="hidden" id="soNgayNghiPhep" value="@ViewData["soNgayNghiPhep"]" />
+            <input type="hidden" id="tenNhanVien" value="@ViewData["tenNhanVien"]" />
+            <input type="hidden" id="lyDo" value="@ViewData["lyDo"]" />
+            <input type="hidden" id="maNV" />
+            <input type="hidden" id="maQuiTrinhDuyet" value="@ViewBag.IdQuiTrinh"/>
+            <input type="hidden" id="url" value="@ViewBag.URL" />
+            <table style="width: 100%; font-family: Tahoma;" cellpadding="2" cellspacing="0"
+                border="0">
+                <tr>
+                    <td style="font-size: 25px; text-align: center;" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>Send Email:<input type="checkbox" id="email" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send SMS:<input  type="checkbox" id="sms" />
+                    </td>
+                    <td align="right" style="padding: 7px 0;">
+                        <input type="button" class="btn btn-info" value="Gửi duyệt" id="btnGoiDuyet" />
+                        <input type="button" class="btn btn-info" value="Đóng" onclick="window.close()" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="overflow-x: hidden; height: 250px">
+                            <table id="maintable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">STT
+                                        </th>
+                                        <th style="text-align: center">Mã nhân viên
+                                        </th>
+                                        <th style="text-align: center">Tên nhân viên
+                                        </th>
+                                        <th style="text-align: center">Tên phòng ban
+                                        </th>
+                                        <th style="width: 30px">&nbsp;
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int count = 0;
+                                        if (ds != null && ds.Count > 0)
+                                        {
+                                            foreach (var item in ds)
+                                            {
+                                                count++;
+                                        <tr>
+                                            <td style="text-align: center">@count</td>
+                                            <td style="text-align: center">@item.maNhanVien</td>
+                                            <td style="text-align: center">@item.hoVaTen</td>
+                                            <td style="text-align: center">@item.tenPhongBan</td>
+                                            <td style="text-align: center" data-label="">
+                                                @if (count == 1)
+                                                {
+                                                    <input type="radio" name="rdb" value="@item.maNhanVien" checked="checked" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" name="rdb" value="@item.maNhanVien"/>
+                                                }
+                                            </td>
+                                        </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+
+</div>

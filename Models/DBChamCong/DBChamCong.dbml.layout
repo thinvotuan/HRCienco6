@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 10.375" name="DBChamCong">
+  <DataContextMoniker Name="/DBChamCongDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1664d25e-4f5b-430f-b304-0914c78a5494" absoluteBounds="6.75, 3.75, 2, 6.3861311848958326">
+      <DataClassMoniker Name="/DBChamCongDataContext/userinfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="27ff332c-bda9-4375-af58-d39c9aeee058" absoluteBounds="6.765, 4.21, 1.9700000000000002, 5.826131184895833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="098de28c-df48-4f33-9279-95ba1b99296f" absoluteBounds="7.75, 2.375, 2, 2.5401025390625">
+      <DataClassMoniker Name="/DBChamCongDataContext/checkinout" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c897c586-827d-4535-85ec-ea454ebef14d" absoluteBounds="7.765, 2.835, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

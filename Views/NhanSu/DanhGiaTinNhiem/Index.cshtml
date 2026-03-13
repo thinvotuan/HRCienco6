@@ -1,0 +1,101 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ls = ViewBag.lsDanhSach as List<sp_NS_PhieuDanhGia_IndexResult>; 
+   
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script type="text/javascript">
+
+   
+    function Insert() {
+        location.href = '@Url.Action("Create","DanhGiaTinNhiem")';
+    }
+
+    </script>
+ <fieldset class="removeBorderFieldset">
+       
+        <div id="tabs" style="" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách phiếu tín nhiệm</span></a></li>
+                </ul>
+            </div>
+      <div id="container">
+      
+                    <table id="grdDanhMucCongViec" class="table table-striped table-hover table-condensed tableThemeCustome WorkTicket" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    Mã phiếu tín nhiệm
+                                </th>
+                                <th>
+                                    Người lập
+                                </th>
+                                <th>
+                                    Ngày lập
+                                </th>
+                               
+                                <th>
+                                    Năm
+                                </th>
+                                <th>
+                                    Trạng thái
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                              int stt = 1;
+                              foreach (var item in ls.ToList().OrderByDescending(t=>t.ngayLap ))
+                              {
+                           
+                            <tr>
+                                <td align="center" data-label="STT">
+                                    @stt
+                                </td>
+                                <td data-label="Mã phiếu tín nhiệm">
+                                    @item.maPhieuDanhGia
+                                </td>
+                                <td data-label="Người lập">
+                                    @item.tenNhanVien
+                                </td>
+                                <td data-label="Ngày lập">
+                                 @string.Format("{0:dd/MM/yyyy}", item.ngayLap)
+                                </td>
+                                
+                                <td data-label="Năm">
+                                    Kỳ @item.qui-@item.nam
+                                </td>
+                                <td data-label="Trạng thái" align="center">
+                               @{
+                                   if (item.trangThai != 1)
+                                 {
+                                 <span>Chưa hoàn thành</span>
+                              }
+                                 else
+                                 { 
+                                 <span>Đã hoàn thành</span>
+                                }
+                               }
+                                </td>
+                                <td data-label="" align="center">
+                                    @Html.ActionLink("Xem", "Details", new { id = item.maPhieuDanhGia })
+                                 
+                                </td>
+                            </tr>
+                                  stt++;
+                           }
+                            }
+                        </tbody>
+                    </table>
+            
+          </div>
+    </fieldset>

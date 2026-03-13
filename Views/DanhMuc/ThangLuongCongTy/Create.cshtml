@@ -1,0 +1,67 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model ThangLuongCongTyModel
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Tạo mới thang lương</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Bậc <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.bac, new { @class = "form-inline numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Cấp bậc chức vụ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.capBacChucVu, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tổng lương khởi điểm <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tongLuongKhoiDiem, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tổng lương chính thức <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tongLuongChinhThuc, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tổng lương thực thụ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tongLuongThucThu, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương căn bản khởi điểm <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongCanBanKhoiDiem, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương căn bản chính thức <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongCanBanChinhThuc, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương căn bản thực thụ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongCanBanThucThu, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương thành tích khởi điểm <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongThanhTichKhoiDiem, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương thành tích chính thức <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongThanhTichChinhThuc, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Lương thành tích thực thụ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.luongThanhTichThucThu, new { @class = "form-control numberinputInt", required = "required" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    /*#tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }*/
+</style>
+<script>
+    $(".numberinputInt").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-999999999' });
+</script>

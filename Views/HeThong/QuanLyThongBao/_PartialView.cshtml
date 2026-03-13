@@ -1,0 +1,5 @@
+﻿@model BatDongSan.Models.HeThong.Sys_ThongBao
+<script>
+    $(".showTotalTB").html(@Session["listThongBao"]);
+</script>
+@Html.Raw(Model.noiDungThongBao)

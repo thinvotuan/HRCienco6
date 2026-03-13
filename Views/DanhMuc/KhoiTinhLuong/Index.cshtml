@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Khối tính lương";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+@using BatDongSan.Models.DanhMuc
+@model IList<tbl_NS_KhoiTinhLuong>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "KhoiTinhLuong")" + "/" + this.value;
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        });
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "KhoiTinhLuong")" + "/" + this.value;
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "html",
+                success: function (html) {
+                    $("#ViewBody").html(html);
+                    Alert.success("Xóa thành công!", "Thông báo", { displayDuration: 2000 });
+                },
+                error: function () {
+                    Alert.error("Có lỗi xảy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                }
+            });
+        });
+
+        $(document).on("click", ".btnPhanCa", function () {
+            var url = "@Url.Action("PhanCa", "KhoiTinhLuong")" + "/" + this.value;
+            location.href = url;            
+        });
+
+        $("#btnSubmit").click(function () {
+            var url = $("#form-submit").attr("action");
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "html",
+                data: $('#form-submit').serialize(),
+                success: function (html) {
+                    $("#ViewBody").html(html);
+                    Alert.success("Lưu thành công!", "Thông báo", { displayDuration: 2000 });
+                },
+                error: function () {
+                    Alert.error("Có lỗi xảy ra, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                }
+            });            
+            //$.post(url, $('#form-submit').serialize(), function (data) {
+            //    if (data == "") {
+            //        ReLoadGrid();
+
+            //    }
+            //    else {                    
+            //    }
+            //});
+        });       
+
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "KhoiTinhLuong")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        });
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#nhanVien-panel").html("");
+        });
+
+    });
+
+</script>
+<form>
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Danh sách khối tính lương</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block">
+                <div id="dialog" class="alert alert-info" style="display: none">
+                    <strong>Thông báo!</strong> Vui lòng chọn nhóm người dùng để cập nhật.  
+                </div>
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div class="form-group" style="float: right">
+                            <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px">STT</th>
+                            <th>Tên khối tính lương</th>
+                            <th>Ghi chú</th>
+                            <th style="width: 80px">Ngày cập nhật</th>
+                            <th style="width: 200px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ViewBody">
+                        @{Html.RenderPartial("_ViewIndex");}
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm Edit" type="button" data-dismiss="modal" id="btnSubmit">
+                            Lưu
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

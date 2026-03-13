@@ -1,0 +1,739 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    var listXL = ViewBag.listXLTong as List<BatDongSan.Models.DanhMuc.sp_DG_XepLoaiTongResult>;
+    var listTheoHangIndex = ViewBag.lstTheoHangIndex as List<BatDongSan.Models.DanhMuc.sp_DG_XepLoaiTheoHang_IndexResult>;
+    int total = (int)ViewBag.toTal;
+    int totalHang = (int)ViewBag.totalHang;
+    var listHangDist = listTheoHangIndex.Select(m => new { m.thuTuHang, m.soLuongNV }).Distinct().ToList();
+    var countHang = listTheoHangIndex.Select(d => d.thuTuHang).Distinct().Count();
+
+    // Xep loai theo bo phan
+    var listXLTheoBoPhan = ViewBag.listXLTheoBoPhan as List<BatDongSan.Models.DanhMuc.sp_DG_XepLoaiTheoBoPhanResult>;
+    var hangDistinceBoPhan = listXLTheoBoPhan.Select(m => new { m.thuHang }).Distinct();
+    var countHangDistinceBoPhan = hangDistinceBoPhan.Count();
+                                //End XLT BOPhan
+    
+ 
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 1, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $("#namThuHang,#namThuHangXLBP").val($("#nam").val());
+        checkDuyetXL();
+
+        $("#btnSaveSoLuong").click(function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+
+            $(".infor_MucLuongThuong").html(imageUrl).css('display', 'block');
+            var lstMaLoai = "";
+            var lstSoLuong = "";
+            var arrSoLuong = [];
+            var iSL = 0;
+            var strString;
+            //Get value
+            jQuery("input[name='soLuong']").each(function (index, element) {
+                strString = getNumber(jQuery(this).val());
+
+
+                arrSoLuong[iSL] = strString;
+                iSL++;
+            });
+
+            var arrMaLoai = [];
+            var iML = 0;
+            var strStringML;
+            //Get value
+            jQuery("input[name='maLoai']").each(function (index, element) {
+                strStringML = jQuery(this).val();
+
+                arrMaLoai[iML] = strStringML.split(',');
+                iML++;
+            });
+
+            //post
+            $.ajax({
+
+                type: "POST",
+                url: '/DanhGiaTinNhiem/UpdateMucLuongThuong',
+                dataType: "json",
+                data: { nam: $("#nam").val(), soLuongs: arrSoLuong.toString(), maLoais: arrMaLoai.toString() },
+                success: function (result) {
+                    $(".infor_MucLuongThuong").css('display', 'block');
+
+
+                    $(".infor_MucLuongThuong").html('Cập nhật thành công mức lương thưởng năm:' + $("#nam").val());
+                },
+                error: function () {
+                    $(".infor_MucLuongThuong").html('Cập nhật thất bại mức lương thưởng năm:' + $("#nam").val());
+
+                }
+
+
+            });
+            //End post
+        });
+        $("#btnSaveTiLe").click(function () {
+            var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+
+            $(".infor_TiLe").html(imageUrl).css('display', 'block');
+            var lstMaLoai = "";
+            var lstSoLuong = "";
+            var arrSoLuong = [];
+            var iSL = 0;
+            var strString;
+            var tongTiLe = 0;
+            //Get value
+            jQuery("input[name='tiLe']").each(function (index, element) {
+                strString = getNumber(jQuery(this).val());
+                tongTiLe = tongTiLe + strString;
+                arrSoLuong[iSL] = strString;
+
+                iSL++;
+            });
+            if (tongTiLe > 100) {
+                $(".infor_TiLe").html('Tổng tỉ lệ phải <= 100');
+                return false;
+            }
+            var arrMaLoai = [];
+            var iML = 0;
+            var strStringML;
+            //Get value
+            jQuery("input[name='maLoai']").each(function (index, element) {
+                strStringML = jQuery(this).val();
+
+                arrMaLoai[iML] = strStringML.split(',');
+                iML++;
+            });
+
+            //post
+            $.ajax({
+
+                type: "POST",
+                url: '/DanhGiaTinNhiem/UpdateTiLe',
+                dataType: "json",
+                data: { nam: $("#nam").val(), tiLes: arrSoLuong.toString(), maLoais: arrMaLoai.toString() },
+                success: function (result) {
+                    $(".infor_TiLe").css('display', 'block');
+
+
+                    $(".infor_TiLe").html('Cập nhật thành công tỉ lệ khen thưởng năm:' + $("#nam").val());
+                },
+                error: function () {
+                    $(".infor_TiLe").html('Cập nhật thất bại tỉ lệ khen thưởng năm:' + $("#nam").val());
+
+                }
+
+
+            });
+            //End post
+        });
+        $("#btnResetTiLeKT").click(function () {
+            
+            bootbox.confirm("Dữ liệu sẽ được đưa về trạng thái tạo mới?", function (result) {
+                if (result) {
+                    //post
+                    $.ajax({
+
+                        type: "POST",
+                        url: '/DanhGiaTinNhiem/ResetTiLeKhenThuong',
+                        dataType: "json",
+                        data: { nam: $("#nam").val() },
+                        success: function (result) {
+                            
+                            var url = '@Url.Action("LoadBaoCaoXepLoaiNam", "DanhGiaTinNhiem")' + "?nam=" + $("#nam").val();
+                            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+                            $('#tbody').html(imageUrl);
+
+                            $('#tbody').load(url, function () {
+                            });
+                        },
+                        error: function () {
+                            $(".infor_TiLe").html('Khởi tạo thất bại năm:' + $("#nam").val());
+
+                        }
+
+
+                    });
+                    //End post
+                }
+                
+                
+            });
+        });
+        $("input[name='tilephantram']").keyup(function () {
+
+            var strStringTLPT = 0;
+            var parentThuHang = $(this).parent().parent().attr('id');
+            var idParent = "#" + parentThuHang + " input[name='tilephantram']";
+            var total = 0;
+
+            // Read ti le pt tat ca
+
+            // End read
+            // Tinh so luong
+            var classParent = $(this).parent().attr('class');
+            var clsParent = "." + classParent;
+
+            var soLuongNV = clsParent + " input[name='soLuongNV']";
+            var slNV = $(soLuongNV).val();
+            var tiLePT = $(this).val();
+            var soLuongHang = clsParent + " input[name='soLuongHang']";
+            var giaTriSLHang = Math.round((slNV * tiLePT) / 100);
+            $(soLuongHang).val(giaTriSLHang);
+            checkSoLuong();
+            // alert(index);
+        });
+        // So Luong change
+        $("input[name='soLuongHang']").keyup(function () {
+
+            //Tinh lai ti le %
+            var classParent = $(this).parent().attr('class');
+            var clsParent = "." + classParent;
+
+            var soLuongNV = clsParent + " input[name='soLuongNV']";
+            var slNV = $(soLuongNV).val();
+            var slHang = $(this).val();
+            var tiLePT = clsParent + " input[name='tilephantram']";
+
+            var giaTriPT = (slHang * 100) / slNV;
+            giaTriPT = giaTriPT.toFixed(2);
+            $(tiLePT).val(giaTriPT);
+            // End tinh lai ti le %
+            //Check lai ti le %
+
+            checkSoLuong();
+        });
+        //End so luong change
+
+
+    });
+
+    // Submit Form
+    function goSubmit() {
+
+        //  var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+
+        // $(".infor_tiLeKhenThuongTheoXephang").html(imageUrl).css('display', 'block');
+        $.post('@Url.Action("SaveKhenThuongTH")', ($('#frmCreate').serialize()), function (data) {
+
+            //$(".infor_tiLeKhenThuongTheoXephang").html('Cập nhật thành công khen thưởng theo sếp hạn năm:' + $("#nam").val()).show();
+            var url = '@Url.Action("LoadBaoCaoXepLoaiNam", "DanhGiaTinNhiem")' + "?nam=" + $("#nam").val();
+
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#tbody').html(imageUrl);
+            $('#tbody').load(url, function () {
+            });
+        });
+    }
+        // Submit Form
+        function goSubmitXLBP() {
+
+            //  var imageUrl = '<div id="divMsg" align="center"><img src="/Content/Images/loading.gif "/></div>';
+
+            // $(".infor_tiLeKhenThuongTheoXephang").html(imageUrl).css('display', 'block');
+            $.post('@Url.Action("SaveXepLoaiTheoBP")', ($('#frmCreateXLBP').serialize()), function (data) {
+
+                //$(".infor_tiLeKhenThuongTheoXephang").html('Cập nhật thành công khen thưởng theo sếp hạn năm:' + $("#nam").val()).show();
+                var url = '@Url.Action("LoadBaoCaoXepLoaiNam", "DanhGiaTinNhiem")' + "?nam=" + $("#nam").val();
+
+                var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+                $('#tbody').html(imageUrl);
+                $('#tbody').load(url, function () {
+                });
+            });
+
+
+
+
+
+        }
+        function checkSoLuong() {
+            var countThuHang = $(".parentThuHang").length;
+            var checkFlashHang = 0;
+            for (var j = 0; j < countThuHang; j++) {
+                // Check all
+                var idParent = "#parentThuHang_" + j + " input[name='soLuongHang']";
+                var idParentHang = "#parentThuHang_" + j + " input[name='soLuongNV']";
+                var total = 0;
+                var slNVTheoHang = $(idParentHang).val();
+
+
+                jQuery(idParent).each(function (index, element) {
+                    strStringTLPT = getNumber(jQuery(this).val());
+                    total = total + strStringTLPT;
+
+
+                });
+
+                if (total != slNVTheoHang) {
+                    //alert("here");
+                    $(".inforThuHang").eq(j).show();
+                    $(".inforThuHang").eq(j).find(".inforSLHang").html("Số lượng theo loại phải bằng:" + slNVTheoHang + "<p>Giá trị hiện tại: " + total + "</p>");
+                    // Alert.error("Số lượng phải bằng: " + slNVTheoHang + " (tổng số lượng NV)", "Thông báo", { displayDuration: 3000 });
+
+                    $(".btnTiLeKTXH").hide();
+                    checkFlashHang = 1;
+
+                }
+                else {
+                    $(".inforThuHang").eq(j).hide();
+                }
+
+                // Check all
+            }
+            if (checkFlashHang == 1) {
+                $(".btnTiLeKTXH").hide();
+            }
+            else {
+                $(".btnTiLeKTXH").show();
+                $(".inforThuHang").hide();
+            }
+        }
+
+
+
+
+</script>
+<div class="contentNDG"  style="display:none">
+ <select id="maNhomDanhGiaCTHidden">
+                        <option value="">--Chọn nhóm đánh giá--</option>
+                        @{
+                            var listNDGChiTietNew = ViewBag.ListNhomDanhGiasNews as List<BatDongSan.Models.DanhMuc.sp_DG_XepLoaiHangResult>;
+                            if (listNDGChiTietNew != null)
+                            {
+                                foreach (var itemNhomDGCT in listNDGChiTietNew)
+                                {
+                            <option value="@itemNhomDGCT.maNhomDanhGia">@itemNhomDGCT.maNhomDanhGia</option>
+                                }
+                            }
+                        }
+                    </select>
+</div>
+<div class="box_mucLuongThuong">
+    <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+        <h4 class="col-md-12 tieudeGroup" style="color: #1b809e; margin: 0px;"><b></b>Mức lương thưởng<span style="color: red; font-style: italic"></span></h4>
+    </div>
+    <div class="content_mucLuongThuong">
+        <div class="infor_MucLuongThuong" style="display: none"></div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    @{
+       
+          
+                        for (var i = 0; i < total; i++)
+                        {
+            
+                        <th style="width: 100px">Loại</th>
+                        <th>Tháng lương</th>
+               
+                        }
+                        <th></th>
+
+           
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @{
+       
+                        if (listXL != null)
+                        {
+
+                            foreach (var item in listXL)
+                            {
+            
+                        <td style="text-align: center">@item.tenXepLoai<input type="hidden" value="@item.maLoai" name="maLoai" /></td>
+                        <td>
+                            <input type="text" value="@item.soLuong" name="soLuong" class="numberinput" style="text-align:right"/></td>
+               
+                            }
+                        <td style="text-align: center">
+                            <button class="btn btn-info btnAdd" id="btnSaveSoLuong">Lưu </button>
+                        </td>
+
+                        }
+                    }
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="box_TiLeKhenThuong">
+    <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+        <h4 class="col-md-12 tieudeGroup" style="color: #1b809e; margin: 0px;"><b></b>Tỉ lệ khen thưởng<span style="color: red; font-style: italic"></span></h4>
+    </div>
+    <div class="content_tiLeKhenThuong">
+        <div class="infor_TiLe" style="display: none"></div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    @{
+       
+          
+                        for (var i = 0; i < total; i++)
+                        {
+            
+                        <th style="width: 100px">Loại</th>
+                        <th>Tỉ lệ</th>
+               
+                        }
+                        <th></th>
+
+            
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @{
+       
+                        if (listXL != null)
+                        {
+
+                            foreach (var item in listXL)
+                            {
+            
+                        <td style="text-align: center">@item.tenXepLoai</td>
+                        <td>
+                            <input type="text" value="@item.tiLe" name="tiLe" class="numberinput" style="text-align:right"/></td>
+               
+                            }
+
+                        }
+                    }
+                    <td style="text-align: center">
+                        <button class="btn btn-info btnAdd" id="btnSaveTiLe">Lưu </button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<form method="post" id="frmCreate">
+
+    <div class="box_TiLeKhenThuongTheoXepHang">
+
+        <input type="hidden" value="" name="namThuHang" id="namThuHang" />
+        <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+            <h4 class="col-md-8 tieudeGroup" style="color: #1b809e; margin: 0px;"><b></b>Tỉ lệ khen thưởng theo xếp hạng<span style="color: red; font-style: italic"></span></h4>
+            <button class="col-md-4 btn btn-info" id="btnResetTiLeKT" style="float: right" type="button">Khởi tạo giá trị ban đầu </button>
+        </div>
+        <div class="content_tiLeKhenThuongTheoXephang">
+            <div class="infor_tiLeKhenThuongTheoXephang" style="display: none"></div>
+
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 90px;">Thứ hạng</th>
+                        <th rowspan="2" style="width: 70px;" title="Số lượng nhân viên">SLNV</th>
+                        @{
+                            if (listTheoHangIndex != null && countHang != 0)
+                            {
+                                for (var i = 0; i < totalHang / countHang; i++)
+                                {
+                                    var clsLoai = listTheoHangIndex[i].maLoai;
+                                    if (listTheoHangIndex[i].maLoai == "A+")
+                                    {
+                                        clsLoai = "AA";
+                                    }
+                                    if (listTheoHangIndex[i].maLoai == "B+")
+                                    {
+                                        clsLoai = "BB";
+                                    }
+
+
+                            <th colspan="2" class="@clsLoai">@listTheoHangIndex[i].tenXepLoai</th>
+                                }
+                            }
+
+                        }
+
+
+                    </tr>
+                    <tr>
+                        @{ 
+                            if (listTheoHangIndex != null && countHang != 0)
+                            {
+
+                                for (var i = 0; i < totalHang / countHang; i++)
+                                {
+                                    var clsLoai = listTheoHangIndex[i].maLoai;
+                                    if (listTheoHangIndex[i].maLoai == "A+")
+                                    {
+                                        clsLoai = "AA";
+                                    }
+                                    if (listTheoHangIndex[i].maLoai == "B+")
+                                    {
+                                        clsLoai = "BB";
+                                    }
+                            <th  class="@clsLoai">%</th>
+                            <th  class="@clsLoai">SL</th>
+                                }
+                            }
+                        }
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (listTheoHangIndex != null)
+                        {
+                            var stt = 0;
+                            for (var thuHang = 0; thuHang < countHang; thuHang++)
+                            {      
+                        <tr class="inforThuHang" style="display: none">
+                            <td colspan="14">
+                                <div class="inforSLHang">
+                                    Tổng số lượng phải bằng: (@listHangDist[thuHang].soLuongNV).
+                                         
+                                </div>
+                                <div class="inforTLHang"></div>
+                            </td>
+                        </tr>
+                        <tr class="parentThuHang" id="parentThuHang_@thuHang">
+                            <td style="text-align: center">Hạng: @listHangDist[thuHang].thuTuHang
+
+
+                            </td>
+                            <td class="numberinputInt" style="text-align: right">@listHangDist[thuHang].soLuongNV
+
+                            </td>
+                            @{
+                                var whereHang = listTheoHangIndex.Where(t => t.thuTuHang == listHangDist[thuHang].thuTuHang).ToList();
+
+                                foreach (var itemChiTietHang in whereHang)
+                                {
+                                    var chiTietHang = "chiTietHang_" + stt;
+                                <td class="@chiTietHang">
+                                    <input type="hidden" name="thuTuHang" value="@listHangDist[thuHang].thuTuHang" />
+                                    <input type="hidden" name="soLuongNV" value="@listHangDist[thuHang].soLuongNV" />
+                                    <input type="hidden" name="maLoaiHang" value="@itemChiTietHang.maLoai" />
+                                    <input type="hidden" name="tiLeChoi" value="@itemChiTietHang.tiLeChoi" class="numberinput" style="text-align:right" />
+                                    <input type="text" name="tilephantram" value="@itemChiTietHang.phanTram" class="numberinput" style="text-align:right" /></td>
+                                <td class="@chiTietHang">
+                                    <input type="text" name="soLuongHang" value="@itemChiTietHang.soLuong" class="numberinputInt" style="text-align:right" /></td>
+                                    stt++;
+                                }
+                            }
+
+                        </tr>
+                            
+                            }
+                        }
+                    }
+                    <tr>
+                        <td colspan="14" style="text-align: right">
+                            <input type="button" class="btnAdd btnTiLeKTXH" value="Lưu" onclick="goSubmit()" /></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</form>
+<!--Xếp loại theo bộ phận-->
+<form id="frmCreateXLBP" method="post">
+    <input type="hidden" value="" name="namThuHangXLBP" id="namThuHangXLBP" />
+    <div class="box_XepLoaiTheoBoPhan">
+        <div class="form-group bs-callout bs-callout-info" style="overflow: hidden; margin-bottom: 1px;">
+            <h4 class="col-md-12 tieudeGroup" style="color: #1b809e; margin: 0px;"><b></b>Xếp loại theo bộ phận<span style="color: red; font-style: italic"></span></h4>
+        </div>
+        <div class="content_XepLoaiTheoBoPhan">
+
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th style="width: 90px;">Thứ hạng</th>
+                        <th style="">Bộ phận</th>
+                        <th style="width: 70px;">SLNV</th>
+                        @{
+                            if (listTheoHangIndex != null && countHang != 0)
+                            {
+                                for (var i = 0; i < totalHang / countHang; i++)
+                                {
+                                    var clsLoai = listTheoHangIndex[i].maLoai;
+                                    if (listTheoHangIndex[i].maLoai == "A+")
+                                    {
+                                        clsLoai = "AA";
+                                    }
+                                    if (listTheoHangIndex[i].maLoai == "B+")
+                                    {
+                                        clsLoai = "BB";
+                                    }
+
+
+                            <th  class="@clsLoai">@listTheoHangIndex[i].tenXepLoai</th>
+                                }
+                            }
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        if (listXLTheoBoPhan != null)
+                        {
+                            foreach (var itemXepLoaiBoPhan in hangDistinceBoPhan)
+                            {
+                                var rowSpanPB = listXLTheoBoPhan.Where(d => d.thuHang == itemXepLoaiBoPhan.thuHang).Select(d => d.tenPhongBan).ToList();
+                                var colRow = rowSpanPB.Count();
+@*<tr>
+                        <td rowspan="@colRow">@itemXepLoaiBoPhan.thuHang</td>
+                        @{
+                            foreach(var itemPhongBan in rowSpanPB){
+                            <td>@itemPhongBan</td>
+                            }
+                            
+                            }
+                    </tr>*@
+                            }
+                        }
+                    }
+                    @{
+                        double totalSoLuongNVPB = 0;
+                        double totalXuatSac = 0;
+                        double totalLoaiAA = 0;
+                        double totalLoaiA = 0;
+                        double totalLoaiBB = 0;
+                        double totalLoaiB = 0;
+                        double totalLoaiC = 0;
+                        if (listXLTheoBoPhan != null && listXLTheoBoPhan.Count() > 0)
+                        {
+
+                            var thuHangBanDau = listXLTheoBoPhan[0].thuHang;
+                            var flashHang = 0;
+                            var rowSpanPB = listXLTheoBoPhan.Where(d => d.thuHang == thuHangBanDau).Count();
+                            for (var thuTuXL = 0; thuTuXL < listXLTheoBoPhan.Count(); thuTuXL++)
+                            {
+                                flashHang = 0;
+                                if (listXLTheoBoPhan[thuTuXL].thuHang != thuHangBanDau && thuTuXL != 0)
+                                {
+                                    thuHangBanDau = listXLTheoBoPhan[thuTuXL].thuHang;
+                                    rowSpanPB = listXLTheoBoPhan.Where(d => d.thuHang == thuHangBanDau).Count();
+                                    flashHang = 1;
+                                }
+                                if (thuTuXL == 0) { flashHang = 1; }
+                           
+                        <tr>
+                            @{
+                                if (flashHang == 1)
+                                {
+                                <td rowspan="@rowSpanPB" style="text-align:center; color:red">Hạng: <span class="numberinputInt">@(Math.Round(listXLTheoBoPhan[thuTuXL].thuHang ?? 0, 0, MidpointRounding.AwayFromZero))</span></td>
+                                }
+                            }
+                            <td>@listXLTheoBoPhan[thuTuXL].tenPhongBan</td>
+                            <td style="text-align: right">@listXLTheoBoPhan[thuTuXL].sL</td>
+                            @{
+                                var getSX = listTheoHangIndex.Where(t => t.thuTuHang == Convert.ToDouble(thuHangBanDau) && t.nam == @listXLTheoBoPhan[thuTuXL].nam).Select(m => new { m.phanTram, m.maLoai }).ToList();
+                                if (getSX != null)
+                                {
+                                    double soLNVPB = listXLTheoBoPhan[thuTuXL].sL ?? 0;
+                                    foreach (var itemSLMaLoai in getSX)
+                                    {
+
+
+
+
+                                        double giaTriTemp = Convert.ToDouble(itemSLMaLoai.phanTram * listXLTheoBoPhan[thuTuXL].sL / 100);
+                                        double vlSoLuongTemp = Math.Round(giaTriTemp, 0, MidpointRounding.AwayFromZero);
+                                        //Tinh tong
+                                        totalSoLuongNVPB = totalSoLuongNVPB + vlSoLuongTemp;
+                                        if (itemSLMaLoai.maLoai == "XS")
+                                        {
+                                            totalXuatSac = totalXuatSac + vlSoLuongTemp;
+                                        }
+                                        if (itemSLMaLoai.maLoai == "A+")
+                                        {
+                                            totalLoaiAA = totalLoaiAA + vlSoLuongTemp;
+                                        }
+                                        if (itemSLMaLoai.maLoai == "A")
+                                        {
+                                            totalLoaiA = totalLoaiA + vlSoLuongTemp;
+                                        }
+                                        if (itemSLMaLoai.maLoai == "B+")
+                                        {
+                                            totalLoaiBB = totalLoaiBB + vlSoLuongTemp;
+                                        }
+                                        if (itemSLMaLoai.maLoai == "B")
+                                        {
+                                            totalLoaiB = totalLoaiB + vlSoLuongTemp;
+                                        }
+
+                                        //End tinh tong
+                                <td style="text-align: right">
+                                    <input type="hidden" name="thuTuHangXLBP" value="@listXLTheoBoPhan[thuTuXL].thuHang" class="numberinputInt" />
+                                    <input type="hidden" name="maPhongBanXLBP" value="@listXLTheoBoPhan[thuTuXL].maPhongBan" />
+                                    <input type="hidden" name="maLoaiHangXLBP" value="@itemSLMaLoai.maLoai" />
+                                    @{
+                                        if (soLNVPB >= vlSoLuongTemp && itemSLMaLoai.maLoai != "C")
+                                        {
+                                            soLNVPB = soLNVPB - vlSoLuongTemp;
+                                        <span>@vlSoLuongTemp</span>
+                                        
+                                       
+                                        <input type="hidden" name="soLuongXLBP" value="@vlSoLuongTemp" />
+                                        
+                                        }
+                                        else
+                                        {
+
+                                            if (soLNVPB <= 0) { soLNVPB = 0; }
+                                        <input type="hidden" name="soLuongXLBP" value="@soLNVPB" />
+                                        <span>@soLNVPB</span>
+                                            if (itemSLMaLoai.maLoai == "C")
+                                            {
+                                                totalLoaiC = totalLoaiC + soLNVPB;
+                                            }
+                                            soLNVPB = 0;
+                                        }
+                                    }
+                                </td>
+
+
+
+                                    }
+                                }
+                            }
+
+
+                        </tr>
+                            }
+                        }
+                    }
+                    <tr style="background-color: aliceblue; font-weight: bold">
+                        <td colspan="2" style="text-align: center">Tổng cộng</td>
+                        <td style="text-align: right">@(totalXuatSac + totalLoaiAA + totalLoaiA + totalLoaiBB + totalLoaiB + totalLoaiC)</td>
+                        <td style="text-align: right">@totalXuatSac</td>
+                        <td style="text-align: right">@totalLoaiAA</td>
+                        <td style="text-align: right">@totalLoaiA</td>
+                        <td style="text-align: right">@totalLoaiBB</td>
+                        <td style="text-align: right">@totalLoaiB</td>
+                        <td style="text-align: right">@totalLoaiC</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="text-align: right">
+                            <input type="button" class="btnAdd btnSaveXLTheoBP" value="Lưu" onclick="goSubmitXLBP()" /></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</form>
+<!-- End xep loai theo bo phan-->
+

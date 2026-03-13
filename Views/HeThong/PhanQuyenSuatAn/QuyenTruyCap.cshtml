@@ -1,0 +1,195 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Helper.Utils;
+@model IList<sp_Sys_CongViecCuaUsersResult>
+@{    
+    ViewBag.Title = "Quyền Truy Cập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    Sys_NhomUser nhomUser = ViewBag.NhomUser;
+}
+<link rel="stylesheet" href="~/Content/batdongsan-treeview.css" />
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    table
+    {
+        border: none;
+    }
+
+    td
+    {
+        border: none;
+    }
+
+    .batdongsan-treeview
+    {
+        overflow-y: scroll;
+        max-height: 600px;
+        width: 100%;
+    }
+
+    a.actived
+    {
+        color: green;
+        font-weight: 800;
+    }
+</style>
+
+<form method="post" id="form-submit">
+    <div>
+        @Html.Hidden("maNhomUser", nhomUser.maNhomUser)
+        <table class="table">
+            <tr>
+                <td style="border: none; vertical-align: top!important; width: 50%;">
+                    <fieldset>
+                        <legend style="display: inline">DANH SÁCH CÔNG VIỆC CỦA @nhomUser.tenNhomUser.ToUpper()</legend>
+                        <label>
+                            @if (ViewBag.NhomUsers != null)
+                            {
+                                <input type="checkbox" id="viewall" checked="checked" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="viewall" />
+                            }
+                        </label>
+                        <label><span class="label label-default" style="padding: 0.4em .6em .3em;">Hiển thị tất cả</span></label>
+                        <div class="batdongsan-treeview">
+                            <ul>
+                                @foreach (var root in Model.Where(s => s.maCha == null).OrderBy(o => o.doUuTien))
+                                {                                            
+                                    <li>
+                                        <input type="checkbox" id="@root.maCongViec-@i" /><label for="@root.maCongViec-@i"><a class="viewPrivillege" href="#" data-value="@root.maCongViec">@root.tenCongViec</a></label>
+                                        @*@Html.ActionLink(root.tenCongViec, "Index", "", new { @data_value = root.maCongViec })*@
+                                        @Html.Raw(PhanQuyenTreeView.BuildTreeView(Model, root.maCongViec).ToString())
+                                    </li>                                                 
+                                }
+                            </ul>
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="border: none; vertical-align: top!important">
+                    <div>
+                        <fieldset>
+                            <legend style="display: inline">QUYỀN HẠN</legend>
+                            <div id="container">
+                                @if (ViewBag.NhomUsers != null)
+                                {
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <label><span class="label label-default" style="padding: 0.4em .6em .3em;">Nhóm người sử dụng</span></label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                @Html.DropDownList("nhomUsers", ViewBag.NhomsUsers as SelectList, new { @class = "form-control", style = "height: 25px!important" })
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                <input id="maCongViec" type="hidden" />
+                                <table class="table" id="tbl-chitiet">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã quyền hạn</th>
+                                            <th>Tên quyền hạn</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.XemChiTiet != null)
+                                        {
+                                            Html.RenderPartial("PartialChiTietQuyenHan");
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $(".viewPrivillege").on("click", function () {
+            $(".viewPrivillege").removeClass("actived");
+            $(this).addClass("actived");
+            var nhomUser;
+            var mcv = $(this).data("value");
+            if ($("#nhomUsers").val() != undefined) {
+                nhomUser = $("#nhomUsers").val();
+            } else {
+                nhomUser = $("#maNhomUser").val();
+            }
+            url = '@Url.Action("XemChiTietQuyenHan", "PhanQuyen")' + "?congViec=" + mcv + "&nhomUser=" + nhomUser;
+            $("#maCongViec").val(mcv);
+            beginPaging();
+            $("#tbl-chitiet >tbody").load(url, function () {
+                successPaging();
+            });
+        });
+
+
+        $(document).on("change", "#nhomUsers", function () {
+            var nhomUser;
+            var mcv = $(".actived").data("value");
+            if ($("#nhomUsers").val() != undefined) {
+                nhomUser = $("#nhomUsers").val();
+            } else {
+                nhomUser = $("#maNhomUser").val();
+            }
+            url = '@Url.Action("XemChiTietQuyenHan", "PhanQuyen")' + "?congViec=" + mcv + "&nhomUser=" + nhomUser;
+            $("#maCongViec").val(mcv);
+            beginPaging();
+            $("#tbl-chitiet >tbody").load(url, function () {
+                successPaging();
+            });
+        });
+
+        $(document).on("click", "#tbl-chitiet input", function () {
+            var maNhomUser;
+            var maVuViec = this.value,
+                maCV = $(".actived").data("value");
+            if ($("#nhomUsers").val() != undefined) {
+                maNhomUser = $("#nhomUsers").val();
+            } else {
+                maNhomUser = $("#maNhomUser").val();
+            }
+            var url = "@Url.Action("UpdateVuViec", "PhanQuyen")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: 'json',
+                data: { maVuViec: maVuViec, maCongViec: maCV, maNhomUser: maNhomUser },
+                success: function () {
+                    Alert.success("Cập nhật thành công", "Thông báo", { displayDuration: 2000 });
+                },
+                error: function () {
+                    Alert.error('Có lỗi xảy ra', 'Thông báo', { displayDuration: 2000 });
+                }
+            })
+        });
+
+        $("#viewall").click(function () {
+            var url, maNhomUser = $("#maNhomUser").val();
+            if ($(this).prop("checked") == true) {
+                url = '/PhanQuyen/QuyenTruyCap?id=' + maNhomUser + "&viewall=true";
+            }
+            else {
+                url = '/PhanQuyen/QuyenTruyCap?id=' + maNhomUser + "&viewall=false";
+            }
+            location.href = url;
+        })
+    })
+
+    function beginPaging(args) {
+        // Animate         
+        $('#tbl-chitiet >tbody').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate        
+        $('#tbl-chitiet >tbody').fadeIn('fast');
+    }
+</script>

@@ -1,0 +1,53 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model tbl_DM_ChiNhanhNganHang
+
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Thêm mới chi nhánh</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã chi nhánh <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.maChiNhanh, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Tên chi nhánh <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenChiNhanh, new { @class = "form-control", required = "required" })</td>
+        </tr>        
+        <tr>
+            <td  class="tdtitle">Địa chỉ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.diaChi, new { @class = "form-control", required = "required"  })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Điện thoại</td>
+            <td>@Html.TextBoxFor(model => model.dienThoai, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Fax</td>
+            <td>@Html.TextBoxFor(model => model.fax, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Email</td>
+            <td>@Html.TextBoxFor(model => model.email, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Website</td>
+            <td>@Html.TextBoxFor(model => model.website, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td  class="tdtitle">Ghi chú</td>
+            <td>@Html.TextAreaFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+</style>

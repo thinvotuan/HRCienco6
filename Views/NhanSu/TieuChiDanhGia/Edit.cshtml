@@ -1,0 +1,132 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    // var List = ViewBag.lsTieuChi as List<tbl_NS_TieuChi>;
+    tbl_NS_TieuChi item = ViewBag.data;
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $().ready(function () {
+        $("#btnSave").click(function () {
+            if (checkForm()) {
+                $("form").submit();
+            }
+        });
+        $("input[type='text']:eq(0)").focus();
+
+        $("input[type='text']").setFocusToNextText();
+
+        setTimeout(function () { $("#divMsg").hide() }, 5000);
+    });
+
+    function checkForm() {
+        var flag = true;
+        if (isEmpty($("#maNhomTieuChi"), ""))
+            flag = false;
+        if (isEmpty($("#tenNhomTieuChi"), ""))
+            flag = false;
+        if (isEmpty($("#heSoDiem"), ""))
+            flag = false;
+        return flag;
+    }
+
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }           
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <fieldset class="fieldset1">
+        
+        <legend class="legend">Sửa nhóm tiêu chí đánh giá nhân viên </legend>
+        <div  id="divMsg" style="color: Red;text-align: left">
+            @{if ((string)ViewBag.Message != "")
+              {
+               <span>@ViewBag.Message.ToString()</span>
+              }
+            }
+        </div>
+       
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 600px;">
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Mã nhóm tiêu chí
+                        </td>
+                        <td style="width: 35%">
+                            <input type="text" id="maNhomTieuChi" name="maNhomTieuChi" value="@item.maNhom"
+                            style="width: 97.5%" maxlength="20" readonly="readonly" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Tên nhóm tiêu chí
+                        </td>
+                        <td style="width: 35%">
+                            <input type="text" id="tenNhomTieuChi" name="tenNhomTieuChi" value="@item.tenTieuChi"
+                            style="width: 97.5%" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Hệ số điểm
+                        </td>
+                        <td style="width: 35%">
+                            <input type="text" id="heSoDiem" name="heSoDiem" value="@item.heSoDiem" style="width: 97.5%"
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%"  class="tdtitle">Ghi chú
+                        </td>
+                        <td style="width: 35%">
+                            @Html.TextArea("note", item.ghiChu, new { @style = "width:97.5%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;
+                        </td>
+                        <td colspan="2">
+                            <input type="button" class="btnBlack" id="btnSave" value="Lưu" />
+                            <input type="button" class="btnBlack" value="Trở về" onclick="window.location='@Url.Action("Index", "TieuChiDanhGia")'" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+}

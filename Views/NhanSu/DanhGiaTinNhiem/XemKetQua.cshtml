@@ -1,0 +1,198 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var datas = ViewData["lists"] as List<sp_NS_KetQuaDanhGiaNhanVienResult>;
+}
+ <style>
+        input#maPhieuTinNhiem
+        {
+            border: none;
+            cursor: no-drop;
+            background-color: transparent;
+        }
+    </style>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/worldsoft/tabs/jquery.ui.tabs.js")"></script>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/JQuery/jquery.treetable/javascripts/jquery.treeTable.js")"></script>
+
+    <link rel="Stylesheet" href="@Url.Content("~/Scripts/JQuery/jquery.treetable/stylesheets/jquery.treeTable.css")"
+        type="text/css">
+<link rel="stylesheet" href="~/Content/table.css" />
+  
+   <script type="text/javascript">
+        $().ready(function() {
+
+            $(".backLink").click(function(event) {
+                event.preventDefault();
+                history.back(1);
+            });
+        });
+                function goBack() {
+            window.history.back();
+        }
+    </script>
+    <style>
+    .boxNhanXet {
+    text-align: left;
+    line-height: 1.6;
+}
+    </style>
+   
+  
+    <div class="custome_fieldSet WrapperPhieuDG">
+    <div class="myatable03 mtxxs">
+        <fieldset  class="removeBorderFieldset">
+           
+             <div class="titleBorderPhieu">
+              <div class="colorCommonBieuNgu">Xem kết quả đánh giá<br />
+             <span>Trách Nhiệm</span> – <span>Công Tâm</span> – <span>Đúng Sự Thật</span>
+              </div>
+            </div>
+             <div id="table-container">
+             <div style="float: right">
+               
+               
+                 <a href="javascript:1 history.go(1)" class="backLink">
+                   <button type="button" class="btnBlack"><i class="fa fa-reply-all" aria-hidden="true"></i> Quay về</button>
+                   </a>
+            </div>
+                <table id="gridSource" class="tbl WorkTicket" style="width: 100%">
+                    <thead>
+                        <tr style="color: #000099; font-weight: 700">
+                            <td style="width:60px">
+                            
+                            </td>
+                            <td style="width:90px">
+                               Trình độ chuyên môn, kỹ thuật 
+                            </td>
+                             <td style="width:90px">
+                               Thái độ, tác phong làm việc 
+                            </td>
+                             <td style="width:90px">
+                               Kinh nghiệm làm việc 
+                            </td>
+                             <td style="width:90px">
+                               Khả năng làm việc nhóm
+                            </td>
+                             <td style="width:90px">
+                              Khả năng lãnh đạo
+                            </td>
+                            
+                            <td>
+                            Nhận Xét
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                      @{
+                            if (datas != null)
+                            {
+                                var stt = 0;
+                                foreach (var item in datas)
+                                {
+                                    
+                               
+                                <tr>
+                                  <td><b>Phiếu @(++stt)</b></td>
+                                 <td>
+                                   @{
+                                        if (item.diemTC1 != 0)
+                                        { 
+                                       
+                                        @(item.diemTC1)
+                                       
+                                        }
+                                        else { 
+                                       <span>
+                                        -
+                                        </span>
+                                        }
+                                        }
+                                    
+                                  
+                                </td>
+                                 <td>
+                                   @{
+                                        if (item.diemTC2 != 0)
+                                        { 
+                                       
+                                        @(item.diemTC2)
+                                        
+                                        }
+                                        else { 
+                                        <span>-</span>
+                                       
+                                        }
+                                 }
+                                </td>
+                                 <td>
+                                    @{
+                                        if (item.diemTC3 != 0)
+                                        { 
+                                        
+                                       @(item.diemTC3)
+                                       
+                                        }
+                                        else { 
+                                       <span>-</span>
+                                       
+                                        }
+                                     }
+                                </td>
+                                 <td>
+                                    @{
+                                        if (item.diemTC4 != 0)
+                                        { 
+                                       @(item.diemTC4)
+                                        
+                                        }
+                                        else { 
+                                        <span>-</span>
+                                        }
+                                        }
+                                </td>
+                                 <td>
+                                    @{
+                                        if (item.diemTC5 != 0)
+                                        { 
+                                      
+                                        @(item.diemTC5)
+                                        
+                                        }
+                                        else { 
+                                     
+                                        <span>-</span> 
+                                        }
+                                        }
+                                </td>
+                                
+                                <td class="boxNhanXet">
+                                 <div>@(item.nhanXet)</div>
+                                </td>
+                                </tr>
+                                
+                                }
+                            }
+                            }
+                       
+                    </tbody>
+                   
+                </table>
+            </div>
+           
+            <br />
+           <i style="float:left"><i class="fa fa-quote-left" aria-hidden="true"></i> Nếu có phát hiện nhầm lẫn, sai sót, tiêu cực vui lòng liên hệ email: <span>danhgianhanvien@thuanviet.com.vn</span> <i class="fa fa-quote-right" aria-hidden="true"></i> </i>
+            <div style="float: right">
+               
+               
+                 <a href="javascript: history.go(1)" class="backLink">
+                   <button type="button" class="btnBlack"><i class="fa fa-reply-all" aria-hidden="true"></i> Quay về</button>
+                   </a>
+            </div>
+        </fieldset>
+    </div>
+    </div>

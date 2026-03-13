@@ -1,0 +1,622 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var listPhanCa = ViewBag.shiftType as IList<tbl_NS_PhanCa>;
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnImportHRToERP").click(function () {
+            bootbox.confirm("Import dữ liệu nhân viên đến ERP?", function (result) {
+                if (result) {
+                    var url = "@Url.Action("ImportHRToERP", "PhongBan")";
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data == 1) {
+                                Alert.success("Cập nhật dữ liệu HR đến ERP thành công.", "Thông báo", { displayDuration: 2000 });
+                            }
+                            else {
+                                Alert.error("Có lỗi xãy ra trong quá trình xử lý", "Thông báo", { displayDuration: 2000 });
+                            }
+                        },
+                        error: function () {
+                            Alert.error("Có lỗi xãy ra trong quá trình xử lý", "Thông báo", { displayDuration: 2000 });
+                        }
+                    });
+                }
+            });
+        });
+        $(".navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+        var parentId = "";
+
+        $("#flag").val(true);
+        $("#btnSave").show();
+        $("#btnSkip").hide();
+        $("#btnAddNew").hide();
+        $('#parentId').val("");
+        $('#departmentID').val("");
+        $('#departmentName').val("");
+        $('#note').val("");
+        $(".tabToggle").click(function () {
+            $(".tabToggle").removeClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").hide(500);
+            var index = $(".tabToggle").index(this);
+            $(".tabToggle").eq(index).addClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").eq(index).show(500);
+        });
+        $(".custome_fieldSet li a").addClass("hvr-underline");
+        var heightBrowser = $(window).height();
+        var heightWrapper = $(".wrapper").height();
+
+        var heightSet = heightBrowser - heightWrapper;
+        heightSet = parseInt(heightSet);
+        heightSet = heightSet - 50;
+
+        $("#divTreeCongViec").css("height", heightSet);
+        $("#navigation1 a").click(function () {
+            $.each($("#navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            parentId = $(this).attr("alt");
+            var giatri = $(this).attr("alt").replace(/ /gi, '+');
+            var qsearch = $("#searchText").val().replace(/ /gi, '+');
+            var url = '@Url.Action("LoadNhanVienPhongBan", "PhongBan")' + "?searchString=" + qsearch + '&maPhongBan=' + giatri;
+            $('#LoadNhanVienPB').load(url, function () { });
+
+            var urlPost = "@Url.Action("GetDepartmentByID", "PhongBan")" + "?departmentID=" + $(this).attr("alt");
+            $.ajax({
+                url: urlPost,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#parentId').val(data.maCha);
+                    $('#departmentID').val(data.MaPhongBan);
+                    // load ds NV LK
+                    $("#btnSearchNVLK").click();
+                    $('#departmentName').val(data.Ten);
+                    $('#note').val(data.GhiChu);
+                    $('#shiftId').val(data.maPhanCa);
+                    $('#MaNhanVienDuyet').val(data.maNhanVienDuyet);
+                    $('#NhanVienDuyet').val(data.tenNhanVienDuyet);
+
+                },
+                error: function () {
+                }
+            });
+            $("#btnSearchNVLK").click(function () {
+                SearchNVLK();
+            });
+            $('#btnAddNew').show();
+            //$('#btnSkip').show();
+            $("#flag").val(false);
+            $("#departmentID").attr("readonly", true);
+
+            var urlPostAnHien = "@Url.Action("GetDepartmentByIDAnHien", "PhongBan")" + "?departmentID=" + $(this).attr("alt");
+            $.ajax({
+                url: urlPostAnHien,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        if (data == "1") {
+                            $("#btnCapNhatPhongBan").show();
+                        }
+                        else {
+                            $("#btnCapNhatPhongBan").hide();
+                        }
+                    }
+                    else {
+                        $("#btnCapNhatPhongBan").hide();
+                    }
+
+                },
+                error: function () {
+                    $("#btnCapNhatPhongBan").hide();
+                }
+            });
+        });
+
+        $('#btnSearch').click(function () {
+            Search();
+        });
+
+        $("#searchText").keyup(function (e) {
+            if (event.keyCode == 13) {
+                Search();
+            }
+        });
+        $("#btnReload").click(function () {
+            location.href = '@Url.Action("Index/")';
+
+        });
+        $("#btnCapNhatPhongBan").click(function () {
+            var url = '/NhanVien/PhongBanListTreePopup';
+            showPopup(url, 800, 600);
+
+            //$('#filter-panel').load(url);
+           
+            
+        });
+        $("#myModalChonPhongBan").on("hide.bs.modal", function () {
+            $("#filter-panel").html("");
+        });
+
+
+        $("#btnDelete").click(function () {
+            var cnf = window.confirm("Bạn có muốn xóa không?");
+            if (cnf) {
+                var UrlDelete = '@Url.Action("XoaPhongBan")'
+                $.ajax({
+                    url: UrlDelete,
+                    type: "POST",
+                    dataType: "json",
+                    data: { departmentID: $('#departmentID').val() },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function () {
+                        Alert.error("Phòng ban này đang được sử dụng trong hệ thống. Không thể xóa.", "Thông báo", { displayDuration: 2000 });
+                    }
+                });
+                return;
+            };
+        });
+        $("#btnAddNew").click(function () {
+            $('#departmentID').val("");
+            $('#departmentName').val("");
+            $('#parentId').val(parentId);
+            $('#note').val("");
+            $("#departmentID").attr("readonly", false);
+            $("#flag").val(true);
+            $('#MaNhanVienDuyet').val("");
+            $('#NhanVienDuyet').val("");
+        });
+
+        $("#btnSave").click(function () {
+            jQuery.validator.setDefaults({
+                debug: true,
+                success: "valid"
+            });
+
+            var form = $("#form-submit");
+            form.validate({
+                errorPlacement: function (error, element) {
+                    $(error).remove();
+                },
+            });
+            if (form.valid()) {
+                $.ajax({
+                    url: "@Url.Action("LuuPhongBan", "PhongBan")",
+                    type: "POST",
+                    dataType: "json",
+                    data: { departmentID: $('#departmentID').val(), departmentName: $('#departmentName').val(), parentId: $('#parentId').val(), note: $('#note').val(), shiftId: $('#shiftId').val(), flag: $('#flag').val(), maNguoiDuyet: $("#MaNhanVienDuyet").val() },
+                    success: function (data) {
+                        if (data == 0) {
+                            Alert.error("Mã phòng ban đã tồn tại, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                        }
+                        else
+                            if (data == 1) {
+                                Alert.error("Tên phòng ban đã tồn tại, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                            }
+                            else {
+                                Alert.success("Lưu phòng ban thành công!", "Thông báo", { displayDuration: 2000 });
+                                // them moi xong chuyen qua update
+                                $("#flag").val(false);
+                                $("#departmentID").attr("readonly", false);
+                                $("#btnReload").click();
+                            }
+
+                    },
+                    error: function () {
+                        Alert.error("Lưu không thành công, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                    }
+                });
+            }
+
+        });
+
+        $("#btnChuyenNV").click(function (e) {
+            if ($("[name='ChekChonNVPB']:checked").length == 0) {
+                Alert.error("Không có nhân viên nào được chọn, Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+                return;
+            }
+            if ($("[name='ChekChonNVPB']:checked").length >= 1) {
+                var i = 0;
+                var strString;
+                var arrMaNV = [];
+                //Get value
+                jQuery("input[name='ChekChonNVPB']:checked").each(function (index, element) {
+                    strString = jQuery(this).attr("data-manhanvien");
+                    arrMaNV[i] = strString.split(',');
+                    i++;
+                });
+                $('#myModalChonPhongBan').modal();
+                var Url = '@Url.Action("chuyenNV", "PhongBan")' + "?arrMaNV=" + arrMaNV.toString();
+                $('#filter-panel').load(Url);
+                // End get value
+            }
+        });
+        $("#btnAddNhanVien").click(function () {
+            var currentBP = $("#departmentID").val();
+            if (currentBP == null || currentBP == "") {
+                Alert.error("Chọn bộ phận cần thêm!", "Thông báo", { displayDuration: 2000 });
+                return false;
+            }
+
+            $('#myModalChonPhongBan').modal();
+            var qsearch = $("#searchText").val().replace(/\ /g, '+');
+            var url = '@Url.Action("ListDSNhanVien", "PhongBan")' + '?qSearch=' + qsearch + "&parrentId=" + currentBP.replace(/ /gi, '+');;
+            $('#filter-panel').load(url);
+        });
+    });
+    function SearchNVLK() {
+        var giatri = $("#departmentID").val().replace(/ /gi, '+');
+        if (giatri == null || giatri == "") {
+            jAlert("Chọn phòng ban cần xem");
+            return false;
+        }
+        var url = '@Url.Action("LoadNhanVienLienKetView", "PhongBan")' + "?parrentId=" + giatri.trim();
+        $('#loadNVLK').load(url, function () { });
+    }
+    function ChonNhanVienDuyet() {
+        $("#myModalChonPhongBan .modal-dialog").addClass("modal-lg");
+        var url = '@Url.Action("NhanVienDuyet", "PhongBan")';
+        $('#filter-panel').load(url);
+    }
+    function ChonPhongBanMoi() {
+        $("#myModalChonPhongBan .modal-dialog").removeClass("modal-lg");
+        var url = '@Url.Action("DanhSachPhongBan", "PhongBan")';
+        $('#filter-panel').load(url);
+    }
+    
+    function Search() {
+        var searchText = $('#searchText').val().replace(/\ /g, '+');
+        var url = "@Url.Action("LoadNhanVienPhongBan", "PhongBan")" + "?searchString=" + searchText + '&maPhongBan=' + $("#departmentID").val();
+        beginPaging1();
+        $('#LoadNhanVienPB').html('<h4>Loading...</h4>').load(url);
+        successPaging1();
+    }
+    function beginPaging1(args) {
+        // Animate        
+        $('#LoadNhanVienPB').fadeOut('fast');
+    }
+
+    function successPaging1() {
+        // Animate
+        $('#LoadNhanVienPB').fadeIn('fast');
+    }
+    function XoaNhanVienLKView(MaNV, TenNV) {
+        var departmentID = $("#departmentID").val();
+
+        $.ajax({
+            url: "@Url.Action("removeNVLienKetPhongBan", "PhongBan")",
+            type: "POST",
+            dataType: "json",
+            data: { MaNV: MaNV, MaPB: departmentID },
+            success: function (data) {
+                $("#btnSearchNVLK").click();
+            },
+            error: function () {
+                Alert.error("Xóa không thành công., Vui lòng kiểm tra lại!", "Thông báo", { displayDuration: 2000 });
+            }
+        });
+
+    }
+    function ChonNhanVienLienKet() {
+
+        var departmentID = $("#departmentID").val();
+        if (departmentID == null || departmentID == "") {
+            Alert.error("Chọn Bộ phận/Phòng ban trước khi thêm.", "Thông báo", { displayDuration: 2000 });
+            return;
+        }
+        $("#myModalChonPhongBan .modal-dialog").addClass("modal-lg");
+        $('#myModalChonPhongBan').modal({});
+        var Url = '@Url.Action("ChonNhanVienLienKet", "PhongBan")';
+        $('#filter-panel').load(Url);
+    }
+    
+    
+</script>
+<style>
+    .tbl-create td
+    {
+        border: none;
+    }
+
+    input.form-control
+    {
+        display: inline;
+    }
+
+    #navigation1 a:link
+    {
+        color: #0000FF;
+    }
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    .btnXoaNVLKView{
+        font-size: 20px;
+    }
+    .btnXoaNVLKView .fa
+    {
+        color:#1a9dcc
+    }
+
+</style>
+<form id="form-submit">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-yelp" aria-hidden="true"></i>Danh sách Bộ phận</span></a>
+                         @{
+                            string flagAdmin = (string)ViewBag.flagAdmin;
+                            if (flagAdmin == "true"){
+                        <button id="btnImportHRToERP" type="button" class="btn btn-primary btn-sm" style="border: 1px double; margin-left: 8px">
+                                        Import HR To ERP
+                                    </button>
+                        }
+                        }
+                    </li>
+                </ul>
+            </div>
+            <div id="tabs" style="width: 70%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active activeColorTab tabToggle">
+                        <a href="#"><span><i class="fa fa-object-group" aria-hidden="true"></i>Thông tin bộ phận</span></a>
+
+                    </li>
+
+                    <li class="ui-state-default ui-corner-top tabToggle">
+                        <a href="#"><span><i class="fa fa-users" aria-hidden="true"></i>Danh sách nhân viên</span></a></li>
+                </ul>
+            </div>
+            <table width="100%" class="tbl-create">
+                <tr>
+                    <td style="width: 30%; box-shadow: 0 10px 30px rgba(0,0,0,.3); box-sizing: border-box; vertical-align: top">
+                        <div style="overflow: auto; margin-left: 5px;" id="divTreeCongViec">
+                            @Html.Raw(ViewBag.departments)
+                        </div>
+                        <div style="text-align: center; padding: 10px 0;">
+                            <button class="btn btn-info btn-xs" type="button" id="btnReload">Tải lại</button>
+                            <button class="btn btn-warning btn-xs " id="btnDelete" type="button">Xóa</button>
+                            <input type="hidden" id="flag" name="flag" />
+                        </div>
+                    </td>
+                    <td style="width: 70%; padding-left: 14px; box-sizing: border-box; vertical-align: top">
+                        <div class="contentToggle">
+                            <table width="100%" style="background-color: Transparent">
+                                <tr>
+                                    <td width="15%">Bộ phận cha
+                                    </td>
+                                    <td>
+                                        <input readonly="readonly" id="parentId" name="parentId" class="form-control" type="text" style="width: 300px" />
+                                        @*<div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.departments)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>*@
+                                        
+                                      
+                                        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#myModalChonPhongBan" onclick="ChonPhongBanMoi();"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn phòng ban</button>
+                                          @*<button style="padding-left: -1px; border-radius: 0px 4px 4px 0px" type="button" class="btn btn-primary" id="btnCapNhatPhongBan" data-toggle="modal" data-target="#myModalChonPhongBan">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;Chọn phòng ban</button>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mã bộ phận
+                                    </td>
+                                    <td>
+                                        <input name="departmentID" id="departmentID" required="required" class="form-control" type="text" style="width: 300px" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tên bộ phận
+                                    </td>
+                                    <td>
+                                        <input name="departmentName" id="departmentName" required="required" class="form-control" type="text" style="width: 300px" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ghi chú
+                                    </td>
+                                    <td>
+                                        <input name="note" id="note" type="text" class="form-control" style="width: 300px" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Nhân viên duyệt
+                                    </td>
+                                    <td>
+                                        <input name="NhanVienDuyet" id="NhanVienDuyet" type="text" class="form-control" readonly="readonly" style="width: 300px" />
+                                        <input name="MaNhanVienDuyet" id="MaNhanVienDuyet" type="hidden" />
+                                        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#myModalChonPhongBan" onclick="ChonNhanVienDuyet();">Chọn nhân viên</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Phân ca
+                                    </td>
+                                    <td>
+                                     
+                                        <select  name="shiftId" id="shiftId" class="form-control" style="max-width:300px">
+                                            <option value="">Chọn phân ca</option> 
+                                              @foreach (var it in listPhanCa)
+                                            { 
+                                            <option value="@it.maPhanCa">  @it.tenPhanCa</option>
+                                               }
+                                        </select>
+                                        
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <button class="btn btn-info" type="button" id="btnAddNew">Thêm mới</button>
+                                        <button class="btn btn-info" id="btnSave" type="button">Lưu</button>
+                                        <button class="btn btn-info" type="button" id="btnSkip">Hủy</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="themNVLienKet" style="margin-top: 10px">
+
+                                <div style="background-color: #DADEE4; overflow: hidden; padding: 3px; box-sizing: border-box;">
+
+
+                                    <div id="tabs" style="width: 50%; height: auto; border: none; float: left; box-sizing: border-box; background: transparent; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                                        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+                                                <a href="#" class="hvr-underline"><span><i class="fa fa-users" aria-hidden="true"></i>Danh sách nhân viên liên kết</span></a>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div style="width: 50%; float: right; text-align: right; margin-top: 3px;">
+                                        <button type="button" id="btnSearchNVLK" class="btn btn-info btn-xs"><i class="fa fa-recycle" aria-hidden="true"></i>Refresh</button>
+                                        <button type="button" onclick="ChonNhanVienLienKet()" class="btn btn-info btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="modal"><i class="fa fa-user-plus" aria-hidden="true"></i>Thêm NV Liên Kết</button>
+
+                                    </div>
+
+                                </div>
+                                <div >
+                                    <table id="Table1" width="100%" class="table table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px; ">STT
+                                                </th>
+                                                <th style="width: 100px;">Hình ảnh
+                                                </th>
+                                                <th style="width: 250px; ">Nhân viên
+                                                </th>
+                                                <th style="width: 200px;">Chức danh
+                                                </th>
+                                                <th style="width: 200px; ">Thông tin thêm
+                                                </th>
+                                                <th style="width: 100px; text-align:center">Xóa
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="loadNVLK">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentToggle loadNV" style="display: none">
+
+                            <div style="background-color: #DADEE4; overflow: hidden; padding: 3px; box-sizing: border-box;">
+                                <div style="float: left">
+                                    Nhập mã hoặc tên:
+                            <input type="text" id="searchText" name="searchText" value="" style="width: 250px;" class="form-control" />
+                                    <input type="button" id="btnSearch" value="Tìm kiếm" class="btn btn-info" style="margin: 0" />
+                                </div>
+                                <div style="float: right; margin-top: 4px;">
+                                   @* <button type="button" id="btnChuyenNV" class="btn btn-info"><i class="fa fa-refresh" aria-hidden="true"></i>Chuyển NV</button>
+                                    <button type="button" id="btnAddNhanVien" class="btn btn-info"><i class="fa fa-plus-circle" aria-hidden="true"></i>Thêm NV</button>*@
+                                </div>
+                            </div>
+                            <div id="LoadNhanVienPB">
+                                <table id="gridSource" width="100%" class="tbl colorize custome_checked">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30px; ">STT
+                                            </th>
+                                            <th style="width: 100px;">Hình ảnh
+                                            </th>
+                                            <th style="width: 250px; ">Nhân viên
+                                            </th>
+                                            <th style="width: 400px;">Phòng ban/Chức danh
+                                            </th>
+                                            <th style="width: 150px;">
+                                               @* <input type="checkbox" id="checkAll" name="checkAll" title="Click chọn tất cả." onclick="checkAllTbl('gridSource', 'checkAll')">
+                                                <label for="checkAll"></label>*@
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- Modal -->
+            <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                        <div class="modal-body">
+                            <div class="container" style="width: 98%">
+                                <div class="row">
+                                    <div id="filter-panel" class="filter-panel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+        </fieldset>
+    </div>
+</form>

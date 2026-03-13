@@ -1,0 +1,248 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    Layout = "~/Views/Shared/_Popup.cshtml";
+   
+}
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+    var obj = window.opener;
+    $().ready(function () {
+        $('#checkAll').click(function (e) {
+            $('[name="chk"]').prop('checked', this.checked);
+        });
+
+        $('[name="chk"]').click(function (e) {
+            if ($('[name="chk"]:checked').length == $('[name="chk"]').length || !this.checked)
+                $('#checkAll').prop('checked', this.checked);
+        });
+        $("#navigation1").treeview({
+            persist: "location",
+            collapsed: false,
+            unique: false
+        });
+        var parentId = "";
+        //khi click vào công viêc tren tree
+        $("#navigation1 a").click(function () {
+            $.each($("#navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            parentId = $(this).attr("alt");
+
+            // Get phòng ban
+            var giatri = $(this).attr("alt").replace(/ /gi, '+');
+            var qsearch = $("#searchText").val().replace(/ /gi, '+');
+
+            var url = '@Url.Action("LoadNhanVien", "PhieuTangCa")' + "?parrentId=" + giatri.trim() + "&_page=1" + '&qSearch=' + qsearch;
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#tbody').html(imageUrl);
+            $('#tbody').load(url, function () {
+            });
+        });
+        $('#btnSearch').click(function () {
+            Search();
+        });
+
+        $("#searchText").keyup(function (e) {
+            if (event.keyCode == 13) {
+                Search();
+            }
+        });
+    });
+
+    function OnCriteriaPC(page) {
+        var giatri = $("#parrentId").val().replace(/ /gi, '+');
+        var qsearch = $("#searchText").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadNhanVien", "PhieuTangCa")' + "?parrentId=" + giatri.trim() + "&_page=" + page + '&qSearch=' + qsearch;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+        var giatri = $("#parrentId").val().replace(/ /gi, '+');
+        var qsearch = $("#searchText").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadNhanVien", "PhieuTangCa")' + "?parrentId=" + giatri.trim() + "&_page=1" + '&qSearch=' + qsearch;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+    function ChonNV() {
+        var chks = document.getElementsByName("chk");
+        var sttMaHieus = document.getElementsByName("sttMaHieu");
+        var maNhanViens = document.getElementsByName("MaNhanVien");
+        var tenNhanViens = document.getElementsByName("TenNhanVien");
+        var tenChucDanhs = document.getElementsByName("TenChucDanh");
+        var tenPhongBans = document.getElementsByName("TenPhongBan");
+        var maPhongBans = document.getElementsByName("MaPhongBan");
+        var emails = document.getElementsByName("Email");
+        var hinhAnhs = document.getElementsByName("HinhAnh");
+        var table = obj.document.getElementById("tbody");
+        var idTbody = "tbody";
+        var stt = table.rows.length;
+        for (var i = 0; i < chks.length; i++) {
+            if (chks.item(i).checked && checkNhanVien(maNhanViens.item(i).value)) {
+                var index = table.rows.length;
+                var row = table.insertRow(index);
+                var stt = row.insertCell(row.childNodes.length);
+                stt.innerHTML = (index + 1) + "<input name='sttMaHieu' type='hidden' value='" + sttMaHieus.item(i).value + "' />";
+                stt.setAttribute("align", "center");
+
+                var maNhanVien = row.insertCell(row.childNodes.length);
+                maNhanVien.innerHTML = "<input name='maNhanVien' type='hidden' value='" + maNhanViens.item(i).value + "' />" + maNhanViens.item(i).value;
+                maNhanVien.setAttribute("align", "left");
+
+                var tenNhanVien = row.insertCell(row.childNodes.length);
+                tenNhanVien.innerHTML = "<input name='tenNhanVien' type='hidden' value='" + tenNhanViens.item(i).value + "' />" + '<i class="fa fa-user" aria-hidden="true" style="color: #519ee5"></i>' + tenNhanViens.item(i).value;
+                tenNhanVien.setAttribute("align", "left");
+
+                var phongBan = row.insertCell(row.childNodes.length);
+                phongBan.innerHTML = "<input name='phongBan' type='hidden' value='" + tenPhongBans.item(i).value + "' />" + tenPhongBans.item(i).value;
+                phongBan.setAttribute("align", "left");
+
+                var chucDanh = row.insertCell(row.childNodes.length);
+                chucDanh.innerHTML = "<input name='chucDanh' type='hidden' value='" + tenChucDanhs.item(i).value + "' />" + tenChucDanhs.item(i).value;
+                chucDanh.setAttribute("align", "left");
+
+                var email = row.insertCell(row.childNodes.length);
+                email.innerHTML = "<input name='email' type='hidden' value='" + emails.item(i).value + "' />" + '<i class="fa fa-envelope-o" aria-hidden="true"></i>' + emails.item(i).value;
+                chucDanh.setAttribute("align", "left");
+
+                var del = row.insertCell(row.childNodes.length);
+                del.innerHTML = "<a href='javascript:void(0);'  style='color:blue;' onclick=\"DeleteRow('" + idTbody + "'," + index + ",'true');\">Xóa</a>";
+                del.setAttribute("align", "center");
+            }
+        }
+    }
+
+    function checkNhanVien(idNhanVien) {
+        for (var i = 0; i < obj.$("[name='maNhanVien']").length; i++) {
+            if (obj.$("[name='maNhanVien']:eq(" + i + ")").val() == idNhanVien) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>
+
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    #Avatar
+    {
+        width: 100%;
+        height: auto;
+        max-width: 50px;
+        object-fit: cover;
+    }
+
+    #imgInp
+    {
+        opacity: 0;
+        height: 100%;
+        width: 100%;
+        bottom: 0;
+        cursor: pointer;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        right: 0;
+    }
+</style>
+<div id="container">
+
+
+
+    <table width="100%" cellpadding="2" border="0" cellspacing="0">
+        <tr>
+            <td style="width: 30%" valign="top"  class="clrFullMobile">
+                <fieldset class="removeBorderFieldset">
+
+                    <div id="tabs" style="" class="ui-tabs">
+                        <ul class="ui-tabs-nav">
+                            <li class="ui-tabs-selected ui-state-active"><a><span>Danh mục bộ phận</span></a></li>
+                        </ul>
+                    </div>
+                    <div style="height: 90%; max-height: 400px; overflow: auto; margin-left: 30px" id="divTreeCongViec">@Html.Raw(ViewBag.departments)</div>
+                </fieldset>
+            </td>
+            <td valign="top" style="width: 70%"  class="clrFullMobile">
+                <fieldset class="removeBorderFieldset">
+                    <div id="tabs" style="" class="ui-tabs">
+                        <ul class="ui-tabs-nav">
+                            <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách nhân viên</span></a></li>
+                        </ul>
+                    </div>
+
+                    <div style="padding: 5px; overflow: hidden; background: #ddd;">
+
+
+
+
+                        <div class="input-group" style="max-width: 350px; float: left;">
+
+                            <input type="text" id="searchText" placeholder="Nhập mã hoặc tên" name="searchText" value="@ViewBag.qSearch" class="form-control"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="btnSearch">Tìm kiếm</button>
+
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                        @*<input type="button"  class="btn btn-default btnChon" value="Chọn" onclick="ChonNhanViens()" style="float:right"/>*@
+                        <input type="button" class="btn btn-default btnChon" value="Chọn" onclick="ChonNV()" style="float: right" />
+                    </div>
+                    <table id="gridSource" width="100%" class="tbl colorize table table-striped table-hover table-condensed TableMobile IndexNhanVienPNP">
+                        <thead>
+                            <tr class="background_tr">
+                                <th style="width: 30px;">STT
+                                </th>
+                                <th style="width: 100px;">Hình ảnh
+                                </th>
+                                <th style="width: 250px;">Nhân viên
+                                </th>
+                                <th style="width: 250px;">Phòng ban
+                                </th>
+                                <th style="width: 250px;">Chức danh
+                                </th>
+                                <th style="width: 30px;">
+                                    <input type="checkbox" id="checkAll" name="checkAll" title="Click chọn tất cả." onclick="checkAllTbl('gridSource', 'checkAll')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">@{Html.RenderPartial("LoadNhanVien");}</tbody>
+                    </table>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+
+</div>

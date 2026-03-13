@@ -1,0 +1,100 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_DM_DanhSachBoPhanResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSearchPhongBan').click(function () {
+            var searchText = $('#searchString').val().replace(/\ /g, '+');
+            var url = "@Url.Action("CapNhatPhongBanCha", "PhongBan")" + "?searchString=" + searchText;
+            beginPaging();
+            $('#DanhSachPhongBan').html('<h4>Loading...</h4>').load(url);
+            successPaging();
+        });
+
+        $('.btnChon').click(function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var tenPB = selected.find('#tenPhongBan').val();
+                var maPB = selected.find('#maPhongBan').val();
+                $('#parentId').val(maPB);
+            }
+        })
+    });
+
+    function beginPagingPB(args) {
+        // Animate        
+        $('#DanhSachPhongBan').fadeOut('fast');
+    }
+
+    function successPagingPB() {
+        // Animate
+        $('#DanhSachPhongBan').fadeIn('normal');
+    }
+
+    function failurePagingPB() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchPhongBan").click();
+    }
+</script>
+<div id="DanhSachPhongBan">
+<div id="content">
+    <div class="panel-body">
+        <div style="position: relative">
+            <input type="text" id="searchString" class="form-control" style="padding-right: 30px; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh(event);" />
+            <i class="fa fa-search" id="btnSearchPhongBan" style="position: absolute; top: 9px; right: 10px; cursor: pointer"></i>
+        </div>
+    </div>
+    <div id="container">
+        <table class="table table-striped table-hover table-condensed">
+            <thead style="font-size: 13px">
+                <tr>
+                    <th style="width: 45px">STT</th>
+                    <th>Mã phòng ban
+                    </th>
+                    <th>Tên phòng ban
+                    </th>
+                    <th style="width: 45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {                    
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.maPhongBan</td>
+                        <td>@item.tenPhongBan</td>                        
+                        <td style="color: #0b74d5; text-align: center">
+                            <input type="hidden" id="tenPhongBan" value="@item.tenPhongBan" />
+                            <input type="hidden" id="maPhongBan" value="@item.maPhongBan"/>                            
+                            <button type="button" class="btn btn-primary btn-xs btnChon" data-dismiss="modal">chọn</button>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        <div>
+            Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+        </div>
+        <div>
+            <ul class="pagination">
+                @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "DanhSachPhongBan", OnBegin = "beginPagingPB", OnSuccess = "successPagingPB", OnFailure = "failurePagingPB" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhongBan", action = "CapNhatPhongBanCha" }))
+            </ul>
+        </div>
+    </div>
+</div>
+
+</div>

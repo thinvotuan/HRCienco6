@@ -1,0 +1,342 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model HopDongLaoDongModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $("#btnPhanBo").click(function () {
+
+            var luongThoaThuan = parseFloat($("#luongThoaThuan").autoNumeric("get")),
+                maNhanVien = $("#maNhanVien").val();
+
+            if (maNhanVien == undefined || maNhanVien == "") {
+                bdsConfirm.alert("Vui lòng chọn nhân viên", "Thông báo");
+                return false;
+            }
+
+            if (isNaN(luongThoaThuan) || luongThoaThuan <= 0) {
+                bdsConfirm.alert("Vui lòng nhập mức lương thỏa thuận", "Thông báo");
+                return false;
+            }
+            var url = "@Url.Action("PhanBoLuong", "HopDongLaoDong")" + "?luongThoaThuan=" + luongThoaThuan + "&maNhanVien=" + maNhanVien;
+            $("#phanbo-div").load(url, function (data) {
+
+                //if (data != "") {
+                //    bdsConfirm.alert(JSON.parse(data).mucLuong, "Thông báo");
+                //    $("#phanbo-div").html("");
+                //    return;
+                //}
+                var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get"),
+                        luongCoBan = $("#luongCoBan").autoNumeric("get"),
+                        tyLeHuong = $("#tyLeHuong").autoNumeric("get");
+
+                var tongLuong = parseFloat(luongThoaThuan) * parseFloat(tyLeHuong) / 100;
+
+                $("#tongLuong").autoNumeric("set", tongLuong);
+                $("#luongHopDong").autoNumeric("set", luongCoBan);
+            });
+        });
+
+        $("#btnNhanVien").click(function () {
+            $("#customModal .modal-dialog").addClass("modal-lg");
+            var url = "@Url.Action("NhanVienDuyet", "LuongChoViec")";
+            $("#custom-panel").load(url);
+        });
+
+        $(document).on("click", ".btnChonNVPB", function () {
+            var selected = $(this).parent();
+            if (selected.length != 0) {
+                var hoten = selected.find('#hotenNVPB').val(),
+                    manv = selected.find('#maNVPB').val(),
+                    chucDanh = selected.find("#chucVuNVPB").val();;
+                $('#tenNhanVien').val(hoten);
+                $('#maNhanVien').val(manv);
+                $("#tenChucDanh").val(chucDanh);
+                //$('.panel-default').html('');
+            }
+        });
+
+        $("#tongLuong").on("keyup keydown", function () {
+            var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get"),
+                    tongLuong = $("#tongLuong").autoNumeric("get");
+
+            var tyLeHuong = parseFloat(tongLuong) / parseFloat(luongThoaThuan) * 100;
+            if (parseFloat(tongLuong) > parseFloat(luongThoaThuan)) {
+                $("#tongLuong").autoNumeric("set", luongThoaThuan);
+                $("#tyLeHuong").autoNumeric("set", 100);
+            }
+            else {
+                $("#tyLeHuong").autoNumeric("set", tyLeHuong.toFixed(2));
+            }
+        });
+
+        $("#phuCapLuong, #luongThoaThuan,#khoanBoSungLuong").on("keyup keydown", function () {
+            var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get");
+            var phuCapLuong = $("#phuCapLuong").autoNumeric("get");
+            var khoanBoSungLuong = $("#khoanBoSungLuong").autoNumeric("get");
+
+            var luongDongBH = parseFloat(luongThoaThuan) + parseFloat(phuCapLuong);
+            $("#luongDongBH").autoNumeric("set", luongDongBH.toFixed(2));
+            var tongLuong = 0;
+            tongLuong = parseFloat(luongDongBH) + parseFloat(khoanBoSungLuong);
+            $("#tongLuong").autoNumeric("set", tongLuong.toFixed(2));
+        });
+
+        //$("#luongDongBH, #khoanBoSungLuong").on("keyup keydown", function () {
+        //    var luongThoaThuan = $("#luongThoaThuan").autoNumeric("get");
+        //    var tyLeHuong = $("#tyLeHuong").autoNumeric("get");
+
+        //    var tongLuong2 = parseFloat(tyLeHuong) * parseFloat(luongThoaThuan) / 100;
+        //    var luongDongBH = $("#luongDongBH").autoNumeric("get");
+        //    var khoanBoSungLuong = $("#khoanBoSungLuong").autoNumeric("get");
+
+        //    var tongLuong = tongLuong2 + parseFloat(luongDongBH) + parseFloat(khoanBoSungLuong);
+        //    $("#tongLuong").autoNumeric("set", tongLuong.toFixed(2));
+        //});
+
+
+        $("#btnSubmit").click(function (e) {
+            if ($("#form-submit").valid()) {
+                //if (checkValid() == false) {
+                //    e.preventDefault();
+                //}               
+            }
+        });
+
+
+        $("#idThoiHanHopDong").change(function () {
+            if ($("#idThoiHanHopDong").val() != 0) {
+                $("#idThoiHanHopDong").removeClass('error');
+            }
+        });
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $("#btnTroVe").click(function () {
+            location.href = "/LuongChoViec";
+        });
+
+        $("#maLoaiHopDong").change(function () {
+            if (this.value == "THUVIEC") {
+                $("#tyLeHuong").autoNumeric("set", 85);
+            } else {
+                $("#tyLeHuong").autoNumeric("set", 100);
+            }
+            $("#tyLeHuong").trigger("keyup");
+        });
+
+        $("#idThoiHanHopDong").change(function () {
+            $.ajax({
+                url: "/HopDongLaoDong/GetThoiHanInfo/" + this.value,
+                type: "POST",
+                dataType: "json",
+                data: $("#phucap-form").serialize(),
+                success: function (data) {
+                    $("#soThang").val(data.soThang)
+                    var soThang = parseFloat(data.soThang),
+                        ngayKy = $("#ngayKy").val();
+                    var ngayKetThuc = moment(ngayKy, "DD-MM-YYYY").add(soThang, "month");
+                    $("#ngayKetThuc").val(moment(ngayKetThuc).format("DD/MM/YYYY"));
+                }
+            })
+        });
+    })
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    function checkValid() {
+        //var tongLoaiI = 0, tongLoaiII = 0;
+        //var phuCapKhongTheoTiLe = parseFloat($("#tongPhuCapKhongTheoTyLe").val()),
+        //    phuCapTheoTiLe = parseFloat($("#tongPhuCapTheoTyLe").val());
+        //$(".loaiI").each(function () {
+        //    tongLoaiI += parseFloat($(this).autoNumeric("get"));
+        //})
+
+        //$(".loaiII").each(function () {
+        //    tongLoaiII += parseFloat($(this).autoNumeric("get"));
+        //})
+
+        //if (isNaN(tongLoaiI) || (tongLoaiI != phuCapKhongTheoTiLe)) {
+        //    $("#error-info").html("Tổng số tiền phụ cấp không theo tỷ lệ phải bằng " + phuCapKhongTheoTiLe);
+        //    $("#alertPhanBo").fadeIn("fast");
+        //    setTimeout(function () { $("#alertPhanBo").fadeOut("slow"); }, 4000);
+        //    return false;
+        //}
+
+        //if (isNaN(tongLoaiII) || (tongLoaiII != phuCapTheoTiLe)) {
+        //    $("#error-info").html("Tổng số tiền phụ cấp theo tỷ lệ phải bằng " + phuCapTheoTiLe);
+        //    $("#alertPhanBo").fadeIn("fast");
+        //    setTimeout(function () { $("#alertPhanBo").fadeOut("slow"); }, 4000);
+        //    return false;
+        //}
+
+        return true;
+    }
+
+</script>
+<style>
+    td
+    {
+        border: none!important;
+    }
+
+    .input-group-btn
+    {
+        position: absolute;
+        font-size: 0;
+    }
+
+    .numberinput
+    {
+        text-align: right;
+    }
+</style>
+<form id="form-submit" method="post" action="/LuongChoViec/Create" enctype="multipart/form-data">
+    <fieldset class="removeBorderFieldset">
+        <div id="tabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected active">
+                    <a href="#tab1" data-toggle="tab"><span>Chi tiết lương chờ việc</span></a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane in active" id="tab1">
+                <table class="table table-hover table-striped table-condensed" style="position: relative">
+                    <tr>
+                        <td class="tdtitle" style="width: 15%">Nhân viên <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td style="width: 35%">
+                            <div style="display: inline-flex; width: 100%;">
+                                @Model.NhanVien.hoVaTen
+                                @Html.HiddenFor(model => model.NhanVien.maNhanVien, new { required = "required" })                               
+                            </div>
+                        </td>
+                        <td class="tdtitle" style="width: 15%">Chức danh</td>
+                        <td style="width: 35%">
+                           </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Mã hợp đồng <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.DisplayFor(model => model.soHopDong, new { @class = "form-control", @readonly = "readonly" })
+                            <span style="color: red; font-style: italic">@TempData["SoHopDong"]</span>
+                        </td>
+                        <td class="tdtitle">Tên hợp đồng<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.tenHopDong, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.HiddenFor(model => model.soPhuLuc, new { @class = "form-control", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Mã chờ việc <span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>@Html.DisplayFor(model => model.maLuongChoViec, new { @class = "form-control", required = "required", @readonly = "readonly" })
+                            <span style="color: red; font-style: italic">@TempData["SoHopDong"]</span>
+                        </td>
+
+                        <td class="tdtitle">Ngày lập<span style="font-style: italic; float: right; color: red">*</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.ngayLap, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", required = "required" })
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Lương (1)</td>
+                        <td style="text-align: right">
+                            @String.Format("{0:#,##0}",Model.luongThoaThuan)                            
+                        </td>
+                        <td class="tdtitle">Phụ cấp lương (2)</td>
+                        <td style="text-align: right">
+                            @String.Format("{0:#,##0}",Model.phuCapLuong)                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Lương đóng BH (3=1+2)</td>
+                        <td style="text-align: right">
+                            @String.Format("{0:#,##0}",Model.luongDongBH)                            
+                        </td>
+
+                        <td class="tdtitle">Khoản bổ sung lương (4)</td>
+                        <td style="text-align: right">
+                            @String.Format("{0:#,##0}",Model.khoanBoSungLuong)                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tổng lương (5=3+4)</td>
+                        <td style="text-align: right">
+                            @String.Format("{0:#,##0}",Model.tongLuong)                            
+                        </td>
+                        <td class="form-inline tdtitle">Công chờ việc</td>
+                        <td style="text-align:right">@Model.congChoViec</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Tỷ lệ</td>
+                        <td style="text-align: right">@Model.tyLeLuongChoViec %</td>
+
+                        <td class="form-inline tdtitle">Lương chờ việc</td>
+                        <td style="text-align: right">@String.Format("{0:#,##0}",Model.luongChoViec)</td>
+                    </tr>
+                    <tr>
+                        <td class="tdtitle">Ghi chú</td>
+                        <td colspan="3">
+                         @Html.Raw(Model.ghiChu)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-group" style="float: right">            
+            <button class="btn btn-info btnTroVe" type="button" id="btnTroVe">Trở về </button>
+        </div>
+    </fieldset>
+</form>
+<div id="customModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div id="custom-panel" class="filter-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

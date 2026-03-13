@@ -1,0 +1,55 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model tbl_SA_CuaHang_MonAn
+<script src="/Scripts/jquery-2.1.4.min.js"></script>
+<script src="/Scripts/jquery.validate.min.js"></script>
+<script src="/Scripts/additional-methods.min.js"></script>
+<script src="/Scripts/batdongsan.validate.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+    });
+</script>
+
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cập nhật món ăn</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Tên món ăn<span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.tenMonAn, new { @class = "form-control", required = "required" })</td>
+        </tr>
+
+        <tr>
+            <td class="tdtitle">Số suất ăn trong ngày</td>
+            <td>@Html.TextBox("soSuatAnTrongNgay", Model.soSuatAnTrongNgay, new { @class = "form-control numberinputInt", @style = "text-align: right" })</td>
+        </tr>
+         <tr>
+            <td class="tdtitle">Số suất ăn / nhân viên</td>
+            <td>@Html.TextBox("suatAnTrenNhanVien", Model.suatAnTrenNhanVien, new { @class = "form-control numberinputInt", @style = "text-align: right" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextBoxFor(model => model.ghiChu, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Avatar</td>
+            <td>
+                <input type="file" id="fileAvatar" name="files" class="btn btn-file" />
+                <img id="imgCK" src="@Model.avatar" alt="Avatar"  style="    width: 100%;
+    height: 300px;
+    object-fit: contain;"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<style>
+    #tbl-create td {
+        border: none;
+    }
+
+    #tbl-create {
+        margin: 0;
+    }
+</style>

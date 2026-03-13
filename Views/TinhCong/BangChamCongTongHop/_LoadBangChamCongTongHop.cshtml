@@ -1,0 +1,93 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+@{
+                                
+    int stt = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSach"] as List<sp_NS_BangTongHopCongThangResult>;
+
+    foreach (var item in ls.ToList())
+    {
+      
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td><a style="color:#519ee5" href="@Url.Action("Details", "NhanVien", new { id = item.maNhanVien })">@item.maNhanVien</a> / @item.maChamCong
+            <br />
+            <i class="fa fa-user" aria-hidden="true"></i>@item.hoTen</td>
+
+        <td><i class="fa fa-th"></i>@item.phongBan<br />
+            <i class="fa fa-cubes"></i>@item.chucVu
+        </td>
+        <td style="text-align: center">@item.congChuan
+            @Html.Hidden("maNhanVienDieuChinh", item.maNhanVien)
+            @Html.Hidden("thangDieuChinh", item.thang)
+            @Html.Hidden("namDieuChinh", item.nam)
+            @if (!string.IsNullOrEmpty(item.ghiChu))
+            {
+                <br />@item.ghiChu
+            }
+        </td>
+        <td style="text-align: center">@item.soNgayCongChoViec</td>
+        <td style="text-align: center">@item.ngayQuet</td>
+        <td style="text-align: center">@item.congTac</td>
+        <td style="text-align: center">@item.nghiPhep</td>
+        <td style="text-align: center">@item.nghiPhepKhongLuong</td>
+        <td style="text-align: center">@item.nghiLe</td>
+        <td style="text-align: center">@item.tangCaThuong</td>
+        <td style="text-align: center">@item.tangCaChuNhat</td>
+        <td style="text-align: center">@item.tangCaLe</td>
+        <td style="text-align: center">@item.luyKeThangTruoc</td>
+        <td style="text-align: center">
+            <input type="text" value="@String.Format("{0:###,##0.##}", item.tongCong)" style="width:50px;text-align:right;font-weight:bold" name="congDieuChinh"/>
+        </td>
+    </tr>                    
+    }
+}
+
+<tr>
+    <td colspan="3" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPCTC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>

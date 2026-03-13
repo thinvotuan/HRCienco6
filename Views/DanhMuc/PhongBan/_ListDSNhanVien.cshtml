@@ -1,0 +1,110 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+@{
+    Layout = null;
+    int i = 1;
+}
+<style>
+    td
+    {
+        border: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSearchListNV').click(function () {
+            var searchText = $('#searchStringNV').val().replace(/\ /g, '+');
+            var url = "@Url.Action("ListDSNhanVien", "PhongBan")" + "?qSearch=" + searchText + "&parrentId=" + "@ViewBag.parrentIdAdd";
+            beginPagingNV();
+            $('#DanhSachListNV').html('<h4>Loading...</h4>').load(url);
+            successPagingNV();
+        });
+    });
+
+    function ChooseNhanVien(MaNV){          
+        var MaPB = "@ViewBag.parrentIdAdd";            
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("updateNVPhongBan/","PhongBan")',
+            data: {
+                MaNV: MaNV,
+                MaPB: MaPB
+            },
+            success: function(result) {
+                if (result == "true") {
+                    Alert.success("Thêm nhân viên liên kết thành công!", "Thông báo", { displayDuration: 2000 });
+                    $("#btnSearch").click();
+                    $("#btnSearchListNV").click();                        
+                }
+                else {
+                    Alert.error(result, "Thông báo", { displayDuration: 2000 });
+                }
+            }
+        });
+    }
+    function beginPagingNV(args) {
+        // Animate        
+        $('#DanhSachListNV').fadeOut('fast');
+    }
+
+    function successPagingNV() {
+        // Animate
+        $('#DanhSachListNV').fadeIn('normal');
+    }
+
+    function failurePagingNV() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchListNV").click();
+    }
+</script>
+<div id="DanhSachListNV">
+<div id="content">
+    <div class="panel-body">
+        <div style="position: relative">
+            <input type="text" id="searchStringNV" value="@ViewBag.qSearchNVAdd" class="form-control" style="padding-right: 30px; border-radius: 50px" placeholder="Search" onkeypress="enterToSeacrh(event);" />
+            <i class="fa fa-search" id="btnSearchListNV" style="position: absolute; top: 9px; right: 10px; cursor: pointer"></i>
+        </div>
+    </div>
+    <div id="container">
+        <table class="table table-striped table-hover table-condensed">
+            <thead style="font-size: 13px">
+                <tr>
+                    <th style="width: 45px">STT</th>
+                    <th>Mã nhân viên
+                    </th>
+                    <th>Tên nhân viên
+                    </th>
+                    <th style="width: 45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {       
+                    <tr>
+                        <td style="text-align:center">@i</td>
+                        <td>@item.maNhanVien</td>
+                        <td>@item.hoVaTen</td>                        
+                        <td style="color: #0b74d5; text-align: center">
+                            <button type="button" class="btn btn-primary btn-xs btnChonNV" onclick="ChooseNhanVien('@item.maNhanVien')">Chọn</button>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        <div>
+            Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+        </div>
+        <div>
+            <ul class="pagination">
+                @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "DanhSachListNV", OnBegin = "beginPagingNV", OnSuccess = "successPagingNV", OnFailure = "failurePagingNV" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhongBan", action = "ListDSNhanVien",qSearch=ViewBag.qSearchNVAdd,parrentId=ViewBag.parrentIdAdd }))
+            </ul>
+        </div>
+    </div>
+</div>
+
+</div>

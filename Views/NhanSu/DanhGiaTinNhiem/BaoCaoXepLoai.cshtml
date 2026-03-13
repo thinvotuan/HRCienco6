@@ -1,0 +1,270 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+
+    #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+    }
+
+    .leftSpan span
+    {
+        float: left;
+        padding-right: 5px;
+    }
+
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .dropdown-menu
+    {
+        min-width: 420px;
+    }
+
+    #grdDanhMucCongViec a.makeLink
+    {
+        color: red;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+
+
+
+        $(document).on("click", "#phongban-dropdown-menu li a", function () {
+
+            $("#btnPhongBan").val($(this).attr('alt'));
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            $("#btnSearch").click();
+        })
+        $("#btnSearch").click(function () {
+            Search();
+        });
+        $("#qui").val('@ViewData["qui"]');
+          $("#soCapBac").val('@ViewData["mucLevel"]');
+
+        $("#nam,#qui,#soCapBac").change(function () {
+            $("#btnSearch").click();
+        });
+
+        $("#btnSearch").click();
+
+
+    });
+    function OnCriteriaPC(page) {
+        var giatri = $("#qSearch").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadBaoCaoXepLoai", "DanhGiaTinNhiem")' + "?maPhongBan=" + $("#btnPhongBan").val() + "&mucLevel=" + $("#soCapBac").val() + "&qui=" + $("#qui").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=" + page;
+
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+        });
+    }
+
+    function Search() {
+
+        var giatri = $("#qSearch").val().replace(/ /gi, '+');
+        var url = '@Url.Action("LoadBaoCaoXepLoai", "DanhGiaTinNhiem")' + "?maPhongBan=" + $("#btnPhongBan").val() + "&mucLevel=" + $("#soCapBac").val() + "&qui=" + $("#qui").val() + "&nam=" + $("#nam").val() + "&qSearch=" + giatri + "&_page=1";
+
+            var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+            $('#tbody').html(imageUrl);
+            $('#tbody').load(url, function () {
+            });
+        }
+
+
+        function Reset() {
+            location.href = '@Url.Action("BaoCaoXepLoai", "DanhGiaTinNhiem")';
+        }
+    function ShowChiTiet(maNhanVien) {
+        var nam = $("#nam").val();
+            var url = '@Url.Action("BaoCaoXepLoaiNhanVien", "DanhGiaTinNhiem")' + "?maNV=" + maNhanVien+"&nam="+nam;
+            showPopup(url, 1000, 450);
+        }
+</script>
+
+<fieldset class="removeBorderFieldset">
+
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active"><a><span>Báo cáo kết quả đánh giá phiếu tín nhiệm</span></a></li>
+        </ul>
+    </div>
+    <div id="container">
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+
+
+            <tr class="background_tr">
+                <td class="leftSpan">
+                    <span>Kỳ đánh giá:</span>
+                    <span>
+
+                        <select id="qui" class="form-control" style="width: 50px;">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </span>
+                    <span>Năm:
+                    </span>
+                    <span>
+                        @Html.DropDownList("nam", ViewData["yearWorkings"] as SelectList)
+                    </span>
+                </td>
+
+
+
+                <td>
+
+                    <select style="width: 100px;" id="soCapBac">
+                        <option value="">--Cấp bậc--</option>
+                        <option value="8">[8] Tổng Giám đốc</option>
+
+                        <option value="6">[6] Phó Tổng Giám đốc</option>
+                        <option value="5">[5] Ban Giám đốc</option>
+                        <option value="4">[4] Phó Giám Đốc : GĐPTDA, PGĐKT, TP.ME</option>
+                        <option value="3">[3] Trưởng phòng - CHT - Phó Ban ME</option>
+                        <option value="2">[2] Phó Phòng - CHP- Trưởng Bộ phận</option>
+                        <option value="1">[1] Nhân viên</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 4px auto;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </td>
+                <td>
+
+
+                    <div class="input-group" style="width: 300px; float: left;">
+                        <input type="text" id="qSearch" value="@ViewData["qSearch"]" />
+
+                        <span class="input-group-btn">
+                            <input type="button" id="btnSearch" value="Tìm">
+                        </span>
+                    </div>
+
+
+                </td>
+
+
+            </tr>
+        </table>
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+            <tr>
+                <td colspan="7">
+                    <table class="tbl colorize" id='grdDanhMucCongViec' style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th style="width: 35px">STT
+                                </th>
+                                <th style="width: 170px">Họ và tên
+                                </th>
+                                <th style="width: 200px">Phòng ban
+                                </th>
+                                <th style="width: 90px">Điểm Cấp Trên
+                                </th>
+                                <th style="width: 90px">Điểm Ngang Cấp
+                                </th>
+                                <th style="width: 90px">Điểm Cấp Dưới
+                                </th>
+                                <th style="width: 90px">Tổng số phiếu
+                                </th>
+                                <th style="width: 90px">Tổng điểm
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</fieldset>
+<style>
+    .spanDiem
+    {
+        display: inline-block;
+        width: 45px;
+    }
+</style>

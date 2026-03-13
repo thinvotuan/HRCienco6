@@ -1,0 +1,1353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{695F9B0B-E958-44E6-8830-A034BE08A37E}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BatDongSan</RootNamespace>
+    <AssemblyName>BatDongSan</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\..\BatDongSan\BatDongSan\bin\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.3.4.13329\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\FileBin\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.1.2.3\lib\2.0\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NPOI, Version=1.2.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>packages\NPOI.1.2.3\lib\2.0\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.20710.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.20710.0\lib\net40\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomViewLocationRazorViewEngine .cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BarcodeLib\BarcodeCommon.cs" />
+    <Compile Include="BarcodeLib\BarcodeLib.cs" />
+    <Compile Include="BarcodeLib\IBarcode.cs" />
+    <Compile Include="Controllers\BaoCao\BaoCaoNhanSuController.cs" />
+    <Compile Include="Controllers\BaoCao\BaoCaoTongHopController.cs" />
+    <Compile Include="Controllers\Barcode.cs" />
+    <Compile Include="Controllers\DanhMuc\DanhSachCongNhanController.cs" />
+    <Compile Include="Controllers\DanhMuc\DMNhomDanhGiaController.cs" />
+    <Compile Include="Controllers\DanhMuc\DMXepLoaiDGController.cs" />
+    <Compile Include="Controllers\DanhMuc\NgheNghiepController.cs" />
+    <Compile Include="Controllers\DanhMuc\PhuCapTheoCongTrinhController.cs" />
+    <Compile Include="Controllers\DanhMuc\PhuongPhapNhomDanhGiaController.cs" />
+    <Compile Include="Controllers\DanhMuc\ThangLuongCongTyController.cs" />
+    <Compile Include="Controllers\HeThong\GhiNhanLogController.cs" />
+    <Compile Include="Controllers\HeThong\PhanQuyenSuatAnController.cs" />
+    <Compile Include="Controllers\HeThong\PrintTemplateController.cs" />
+    <Compile Include="Controllers\NhanSu\LuongChoViecController.cs" />
+    <Compile Include="Controllers\NhanSu\NhanVienVipController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBanController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuBoNhiemController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuCapNhatNgayCongController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuDieuChuyenBoNhiemController.cs" />
+    <Compile Include="Controllers\QLSuatAn\BaoCaoThongKeSuatAnTheoNhanVienController.cs" />
+    <Compile Include="Controllers\QLSuatAn\PhieuDangKySuatAnController.cs" />
+    <Compile Include="Controllers\TinhCong\BangLuongNVController.cs" />
+    <Compile Include="Controllers\TinhCong\BangLuongNVVIPController.cs" />
+    <Compile Include="Controllers\TinhCong\BangLuongTamUngVIPController.cs" />
+    <Compile Include="Controllers\TinhCong\BangLuongThuongTetController.cs" />
+    <Compile Include="Controllers\TinhCong\BangLuongThuongTetVipController.cs" />
+    <Compile Include="Controllers\TinhCong\ChamCongController.cs" />
+    <Compile Include="Controllers\TinhCong\BangChamCongChiTietController.cs" />
+    <Compile Include="Controllers\TinhCong\BangChamCongTongHopController.cs" />
+    <Compile Include="Controllers\DanhMuc\BangCapController.cs" />
+    <Compile Include="Controllers\DanhMuc\ChiNhanhNganHangController.cs" />
+    <Compile Include="Controllers\DanhMuc\ChucDanhController.cs" />
+    <Compile Include="Controllers\DanhMuc\DMThuNhapKhacController.cs" />
+    <Compile Include="Controllers\DanhMuc\LoaiTangCaController.cs" />
+    <Compile Include="Controllers\DanhMuc\LyDoThoiViecController.cs" />
+    <Compile Include="Controllers\DanhMuc\KhoiTinhLuongController.cs" />
+    <Compile Include="Controllers\DanhMuc\LoaiHopDongLaoDongController.cs" />
+    <Compile Include="Controllers\DanhMuc\LoaiNghiPhepController.cs" />
+    <Compile Include="Controllers\DanhMuc\LoaiQuanHeGiaDinhController.cs" />
+    <Compile Include="Controllers\DanhMuc\NgayLeController.cs" />
+    <Compile Include="Controllers\DanhMuc\PhongBanController.cs" />
+    <Compile Include="Controllers\DanhMuc\PhuCapController.cs" />
+    <Compile Include="Controllers\DanhMuc\QuanLyCapBacController.cs" />
+    <Compile Include="Controllers\DanhMuc\QuanLyThemeController.cs" />
+    <Compile Include="Controllers\DanhMuc\QuiTrinhDuyetController.cs" />
+    <Compile Include="Controllers\DanhMuc\TaiLieuAdminController.cs" />
+    <Compile Include="Controllers\DanhMuc\TaiLieuController.cs" />
+    <Compile Include="Controllers\DMNguoiDuyetController.cs" />
+    <Compile Include="Controllers\HeThong\PhanQuyenController.cs" />
+    <Compile Include="Controllers\HeThong\QuanLyGiupDoController.cs" />
+    <Compile Include="Controllers\HeThong\QuanLyThongBaoController.cs" />
+    <Compile Include="Controllers\NhanSu\BangPhanTachMucLuongController.cs" />
+    <Compile Include="Controllers\NhanSu\DanhGiaTinNhiemController.cs" />
+    <Compile Include="Controllers\NhanSu\HopDongLaoDongController.cs" />
+    <Compile Include="Controllers\NhanSu\MucLuongToiThieuController.cs" />
+    <Compile Include="Controllers\NhanSu\NhanVienController.cs" />
+    <Compile Include="Controllers\NhanSu\NoiKhamChuaBenhController.cs" />
+    <Compile Include="Controllers\NhanSu\PhanCaNhanVienController.cs" />
+    <Compile Include="Controllers\NhanSu\PhepNamNhanVienController.cs" />
+    <Compile Include="Controllers\NhanSu\PhieuTamUngController.cs" />
+    <Compile Include="Controllers\NhanSu\PhuLucHopDongController.cs" />
+    <Compile Include="Controllers\NhanSu\ThangTinhThueTNCNController.cs" />
+    <Compile Include="Controllers\NhanSu\ThuNhapKhacController.cs" />
+    <Compile Include="Controllers\NhanSu\TieuChiDanhGiaController.cs" />
+    <Compile Include="Controllers\NhanSu\TyLeDongBHController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuCongTacController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuDieuChuyenController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuDiLamLaiController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuNghiPhepController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuTangCaController.cs" />
+    <Compile Include="Controllers\PhieuDeNghi\PhieuThoiViecController.cs" />
+    <Compile Include="Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\TinhCong\DeNghiChiLuongController.cs" />
+    <Compile Include="Controllers\TinhCong\DieuChinhCongVipController.cs" />
+    <Compile Include="Controllers\TinhCong\tbl_NhanVienVIP.cs" />
+    <Compile Include="Helper\Common\BangPhanQuyen.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
+    <Compile Include="Helper\Common\ConstantVariale.cs" />
+    <Compile Include="Helper\DownloadResult.cs" />
+    <Compile Include="Helper\ReportHelperExcel.cs" />
+    <Compile Include="Helper\UploadHelper.cs" />
+    <Compile Include="Helper\Utils\CharacterHelper.cs" />
+    <Compile Include="Helper\Utils\ExcelDataProcessing.cs" />
+    <Compile Include="Helper\Utils\GenerateUtil.cs" />
+    <Compile Include="Helper\Utils\HtmlRequestHelper.cs" />
+    <Compile Include="Helper\Utils\Log4Net.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\Utils\MailHelper.cs" />
+    <Compile Include="Helper\Utils\PhanQuyenTreeView.cs" />
+    <Compile Include="Helper\Utils\SMSHelper.cs" />
+    <Compile Include="Helper\Utils\SMSThuanViet.cs" />
+    <Compile Include="Helper\Utils\TreePhongBans.cs" />
+    <Compile Include="Models\ChamCong\LinqChamCongClient.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqChamCongClient.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChamCong\LinqChamCongServer.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqChamCongServer.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DanhMuc\LinqDanhMuc.cs">
+      <DependentUpon>LinqDanhMuc.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DanhMuc\LinqDanhMuc.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqDanhMuc.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DanhMuc\MPhanca.cs" />
+    <Compile Include="Models\DanhMuc\PhongBanModel.cs" />
+    <Compile Include="Models\DanhMuc\PhuCapModel.cs" />
+    <Compile Include="Controllers\HeThong\CongViecController.cs" />
+    <Compile Include="Controllers\HeThong\UserController.cs" />
+    <Compile Include="Controllers\HeThong\UserGroupController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\DanhMuc\PhuongPhapDanhGiaChiTietModel.cs" />
+    <Compile Include="Models\DanhMuc\ThangLuongCongTyModel.cs" />
+    <Compile Include="Models\DBChamCong\DBChamCong.cs">
+      <DependentUpon>DBChamCong.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DBChamCong\DBChamCong.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBChamCong.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DMS\LinqDMSDataContext.cs">
+      <DependentUpon>LinqDMSDataContext.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DMS\LinqDMSDataContext.designer.cs">
+      <DependentUpon>LinqDMSDataContext.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\ERP\linqERPCienco6.cs">
+      <DependentUpon>linqERPCienco6.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ERP\linqERPCienco6.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>linqERPCienco6.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HeThong\ChiTietQuiTrinhDuyet.cs" />
+    <Compile Include="Models\HeThong\DMNguoiDuyet.cs" />
+    <Compile Include="Models\HeThong\LinqHeThong.cs">
+      <DependentUpon>LinqHeThong.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HeThong\VuViecRepository.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\HeThong\LinqHeThong.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqHeThong.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HeThong\UserModel.cs" />
+    <Compile Include="Models\HeThong\VuViecModel.cs" />
+    <Compile Include="Models\NhanSu\BangPhanTachLuongChiTietModel.cs" />
+    <Compile Include="Models\NhanSu\BoPhanTinhLuong.cs" />
+    <Compile Include="Models\NhanSu\DanhSachNhanVienDaChonModel.cs" />
+    <Compile Include="Models\NhanSu\DeNghiChiLuong.cs" />
+    <Compile Include="Models\NhanSu\HopDongLaoDongModel.cs" />
+    <Compile Include="Models\NhanSu\LinqNhanSu.cs">
+      <DependentUpon>LinqNhanSu.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NhanSu\LinqNhanSu.designer.cs">
+      <DependentUpon>LinqNhanSu.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\NhanSu\LinqThuanViet.cs">
+      <DependentUpon>LinqThuanViet.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NhanSu\LinqThuanViet.designer.cs">
+      <DependentUpon>LinqThuanViet.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\NhanSu\NhanVienModel.cs" />
+    <Compile Include="Models\NhanSu\NoiKhamChuaBenhModel.cs" />
+    <Compile Include="Models\NhanSu\PhanBoLuongModel.cs" />
+    <Compile Include="Models\NhanSu\PhepNamNhanVien.cs" />
+    <Compile Include="Models\NhanSu\PhieuTamUng.cs" />
+    <Compile Include="Models\NhanSu\PhuLucHopDongModel.cs" />
+    <Compile Include="Models\NhanSu\ThangTinhThueTNCNModel.cs" />
+    <Compile Include="Models\NhanSu\ThuNhapKhac.cs" />
+    <Compile Include="Models\PhieuDeNghi\LinqPhieuDeNghi.cs">
+      <DependentUpon>LinqPhieuDeNghi.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PhieuDeNghi\PhieuCapNhatNgayCong.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuDanhGiaNVPBModel.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuDieuChuyen.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuDiLamLai.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuThoiViec.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuDeNghiTangCa.cs" />
+    <Compile Include="Models\PhieuDeNghi\LinqPhieuDeNghi.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinqPhieuDeNghi.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PhieuDeNghi\PhieuDeNghiCongTac.cs" />
+    <Compile Include="Models\PhieuDeNghi\PhieuDeNghiNghiPhep.cs" />
+    <Compile Include="Models\QLSuatAn\CuaHangModel.cs" />
+    <Compile Include="Models\QLSuatAn\LuuVet\QLSALuuVet.cs">
+      <DependentUpon>QLSALuuVet.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QLSuatAn\LuuVet\QLSALuuVet.designer.cs">
+      <DependentUpon>QLSALuuVet.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\QLSuatAn\PhieuDangKySuatAnModel.cs" />
+    <Compile Include="Models\QLSuatAn\QLSuatAn.cs">
+      <DependentUpon>QLSuatAn.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QLSuatAn\QLSuatAn.designer.cs">
+      <DependentUpon>QLSuatAn.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\VIP\BangLuongNVVIPModel.cs" />
+    <Compile Include="Models\VIP\LinqVIP.cs">
+      <DependentUpon>LinqVIP.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VIP\LinqVIP.designer.cs">
+      <DependentUpon>LinqVIP.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Models\VIP\NhanVienVIPModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helper\Utils\HashingHelper.cs" />
+    <Compile Include="Helper\Utils\ImageHelper.cs" />
+    <Compile Include="Helper\Utils\MenuBuilder.cs" />
+    <Compile Include="Helper\Utils\Paging\AjaxPager.cs" />
+    <Compile Include="Helper\Utils\Paging\AjaxPagingExtensions.cs" />
+    <Compile Include="Helper\Utils\Paging\IEnumerableExtensions.cs" />
+    <Compile Include="Helper\Utils\Paging\IPagedList.cs" />
+    <Compile Include="Helper\Utils\Paging\IQueryableExtensions.cs" />
+    <Compile Include="Helper\Utils\Paging\PagedList.cs" />
+    <Compile Include="Helper\Utils\Paging\Pager.cs" />
+    <Compile Include="Helper\Utils\Paging\PagingExtensions.cs" />
+    <Compile Include="Symbologies\Blank.cs" />
+    <Compile Include="Symbologies\Code128.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-switch\bootstrap2\bootstrap-switch.css" />
+    <Content Include="Content\bootstrap-switch\bootstrap2\bootstrap-switch.min.css" />
+    <Content Include="Content\bootstrap-switch\bootstrap3\bootstrap-switch.css" />
+    <Content Include="Content\bootstrap-switch\bootstrap3\bootstrap-switch.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-button-dropdown.css" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\bootstrap\js\bootstrap-select.js" />
+    <Content Include="Content\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\bootstrap\js\moment.js" />
+    <Content Include="Content\bootstrap\js\npm.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\font\css\font-awesome.css" />
+    <Content Include="Content\font\css\font-awesome.min.css" />
+    <Content Include="Content\font\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font\HELP-US-OUT.txt" />
+    <Content Include="Content\login\login-style.css" />
+    <Content Include="Content\login\login.css" />
+    <Content Include="Content\login\reset.css" />
+    <Content Include="Content\res-menu\css\ionicons.min.css" />
+    <Content Include="Content\res-menu\css\responsivemultimenu.css" />
+    <Content Include="Content\res-menu\fonts\icomoon.dev.svg" />
+    <Content Include="Content\res-menu\fonts\icomoon.svg" />
+    <Content Include="Content\res-menu\fonts\license.txt" />
+    <Content Include="Content\res-menu\index.html" />
+    <Content Include="Content\res-menu\js\responsivemultimenu.js" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.calendrical.css" />
+    <Content Include="Content\themes\base\jquery.datetimepicker.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\tooltipster.css" />
+    <Content Include="Content\v1_20170418.css" />
+    <Content Include="Content\v1_20170419.css" />
+    <Content Include="FileUploads\BarcodeImage\PSA180913-0001.png" />
+    <Content Include="Images\arrows.png" />
+    <Content Include="Images\CuaHang\20180802-090802.jpg" />
+    <Content Include="Images\CuaHang\20180802-090839.jpg" />
+    <Content Include="Images\CuaHang\20180802-090843.jpg" />
+    <Content Include="Images\CuaHang\20180802-090854.jpg" />
+    <Content Include="Images\CuaHang\20180802-110823.jpg" />
+    <Content Include="Images\CuaHang\20180802-130801.jpg" />
+    <Content Include="Images\CuaHang\20180802-130821.jpg" />
+    <Content Include="Images\CuaHang\20180802-130829.jpg" />
+    <Content Include="Images\CuaHang\20180802-130846.jpg" />
+    <Content Include="Images\CuaHang\20180803-100800.jpg" />
+    <Content Include="Images\CuaHang\20180803-100821.jpg" />
+    <Content Include="Images\CuaHang\20180803-100824.jpg" />
+    <Content Include="Images\CuaHang\20180803-100845.jpg" />
+    <Content Include="Images\CuaHang\20180806-140801.jpg" />
+    <Content Include="Images\CuaHang\20180806-140830.jpg" />
+    <Content Include="Images\CuaHang\20180806-140836.jpg" />
+    <Content Include="Images\CuaHang\20180806-140845.jpg" />
+    <Content Include="Images\CuaHang\20180807-140800.jpg" />
+    <Content Include="Images\CuaHang\20180807-140802.jpg" />
+    <Content Include="Images\CuaHang\20180807-140803.jpg" />
+    <Content Include="Images\CuaHang\20180807-140834.jpg" />
+    <Content Include="Images\CuaHang\20180807-170826.jpg" />
+    <Content Include="Images\CuaHang\20180807-170828.jpg" />
+    <Content Include="Images\CuaHang\20180807-170834.jpg" />
+    <Content Include="Images\CuaHang\20180807-170851.jpg" />
+    <Content Include="Images\CuaHang\PSA180803-0005.png" />
+    <Content Include="Scripts\additional-methods.js" />
+    <Content Include="Scripts\additional-methods.min.js" />
+    <Content Include="Scripts\autoNumeric.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\bg_sub_nav.jpg" />
+    <Content Include="Images\img-main.png" />
+    <Content Include="Images\line_top.jpg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logout.png" />
+    <Content Include="Images\top_line_menu.png" />
+    <Content Include="Models\HeThong\LinqHeThong.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqHeThong.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\font\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font\fonts\FontAwesome.otf" />
+    <Content Include="Content\font\less\animated.less" />
+    <Content Include="Content\font\less\bordered-pulled.less" />
+    <Content Include="Content\font\less\core.less" />
+    <Content Include="Content\font\less\fixed-width.less" />
+    <Content Include="Content\font\less\font-awesome.less" />
+    <Content Include="Content\font\less\icons.less" />
+    <Content Include="Content\font\less\larger.less" />
+    <Content Include="Content\font\less\list.less" />
+    <Content Include="Content\font\less\mixins.less" />
+    <Content Include="Content\font\less\path.less" />
+    <Content Include="Content\font\less\rotated-flipped.less" />
+    <Content Include="Content\font\less\stacked.less" />
+    <Content Include="Content\font\less\variables.less" />
+    <Content Include="Content\font\scss\font-awesome.scss" />
+    <Content Include="Content\font\scss\_animated.scss" />
+    <Content Include="Content\font\scss\_bordered-pulled.scss" />
+    <Content Include="Content\font\scss\_core.scss" />
+    <Content Include="Content\font\scss\_fixed-width.scss" />
+    <Content Include="Content\font\scss\_icons.scss" />
+    <Content Include="Content\font\scss\_larger.scss" />
+    <Content Include="Content\font\scss\_list.scss" />
+    <Content Include="Content\font\scss\_mixins.scss" />
+    <Content Include="Content\font\scss\_path.scss" />
+    <Content Include="Content\font\scss\_rotated-flipped.scss" />
+    <Content Include="Content\font\scss\_stacked.scss" />
+    <Content Include="Content\font\scss\_variables.scss" />
+    <Content Include="Content\res-menu\.htaccess" />
+    <Content Include="Content\res-menu\aaa" />
+    <Content Include="Content\res-menu\fonts\icomoon.eot" />
+    <Content Include="Content\res-menu\fonts\icomoon.ttf" />
+    <Content Include="Content\res-menu\fonts\icomoon.woff" />
+    <Content Include="Content\res-menu\fonts\ionicons.woff" />
+    <Content Include="Content\res-menu\LICENSE" />
+    <Content Include="Content\res-menu\README.md" />
+    <Content Include="Content\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\bootstrap\css\datepicker.less" />
+    <Content Include="Content\bootstrap\css\datepicker3.less" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-switch.js" />
+    <Content Include="Scripts\bootstrap-switch.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\batdongsan.utils.js" />
+    <Content Include="Models\NhanSu\LinqNhanSu.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqNhanSu.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\DanhMuc\LinqDanhMuc.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqDanhMuc.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\PhieuDeNghi\LinqPhieuDeNghi.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqPhieuDeNghi.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\ChamCong\LinqChamCongClient.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqChamCongClient.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\ChamCong\LinqChamCongServer.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqChamCongServer.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\Report\ReportTemplate.xls" />
+    <Content Include="Content\Report\ReportTemplate2.xls" />
+    <Content Include="Content\Report\ReportTemplateBTHVT.xls" />
+    <Content Include="Models\NhanSu\LinqThuanViet.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqThuanViet.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\VIP\LinqVIP.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqVIP.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\ERP\linqERPCienco6.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>linqERPCienco6.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\DBChamCong\DBChamCong.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBChamCong.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\DMS\LinqDMSDataContext.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqDMSDataContext.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\QLSuatAn\LuuVet\QLSALuuVet.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>QLSALuuVet.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\QLSuatAn\QLSuatAn.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>QLSuatAn.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.calendrical.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.js" />
+    <Content Include="Scripts\jquery.datetimepicker.min.js" />
+    <Content Include="Scripts\jquery.form-validator.min.js" />
+    <Content Include="Scripts\jquery.tooltipster.js" />
+    <Content Include="Scripts\jquery.tooltipster.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\json.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\login.js" />
+    <Content Include="Scripts\login\login.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\security.dev.js" />
+    <Content Include="Scripts\security.js" />
+    <Content Include="Scripts\batdongsan.validate.js" />
+    <Content Include="Scripts\vi.js" />
+    <Content Include="UploadFiles\QLNV\NV-1412454.jpg" />
+    <Content Include="UploadFiles\QLNV\NV-1501484.jpg" />
+    <Content Include="UploadFiles\QLNV\NV-1504518.jpg" />
+    <Content Include="UploadFiles\QLNV\NV-1604744.jpg" />
+    <Content Include="UploadFiles\QLNV\NV-1611287.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Images\accent.png" />
+    <Content Include="Images\bullet.png" />
+    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\orderedList0.png" />
+    <Content Include="Images\orderedList1.png" />
+    <Content Include="Images\orderedList2.png" />
+    <Content Include="Images\orderedList3.png" />
+    <Content Include="Images\orderedList4.png" />
+    <Content Include="Images\orderedList5.png" />
+    <Content Include="Images\orderedList6.png" />
+    <Content Include="Images\orderedList7.png" />
+    <Content Include="Images\orderedList8.png" />
+    <Content Include="Images\orderedList9.png" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Account\Login2.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\_MenuPartial.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\HeThong\PhongBan\Index.cshtml" />
+    <Content Include="Views\HeThong\PhongBan\Edit.cshtml" />
+    <Content Include="Views\HeThong\PhongBan\Create.cshtml" />
+    <Content Include="Views\HeThong\PhongBan\Details.cshtml" />
+    <Content Include="Views\HeThong\UserGroup\Index.cshtml" />
+    <Content Include="Views\HeThong\UserGroup\Create.cshtml" />
+    <Content Include="Views\HeThong\UserGroup\Edit.cshtml" />
+    <Content Include="Views\HeThong\CongViec\Create.cshtml" />
+    <Content Include="Views\HeThong\CongViec\Index.cshtml" />
+    <Content Include="Views\HeThong\CongViec\Edit.cshtml" />
+    <Content Include="Views\HeThong\User\Index.cshtml" />
+    <Content Include="Views\HeThong\User\Details.cshtml" />
+    <Content Include="Views\HeThong\User\Create.cshtml" />
+    <Content Include="Views\HeThong\User\Edit.cshtml" />
+    <Content Include="Views\HeThong\User\PartialNhanViens.cshtml" />
+    <Content Include="Views\Shared\Login.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Views\Application\AccessDenied.cshtml" />
+    <Content Include="Views\HeThong\User\PartialContent.cshtml" />
+    <Content Include="Views\NhanSu\BangPhanTachMucLuong\Create.cshtml" />
+    <Content Include="Views\NhanSu\BangPhanTachMucLuong\Edit.cshtml" />
+    <Content Include="Views\NhanSu\BangPhanTachMucLuong\Index.cshtml" />
+    <Content Include="Views\NhanSu\BangPhanTachMucLuong\PartialPhuCapChiTiet.cshtml" />
+    <Content Include="Views\NhanSu\BangPhanTachMucLuong\PartialPhuCapDanhSach.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\BaoCaoXepLoai.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\BaoCaoXepLoaiNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\Cauhinh.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\ChonDanhSachNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\Details.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\Index.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\LoadNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\ThongBao.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\XemKetQua.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\_ChonDanhSachNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\_Create.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\_Edit.cshtml" />
+    <Content Include="Views\NhanSu\DanhGiaTinNhiem\_LoadBaoCaoXepLoai.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\Create.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\Details.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\Edit.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\Index.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\PartialIndex.cshtml" />
+    <Content Include="Views\NhanSu\HopDongLaoDong\PartialPhanBoLuong.cshtml" />
+    <Content Include="Views\NhanSu\MucLuongToiThieu\Create.cshtml" />
+    <Content Include="Views\NhanSu\MucLuongToiThieu\Edit.cshtml" />
+    <Content Include="Views\NhanSu\MucLuongToiThieu\Index.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\Create.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\Details.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\Edit.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\Index.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\PartialEditQuanHeGD.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\PartialIndex.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\PartialPhongBanTree.cshtml" />
+    <Content Include="Views\NhanSu\NhanVien\PartialQuanHeGiaDinh.cshtml" />
+    <Content Include="Views\NhanSu\NoiKhamChuaBenh\Create.cshtml" />
+    <Content Include="Views\NhanSu\NoiKhamChuaBenh\Edit.cshtml" />
+    <Content Include="Views\NhanSu\NoiKhamChuaBenh\Index.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\Create.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\Details.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\Edit.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\EditNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\Index.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\ViewDanhSachNhanVienIndex.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\ViewIndex.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\_ChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\_ListNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhanCaNhanVien\_LoadChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\Create.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\Edit.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\Index.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\ViewIndex.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\_ChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\_LoadChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhepNamNhanVien\_LoadDanhSachNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhuLucHopDong\Create.cshtml" />
+    <Content Include="Views\NhanSu\PhuLucHopDong\Edit.cshtml" />
+    <Content Include="Views\NhanSu\ThangTinhThueTNCN\Create.cshtml" />
+    <Content Include="Views\NhanSu\ThangTinhThueTNCN\Details.cshtml" />
+    <Content Include="Views\NhanSu\ThangTinhThueTNCN\Edit.cshtml" />
+    <Content Include="Views\NhanSu\ThangTinhThueTNCN\Index.cshtml" />
+    <Content Include="Views\NhanSu\TieuChiDanhGia\Create.cshtml" />
+    <Content Include="Views\NhanSu\TieuChiDanhGia\Details.cshtml" />
+    <Content Include="Views\NhanSu\TieuChiDanhGia\Edit.cshtml" />
+    <Content Include="Views\NhanSu\TieuChiDanhGia\Index.cshtml" />
+    <Content Include="Views\NhanSu\TyLeDongBH\Create.cshtml" />
+    <Content Include="Views\NhanSu\TyLeDongBH\Edit.cshtml" />
+    <Content Include="Views\NhanSu\TyLeDongBH\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\ViewIndex.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\_ChonNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\_ChonPhongBan.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCongTac\_LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuNghiPhep\ViewIndex.cshtml" />
+    <Content Include="Views\DanhMuc\BangCap\Create.cshtml" />
+    <Content Include="Views\DanhMuc\BangCap\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\BangCap\Index.cshtml" />
+    <Content Include="Views\DanhMuc\ChiNhanhNganHang\Create.cshtml" />
+    <Content Include="Views\DanhMuc\ChiNhanhNganHang\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\ChiNhanhNganHang\Index.cshtml" />
+    <Content Include="Views\DanhMuc\ChucDanh\Create.cshtml" />
+    <Content Include="Views\DanhMuc\ChucDanh\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\ChucDanh\Index.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\CreatePhanCa.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\DetailPhanCa.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\EditPhanCa.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\Index.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\PhanCa.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\_CreateEdit.cshtml" />
+    <Content Include="Views\DanhMuc\KhoiTinhLuong\_ViewIndex.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiHopDongLaoDong\Create.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiHopDongLaoDong\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiHopDongLaoDong\Index.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiNghiPhep\Create.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiNghiPhep\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiNghiPhep\Index.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiQuanHeGiaDinh\Create.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiQuanHeGiaDinh\Details.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiQuanHeGiaDinh\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiQuanHeGiaDinh\Index.cshtml" />
+    <Content Include="Views\DanhMuc\NgayLe\Create.cshtml" />
+    <Content Include="Views\DanhMuc\NgayLe\Details.cshtml" />
+    <Content Include="Views\DanhMuc\NgayLe\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\NgayLe\Index.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\CapNhatPhongBanCha.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\Index.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\ListPhongBan.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\LoadNhanVien.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\LoadNhanVienDuyet.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\LoadNhanVienLienKet.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\LoadNhanVienLienKetView.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\SoDoToChuc.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_DanhSachPhongBan.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_ListDSNhanVien.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_NhanVienLienKet.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_NhanVienPhongBan.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_PartDanhSachPhongBan.cshtml" />
+    <Content Include="Views\DanhMuc\PhongBan\_PhongBanChuyen.cshtml" />
+    <Content Include="Views\DanhMuc\PhuCap\Create.cshtml" />
+    <Content Include="Views\DanhMuc\PhuCap\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\PhuCap\Index.cshtml" />
+    <Content Include="Views\DanhMuc\TaiLieuAdmin\Index.cshtml" />
+    <Content Include="Views\DanhMuc\TaiLieu\Index.cshtml" />
+    <Content Include="Views\DMNguoiDuyet\Index.cshtml" />
+    <Content Include="Views\DMNguoiDuyet\SelectCapDuyet1.cshtml" />
+    <Content Include="Views\TaiKhoan\ActiveAccount.cshtml" />
+    <Content Include="Views\TaiKhoan\ActiveUser.cshtml" />
+    <Content Include="Views\TaiKhoan\ChangePassword.cshtml" />
+    <Content Include="Views\TaiKhoan\ChiTiet.cshtml" />
+    <Content Include="Views\TaiKhoan\ConfirmResetPW.cshtml" />
+    <Content Include="Views\TaiKhoan\DangKy.cshtml" />
+    <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
+    <Content Include="Views\TaiKhoan\Index.cshtml" />
+    <Content Include="Views\TaiKhoan\InforSendMail.cshtml" />
+    <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
+    <Content Include="Views\TaiKhoan\ThongTinTaiKhoan.cshtml" />
+    <Content Include="Views\TaiKhoan\ViewIndex.cshtml" />
+    <Content Include="Views\DanhMuc\LyDoThoiViec\Create.cshtml" />
+    <Content Include="Views\DanhMuc\LyDoThoiViec\Details.cshtml" />
+    <Content Include="Views\DanhMuc\LyDoThoiViec\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\LyDoThoiViec\Index.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiTangCa\Create.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiTangCa\Details.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiTangCa\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\LoaiTangCa\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\ViewIndex.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\_ChonNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\_ChonPhongBan.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuTangCa\_LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\_ChonNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\_ChonPhongBan.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\_LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDieuChuyen\ViewIndex.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\_ChonNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\_ChonPhongBan.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\_LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDiLamLai\ViewIndex.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\_ChonNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\_ChonPhongBan.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\_LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\CreateTrucTiep.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuThoiViec\ViewIndex.cshtml" />
+    <Content Include="Views\TinhCong\ChamCong\_LoadXemTinhHinhRaVao.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\_LoadXemTinhHinhRaVao.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\Copy of Index.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\IndexChamCong.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\IndexUser.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\PartialIndex.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\ViewIndex.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\ViewIndexAdmin.cshtml" />
+    <Content Include="Views\TinhCong\ChamCong\XemTinhHinhRaVao.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\NhanSu\PhieuTamUng\Create.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\CreateTrucTiep.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\Details.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\Edit.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\Index.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\ViewIndex.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\_ChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\_ChonPhongBan.cshtml" />
+    <Content Include="Views\NhanSu\PhieuTamUng\_LoadNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\Create.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\CreateTrucTiep.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\Details.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\Edit.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\Index.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\ViewIndex.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\_ChonNhanVien.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\_ChonPhongBan.cshtml" />
+    <Content Include="Views\NhanSu\ThuNhapKhac\_LoadNhanVien.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\Create.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\Details.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\DetailsView.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\Edit.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\Index.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\IndexView.cshtml" />
+    <Content Include="Views\HeThong\QuanLyGiupDo\_PartialView.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\Create.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\Details.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\DetailsView.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\Edit.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\Index.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\IndexView.cshtml" />
+    <Content Include="Views\HeThong\QuanLyThongBao\_PartialView.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyCapBac\Create.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyCapBac\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyCapBac\Index.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyTheme\Create.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyTheme\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\QuanLyTheme\Index.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\ChonQuiTrinh.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\Create.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\DanhSachNVPB.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\Index.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\PartialNhanViens.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\ViewIndex.cshtml" />
+    <Content Include="Views\DanhMuc\QuiTrinhDuyet\_LoadNhanVien.cshtml" />
+    <Content Include="Views\DanhMuc\DMThuNhapKhac\Create.cshtml" />
+    <Content Include="Views\DanhMuc\DMThuNhapKhac\Edit.cshtml" />
+    <Content Include="Views\DanhMuc\DMThuNhapKhac\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\BangLuongChuyenNN.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\ViewChiTietLuong.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\_LoadBangLuongChuyenNN.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\_LoadBangLuongNV.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNV\_LoadBangLuongTheoBP.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\BieuDoLuong.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\BCSinhNhatNV.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\BCDiTreVeSom.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\BCNhanVienNghiPhep.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\BCHopDongSapHetHan.cshtml" />
+    <Content Include="Views\NhanSu\PhuLucHopDong\Details.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\NhanSu\PhuLucHopDong\Index.cshtml" />
+    <Content Include="Views\NhanSu\PhuLucHopDong\PartialPhanBoLuong.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\NhanSu\PhuLucHopDong\ViewIndex.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\BaoCao\BaoCaoTongHop\Index.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoBienDongNVThang.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoHopDongSapHetHan.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoLuong.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoTongSoNV.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoTrinhDo.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoTuoi.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_BieuDoTuyenMoiNghiViec.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHop\_LoadBieuDoHopDongSapHetHan.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\ViewIndexDTVS.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\ViewIndexHDHH.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\ViewIndexNP.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoNhanSu\ViewIndexSN.cshtml" />
+    <Content Include="Views\HeThong\User\ListCongViecProcess.cshtml" />
+    <Content Include="Views\HeThong\User\PartialIndex.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\Create.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\Details.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\Edit.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\Index.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\PartialChiTietQuyenHan.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\PartialContent.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\PartialNhanVien.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\PartialUsers.cshtml" />
+    <Content Include="Views\HeThong\PhanQuyen\QuyenTruyCap.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\Create.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\DanhSachPhongBan.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\Details.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\Edit.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\Index.cshtml" />
+    <Content Include="Views\DMNhomDanhGia\ViewIndex.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\Create.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\DanhSachNhomDanhGia.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\Details.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\Edit.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\Index.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\LoadDanhGia.cshtml" />
+    <Content Include="Views\PhuongPhapNhomDanhGia\ViewIndex.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\XemBangLuong.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\XemBangLuongNVVIP.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\_LoadXemBangLuong.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\_LoadXemBangLuongNVVIP.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\_ViewChiTietLuongTemplate.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongNVVIP\_ViewChiTietLuongTemplateNVVIP.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongTamUngVIP\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongTamUngVIP\_LoadIndex.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongThuongTetVip\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongThuongTetVip\_LoadIndex.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongThuongTet\Index.cshtml" />
+    <Content Include="Views\TinhCong\BangLuongThuongTet\_LoadIndex.cshtml" />
+    <Content Include="Views\TinhCong\DeNghiChiLuong\Create.cshtml" />
+    <Content Include="Views\TinhCong\DeNghiChiLuong\Details.cshtml" />
+    <Content Include="Views\TinhCong\DeNghiChiLuong\Edit.cshtml" />
+    <Content Include="Views\TinhCong\DeNghiChiLuong\Index.cshtml" />
+    <Content Include="Views\TinhCong\DeNghiChiLuong\PartialIndex.cshtml" />
+    <Content Include="Views\TinhCong\DieuChinhCongVip\XemBangChamCong.cshtml" />
+    <Content Include="Views\TinhCong\DieuChinhCongVip\XemBangChamCongTongHop.cshtml" />
+    <Content Include="Views\TinhCong\DieuChinhCongVip\_LoadBangChamCong.cshtml" />
+    <Content Include="Views\TinhCong\DieuChinhCongVip\_LoadBangChamCongTongHop.cshtml" />
+    <Content Include="Views\Shared\_FormLoginPartial.cshtml" />
+    <Content Include="Views\Shared\_LoginDeskPartial.cshtml" />
+    <Content Include="Views\Shared\_MenuMobilePartial.cshtml" />
+    <Content Include="Views\Shared\_Popup.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\Create.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\Details.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\Edit.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\Index.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\LoadNhanVienDuyet.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\PartialIndex.cshtml" />
+    <Content Include="Views\NhanSu\NhanVienVip\_NhanVienPhongBan.cshtml" />
+    <Content Include="Views\TinhCong\BangChamCongTongHop\XemBangChamCongChiTiet.cshtml" />
+    <Content Include="Views\QLSuatAn\BaoCaoThongKeSuatAnTheoNhanVien\Index.cshtml" />
+    <Content Include="Views\QLSuatAn\BaoCaoThongKeSuatAnTheoNhanVien\ViewIndex.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\Create.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\DanhSachMonAn.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\Edit.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\Index.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\_LoadDanhSachBaoCaoPhanBo.cshtml" />
+    <Content Include="Views\QLSuatAn\DMCuaHang\_LoadDanhSachPhanBo.cshtml" />
+    <Content Include="Views\QLSuatAn\DMMonAn\Create.cshtml" />
+    <Content Include="Views\QLSuatAn\DMMonAn\Edit.cshtml" />
+    <Content Include="Views\QLSuatAn\DMMonAn\Index.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\ChiTietCuaHang.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\ChonNhanVien.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\Copy of DanhSachCuaHang.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\Create.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\DanhSachCuaHang.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\Details.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\Edit.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\Index.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\LoadNhanVienSuatAnTheoPB.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\PartialContent.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\PartialPrintSuatAn.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\PrintSuatAn.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\_LoadDanhSachPhanBo.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\_LoadNhanVien.cshtml" />
+    <Content Include="Views\QLSuatAn\PhieuDangKySuatAn\_NhanVienSuatAnPB.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\Details.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuCapNhatNgayCong\ViewIndex.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\Index.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\Create.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\Edit.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\LoadNhanVien.cshtml" />
+    <Content Include="Views\PhieuDeNghi\PhieuDanhGiaNhanVienPhongBan\ViewIndex.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Images\NhanVien\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\HeThong\LinqHeThong.dbml.layout">
+      <DependentUpon>LinqHeThong.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\NhanSu\LinqNhanSu.dbml.layout">
+      <DependentUpon>LinqNhanSu.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\DanhMuc\LinqDanhMuc.dbml.layout">
+      <DependentUpon>LinqDanhMuc.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\PhieuDeNghi\LinqPhieuDeNghi.dbml.layout">
+      <DependentUpon>LinqPhieuDeNghi.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ChamCong\LinqChamCongClient.dbml.layout">
+      <DependentUpon>LinqChamCongClient.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ChamCong\LinqChamCongServer.dbml.layout">
+      <DependentUpon>LinqChamCongServer.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\NhanSu\LinqThuanViet.dbml.layout">
+      <DependentUpon>LinqThuanViet.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\VIP\LinqVIP.dbml.layout">
+      <DependentUpon>LinqVIP.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ERP\linqERPCienco6.dbml.layout">
+      <DependentUpon>linqERPCienco6.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\DBChamCong\DBChamCong.dbml.layout">
+      <DependentUpon>DBChamCong.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\DMS\LinqDMSDataContext.dbml.layout">
+      <DependentUpon>LinqDMSDataContext.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\QLSuatAn\LuuVet\QLSALuuVet.dbml.layout">
+      <DependentUpon>QLSALuuVet.dbml</DependentUpon>
+    </None>
+    <None Include="Models\QLSuatAn\QLSuatAn.dbml.layout">
+      <DependentUpon>QLSuatAn.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57550</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8080/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:8080/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://localhost:44301/</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,285 @@
+﻿@*Author Viet-Truong*@
+@using BatDongSan.Models.HeThong;
+@using BatDongSan.Controllers.HeThong;
+@model IList<Sys_CongViec>
+@{    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<sp_Sys_CongViecVuViecResult> congViecVuViecs = ViewBag.CVVV;
+    IList<Sys_VuViec> vuViecs = ViewBag.VuViecs;
+    IList<sp_Sys_VuViecCuaCongViecResult> vuViecOfCVs = ViewBag.VuViecOfCV;
+    int len = vuViecs.Count; 
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<style>
+    .parent
+    {
+        cursor: pointer;
+        color: black;
+        background-color: #efefef;
+        -moz-transition: background-color 100ms linear, color 100ms linear;
+        -webkit-transition: background-color 100ms linear, color 100ms linear;
+        -o-transition: background-color 1000ms linear, color 100ms linear;
+        transition: background-color 1000ms linear, color 100ms linear;
+    }
+
+        .parent td:first-child
+        {
+            font-weight: bold;
+        }
+
+    .parent1 td:first-child
+    {
+        font-weight: bold;
+    }
+
+    .parent1
+    {
+        background-color: #ECEBEC!important;
+    }
+
+    .parent:hover
+    {
+        color: #00275A;
+        background-color: black;
+    }
+
+    #container td.options
+    {
+        position: relative;
+    }
+
+    #container td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+
+    #container .botleft
+    {
+        border-radius: 0 0 0 6px!important;
+    }
+
+    #container .botright
+    {
+        border-radius: 0 0 6px 0!important;
+    }
+
+    tr:not(.parent):not(.parent1)
+    {
+        display: none;
+    }
+
+    #maintable tr:first-child, #maintable tr:last-child
+    {
+        display: table-row;
+    }
+    
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {        
+        $("#maintable tr.parent").click(function () {
+            var theId = this.id;
+            $("." + theId).toggle();
+            if ($(this).next().is(":visible")) {
+                $(this).find("samp").html(function () {
+                    return "&#9662 ";
+                });
+            }
+            else
+                $(this).find("samp").html(function () {
+                    return "&#9656 ";
+                });
+        });
+
+        //-------Submit vu viec checkbox-------//  
+        $("input[type=checkbox]").click(function () {
+            var clsName = $(this).attr("class");
+            var name = $(this).attr("name");
+            var dataPost = { "maVuViec": clsName, "maCongViec": name };
+            var json = JSON.stringify(dataPost);
+            $.ajax({
+                url: '@Url.Action("UpdateVuViec", "CongViec")',
+                type: 'POST',
+                dataType: 'json',
+                data: json,
+                contentType: 'application/json; charset=utf-8',
+            })
+        });
+
+        $("#parentlist").change(function () {
+            var url = "@Url.Action("Index", "CongViec", new { congViecCha = "macv" })";
+            var macv = this.value;
+            url = url.replace("macv", macv);
+            window.location.href = url;
+        })
+
+        $("#childlist").change(function () {
+            var cvCha = $("#parentlist").val();
+            var url = "CongViec?congViecCha=" + cvCha + "&congViecCon=" + this.value;
+            window.location.href = url;
+        })
+
+        $(".btnEdit").click(function () {
+            var url = "@Url.Action("Edit", "CongViec")" + "/" + $(this).val();
+            location.href = url;
+        })
+
+        $(".btnDelete").click(function (e) {
+            var url = "@Url.Action("Delete", "CongViec")" + "/" + this.value;
+            var form = document.getElementById("form-submit");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+    });
+
+        function themMoi() {
+            var url = "@Url.Action("Create", "CongViec")";
+            window.location.href = url;
+        }
+
+
+        function Sua(obj) {
+            //var MCV = $(obj).closest(".panel-body").find("#parentlist").val();
+            var MCV = $("#parentlist").val();
+            
+            var url = "@Url.Action("Edit", "CongViec")" + "/" + MCV;
+        location.href = url;
+    }
+
+</script>
+@using (Html.BeginForm("Delete", "CongViec", FormMethod.Post, new { @class = "form-inline", @role = "form", @id = "form-submit" }))
+{
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách công việc</span></a></li>
+                </ul>
+            </div>
+            <div class="form-inline">
+                <div class="panel-body background_top">
+                    <div class="form-group">
+                        <label class="filter-col" style="vertical-align: middle; font-size: 15px">Nhóm công việc</label>
+                        @Html.DropDownList("parentlist", ViewBag.CongViecChas as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label style="text-align: right; vertical-align: middle; font-size: 15px">Công việc</label>
+                        @Html.DropDownList("childlist", ViewBag.CongViecCons as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" type="button" onclick="Sua()">Sửa </button>
+                        <button class="btn btn-info btnThemeAdd" type="button" onclick="themMoi()">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="maintable">
+                <thead>
+                    <tr id="toptitle">
+                        <th style="width: 20%" class="topleft">Tên công việc</th>
+                        @foreach (var item in vuViecs)
+                        {
+                            <th style="text-align: center">
+                               @item.tenVuViec
+                            </th>
+                        }
+                        <th class="topright" style="width: 1px; white-space: nowrap"></th>
+                    </tr>
+                </thead>
+                @* TẠO CÔNG VIỆC CHA *@
+                @foreach (var congViecCha in congViecVuViecs)
+                {
+                    //trường họp có công việc con
+                    if (Model.Select(s => s.maCha).Any(x => x == congViecCha.maCongViec))
+                    {
+                    <tr class="parent" id="@congViecCha.maCongViec" style="background-color:#e0e0df">
+                        <td style="text-align: left">
+                            <samp>&#9656 </samp>
+                             <i class="@congViecCha.maIcon"></i>@Html.Raw(congViecCha.tenCongViec)
+                        </td>
+                        <td colspan="@len"></td>
+                        <td style="text-align: right">
+                            <a style="color:#1198f1; width:50px" href="@Url.Action("Edit", "CongViec", new { id = @congViecCha.maCongViec })">Sửa</a>
+                        </td>
+                    </tr>  
+                        ///TẠO CÔNG VIỆC CON
+                        ///tìm danh sách công việc có mã cha khác null                   
+                        ///so sánh với với mã công việc ở <tr> cha                    
+                        foreach (var congViecCon in Model.Where(s => s.maCha != null && s.maCha == congViecCha.maCongViec))
+                        {                                                                
+                    <tr class="@congViecCha.maCongViec">
+                        <td style="padding-left: 20px!important">
+                            <i class="@congViecCon.maIcon"></i>@Html.Raw(congViecCon.tenCongViec)
+                        </td>
+
+                        @foreach (var vuViec in vuViecs) //TẠO CÁC CHECKBOK
+                        {
+                            //KIỂM TRA ĐIỀU KIỆN CÔNG VIỆC - VỤ VIỆC (CHECKBOX IS CHECKED OR NOT)
+                            if (vuViecOfCVs.Where(s => s.maCongViec == congViecCon.maCongViec && s.maVuViec == vuViec.maVuViec).FirstOrDefault() != null)
+                            {                                                                                                                                              
+                            <td class="options" style="text-align: center">
+                                <input checked="checked" name="@congViecCon.maCongViec" type="checkbox" class="@vuViec.maVuViec">
+                            </td>                               
+                            }
+                            else
+                            {                                   
+                            <td class="options" style="text-align: center">
+                                <input type="checkbox" name="@congViecCon.maCongViec" class="@vuViec.maVuViec">
+                            </td>
+                            }
+                        }
+                        <td style="width: 1px; white-space: nowrap">
+                            <button class="btn btn-primary btn-xs btnEdit" type="button" value="@congViecCon.maCongViec" name="editbtn">Sửa</button>
+                            <button class="btn btn-warning btn-xs btnDelete" name="macv" value="@congViecCon.maCongViec">Xóa</button>
+                        </td>
+                    </tr>                        
+                        }
+                    }
+                    //Trường hợp không có công việc con
+                    else
+                    {
+                    <tr class="parent1" id="@congViecCha.maCongViec" >
+                        <td style="text-align: left">
+                            <i class="@congViecCha.maIcon"></i>@Html.Raw(congViecCha.tenCongViec)
+                        </td>
+                        @foreach (var vuViec in vuViecs)
+                        {
+                            //KIỂM TRA ĐIỀU KIỆN CHECKBOX                             
+                            if (vuViecOfCVs.Where(s => s.maCongViec == congViecCha.maCongViec && s.maVuViec == vuViec.maVuViec).FirstOrDefault() != null)
+                            {                                                           
+                            <td class="options" style="text-align: center">
+                                <input checked="checked" name="@congViecCha.maCongViec" type="checkbox" class="@vuViec.maVuViec">
+                            </td>                               
+                            }
+                            else
+                            {                                   
+                            <td class="options" style="text-align: center">
+                                <input type="checkbox" name="@congViecCha.maCongViec" class="@vuViec.maVuViec">
+                            </td>
+                            }
+                        }
+                        <td style="width: 1px; white-space: nowrap">
+                            <button class="btn btn-primary btn-xs btnEdit" type="button" value="@congViecCha.maCongViec">Sửa</button>
+                            <button class="btn btn-warning btn-xs btnDelete" type="button" name="maCongViec" value="@congViecCha.maCongViec">Xóa</button>
+                        </td>
+                    </tr>                        
+                    }
+                    <tr>
+                        <th style="width: 20%">Tên công việc</th>
+                        @foreach (var item in vuViecs)
+                        {
+                            <th style="text-align: center">
+                                @item.tenVuViec
+                            </th>
+                        }
+                        <th></th>
+                    </tr>
+                }
+            </table>
+        </fieldset>
+    </div>
+}

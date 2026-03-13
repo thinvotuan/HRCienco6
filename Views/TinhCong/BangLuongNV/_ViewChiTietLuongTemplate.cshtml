@@ -1,0 +1,58 @@
+﻿@using BatDongSan.Models.NhanSu;
+@{
+    ViewBag.Title = "Chi tiết bảng lương";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
+}
+<script>
+    $(document).ready(function () {
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+
+    });
+    function PrintView() {
+        var el_style = document.getElementById('print-preview').style;
+        el_style.width = '100%';
+        $(".header_salary").css("margin-bottom", "0px");
+        $(".wrapper_salary").css({ margin: "0px", padding: "0px", "box-shadow": "none" });
+        $(".header_salary ul li,.bs-callout-info,.detail_salary").css("padding", "0px");
+        $(".bs-callout-info").css("padding-left", "2px");
+        $(".wrapper_salary tr td").css({ padding: "0px", border: "0px", "border-bottom": "1px solid #ccc", "border-right": "1px solid #ccc" });
+        $(".bs-callout-info").css("font-size", "12px");
+        $(".removePrint").remove();
+        var tt = $('#print-preview').html();
+        var t = window;
+        t.document.write(tt);
+        t.print();
+        var url = window.location.href;
+        location.href = url;
+    }
+
+
+</script>
+@{
+    var noiDung = (string)ViewBag.NoiDung;
+    string noiCongTac = string.Empty;
+    string loaiCongTac = string.Empty;
+    var item = ViewData["chiTiet"] as tbl_NS_BangLuongNhanVien;
+
+    BatDongSan.Models.HeThong.Sys_User user1 = new BatDongSan.Models.HeThong.Sys_User();
+    if (Session["User"] != null)
+    {
+        user1 = (BatDongSan.Models.HeThong.Sys_User)Session["User"];
+    }  
+    
+}
+<div id="print-preview" style="width: 99%; padding: 5px">
+    @Html.Raw(noiDung)
+</div>
+<div style="float:right; clear:both">
+<input type="button" class="btn btn-info" value="Print" onclick="PrintView()" />
+<button class="btn btn-info" type="button" style="" id="btnTroVe">
+    Trở về
+</button>
+    </div>
+
+

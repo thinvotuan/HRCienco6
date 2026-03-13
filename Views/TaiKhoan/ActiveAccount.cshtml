@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Thông tin kích hoạt";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+ <link rel="stylesheet" href="~/Content/menuMobile.css" type="text/css" />
+ <link rel="stylesheet" href="~/Content/common.css" type="text/css" />
+ <script src="/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<script src="~/Scripts/batdongsan.uploadfile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+@Styles.Render("~/Content/css")
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+
+            location.href = "@Url.Action("Index", "Home")";
+       }, 5000);
+     
+
+        
+    });
+    
+   
+</script>
+<style>
+    .require
+    {
+        color: red;
+    }
+</style>
+<div class="wrapper_page_login">
+    <div class="box_form_login">
+        <div class="form_login_account">
+            <h4 class="title">Thông tin kích hoạt</h4>
+            <div class="thongbao">
+                @{
+                    if (ViewBag.statusReset == "ok")
+                    {
+                     <p>Chúc mừng bạn đã click hoạt tài khoản thành công</p>
+                    
+
+                    }
+                    else{
+                     <p>Link này đã được sử dụng</p>
+                    
+                    }
+                    }
+            </div>
+        </div>
+    </div>
+
+    <div class="box_footer_form_login">
+    </div>
+</div>

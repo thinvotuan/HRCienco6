@@ -1,0 +1,216 @@
+﻿@*Author Viet-Truong*@
+@using BatDongSan.Utils.Paging;
+@using BatDongSan.Models.HeThong;
+@{    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<Sys_NhomUser> userGroups = ViewBag.UserGroups;
+}
+<script type="text/javascript" src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    td
+    {
+        vertical-align: middle;
+        border: none;
+    }
+
+    #content td
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+    }
+
+    #container #extras
+    {
+        width: auto;
+    }
+    div.buttons
+    {
+        text-align: center;
+   
+    margin: 0px auto;
+    }
+    div.buttons button
+    {
+            float: left;
+    margin-top: 3px;
+    }
+
+    /*.btn-default.btn-xs:before { content: "\270E";}
+    .btn-danger.btn-xs:before { content: "\2718";}*/
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", "[type=checkbox]", function () {
+            var clsName = $(this).attr('class');
+            var name = $(this).attr('name');
+            var dataPost = { "userId": clsName, "maNhomUser": name };
+            var json = JSON.stringify(dataPost);
+            $.ajax({
+                url: '@Url.Action("UpdateNhomUser", "User")',
+                type: 'POST',
+                dataType: 'json',
+                data: json,
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if (result.success == false) {
+                        bdsConfirm.alert("Không đủ quyền để cập nhật lên administrator", "Thông báo");
+                        location.href = '/User';
+                    }
+                    
+
+                }
+
+            });
+        });
+
+        $(document).on("click", "button[name=editbtn]", (function () {
+            var url = "@Url.Action("Edit", "User")" + "/" + $(this).val();
+            location.href = url;
+        }));
+
+        $(document).on("click", ".btnDelete", function (e) {
+            var url = "@Url.Action("Delete", "User")" + "/" + this.value;
+            var form = document.getElementById("form-submit");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    if ($(this).attr("title") == "admin") {
+                        bdsConfirm.alert("Không được xóa user admin", "Thông báo");
+                        return false;
+                    } else {
+                        form.action = url;
+                        form.submit();
+                    }
+                }
+            });
+        });
+
+        $("#btnSearch").click(function () {
+            search();
+        })
+
+        $("#btnAddGroup").click(function () {
+            var url = "@Url.Action("Create", "PhanQuyen")";
+            location.href = url;
+        })
+
+        $("#btnSetAuthentic").click(function () {
+            var url = "@Url.Action("Index", "PhanQuyen")";
+            location.href = url;
+        })        
+    });
+
+    function themMoi() {
+        var url = "@Url.Action("Create", "User")";
+        window.location.href = url;
+    }
+
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu nhân viên");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+    function search() {
+        var url = "@Url.Action("Index", "User")" + "?pageSize=" + $('#pref-perpage').val() + "&searchString=" + $("#pref-search").val().replace(/ /gi, '+');
+        beginPaging();
+        $('#content').html('<h4>Loading...</h4>').load(url, function () {
+            //noRecordToGet = false;
+            //offset = 50;
+            //searchString = $("#pref-search").val().replace(/ /gi, '+');
+            successPaging();
+        })
+    }
+
+    function preventEnter() {
+        if (event.keyCode == 13) {
+            event.cancelBubble = true;
+            event.returnValue = false;
+        }
+    }
+
+    @*//Load more page when hitting the bottom of page 
+    var loading = false, noRecordToGet = false, fetchNext = 50, offset = 50, searchString = "";
+    $(window).on("scroll", function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            if (loading == false && noRecordToGet == false) {
+                loading = true;
+                $.ajax({
+                    url: "@Url.Action("LoadMore", "User")",
+                    type: "POST",
+                    dataType: "html",
+                    data: { offset: offset, fetchNext: fetchNext, searchString: searchString },
+                    success: function (data) {
+                        offset = offset + fetchNext;
+                        $("#loader").show();
+                        setTimeout(function () {
+                            $("#maintable >tbody").append(data);
+                            if (data.trim() == "") {
+                                noRecordToGet = true;
+                                $("#loader").hide();
+                            }
+                            loading = false;
+                        }, 1000);
+                    },
+                    error: function () {
+                        bdsConfirm.alert("Có lỗi xảy ra", "Thông báo");
+                    }
+                })
+            }
+        }
+    });*@
+</script>
+@using (Html.BeginForm("Delete", "User", FormMethod.Post, new { @class = "form-inline", @role = "form", @id = "form-submit" }))
+{    
+    <div id="container">
+        <div class="removeBorderFieldset">
+
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav">
+                    <li class="ui-tabs-selected ui-state-active"><a><span>Danh sách người dùng</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <form class="form-inline" role="form">
+                            <!-- form group [rows] -->
+                            <div class="form-group">
+                                <input type="text" class="form-control input-sm" id="pref-search" onkeypress="enterToSeacrh(event)" value="@ViewBag.Search" />
+                            </div>
+                            <!-- form group [search] -->
+                            <div class="form-group">
+                                <button id="btnSearch" type="button" class="btn btn-primary btn-sm" onclick="search()">
+                                    <span class="glyphicon glyphicon-search"></span>Tìm kiếm
+                                </button>
+                            </div>
+                            <div class="form-group" style="float: right">
+                                <button type="button" class="btn btn-info" onclick="themMoi()">Thêm người sử dụng</button>
+                                <button type="button" class="btn btn-info" id="btnSetAuthentic">Cấp quyền cho nhóm</button>
+                                <button type="button" class="btn btn-info" id="btnAddGroup">Thêm nhóm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("PartialContent");}
+            </div>
+        </div>
+    </div>   
+}
+

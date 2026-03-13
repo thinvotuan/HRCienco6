@@ -1,0 +1,155 @@
+﻿@using BatDongSan.Models.HeThong;
+@model Sys_User
+@{
+    Layout = null;    
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnQuenMatKhau").click(function () {
+
+            $(".inforLoginFailed").html("");
+            if ($("#username").val() == "" || $("#email").val() == "") {
+                $(".inforLoginFailed").html("Vui lòng nhập đầy đủ tên đăng nhập, email").css("color", "red");
+                return false;
+            }
+            
+            if ($("#captcha-code").val() != $("#codeSpamHiddeen").val()) {
+                $(".inforLoginFailed").html("Mã captcha không hợp lệ, phân biệt hoa thường").css("color", "red");
+                return false;
+
+            }
+            var email = $(this).val();
+            var re = /[A-Z0-9._%+-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
+            if (checkEmail()) {
+                $(".ProcessLoading").html('<img src="@Url.Content("~/Content/Images/loading.gif")"/>');
+                $.ajax({
+                    url: "@Url.Action("CheckEmailForget", "TaiKhoan")" + "?email=" + $("#email").val() + "&username=" + $("#username").val(),
+                    type: "POST",
+                    error: function (data) {
+                        $(".ProcessLoading").html("");
+                        $(".inforLoginFailed").html("Email hoặc tên đăng nhập không đúng.").css("color", "red");
+                    },
+                    success: function () {
+                        ResetPassword();
+                    }
+                })
+            } else {
+                $(".ProcessLoading").html('');
+                $(".inforLoginFailed").html("Vui lòng nhập email hợp lệ").css("color", "red");
+                $("#email").focus();
+                return false;
+            }
+        });
+        // refresh captcha
+        $('img#captcha-refresh').click(function () {
+
+            change_captcha();
+        });
+        change_captcha();
+    });
+    
+    function ResetPassword() {
+        $.ajax({
+            url: "@Url.Action("ResetPasswordNew", "TaiKhoan")" + "?email=" + $("#email").val() + "&username=" + $("#username").val(),
+            success: function (data) {
+              
+                $(".ProcessLoading").html("");
+                if (data.Result == "Successed") {
+
+                    $(".inforLoginFailed").html("Đã gửi email").css("color", "green");
+                    change_captcha();
+                }
+                else {
+
+                    $(".inforLoginFailed").html("Gửi email thất bại").css("color", "red");
+                    change_captcha();
+                }
+            }
+        });
+
+
+    }
+
+    function checkEmail() {
+        var email = document.getElementById('email');
+        var filter = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+        if (!filter.test(email.value)) {
+            email.focus;
+            return false;
+        } else
+            return true;
+    }
+</script>
+
+
+@*<div class="iconUndo" id="loginHeThong">
+    <img class="img-undo" src="~/Content/images/icon_return.png">
+</div>*@
+<div class="box_form_login">
+    <input type="hidden" value="" id="codeSpamHiddeen" />
+    <div class="form_login_account">
+
+        <div class="ProcessLoading"></div>
+        <div>@ViewBag.Susccess</div>
+        <div class="inforLoginFailed"></div>
+
+        <form class="form-horizontal " method="post">
+            <div class="form-group txtLoginUserID">
+
+                <div class="col-md-12">
+                    <input type="text" class="form-control" placeholder="Tên đăng nhập" id="username" required="required" name="username">
+                </div>
+            </div>
+            <div class="form-group txtLoginUserID">
+
+                <div class="col-md-12">
+                    <input type="email" class="form-control" placeholder="Email" id="email" required="required" name="email">
+                </div>
+            </div>
+
+            <div class="form-group txtLoginUserID">
+
+                <div class="col-md-12">
+                    <div class="imgSpam">
+                        <div id="captcha-wrap">
+                            <div class="captcha-box">
+                                <div class="preventSpam"></div>
+                                <div class="showCode" id="codeSpam"></div>
+                            </div>
+                            <div class="text-box">
+                                <label>Nhập mã code:</label>
+                                <input name="captcha-code" type="text" id="captcha-code">
+                            </div>
+                            <div class="captcha-action">
+                                <img src="~/Content/images/captcha_refresh.jpg" alt="" id="captcha-refresh" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-primary" type="button" id="btnQuenMatKhau" value="Lấy mật khẩu">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="border_newto">
+                        <div class="newtomailtt" id="loginHeThong" style="background: #2d6c6b; color: #fff;">
+                            Đăng nhập
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="box_footer_form_login">
+</div>
+

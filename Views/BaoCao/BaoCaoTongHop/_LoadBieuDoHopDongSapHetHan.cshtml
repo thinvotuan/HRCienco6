@@ -1,0 +1,40 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+ @{
+                                
+    int stt = 1;
+  
+
+    var ls = ViewData["lsDanhSach"] as List<sp_BC_NS_TongHop_HopDongSapDenHanResult>;
+
+    foreach (var item in ls.ToList())
+    {
+
+
+      
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td><i class="fa fa-user" aria-hidden="true"></i>@item.hoTen</td>
+        <td><i class="fa fa-ticket" aria-hidden="true"></i> @item.tenPhongBan<br />@item.TenChucDanh</td>
+        <td style="text-align: center">@String.Format("{0: dd/MM/yyyy}", item.ngayKy)</td>
+         <td style="text-align: center">@String.Format("{0: dd/MM/yyyy}", item.ngayHetHan)</td>
+        <td style="text-align: center">@item.soNgayDenHan</td>
+     
+
+
+
+
+
+    </tr>
+                           
+    
+    }
+}
+

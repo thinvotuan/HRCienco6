@@ -1,0 +1,217 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model BangPhanTachLuongModel
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 2, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+
+        $("#btnClose").click(function () {
+            $("#phucap-details").html("");
+        })
+
+        $("#btnSave").click(function (e) {
+           
+            if (checkValid()) {
+                var url = "@Url.Action("SavePhuCap", "BangPhanTachMucLuong")" + "/" + $("#maMucLuong").val();
+            $(".numberinput").each(function () {
+                $(this).val($(this).autoNumeric('get'));
+            });
+
+            $(".noPostRow").remove();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                data: $("#phucap-form").serialize(),
+                success: function () {
+                    $("#btnClose").click();
+                    Alert.success("Lưu thành công", "Thông báo", { displayDuration: 2000 });
+                },
+                error: function () {
+                    Alert.error("Có lỗi xảy ra", "Lỗi", { displayDuration: 2000 });
+                }
+            })
+        }
+        })
+    });
+
+function checkValid(e) {
+    var sumSalaryC1 = 0,
+        tyLeC2 = 0,
+        maxPhuCapCoDinh = parseFloat($("#phuCapKhongTheoTiLe").val()),
+        flag = true;
+    $("[name=salaryTemplate], [name=tyLe]").autoNumeric('init');
+    $("[name=salaryTemplate]").each(function () {
+        var salary = parseFloat($(this).autoNumeric("get"));
+        sumSalaryC1 += salary;
+    })
+
+    if (sumSalaryC1 > maxPhuCapCoDinh) {
+        $("#error-info").html("Tổng số tiền phụ cấp không theo tỷ lệ không vượt quá " + maxPhuCapCoDinh);
+        $("#alertPhanBo").fadeIn("fast");
+        setTimeout(function () {
+            $("#alertPhanBo").fadeOut("slow");
+        }, 4000)
+        return false;
+    }
+
+    $("[name=tyLe]").each(function () {
+        tyLeC2 += parseFloat($(this).autoNumeric("get"));
+    })
+
+    if (tyLeC2 > 100) {
+        $("#error-info").html("Tổng tỉ lệ phụ cấp theo tỷ lệ không vượt quá 100%");
+        $("#alertPhanBo").fadeIn("fast");
+        setTimeout(function () {
+            $("#alertPhanBo").fadeOut("slow");
+        }, 4000)
+        return false;
+    }
+    else
+        return true;
+}
+
+
+function delRow(obj) {
+    $(obj).closest("tr").remove();
+}
+</script>
+<ul class="nav nav-pills details">
+    <li class="active">
+        <a href="#pane1" data-toggle="tab"><b>Chi tiết phụ cấp @Model.tenMucLuong: C = C1 + C2</b></a></li>
+    <li style="color: red; text-align: center; display: none" id="alertPhuCapC1">
+        <strong style="margin-left: 20px"></strong>Tổng thành tiền C1 không được vượt quá giá trị tối đa cho phép.
+    </li>
+    <li style="color: red; text-align: center; display: none" id="alertPhuCapC2">
+        <strong style="margin-left: 20px"></strong>Tổng tỷ lệ C2 phải bằng 100%.
+    </li>
+</ul>
+<div class="tab-content">
+    @Html.HiddenFor(model => model.phuCapKhongTheoTiLe)
+    @Html.HiddenFor(model => model.phuCapTheoTiLe)
+    @Html.HiddenFor(model => model.maMucLuong)
+    <div id="pane1" class="tab-pane active">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Mã phụ cấp</th>
+                    <th>Tên phụ cấp</th>
+                    <th>Loại phụ cấp</th>
+                    <th>Số tiền phân bổ</th>
+                    <th>Tỉ lệ phân bổ (%)</th>
+                    <th>Thành tiền</th>
+                    <th>Ghi chú</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="rowTypePhuCap">
+                    <td><b>I</b></td>
+                    <td colspan="4"><b>Tổng phụ cấp không theo tỉ lệ (Tối đa: <span class="numberinput" data-a-sign=" VND">@Model.phuCapKhongTheoTiLe</span> ):</b></td>
+                    <td style="text-align:center">C1</td>
+                    <td style="text-align: right" colspan="2">
+                        <button class="btn btn-xs btn-link" type="button" onclick="getPhuCapList(this)" data-toggle="modal" data-target="#phuCapModal">Thêm</button></td>
+                </tr>
+                <tr class="rowC1 noPostRow" style="display: none">
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center"></td>
+                    <td style="text-align: center"></td>
+                    <td></td>
+                    <td>
+                        <input class="form-control numberinput salaryTemplateTypeI" id="salaryTemplate" name="salaryTemplate" type="text" value="0"></td>
+                    <td>
+                        <input class="form-control" id="ghiChu" name="ghiChu" type="text" value=""></td>
+                    <td style="text-align: right">
+                        <button class="btn btn-xs btn-link btnXoaPC" type="button" onclick="delRow(this)">Xóa</button></td>
+                    <td style="display: none">
+                        <input id="tenPhuCap" name="tenPhuCap" type="hidden" value="">
+                        <input id="maPhuCap" name="maPhuCap" type="hidden" value="">
+                        <input id="loaiTyLe" name="loaiTyLe" type="hidden" value="I">
+                        <input id="maMucLuong" name="maMucLuong" type="hidden" value="@Model.maMucLuong">
+                        <input id="tyLe" name="tyLe" type="hidden" value="0">
+                    </td>
+                </tr>
+                @foreach (var item1 in Model.chiTiets.Where(s => s.loaiTyLe == "I"))
+                {
+                    <tr class="rowC1">
+                        <td>@item1.maPhuCap</td>
+                        <td>@item1.tenPhuCap</td>
+                        <td style="text-align: center">@item1.tenLoaiPhuCap</td>
+                        <td style="text-align: center">C1</td>
+                        <td></td>
+                        <td>@Html.TextBox("salaryTemplate", item1.salaryTemplate, new { @class = "form-control numberinput salaryTemplateTypeI" })</td>
+                        <td>@Html.TextBox("ghiChu", item1.ghiChu, new { @class = "form-control" })</td>
+                        <td style="text-align: right">
+                            <button class="btn btn-xs btn-link btnXoaPC" type="button" onclick="delRow(this)">Xóa</button></td>
+                        <td style="display: none">
+                            @Html.Hidden("tenPhuCap", item1.tenPhuCap)
+                            @Html.Hidden("maPhuCap", item1.maPhuCap)
+                            @Html.Hidden("loaiTyLe", item1.loaiTyLe)
+                            @Html.Hidden("maMucLuong", Model.maMucLuong)
+                            @Html.Hidden("tyLe", item1.tyLe)
+                        </td>
+                    </tr>
+                
+                }
+                <tr class="rowTypePhuCap">
+                    <td><b>II</b></td>
+                    <td colspan="4"><b>Tổng phụ cấp theo tỉ lệ:</b></td>
+                    <td style="text-align:center">C2</td>
+                    <td style="text-align: right" colspan="2">
+                        <button class="btn btn-xs btn-link" onclick="getPhuCapList(this)" type="button" data-toggle="modal" data-target="#phuCapModal">Thêm</button></td>
+                </tr>
+                <tr class="rowC2 noPostRow" style="display: none">
+                    <td>PHUCAP</td>
+                    <td>Tổng Phụ cấp 1</td>
+                    <td style="text-align: center">Theo ngày công</td>
+                    <td style="text-align: center">C2</td>
+                    <td>
+                        <input class="form-control numberinput tyLeTypeII" data-a-sign=" %" data-v-max=" 100" id="tyLe" name="tyLe" type="text" value="0">
+                    </td>
+                    <td style="text-align: center" class="thanhTien"></td>
+                    <td>
+                        <input class="form-control" id="ghiChu" name="ghiChu" type="text" value=""></td>
+                    <td style="text-align: right">
+                        <button class="btn btn-xs btn-link btnXoaPC" type="button" onclick="delRow(this)">Xóa</button></td>
+                    <td style="display: none">
+                        <input id="tenPhuCap" name="tenPhuCap" type="hidden" value="">
+                        <input id="maPhuCap" name="maPhuCap" type="hidden" value="">
+                        <input id="loaiTyLe" name="loaiTyLe" type="hidden" value="II">
+                        <input id="maMucLuong" name="maMucLuong" type="hidden" value="@Model.maMucLuong">
+                        <input class="form-control" id="salaryTemplate" name="salaryTemplate" type="hidden" value="0"></td>
+                </tr>
+                @foreach (var item1 in Model.chiTiets.Where(s => s.loaiTyLe == "II"))
+                {
+                    <tr class="rowC2">
+                        <td>@item1.maPhuCap</td>
+                        <td>@item1.tenPhuCap</td>
+                        <td style="text-align: center">@item1.tenLoaiPhuCap</td>
+                        <td style="text-align: center">C2</td>
+                        <td>@Html.TextBox("tyLe", item1.tyLe, new { @class = "form-control numberinput tyLeTypeII", data_a_sign = " %", data_v_max = " 100" })
+                        </td>
+                        <td style="text-align: center" class="thanhTien">@Html.Encode(string.Format("{0} * C2 / 100", item1.tyLe ?? 0))
+                        <td>@Html.TextBox("ghiChu", item1.ghiChu, new { @class = "form-control" })</td>
+                        <td style="text-align: right">
+                            <button class="btn btn-xs btn-link btnXoaPC" type="button" onclick="delRow(this)">Xóa</button></td>
+                        <td style="display: none">
+                            @Html.Hidden("tenPhuCap", item1.maPhuCap)
+                            @Html.Hidden("maPhuCap", item1.maPhuCap)
+                            @Html.Hidden("loaiTyLe", item1.loaiTyLe)
+                            @Html.Hidden("maMucLuong", Model.maMucLuong)
+                            @Html.Hidden("salaryTemplate", "0", new { @class = "form-control" })</td>
+                    </tr>                
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="filter-panel" class="collapse filter-panel" style="display: block">
+    <div class="panel panel-default background_top">
+        <div class="panel-body">
+            <div class="form-group" style="float: right">                
+                   <button class="btn btn-info" id="btnSave" type="button">Lưu </button>
+                <button class="btn btn-info" id="btnClose" type="button">Đóng </button>             
+            </div>
+        </div>
+    </div>
+</div>

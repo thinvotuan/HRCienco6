@@ -1,0 +1,59 @@
+﻿<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+@{
+    Layout = "~/Views/Shared/_Popup.cshtml";
+}
+<script>
+    var obj = window.opener;
+    $(document).ready(function () {
+
+        var heightBrowser = $(window).height();
+        var heightWrapper = $(".PopUpPhongBan").height();
+
+        var heightSet = heightBrowser - heightWrapper;
+        heightSet = parseInt(heightSet);
+        heightSet = heightSet - 50;
+
+       // $("#TreePB").css("height", heightSet - 150);
+        $("#TreePB #navigation1").treeview({
+            persist: "location",
+            collapsed: false,
+            unique: false
+        }).find(".expandable-hitarea").click();
+        $("#TreePB #navigation1 a").click(function () {
+            $.each($("#TreePB #navigation1 a"), function () {
+                $(this).css("color", "");
+            });
+            $(this).css("color", "red");
+            var maPhongBan = $(this).attr("alt");
+            var tenPhongBan = $(this).text();
+            obj.$("#tenPhongBan").val(tenPhongBan);
+            obj.$("#phongBanCongTac").val(maPhongBan);
+            window.close();
+            //CloseWindow();
+            
+        });
+
+    });
+    function CloseWindow() {
+        $('#myModalChonPhongBan').modal("toggle");
+    }
+</script>
+<style>
+    #navigation1 a:link
+    {
+        color:blue;
+    }
+</style>
+<div id="content" class="PopUpPhongBan">
+    <div id="tabs" style="width: 100%;height: auto;border: none;float: left;box-sizing: border-box;overflow: hidden;clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+           
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                <a class="hvr-underline"><span><i class="fa fa-yelp" aria-hidden="true"></i> Danh mục Bộ phận</span></a></li>
+            </ul>
+        </div>
+    <div style="width: 100%; float: left; overflow: auto" id="TreePB">
+        @Html.Raw(ViewBag.PhongBan)
+    </div>
+</div>

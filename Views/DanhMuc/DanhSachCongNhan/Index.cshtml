@@ -1,0 +1,138 @@
+﻿@using BatDongSan.Models.DanhMuc
+@{
+    ViewBag.Title = "Danh sách công nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "DanhSachCongNhan")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)
+        });
+        $("#btnSearch").click(function () {
+            var url = "@Url.Action("Index", "DanhSachCongNhan")" + "?searchString=" + $("#pref-search").val().replace(/\ /g, "+");
+            beginPaging();
+            $("#content").html('<h4>Loading...</h4>').load(url, function () {
+                successPaging();
+            })
+        })
+
+
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "DanhSachCongNhan")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "DanhSachCongNhan")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+
+    });
+    function beginPaging(args) {
+        // Animate        
+        $('#content').fadeOut('fast');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#content').fadeIn('fast');
+    }
+
+    function failurePaging() {
+        alert("Không thể tải dữ liệu");
+    }
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearch").click();
+    }
+
+
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav" style="text-align: center">
+
+                    <li class="ui-tabs-selected ui-state-active"><a><span><i class="fa fa-list" aria-hidden="true"></i>Danh sách công nhân</span></a></li>
+                    
+                </ul>
+            </div>
+            
+            <div class="panel-body background_top">
+               
+                <div class="form-inline">
+                     <div class="form-group">
+                        <input type="text" class="form-control input-sm" id="pref-search" onkeypress="enterToSeacrh(event)" style="width:200px">
+                    </div>
+                    <div class="form-group">
+                        <button id="btnSearch" type="button" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-search" style=""></span>Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+           <div id="content">
+                @{Html.RenderPartial("PartialIndex");}
+            </div>
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

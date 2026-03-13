@@ -1,0 +1,21 @@
+﻿@using BatDongSan.Models.HeThong;
+@using BatDongSan.Helper.Utils;
+@model IList<sp_Sys_VuViecCuaCongViecResult>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.maVuViec</td>
+        <td>@item.tenVuViec</td>
+        <td>
+            @if (item.duocCapQuyen == true)
+            {
+                <input type="checkbox" checked="checked" value="@item.maVuViec" name="quyenHan"/>
+            }
+            else
+            {
+                <input type="checkbox" value="@item.maVuViec" name="quyenHan"/>
+            }
+        </td>
+    </tr>             
+}

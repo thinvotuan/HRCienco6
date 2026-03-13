@@ -1,0 +1,614 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+   
+}
+
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+
+    #navigation1
+    {
+        overflow: auto;
+        height: 600px;
+    }
+
+    .leftSpan span
+    {
+        float: left;
+        padding-right: 5px;
+    }
+
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .dropdown-menu
+    {
+        min-width: 420px;
+    }
+
+    #grdDanhMucCongViec a.makeLink
+    {
+        color: red;
+    }
+
+    .infor_MucLuongThuong, .infor_TiLe, .infor_tiLeKhenThuongTheoXephang
+    {
+        padding: 5px;
+        background: rgb(226, 144, 72);
+        border-radius: 3px;
+        color: #fff;
+        box-sizing: border-box;
+        margin: 5px auto;
+        line-height: 1.7;
+    }
+
+    .removeBorderFieldset .table th, .removeBorderFieldset .tableThemeCustome th
+    {
+        font-size: 12px !important;
+        font-weight: normal !important;
+    }
+
+    .clicked
+    {
+        background-color: rgba(245, 245, 93, 0.25);
+    }
+
+    .ShowChiTietNV
+    {
+        color: green;
+        cursor: pointer;
+        border: 0px !important;
+    }
+
+        .ShowChiTietNV:hover
+        {
+            color: red;
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".tabToggle").click(function () {
+            $(".tabToggle").removeClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").hide(500);
+            var index = $(".tabToggle").index(this);
+            $(".tabToggle").eq(index).addClass("ui-tabs-selected ui-state-active activeColorTab");
+            $(".contentToggle").eq(index).show(500);
+        });
+
+
+        $("#nam").change(function () {
+            $("#namCTNV").val($(this).val());
+            $("#btnSearchCTNV").click();
+            Search();
+           
+        });
+
+
+        Search();
+
+
+    });
+
+
+    function Search() {
+        var url = '@Url.Action("LoadBaoCaoXepLoaiNam", "DanhGiaTinNhiem")' + "?nam=" + $("#nam").val();
+
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#tbody').html(imageUrl);
+        $('#tbody').load(url, function () {
+            $(".contentNDGNew").html($(".contentNDG").html());
+            $(".contentNDG").html('data');
+        });
+        checkDuyetXL();
+    }
+
+    function ShowChiTiet(maNhanVien) {
+        var nam = $("#namCTNV").val();
+        var url = '/DanhGiaTinNhiem/BaoCaoXepLoaiNhanVien' + "?maNV=" + maNhanVien + "&nam="+nam;
+        showPopup(url, 1000, 450);
+    }
+
+</script>
+
+
+<!--Scroll Load Page-->
+<script type="text/javascript">
+    var countParent = 0;
+    var parent = "parent0";
+    var flashIndex = 0, ngayQuery = 0,
+ isPreviousEventComplete = true,
+ isDataAvailable = true;
+    var flashNgay = 0;
+    var ngayCurr = "";
+    var sttClick = 0;
+    var ngayHienTai = "";
+    var sIndex = 0, offSet = 39, limit = 40;
+    var myArray = { "Chọn loại": "0", "Xuất sắc": "XS", "Loại A+": "A+", "Loại A": "A", "Loại B+": "B+", "Loại B": "B", "Loại C": "C" };
+    $(document).ready(function () {
+        $("#qSearchCTNV").keyup(function (e) {
+
+            if (event.keyCode == 13) {
+                $('#btnSearchCTNV').click();
+            }
+        });
+        $("#DuyetXLNV").click(function () {
+            bootbox.confirm("Xếp loại nhân viên năm: " + $("#namCTNV").val() +" sẽ được đóng?", function (result) {
+                if (result) {
+                    //post
+                    $.ajax({
+
+                        type: "POST",
+                        url: '/DanhGiaTinNhiem/DuyetXepLoaiNV',
+                        dataType: "json",
+                        data: { nam: $("#namCTNV").val() },
+                        success: function (result) {
+                            Alert.success("Duyệt xếp loại nhân viên năm: " + $("#namCTNV").val() + " thành công", "Thông báo", { displayDuration: 2000 });
+                            $("#nam").val($("#namCTNV").val());
+                            $("#TinhLuongNV").show();
+                            $("#DuyetXLNV").hide();
+                            Search();
+                        },
+                        error: function () {
+                            Alert.error("Duyệt xếp loại nhân viên năm: " + $("#namCTNV").val() + " thất bại", "Thông báo", { displayDuration: 2000 });
+                            $("#TinhLuongNV").hide();
+                        }
+
+
+                    });
+                }
+            });
+        });
+        
+        $("#TinhLuongNV").click(function () {
+            //Post ajax
+            
+            //post
+            $.ajax({
+
+                type: "POST",
+                url: '/DanhGiaTinNhiem/TinhLuongNVTheoXepLoai',
+                dataType: "json",
+                data: { nam: $("#namCTNV").val() },
+                success: function (result) {
+                    window.location="/BangLuongThuongTet/Index"; target="_blank";
+                },
+                error: function () {
+                    Alert.error("Có lỗi xãy ra trong quá trình xử lý", "Thông báo", { displayDuration: 2000 });
+
+                }
+
+
+            });
+            // End post
+        });
+
+        $(document).on("change", ".changeDieuChinh", function () {
+            var checkXL = 1;
+            if ($("#DuyetXLNV").css("display") == "none") { checkXL = 0; }
+            if (checkXL == 1) {
+                var maNhanVien = $(this).attr('id');
+                var valDieuChinh = $(this).val();
+                var clsMauLoai = '';
+                if (valDieuChinh == 'XS') { clsMauLoai = 'Color_XS' }
+                if (valDieuChinh == 'A+') { clsMauLoai = 'Color_AA' }
+                if (valDieuChinh == 'A') { clsMauLoai = 'Color_A' }
+
+                if (valDieuChinh == 'B+') { clsMauLoai = 'Color_BB' }
+                if (valDieuChinh == 'B') { clsMauLoai = 'Color_B' }
+                if (valDieuChinh == 'C') { clsMauLoai = 'Color_C' }
+
+                $(this).removeClass('Color_XS Color_AA Color_A Color_BB Color_B Color_C');
+                $(this).addClass(clsMauLoai);
+                if (valDieuChinh != 0) {
+                    //post
+                    $.ajax({
+
+                        type: "POST",
+                        url: '/DanhGiaTinNhiem/UpdateDieuChinhXL',
+                        dataType: "json",
+                        data: { nam: $("#namCTNV").val(), maNhanVien: maNhanVien, maXLDieuChinh: valDieuChinh },
+                        success: function (result) {
+                            Alert.success("Cập nhật xếp loại điều chỉnh nhân viên: " + maNhanVien + " thành công", "Thông báo", { displayDuration: 2000 });
+
+                        },
+                        error: function () {
+                            Alert.error("Cập nhật xếp loại điều chỉnh nhân viên: " + maNhanVien + "thất bại", "Thông báo", { displayDuration: 2000 });
+
+                        }
+
+
+                    });
+                }
+            }
+            else {
+                Alert.error("Xếp loại NV đã được duyệt, không thể điều chỉnh.", "Thông báo", { displayDuration: 2000 });
+            }
+            //End post
+        });
+    $(document).on("click", ".ShowChiTietNV", function () {
+        var maNhanVien = $(this).attr('id').split("*")[1];
+            
+           
+
+        ShowChiTiet(maNhanVien);
+    });
+    
+        
+    $("#contentTimeLine").html('');
+    //btnRefreshTL//
+    $("#btnSearchCTNV").click(function () {
+        flashIndex = 0;
+        sIndex = 0;
+        offSet = 39;
+
+        $("#currentDateTL").val('');
+        $("#contentTimeLine").html("");
+        $("#progress").show();
+
+        isPreviousEventComplete = true;
+        isDataAvailable = true;
+        getData();
+        $("#nam").val($("#namCTNV").val());
+        Search();
+    });
+    $("#namCTNV,.sltLoai").change(function () {
+       
+        $("#btnSearchCTNV").click();
+       
+       
+
+    });
+    $(document).on("change", "#maNhomDanhGiaCTHidden", function () {
+        $("#btnSearchCTNV").click();
+    });
+        
+
+
+    //End btnRefreshTL//
+    //-------------------------------------------------------
+
+
+
+
+
+    $("#progress").show();
+
+    isPreviousEventComplete = true;
+    isDataAvailable = true;
+    getData();
+
+    if ($('#back-to-top').length) {
+        var scrollTrigger = 100, // px
+            backToTop = function () {
+                var scrollTop = $(window).scrollTop();
+                if (scrollTop > scrollTrigger) {
+                    $('#back-to-top').addClass('show');
+                } else {
+                    $('#back-to-top').removeClass('show');
+                }
+            };
+        backToTop();
+        $(window).bind('scroll', function () {
+            backToTop();
+        });
+        $('#back-to-top').bind('click', function (e) {
+            e.preventDefault();
+            $('html,body').animate({
+                scrollTop: 0
+            }, 700);
+        });
+    }
+    });
+    var loading = false,
+        noRecordToGet = false;
+
+    $(window).scroll(function () {
+
+        if (flashIndex != 0) {
+            if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
+
+
+
+                if (isPreviousEventComplete && isDataAvailable) {
+
+                    isPreviousEventComplete = false;
+
+                    $("#progress").show();
+
+                    getData();
+                }
+
+
+            }
+        }
+    });
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnSearchCTNV").click();
+    }
+
+    function getData() {
+      
+        var qSearchCTNV = $("#qSearchCTNV").val().replace(/ /gi, '+');
+        
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("LoadBaoCaoChiTietNhanVienPB", "DanhGiaTinNhiem")" + "?maNhomPhongBan=" + $(".contentSel .sltLoai").val()
+                                                            + "&nam=" + $("#namCTNV").val() + "&maNhomDanhGia=" + $("#maNhomDanhGiaCTHidden").val() + "&qSearchCTNV=" + qSearchCTNV + "&pageIndex=" + sIndex + "&pageSize=" + offSet,
+
+            success: function (result) {
+                if (result.lists != null && result.lists != "") {
+                    var select = $('.contentSel').html();
+                    var html = '';
+                   
+                    for (var i = 0; i < result.lists.length; i++) {
+                        var clsMauLoai = '';
+                        if (result.lists[i].xepLoaiHT == 'Xuất sắc') { clsMauLoai = 'Color_XS' }
+                        if (result.lists[i].xepLoaiHT == 'Loại A+') { clsMauLoai = 'Color_AA' }
+                        if (result.lists[i].xepLoaiHT == 'Loại A') { clsMauLoai = 'Color_A' }
+
+                        if (result.lists[i].xepLoaiHT == 'Loại B+') { clsMauLoai = 'Color_BB' }
+                        if (result.lists[i].xepLoaiHT == 'Loại B') { clsMauLoai = 'Color_B' }
+                        if (result.lists[i].xepLoaiHT == 'Loại C') { clsMauLoai = 'Color_C' }
+                        var clsMauLoaiHT = '';
+                        if (result.lists[i].dieuChinhXL == 'XS') { clsMauLoaiHT = 'Color_XS' }
+                        if (result.lists[i].dieuChinhXL == 'A+') { clsMauLoaiHT = 'Color_AA' }
+                        if (result.lists[i].dieuChinhXL == 'A') { clsMauLoaiHT = 'Color_A' }
+
+                        if (result.lists[i].dieuChinhXL == 'B+') { clsMauLoaiHT = 'Color_BB' }
+                        if (result.lists[i].dieuChinhXL == 'B') { clsMauLoaiHT = 'Color_B' }
+                        if (result.lists[i].dieuChinhXL == 'C') { clsMauLoaiHT = 'Color_C' }
+                        html += '<tr>';
+                        html += '<td>' + result.lists[i].tenPhongBan + '</td>';
+                        html += '<td class="ShowChiTietNV"  id="MaNV*' + result.lists[i].maNhanVien + '">' + result.lists[i].hoTen + '</td>';
+                        html += '<td>' + result.lists[i].tenChucVu + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemCT1 + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemNC1 + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemCD1 + '</td>';
+                        html += '<td style="text-align:right;background: #f5f55d;">' + result.lists[i].tongDiem1 + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemCT2 + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemNC2 + '</td>';
+                        html += '<td style="text-align:right">' + result.lists[i].diemCD2 + '</td>';
+                        html += '<td style="text-align:right;background: #f5f55d;">' + result.lists[i].tongDiem2 + '</td>';
+                        html += '<td style="text-align:center" class="' + clsMauLoai + '">' + result.lists[i].xepLoaiHT + '</td>';
+                        
+                        
+                            html += '<td>';
+                            html += '<select class="changeDieuChinh ' + clsMauLoaiHT + '" id="' + result.lists[i].maNhanVien + '">';
+                            for (var key in myArray) {
+                                if (myArray[key] == result.lists[i].dieuChinhXL) {
+                                    html += '<option value="' + myArray[key] + '" selected>' + key + '</option>';
+                                }
+                                else {
+                                    html += '<option value="' + myArray[key] + '">' + key + '</option>';
+
+                                }
+
+                            }
+                            html += '</select>';
+                            html += '</td>';
+                        
+                        
+                       
+                        html += '</tr>';
+
+                    }
+
+
+                }
+                $("#contentTimeLine").append(html);
+                flashIndex = 1;
+
+                sIndex = sIndex + limit;
+                offSet = offSet + limit;
+
+                isPreviousEventComplete = true;
+
+                if (result.lists == '')  //When data is not available
+                    isDataAvailable = false;
+                $("#progress").hide();
+
+            },
+            error: function (error) {
+                $("#progress").hide();
+            }
+        });
+    }
+    function checkDuyetXL() {
+        //post
+        $.ajax({
+
+            type: "POST",
+            url: '/DanhGiaTinNhiem/CheckDuyetXepLoaiNV',
+            dataType: "json",
+            data: { nam: $("#nam").val() },
+            success: function (result) {
+                if (result == true) {
+                    $("#DuyetXLNV,#btnSaveSoLuong,#btnSaveTiLe,#btnResetTiLeKT,.btnTiLeKTXH,.btnSaveXLTheoBP").hide();
+                    $("#TinhLuongNV").show();
+                }
+                else {
+                    $("#DuyetXLNV,#btnSaveSoLuong,#btnSaveTiLe,#btnResetTiLeKT,.btnTiLeKTXH,.btnSaveXLTheoBP").show();
+                    $("#TinhLuongNV").hide();
+                }
+                
+            },
+            error: function () {
+                
+            }
+
+
+        });
+        
+    }
+</script>
+<!-- End Scroll load page -->
+<fieldset class="removeBorderFieldset">
+    <div id="tabs" style="" class="ui-tabs">
+        <ul class="ui-tabs-nav">
+            <li class="ui-tabs-selected ui-state-active tabToggle activeColorTab tabXL"><a><span><i class="fa fa-line-chart"></i>Báo cáo xếp loại theo năm</span></a></li>
+            <li class="ui-state-default ui-corner-top tabToggle tabCT">
+                <a href="#" class="hvr-underline"><span><i class="fa fa-users" aria-hidden="true"></i>Chi tiết nhân viên phòng ban</span></a></li>
+        </ul>
+    </div>
+
+    <div id="container">
+        <div class="contentToggle">
+
+            <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+
+
+                <tr class="background_tr">
+                    <td class="leftSpan">
+
+                        <span>Năm:
+                        </span>
+                        <span>
+                            @Html.DropDownList("nam", ViewData["yearWorkings"] as SelectList)
+                        </span>
+                    </td>
+
+
+
+
+                </tr>
+            </table>
+
+
+            <div id="tbody"></div>
+
+
+        </div>
+    </div>
+    <div class="contentToggle" style="display: none">
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+
+
+
+            <tr class="background_tr">
+                <td class="leftSpan">
+
+
+                    <span>Năm:
+                    </span>
+                    <span>
+                        @Html.DropDownList("namCTNV", ViewData["yearWorkings"] as SelectList)
+                    </span>
+                </td>
+
+
+
+                <td class="contentSel">
+                    <select class="sltLoai" style="min-width: 100px;">
+                        <option value="">Chọn loại</option>
+                        @{
+                            var ListLoaiDGs = ViewBag.ListLoaiDGs as List<BatDongSan.Models.DanhMuc.tbl_DM_XepLoaiDG>;
+                            foreach (var it in ListLoaiDGs)
+                            {
+                            <option value="@it.maXepLoai">@it.tenXepLoai</option>
+                            }
+                        
+                        }
+
+                    </select>
+
+
+                </td>
+                <td class="contentNDGNew">
+                    <select id="maNhomDanhGiaCTHidden">
+                        <option value="">--Chọn--</option>
+                    </select>
+                </td>
+                <td><input class="btn" type="button" value="Duyệt xếp loại NV" name="DuyetXLNV" id="DuyetXLNV" /></td>
+                <td><input class="btn" type="button" value="Tính lương nhân viên" name="TinhLuongNV" id="TinhLuongNV" style="display:none" /></td>
+                <td>
+
+
+                    <div class="input-group" style="width: 300px; float: right;">
+                        <input type="text" id="qSearchCTNV" onclick="enterToSeacrh(this)" />
+
+                        <span class="input-group-btn">
+                            <input type="button" id="btnSearchCTNV" value="Tìm">
+                        </span>
+                    </div>
+
+
+                </td>
+
+
+            </tr>
+        </table>
+        <table style="width: 100%" class="table table-striped table-hover table-condensed tableThemeCustome">
+            <thead>
+                <tr>
+                    <th rowspan="2">Phòng ban</th>
+                    <th rowspan="2">Nhân viên</th>
+                    <th rowspan="2">Chức vụ</th>
+
+                    <th colspan="4">6 tháng đầu năm</th>
+                    <th colspan="4">6 tháng cuối năm</th>
+
+                    <th rowspan="2" style="width:80px;">Xếp loại</th>
+                    <th rowspan="2" style="width:80px;">Điều chỉnh</th>
+                </tr>
+                <tr>
+                    <th>Điểm CT</th>
+                    <th>Điểm NC	</th>
+                    <th>Điểm CD</th>
+
+                    <th>Tổng điểm</th>
+                    <th>Điểm CT</th>
+                    <th>Điểm NC	</th>
+                    <th>Điểm CD</th>
+
+                    <th>Tổng điểm</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="13" style="text-align:center; padding:0px !important;">
+                 <div id="progress" style="display: none; text-align: center; position: fixed; top: 50%; left:55%">
+                            <img src="../../../Content/images/loading.gif" />
+                        </div>
+                    </tr>
+                </td>
+            </tbody>
+            <tbody id="contentTimeLine">
+            </tbody>
+        </table>
+    </div>
+</fieldset>

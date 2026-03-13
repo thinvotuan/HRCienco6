@@ -1,0 +1,187 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model IPagedList<sp_BC_NghiPhep_IndexResult>
+@{
+    ViewBag.Title = "Danh sách nhân viên nghỉ phép";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script src="~/Scripts/batdongsan.utils.js"></script>
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script type="text/javascript" src="~/Scripts/Jquery.treeview/jquery.treeview.js"></script>
+<link rel="stylesheet" href="~/Scripts/Jquery.treeview/jquery.treeview.css" />
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#navigation1").treeview({
+            persist: "location",
+            unique: false,
+            collapsed: true
+        }).find(".expandable-hitarea").click();
+
+
+        //$(".dropdown").on("show.bs.dropdown", function (event) {
+        //    $("#navigation1 .expandable-hitarea ").click();
+        //});
+
+        $('ul.dropdown-menu .hitarea').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+        $('#txtsearch').on("input", function () {
+            $('#navigation1').filterLink($('#txtsearch').val());
+        });
+
+        $("#phongban-dropdown-menu").removeAttr("style");
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $('#btnTimKiem').click(function () {
+            OnCriteriaPC(1);
+        });
+        OnCriteriaPC(1);
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY'
+        });
+        $(document).on("click", "ul.dropdown-menu li a", function () {
+            $(this).closest('.dropdown').find("button").val(this.id);
+            $(this).closest(".dropdown").find('.btn').html($(this).text() + ' &nbsp;<span class="caret"></span>');
+            OnCriteriaPC(1);
+        })
+        $("#nam").change(function () {
+            OnCriteriaPC(1);
+        });
+        $(document).on('click', '#btnXuatFileTQNP', function () {
+            var giatri = $("#searchString").val().trim();
+            giatri = giatri.replace(/ /gi, '+');
+            var maPhongBan = $("#btnPhongBan").val().trim();
+            maPhongBan = maPhongBan.replace(/ /gi, '+');
+
+
+            var url = '@Url.Action("XuatFileBangTongHopCongThang", "BaoCaoNhanSu")' + "?nam=" + $("#nam").val() + "&searchString=" + giatri + "&maPhongBan=" + maPhongBan;
+
+
+            window.location = url;
+
+        });
+    });
+
+    function enterToSeacrh(event) {
+        if (event.keyCode == 13)
+            $("#btnTimKiem").click();
+    }
+    function ToWeek() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(7, "day"));
+    }
+    function ToMonth() {
+        $("#denNgay").data("DateTimePicker").date(moment());
+        $("#tuNgay").data("DateTimePicker").date(moment().subtract(1, "month"));
+    }
+    function OnCriteriaPC(page) {
+        var searchText = $('#searchString').val().replace(/\ /g, '+');
+        var maPhongBan = $('#btnPhongBan').val().replace(/\ /g, '+');
+        var url = "@Url.Action("BCTQNghiPhepViewIndex", "BaoCaoNhanSu")" + "?searchString=" + searchText
+            + "&maPhongBan=" + maPhongBan + "&nam=" + $("#nam").val()
+                                                   + "&_page=" + page;
+        var imageUrl = '<div id="divMsg" align="center"><img src="@Url.Content("~/Content/Images/loading.gif") "/></div>';
+        $('#content').html(imageUrl);
+        $('#content').load(url, function () {
+        });
+    }
+
+
+</script>
+<style>
+    #tbl-create
+    {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+</style>
+<style>
+    .pageActive, .pageCurrent:hover, .pageNext:hover, .pageLast:hover, .pageFirst:hover, .pagePrevious:hover
+    {
+        padding: 7px 11px;
+        background-color: #4D8AFF;
+        color: #FFFFFF;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .pageCurrent, .pageNext, .pageLast, .pageFirst, .pagePrevious
+    {
+        padding: 7px 11px;
+        background-color: #fff;
+        display: inline-block;
+        border: 1px solid #80ABFF;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a><span>Báo cáo tổng quan nghỉ phép</span></a></li>
+                </ul>
+            </div>
+            <div id="filter-panel" class="collapse filter-panel" style="display: block; position: relative">
+                <div class="panel panel-default background_top">
+                    <div class="panel-body">
+                        <div style="float:left">
+                        Năm:@Html.DropDownList("nam", ViewData["lstNam"] as SelectList, new { @style = "" })
+                            </div>
+                        <div style="float:left; margin-left:50px;">
+                        <div class="form-group" id="phongban-div">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" id="btnPhongBan" type="button" data-toggle="dropdown">
+                                Danh sách phòng ban&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="phongban-dropdown-menu">
+                                <li role="presentation">
+                                    <div class="form-group has-feedback" style="width: 90%; margin: 5px auto !important; display: block;">
+                                        <input type="text" class="form-control input-sm" id="txtsearch" placeholder="Search" style="width: 100%" />
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </li>
+                                <li role="presentation">
+                                    @Html.Raw(ViewBag.PhongBans)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                            </div>
+
+                        <div style="float: right; width: 310px;">
+                            <input type="text" id="searchString" value="@ViewBag.Search" class="form-control" style="width:150px;float:left" placeholder="Nhập giá trị tìm kiếm" onkeypress="enterToSeacrh(event);" />
+                            <button class="btn btn-info" id="btnTimKiem" type="button" style="margin-top: 2px; margin-left: 2px; float: left">Tìm kiếm</button>
+                            
+                            <button class="btn btn-info" id="btnXuatFileTQNP" type="button" style="margin-top: 2px; float: left; margin-left: 10px !important">Xuất File</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                @{Html.RenderPartial("ViewIndexNPTQ");}
+            </div>
+
+
+        </fieldset>
+    </div>
+</form>

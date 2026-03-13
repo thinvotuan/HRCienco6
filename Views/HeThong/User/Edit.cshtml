@@ -1,0 +1,113 @@
+﻿@using BatDongSan.Models.HeThong;
+@model UserModel
+@{    
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<link rel="stylesheet" href="~/Content/bootstrap-switch/bootstrap3/bootstrap-switch.min.css" />
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<style>
+    .main-tbl td
+    {
+        border: none !important;
+        line-height: 2.428571 !important;
+        vertical-align: middle !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#btnReset").click(function () {
+            bootbox.confirm("Bạn có muốn reset mật khẩu người dùng này không", function (result) {
+                if (result) {
+                    var id = $("#UserId").val();
+                    $.ajax({
+                        url: "@Url.Action("ResetPassword", "User")" + "/" + id,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            Alert.success("Mật khẩu đã được tạo lại. Vui lòng kiểm tra email để biết thông tin đăng nhập hệ thống", "Thông báos");
+                        },
+                        error: function () {
+                            Alert.error("Có lỗi xảy ra", "Thông báo");
+                        }
+                    })
+                }
+            });
+        })
+        $("#btnTroVe").click(function () {
+            location.href = "@Url.Action("Index", "User")";
+        })
+    });
+</script>
+<form id="createform" method="post">
+    <div style="width: 750px">
+        <fieldset>
+            <legend style="display: inline">Cập nhật thông tin người dùng</legend>
+            <div class="panel-body">
+                <div>
+                    <table class="table main-tbl">
+                        <tr>
+                            <td class="col-md-1 tdtitle">Tên đăng nhập <span style="font-style: italic; float: right; color: red">*</span>
+                            </td>
+                            <td id="ttlmauser" class="col-md-2">
+                                 @Html.HiddenFor(model => model.UserId)
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", maxlength = "50", required = "required" })
+                                <span style="color: red; font-style: italic">@TempData["ErrorMessg"]</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  class="tdtitle">Nhân viên <span style="font-style: italic; float: right; color: red">*</span></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.HoTenNV, new { @class = "form-control", required = "required", disabled = "disabled" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Email <span style="font-style: italic; float: right; color: red">*</span></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", required = "required" })
+                            </td>
+                        </tr>
+                        @*<tr>
+                            <td class="tdtitle">Số điện thoại di động
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control", @maxlength = "20" })
+                            </td>
+                        </tr>*@
+                        <tr>
+                            <td class="tdtitle">Trạng thái kích hoạt
+                            </td>
+                            <td>
+                                @Html.CheckBox("status", Model.Status == true ? true : false, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Ghi chú
+                            </td>
+                            <td>
+                                @Html.TextAreaFor(model => model.Note, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdtitle">Reset Mật khẩu
+                            </td>
+                            <td colspan="3">
+                                @*<input type="button" class="btn btn-warning" id="btnReset" value="Reset" />*@
+                                <div class="buttons">
+                                    <button type="button" id="btnReset" style="background-image: url(/Images/rotation-icon.png); background-size: 25px 25px; width: 30px; height: 30px; background-repeat: no-repeat; border: none; box-shadow: 0px 0px;">
+                                    </button>
+                                   
+                                    @*<input type="button" class="btn btn-warning" id="btnReset" value="Reset" />*@
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="text-align: center">
+                    <button value="Chọn" type="submit" id="btnSubmit" class="btn btn-info">Lưu</button>
+                    <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>

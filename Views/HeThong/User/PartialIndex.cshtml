@@ -1,0 +1,76 @@
+﻿@model IPagedList<BatDongSan.Models.HeThong.sp_HT_NhacViecResult>
+@{    
+    int i = 1;
+    string[] paramters = TempData["Params"].ToString().Split(','); 
+}
+<table class="table table-striped table-hover table-condensed" id="maintable">
+    <thead>
+        <tr id="toptitle">
+            <th style="text-align: center">STT</th>
+            <th style="text-align: center">Số phiếu</th>
+            <th style="text-align: center">Tên nhân viên</th>
+            <th style="text-align: center">Tên Công việc</th>
+            <th style="text-align: center">Ngày gửi</th>
+            <th style="text-align: center">Tình trạng</th>
+            <th style="text-align: center; width: 200px">Lý do</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+
+                string color = "";
+                if (item.trangThaiTraLai == 1)
+                {
+                    color = "background-color:yellow";
+                }   
+               
+            <tr style="@color">
+                <td class="stt">@i</td>
+                <td style="text-align: left">
+                    @Html.ActionLink(item.maPhieu, "ViewsApproval/" + item.maPhieu, item.tenController)
+                    <br />
+                    @if(item.trangThaiTraLai==1)
+                    {
+                        <span style="font-weight:bold;color:red">Phiếu bị trả lại</span>
+                    }
+                </td>
+                <td>
+                    @item.hoTen
+                </td>
+                <td>@item.tenCongViec</td>
+                <td style="text-align: left">
+                    @Html.Encode(String.Format("{0:dd/MM/yyyy hh:mm tt}", item.ngayDuyet))
+                </td>
+                <td>
+                    <a href="javascript:void(0);" style="color:#519ee5;text-decoration:none" onclick="ViewDetailHistory('@item.maPhieu','@item.maQuiTrinhDuyet')">
+                        @item.tenBuocDuyet</a>
+                </td>
+                <td>
+                    @* <i class="fa fa-file" aria-hidden="true"></i>@item.tenBuocDuyet<br />
+                    <i class="fa fa-university" aria-hidden="true"></i>@item.congTrinh<br />*@
+                    <div style="max-width: 350px">@Html.Raw(item.lyDoNghi)</div>
+                </td>
+            </tr>     
+                i++;
+            }
+        }
+    </tbody>
+</table>
+<div>
+    Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+</div>
+<div>
+    <ul class="pagination">
+        @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "content", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount,
+        new
+        {
+            controller = "User",
+            action = "ListCongViecProcess",
+            searchString = paramters[0],
+            maCongViec = paramters[1],
+        }))
+    </ul>
+</div>

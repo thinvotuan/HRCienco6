@@ -1,0 +1,109 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model IPagedList<sp_PB_DanhSachNhanVienResult>
+@{
+    Layout = null;
+    int i = 1;
+    
+}
+<script>
+    $(document).ready(function(){
+        $('#checkAllNVPB').click(function (e) {
+            $('[name="ChekChonNVPB"]').prop('checked', this.checked);
+        });
+
+        $('[name="ChekChonNVPB"]').click(function (e) {
+            if ($('[name="ChekChonNVPB"]:checked').length == $('[name="ChekChonNVPB"]').length || !this.checked)
+                $('#checkAllNVPB').prop('checked', this.checked);
+        });
+    });
+        function beginPaging(args) {
+            // Animate        
+            $('#LoadNhanVienPB').fadeOut('fast');
+        }
+
+        function successPaging() {
+            // Animate
+            $('#LoadNhanVienPB').fadeIn('fast');
+        }
+</script>
+<style>
+    .colorSpec
+    {
+        color:#f00;
+    }
+</style>
+<div id="content">
+<div id="container">
+    <table width="100%" class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width: 30px;">STT
+                </th>
+                <th style="width: 100px;">Hình ảnh
+                </th>
+                <th style="width: 250px;">Nhân viên
+                </th>
+                <th style="width: 400px; ">Phòng ban/Chức danh
+                </th>
+                @*<th style="width: 70px; text-align:center" >
+                     @Html.CheckBox("checkAllNVPB", false)
+                </th>*@
+
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                var colorSpec = "";
+                string ParrentId = ViewBag.parrentId;
+            }
+            
+            @foreach (var item in Model)
+            {
+                if (item.departmentId == ParrentId)
+                {
+                    colorSpec = "colorSpec";
+                }
+                else
+                {
+                    colorSpec = "";
+                }  
+                var HinhAnh = item.maNhanVien + ".jpg";          
+                <tr>
+                    <td style="text-align: center">@i</td>
+                    <td style="text-align: center">
+                        <img id="Avatar" class="imgSmall" onerror="imgError(this)"  accept="image/*" src="/UploadFiles/QLNV/@HinhAnh" />
+
+                    </td>
+                    <td><i class="fa fa-user" style="color: blue"></i> <span style="color: #04828f;">@item.hoVaTen</span>
+                        @if (item.birthday != null)
+                        { 
+                            <p>
+                                <i class="fa fa-calendar"></i> Ngày sinh: 
+                                    @String.Format("{0:dd/MM/yyyy}", item.birthday)
+                            </p>
+                        }
+
+                    </td>
+                    <td><i class="fa fa-object-group" aria-hidden="true" style="color: #3198a3"></i>  <span class="@colorSpec">@item.phongBan</span>
+                        <br />
+                        <i class="fa fa-user-secret" aria-hidden="true" style="color:#0f4c99"></i> @item.chucDanh
+                    </td>
+                    
+                   @* <td style="color: #0b74d5; text-align: center">
+                        @Html.CheckBox("ChekChonNVPB", false, new { data_maNhanVien = item.maNhanVien})
+                    </td>*@
+                </tr>
+                        i++;
+            }
+        </tbody>
+    </table>
+    <div>
+        Trang @Model.PageNumber của @Model.PageCount / @ViewBag.Count
+    </div>
+    <div>
+        <ul class="pagination">
+            @Html.Raw(Ajax.Pager(new AjaxOptions { UpdateTargetId = "LoadNhanVienPB", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, Model.PageSize, Model.PageNumber, Model.TotalItemCount, new { controller = "PhongBan", action = "LoadNhanVienPhongBan", searchString = ViewBag.qSearchNV, maPhongBan = ViewBag.parrentId }))
+        </ul>
+    </div>
+</div>
+    </div>

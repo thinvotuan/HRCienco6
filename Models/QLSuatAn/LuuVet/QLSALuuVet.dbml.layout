@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 9.25" name="QLSALuuVet">
+  <DataContextMoniker Name="/QLSALuuVetDataContext" />
+  <nestedChildShapes>
+    <classShape Id="cc4afc60-db40-4fe7-a5fc-43d8cc0abe3b" absoluteBounds="3.25, 0.5, 2, 1.9631982421875">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_CuaHang_TinhTrangGuiMail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b9633c2c-043b-470d-9611-5de08a07743c" absoluteBounds="3.2649999999999997, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="13ef77f7-7726-4d28-93f9-bcad0084b983" absoluteBounds="6.875, 3.125, 2, 2.5401025390625">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_CuaHang_MonAn" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a73b09fd-c634-4537-b449-5b652d5e0878" absoluteBounds="6.89, 3.585, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0028d3f6-5a57-47f4-aee7-526c5946d55a" absoluteBounds="6.625, 0.5, 3.75, 2.5401025390625">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_NhanVienDangKySuatAnTrongThang" />
+      <nestedChildShapes>
+        <elementListCompartment Id="664f8a7c-af20-4df1-808c-34db85563f17" absoluteBounds="6.64, 0.96, 3.7199999999999998, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4ccca0d2-eb67-40fb-b082-0222d1ce8c92" absoluteBounds="0.75, 2.625, 2, 3.6939111328124996">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_CuaHang" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d9110404-db27-4989-9e22-42ed98df9911" absoluteBounds="0.76499999999999968, 3.085, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="32bc2e8a-44f5-4d77-a730-95841a3abef5" absoluteBounds="4.25, 3.25, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_DuyetPhanBo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="51f8dcdb-2a9c-466e-a607-457087fbcc93" absoluteBounds="4.2650000000000006, 3.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="af380a7f-ddc2-4585-b324-d42c86c4b6e1" absoluteBounds="4, 5.75, 3.375, 3.3093082682291666">
+      <DataClassMoniker Name="/QLSALuuVetDataContext/tbl_SA_PhieuDangKySuatAn_LuuVet" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ab9036cd-5d7b-440b-8f8f-2250728c1bba" absoluteBounds="4.015, 6.21, 3.3449999999999998, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

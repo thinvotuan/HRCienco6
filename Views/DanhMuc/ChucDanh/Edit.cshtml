@@ -1,0 +1,87 @@
+﻿@using BatDongSan.Models.DanhMuc;
+@model Sys_ChucDanh
+@{
+    IList<tbl_DM_CapBacChucDanh> capBacs = ViewBag.CapBacs;
+}
+<script src="~/Scripts/autoNumeric.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0', vMax: '10' });
+    })
+</script>
+<div class="bs-callout bs-callout-info" id="callout-glyphicons-location">
+    <h4 style="color: #1b809e; margin-left: 10px">Cập nhật chức danh</h4>
+</div>
+<div style="margin-top: 15px">
+    <table class="table table-responsive" id="tbl-create">
+        <tr>
+            <td class="tdtitle">Mã chức danh <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.MaChucDanh, new { @class = "form-control", required = "required", @readonly = "readonly" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Tên chức danh <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.TenChucDanh, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Nhiệm vụ <span style="font-style: italic; color: red">*</span></td>
+            <td>@Html.TextBoxFor(model => model.NhiemVu, new { @class = "form-control", required = "required" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Ghi chú</td>
+            <td>@Html.TextBoxFor(model => model.GhiChu, new { @class = "form-control" })</td>
+        </tr>
+        <tr>
+            <td class="tdtitle">Số cấp bậc <span style="font-style: italic; color: red">*</span></td>
+            <td>
+                <select id="soCapBac" name="soCapBac" class="form-control">
+                    @{
+                        var itemCBSelected = (int)(Model.SoCapBac);
+                    }
+                    @foreach (var itemCB in capBacs)
+                    {
+                        <option @(itemCB.soCapBac == itemCBSelected ? "selected" : "") value="@itemCB.soCapBac">
+                            @itemCB.tenCapBac</option>
+                     
+                   
+
+                    }
+
+                </select>
+            </td>
+
+        </tr>
+    </table>
+</div>
+@*<div style="margin-top: 15px" class="col-sm-5">
+    <div style="float: right">
+        <table class="table table-responsive" id="tbl-mota">
+            <tr class="headrow">
+                <td style="width:75px">Số cấp bậc</td>
+                <td>Mô tả</td>
+            </tr>
+            @foreach (var item in capBacs)
+            {
+                <tr>
+                    <td style="text-align:center !important"  class="tdtitle">@item.soCapBac</td>
+                    <td>@item.tenCapBac</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>*@
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+
+    #tbl-create
+    {
+        margin: 0;
+    }
+
+    #tbl-mota td
+    {
+        border: none;
+    }
+</style>

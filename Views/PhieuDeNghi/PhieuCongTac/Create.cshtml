@@ -1,0 +1,352 @@
+﻿@using BatDongSan.Models.PhieuDeNghi;
+@model PhieuDeNghiCongTac
+@{
+    ViewBag.Title = "Đăng ký phiếu công tác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '0' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#ghiChu").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+
+
+        $("#rad-1").click(function () {
+            $("#maTinh").val("");
+            $("#maQuocGia").val("");
+            $("#maTinh").removeClass("error").css("display", "block");
+            $("#maQuocGia").removeClass("error").css("display", "none");
+        });
+
+
+        $("#rad-2").click(function () {
+            $("#maQuocGia").val("");
+            $("#maTinh").val("");
+            $("#maTinh").removeClass("error").css("display", "none");
+            $("#maQuocGia").removeClass("error").css("display", "block");
+        });
+
+        $("#ChoosePB").click(function () {
+            ChonPhongBan();
+        });
+
+        $("#ChooseNV").click(function () {
+            ChonNhanVien();
+        });
+
+        $(document).on("dp.hide", "#ngayBatDau", function (e) {
+            $("#ngayKetThuc").val("");
+            
+
+            var ngayBatDau = moment(this.value, 'DD-MM-YYYY');
+            $("#ngayKetThuc").data("DateTimePicker").minDate(ngayBatDau.add(0, "day"), function () {
+                return;
+            });
+
+            $.post('@Url.Action("checkNgayBatDau", "PhieuCongTac")', { ngayBatDau: moment(e.date).format("DD/MM/YYYY"), maNhanVien: $("#NhanVien_maNhanVien").val() }, function (data) {
+                if (data == 1) {
+                    $("#ngayBatDau").val("");
+                    Alert.error("Ngày bắt đầu không được nhỏ hơn ngày lập 2 ngày", "Thông báo", { displayDuration: 3000 });
+                }
+                else if (data == 2) {
+                    $("#ngayBatDau").val("");
+                    Alert.error("Ngày này đã được tạo phiếu công tác, vui lòng chọn lại ngày công tác khác", "Thông báo", { displayDuration: 3000 });
+
+                }
+            });
+            Generate();
+        });
+        $(document).on("dp.change", "#ngayKetThuc", function (e) {
+
+            var date = new Date();
+            //var expire = moment().subtract(0, "day");
+            //$(this).data("DateTimePicker").minDate(expire, function () {
+            //    return;
+            //});
+            var ngayBD = $('#ngayBatDau').val();
+            var ngayKT = $('#ngayKetThuc').val();
+
+            var d1 = Date.parse(convertDate(ngayBD));
+            var d2 = Date.parse(convertDate(ngayKT));
+            if (d1 > d2) {
+                Alert.error("Ngày kết thúc lớn hơn ngày bắt đầu. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+                $("#ngayKetThuc").val("");
+            }
+            Generate();
+        });
+    });
+    function Generate() {
+        var startDate = $("#ngayBatDau").val();
+        var endDate = $("#ngayKetThuc").val();
+        $.post('@Url.Action("Generate", "PhieuCongTac")', { dateOne: startDate, dateTwo: endDate }, function (data) {
+            if (data != null) {
+                $("#soNgayCongTac").val(data.soNgay);
+            }
+        });
+    }
+    function CheckForm() {
+        var flag = true;
+        if ($("#soNgayCongTac").val() == "" || $("#soNgayCongTac").val() == "0" || parseFloat($("#soNgayCongTac").val()) < 0) {
+            $("#soNgayCongTac").addClass("error").attr("title", "Số ngày công tác phải lớn hơn 0");
+            flag = false;
+
+        }
+
+        if ($("#lyDo").val() == "") {
+            $("#lyDo").addClass("error").attr("title", "Vui lòng nhập lý do.");
+            flag = false;
+
+        }
+        if ($("#rad-1").is(":checked")) {
+            $("#maQuocGia").removeClass("error");
+            if ($("#maTinh").val() == "") {
+                $("#maTinh").addClass("error").attr("title", "Vui lòng chọn nơi công tác.");
+                flag = false;
+            }
+
+        }
+        else if ($("#rad-2").is(":checked")) {
+            $("#maTinh").removeClass("error");
+            if ($("#maQuocGia").val() == "") {
+                $("#maQuocGia").addClass("error").attr("title", "Vui lòng chọn nơi công tác.");;
+                flag = false;
+            }
+
+        }
+        var ngayBD = $("#ngayBatDau").val();
+        var ngayKT = $("#ngayKetThuc").val();
+        if (ngayBD == "" || ngayKT == "") {
+            Alert.error("Chọn ngày công tác.", "Thông báo", { displayDuration: 3000 });
+            $("#ngayKetThuc,#ngayBatDau").val("");
+            flag = false;
+        }
+        var d1 = Date.parse(convertDate(ngayBD));
+        var d2 = Date.parse(convertDate(ngayKT));
+        if (d1 > d2) {
+            Alert.error("Ngày kết thúc lớn hơn ngày bắt đầu. Vui lòng nhập lại.", "Thông báo", { displayDuration: 3000 });
+            $("#ngayKetThuc").val("");
+            flag = false;
+        }       
+        return flag;
+    }
+
+    function PopUpManager(url, title, w, h) {
+        var left = (screen.width / 2) - (w / 2);
+        var top = (screen.height / 2) - (h / 2);
+        var targetWin = window.open(url, title, 'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    }
+    function ChonPhongBan() {
+        var url = ('@Url.Action("DanhSachPhongBan/", "PhieuCongTac")');
+        PopUpManager(url, "DUYET", 800, 500);
+    }
+
+    function ChonNhanVien() {
+        var url = ('@Url.Action("DanhSachNVPB/", "PhieuCongTac")');
+        PopUpManager(url, "DUYET", 800, 500);
+    }
+
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-plus-square-o" aria-hidden="true"></i>Thêm mới phiếu công tác</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed  TableMobileChild" id="tbl-create" style="position: relative">
+                @if ((string)ViewBag.AdminNhanSu == "true")
+                {
+                    <tr>
+                        <td style="width: 15%" class="tdtitle">MNV lập phiếu TT</td>
+                        <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVienLapPhieuTT.maNhanVien, new { @class = "form-control", @readonly = true })</td>
+                        <td style="width: 15%" class="tdtitle">Họ tên NV lập phiếu TT</td>
+                        <td style="width: 35%">
+                            @Html.TextBoxFor(model => model.NhanVienLapPhieuTT.hoVaTen, new { @class = "form-control", @readonly = true })
+                        </td>
+                    </tr>
+
+                }
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Mã nhân viên công tác</td>
+                    <td style="width: 35%">@Html.TextBoxFor(model => model.NhanVien.maNhanVien, new { @class = "form-control", @readonly = true, required = "required" })</td>
+                    <td style="width: 15%" class="tdtitle">Tên nhân viên công tác</td>
+                    <td style="width: 35%">
+
+                        @if ((string)ViewBag.AdminNhanSu == "true")
+                        {
+                            @Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true, @style = "width:86%;float:left;margin-right: 5px;" })
+                            <button class="btn btn-info" id="ChooseNV" type="button">.....</button>
+                            @Html.Hidden("nhanVienNhanSu", (string)ViewBag.AdminNhanSu)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true })
+                            @Html.Hidden("nhanVienNhanSu", (string)ViewBag.AdminNhanSu)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số phiếu ĐK công tác </td>
+                    <td>@Html.TextBoxFor(model => model.maPhieu, new { @class = "form-control", @readonly = true })</td>
+                    <td class="tdtitle">Phòng ban công tác </td>
+                    <td>@Html.TextBoxFor(model => model.tenPhongBan, new { @class = "form-control", @readonly = true, @Style = "width:80%;  margin-right: 5px;   float: left;" })
+                        <button class="btn btn-info" id="ChoosePB" type="button">Chọn</button>
+                        @Html.HiddenFor(model => model.phongBanCongTac)
+                    </td>
+                    @*<td>Loại công tác</td>
+                    <td>
+                        @Html.RadioButtonFor(model => model.loaiCongTac, false, new { @id = "rad-1", @style = "width:auto",@checked=true }) Trong nước @Html.RadioButtonFor(model => model.loaiCongTac, true, new { @id = "rad-2", style = "width:auto" }) Nước ngoài
+
+                    </td>*@
+                </tr>
+                <tr>
+                    <td class="tdtitle">Ngày bắt đầu</td>
+                    <td>@Html.TextBoxFor(model => model.ngayBatDau, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+                    <td class="tdtitle">Ngày kết thúc</td>
+                    <td>@Html.TextBoxFor(model => model.ngayKetThuc, "{0: dd/MM/yyyy}", new { @class = "form-control datepicker" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Giờ bắt đầu</td>
+                    <td>@Html.TextBoxFor(model => model.gioBatDau, new { @class = "form-control", required = "required" })</td>
+                    <td class="tdtitle">Giờ kết thúc</td>
+                    <td>@Html.TextBoxFor(model => model.gioKetThuc, new { @class = "form-control", required = "required" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Số ngày công tác</td>
+                    <td>@Html.TextBoxFor(model => model.soNgayCongTac, new { @class = "form-control numberinput", data_v_max = "999" })</td>
+
+                    @*<td>Nơi công tác</td>
+                    <td>@Html.DropDownListFor(model => model.maTinh, ViewBag.TinhThanh as SelectList, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.maQuocGia, ViewBag.QuocGia as SelectList, new { @class = "form-control", @style = "display:none" })
+
+                    </td>*@
+                    <td class="tdtitle">Phụ cấp công tác</td>
+                    <td>@Html.TextBoxFor(model => model.phuCap, new { @class = "form-control numberinputInt" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Nội dung công tác</td>
+                    <td colspan="3">
+                        <div id="editor"></div>
+                        @Html.HiddenFor(model => model.ghiChu, new { @class = "form-control" })
+                    </td>
+
+                </tr>
+            </table>
+            <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+
+    </div>
+    <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+        <div class="modal-dialog  modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 98%">
+                        <div class="row">
+                            <div id="filter-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery-1.9.0.min.js"></script>
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/ui-1.10.0/ui-lightness/jquery-ui-1.10.0.custom.min.css" />
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.css" />
+
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/ui-1.10.0/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="~/Scripts/JQuery/select2.full.js"></script>
+<link rel="stylesheet" href="~/Content/css/select2.min.css" />
+
+<script type="text/javascript">        jQuery.noConflict(); </script>
+
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#gioBatDau').timepicker({
+            showAnim: 'blind'
+        });
+
+        $('#gioKetThuc').timepicker({
+            showAnim: 'blind'
+        });
+    });
+
+</script>
+
+@*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/redmond/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/JQuery/calendar/include/jquery.ptTimeSelect.js"></script>
+<link rel="stylesheet" href="~/Scripts/JQuery/calendar/include/jquery.ptTimeSelect.css" />
+
+
+
+<script type="text/javascript">        jQuery.noConflict(); </script>
+
+
+<script>
+    jQuery(document).ready(function () {
+        // find the input fields and apply the time select to them.
+        jQuery('#gioBatDau').ptTimeSelect();
+    });
+</script>*@

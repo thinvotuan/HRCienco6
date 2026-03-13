@@ -1,0 +1,72 @@
+﻿@using BatDongSan.Models.QLSuatAn.LuuVet;
+@model sp_SA_PhieuDangKySuatAn_CuaHang_LuuVet_PhanBoResult
+@{
+    ViewBag.Title = "Chi tiết cửa hàng";
+    Layout = "";
+}
+
+<div class="groupCuaHang">
+    @{
+        if (Model != null)
+        {
+
+
+            if (Model.tongSoSuatConLaiCuaCuaHangTrongNgay <= 0)
+            {
+        <div class="clsNotRegSA">Cửa hàng đã hết suất ăn trong ngày, vui lòng chọn cửa hàng khác.</div>
+            }
+            else if (Model.soLanNhanVienDuocDangKyTrongThang <= 0)
+            {
+        <div class="clsNotRegSA">Số lần ăn tại cửa hàng này của bạn đã hết, vui lòng chọn cửa hàng khác.</div>
+            }
+            else
+            {
+                string thoiGianDuKienPhucVu = "Từ 12h - 12h30";
+                if ((Model.soSuatAnTrongNgayDaDangKyCH + 1) > 50){
+                    thoiGianDuKienPhucVu = "Từ 12h30 - 13h";
+                }
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12  item">
+            <div class="clsPadding">
+                <div class="form-check">
+                    <label class="form-check-label" for="">
+                        <input type="hidden" value="@Model.maCuaHang" name="maCuaHang" id="maCuaHang" />
+                        <div class="img">
+                            <img src="@Model.hinhAnh" />
+                        </div>
+                        <h3>@Model.tenCuaHang</h3>
+                        <h4>Số lần NV được đăng ký / tháng: @(Model.soLanNhanVienDaDangKy + 1) / @Model.soLanAnCuaNhanVienTrongThang</h4>
+                        <h5>Tổng suất ăn phục vụ trong ngày của quán: @(Model.tongSoSuatDaDangKyCuaCuaHangTrongNgay+1) / @Model.tongSoSuatCuaCuaHangTrongNgay</h5>
+                        <h5>Số thứ tự phiếu ăn: @(Model.tongSoSuatDaDangKyCuaCuaHangTrongNgay+1)</h5>
+                        @*<h5 class="clsThongBao">Thời gian phục vụ: @thoiGianDuKienPhucVu</h5>*@
+                    </label>
+                    <h6></h6>
+                </div>
+            </div>
+        </div>
+        @*<div class="lstMonAn">
+            @{
+                var monAnChon = ViewBag.lstMenu as PhieuDangKySuatAnModel;
+                                          
+                <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-6 boxMonAn">
+                    <div class="itemMonAn">
+
+                        <ul>
+                            <li>
+                                <input type="hidden" value="@monAnChon.maMonAn" name="maMonAn" id="maMonAn" />
+                                <img src="@monAnChon.hinhMonAn" /></li>
+                            <li>@monAnChon.tenMonAn</li>
+                            <li>Số lượng đã đặt: @(monAnChon.soLuongMonAnDaDat + 1) / @monAnChon.soLuongMonAnBanDau</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+                 
+            }
+            
+        </div>*@
+            }
+        }
+    }
+</div>

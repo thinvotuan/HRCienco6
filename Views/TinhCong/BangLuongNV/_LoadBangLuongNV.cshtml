@@ -1,0 +1,97 @@
+﻿@using BatDongSan.Models.NhanSu
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+ 
+   
+}
+<input type="hidden" value="@ViewData["kqCheck"]" name="checkDuyet" id="checkDuyet" />
+@{
+                                
+    int stt = 1;
+    int page_ = Convert.ToInt32(ViewBag.page);
+    int total_ = Convert.ToInt32(ViewBag.total);
+
+    var ls = ViewData["lsDanhSach"] as List<sp_NS_BangLuongNhanVienResult>;
+
+    foreach (var item in ls.ToList())
+    {
+        double truyLanh = (item.truyLanh ?? 0);
+        if ((item.TTTLLuong ?? 0) > 0) 
+        {truyLanh += (item.TTTLLuong ?? 0);}
+        if ((item.TTTLThue ?? 0) > 0) 
+        {truyLanh += (item.TTTLThue ?? 0);}
+
+        double truyThu = (item.truyThu ?? 0);
+        if ((item.TTTLLuong ?? 0) < 0) 
+        {truyThu += (item.TTTLLuong ?? 0);}
+        if ((item.TTTLThue ?? 0) < 0) 
+        {truyThu += (item.TTTLThue ?? 0);}
+
+      
+    <tr>
+        <td align="center">
+            @(stt++)
+        </td>
+        <td><a style="color:#519ee5" href="@Url.Action("Details", "NhanVien", new { id = item.maNhanVien })">@item.maNhanVien</a>
+            <br /><i class="fa fa-user" aria-hidden="true"></i>@item.hoTen</td>
+        <td>@item.phongBan <br />@item.chucVu</td>
+     
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.tongLuong)</td>
+        <td style="text-align:right"> @item.tongNgayCong</td>
+         <td style="text-align: right">@String.Format("{0:###,##0}", item.baoHiem)</td>
+         <td style="text-align: right">@String.Format("{0:###,##0}", item.thue)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", truyThu)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", truyLanh)</td>
+        <td style="text-align: right">@String.Format("{0:###,##0}", item.thucLanh)</td>
+        <td style="text-align: center"><a style="color:#519ee5" href="@Url.Action("ViewChiTietLuong", "BangLuongNV", new { maNhanVien = item.maNhanVien, thang=item.thang ,nam =item.nam  })">
+                Xem</a></td>
+
+
+
+
+
+    </tr>
+                           
+    
+    }
+}
+
+<tr>
+    <td colspan="11" align="left">
+        @{
+                
+            if (page_ > 1)
+            {
+        
+            <a class="pageFirst" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(1);">First</a> <a class="pagePrevious" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                Previous</a>
+       
+            }
+
+
+            if (page_ - 2 >= 1)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 2));">
+                @(page_ - 2) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ - 1));">
+                    @(page_ - 1) </a>
+            } <span class="pageActive">@page_</span>
+            if (page_ + 2 <= total_)
+            { 
+            <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1) );">
+                @(page_ + 1) </a> <a class="pageCurrent" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 2));">
+                    @(page_ + 2) </a>
+            }
+
+            if (page_ < total_)
+            { 
+        
+            <a class="pageNext" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@(page_ + 1));">Next</a> <a class="pageLast" href="javascript:void(0)" onclick="javascript:OnCriteriaPC(@total_);">
+                Last</a>
+        
+            }
+        
+            <span>Tổng số dòng :</span><strong>@ViewBag.totalRow</strong>
+        }
+    </td>
+</tr>

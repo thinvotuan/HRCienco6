@@ -1,0 +1,132 @@
+﻿@using BatDongSan.Models.DanhMuc
+@model IList<tbl_DM_ThuNhapKhac>
+@{
+    ViewBag.Title = "Danh sách danh mục khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "DMThuNhapKhac")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "DMThuNhapKhac")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "DMThuNhapKhac")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        })
+
+    });
+
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav" style="text-align: center">
+                    
+                     <li class="ui-tabs-selected ui-state-active"> <a><span><i class="fa fa-list" aria-hidden="true"></i> Danh sách DM Thu nhập khác</span></a></li>
+                    <span style="color: red">@TempData["TonTai"]</span>
+                </ul>
+            </div>
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px">STT</th>
+                            <th style="width: 90px">Mã loại thu nhập</th>
+                            <th style="width: 120px">Tên loại thu nhập</th>
+                            <th style="width: 60px">Tính thuế</th>
+                            <th style="width: 60px">Tính<br />bảo hiểm</th>
+                            <th style="width: 200px">Ghi chú</th>
+                            <th style="width: 100px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {                            
+                            <tr>
+                                <td style="text-align: center">@i</td>
+                                <td style="text-align: left">@item.maLoaiThuNhapKhac</td>
+                                <td style="text-align: left">@item.tenLoaiThuNhapKhac</td>
+                                <td style="text-align: center">@Html.CheckBox("tinhThue", item.coTinhThueKhong == true ? true : false, new { @style = "pointer-events: none;"})</td>
+                                <td style="text-align: center">@Html.CheckBox("tinhBH", item.coTinhBaoHiemKhong == true ? true : false, new { @style = "pointer-events: none;"})</td>
+                                <td style="text-align: left">@item.ghiChu</td>
+                                <td style="text-align: center">
+                                       <a class="btnEdit" alt="@item.maLoaiThuNhapKhac" data-toggle="modal" data-target="#customModal"  title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style ="font-size :30px; color: orange ; cursor: pointer;" aria-hidden="true"> | </i></a>                        
+                             <a class="btnDelete" alt="@item.maLoaiThuNhapKhac" title ="Xoá phiếu"><i class="fa fa-trash" style ="font-size :30px; color: red ; cursor: pointer;" aria-hidden="true"></i></a>
+                   
+                                </td>
+                            </tr> 
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">                        
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

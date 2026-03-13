@@ -1,0 +1,164 @@
+﻿@using BatDongSan.Models.NhanSu;
+@model ThuNhapKhac
+@{
+    ViewBag.Title = "Thêm mới phiếu thu nhập khác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/summernote/summernote.css" />
+<script src="~/Content/summernote/summernote.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/autoNumeric.js"></script>
+<script src="~/Scripts/batdongsan.validate.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/vi.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" />
+<script>
+    $(document).ready(function () {
+        $(".numberinput").autoNumeric('init', { mDec: 0, mNum: 3, lZero: 'deny', aSep: ',', aDec: '.', pSign: 's', vMin: '-1000000000000000' });
+        $(".numberinputInt").autoNumeric('init', { lZero: 'deny', mDec: 0, pSign: 's', aSep: ',', aDec: '.' });
+        $("#btnTroVe").click(function () {
+            var url = "@Url.Action("Index")";
+            location.href = url;
+        });
+        $('#editor').summernote({
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null             // set maximum height of editor
+            //focus: true                  // set focus to editable area after initializing summernote
+        });
+        $(".timepicker").datetimepicker({
+            locale: 'vi',
+            format: 'HH:mm'
+        });
+
+        $(".datepicker").datetimepicker({
+            locale: 'vi',
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+        $("#btnSubmit").click(function () {
+            if (CheckForm()) {
+                var noiDung = $(".note-editable").html();
+                $("#lyDo").val(noiDung);
+                $("#form-submit").submit();
+            }
+        });
+
+        $("#ChooseNV").click(function () {
+            
+            $('#myModalChonPhongBan').modal();
+            var Url = '@Url.Action("ChonNhanVien", "ThuNhapKhac")';
+            $('#filter-panel').load(Url);
+        });
+    });
+
+
+    function CheckForm() {
+        var flag = true;
+
+        if ($("#soTien").val() == "") {
+            $("#soTien").addClass("error").attr("title", "Vui lòng nhập số tiền.");
+            flag = false;
+        }
+        if ($("#soTien").val() == "0") {
+            $("#soTien").addClass("error").attr("title", "Số tiền phải lớn hơn 0.");
+            flag = false;
+        }
+        if ($("#loaiThuNhapKhac").val() == "") {
+            $("#loaiThuNhapKhac").addClass("error").attr("title", "Vui lòng chọn loại thu nhập.");
+            flag = false;
+        } 
+        if ($("#NhanVien_hoVaTen").val() == "") {
+            $("#NhanVien_hoVaTen").addClass("error").attr("title", "Vui lòng chọn nhân viên thôi việc.");
+            flag = false;
+        }
+
+        return flag;
+    }
+</script>
+<style>
+    #tbl-create td
+    {
+        border: none;
+    }
+</style>
+<form id="form-submit" class="form-horizontal" method="post">
+    <div id="container" class="custome_fieldSet">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" style="width: 30%; height: auto; border: none; float: left; box-sizing: border-box; overflow: hidden; clear: none;" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active ">
+                        <a><span><i class="fa fa-plus-square-o" aria-hidden="true"></i>Thêm mới phiếu thu nhập khác</span></a></li>
+                </ul>
+            </div>
+            <table class="table table-striped table-hover table-condensed" id="tbl-create" style="position: relative">
+                <tr>
+                    <td style="width: 15%" class="tdtitle">Nhân viên</td>
+                    <td style="width: 35%">
+                        <div style="width: 100%; display: inline-flex">
+                            @Html.TextBoxFor(model => model.NhanVien.hoVaTen, new { @class = "form-control", @readonly = true })
+                            @Html.HiddenFor(m => m.NhanVien.maNhanVien)
+                            <div style="float: right">
+                                <button type="button" class="btn " id="ChooseNV"><i class="fa fa-user-plus" aria-hidden="true"></i>Chọn</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 15%" class="tdtitle">Loai thu nhập</td>
+                    <td style="width: 35%">@Html.DropDownList("loaiThuNhapKhac", ViewBag.loaiThuNhapKhac as SelectList, new { @class = "form-control" })</td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Tháng, năm </td>
+                    <td>
+                        <div style="width: 100%; display: inline-flex">
+                            @Html.DropDownList("thang", ViewBag.Thangs as SelectList, new { @class = "form-control",@style="width:auto;margin-right:10px" })
+                            <div style="float: right">
+                                @Html.DropDownList("nam", ViewBag.Nams as SelectList, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                    <td class="tdtitle">Số tiền</td>
+                    <td>@Html.TextBoxFor(model => model.soTien, new { @class = "form-control numberinput" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdtitle">Lý do</td>
+                    <td colspan="3">
+                        <div id="editor"></div>
+                        @Html.HiddenFor(model => model.lyDo, new { @class = "form-control" })
+                    </td>
+
+                </tr>
+            </table>
+            <div style="text-align: right; margin-bottom: 10px">
+                <button class="btn btn-info" id="btnSubmit" type="button">Lưu </button>
+                <button class="btn btn-info" type="button" id="btnTroVe">Trở về </button>
+            </div>
+        </fieldset>
+
+    </div>
+    <div id="myModalChonPhongBan" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 98%">
+                        <div class="row">
+                            <div id="filter-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>

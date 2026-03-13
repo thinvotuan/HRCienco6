@@ -1,0 +1,246 @@
+﻿@using BatDongSan.Models.HeThong
+@model IList<tbl_DM_TienIchTheme>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;    
+}
+<link rel="stylesheet" href="~/Content/batdongsan-alert.css" />
+<script src="~/Scripts/batdongsan.generals.js"></script>
+<style>
+    #content td, th
+    {
+        border-bottom: 1px inset #ADC2D6;
+        position: relative;
+        text-align: center;
+    }
+ .checkMacDinh {
+    color: #AAAAAA;
+    display: block;
+    position: relative;
+    float: none;
+    text-align: center;
+    margin: 0px auto;
+    height: 100%;
+    width: 100%;
+}
+.checkMacDinh input[type=radio]{
+  position: absolute;
+  visibility: hidden;
+}
+
+.checkMacDinh label {
+    display: block;
+    position: relative;
+    font-weight: 300;
+    font-size: 1.35em;
+    padding: 10px 0px 10px 0px;
+    margin: 10px auto;
+    z-index: 9;
+    cursor: pointer;
+    -webkit-transition: all 0.25s linear;
+}
+
+.checkMacDinh:hover label{
+	color: red;
+}
+
+.checkMacDinh .check {
+    display: block;
+    position: absolute;
+    border: 5px solid #1a9dcc;
+    border-radius: 100%;
+    height: 25px;
+    width: 25px;
+    top: 0px;
+    left: 37px;
+    z-index: 5;
+    transition: border .25s linear;
+    -webkit-transition: border .25s linear;
+}
+
+.checkMacDinh:hover .check {
+  border: 5px solid #bf5a5a;
+}
+
+ .check::before {
+    display: block;
+    position: absolute;
+    content: '';
+    border-radius: 100%;
+    height: 15px;
+    width: 15px;
+    top: 0px;
+    left: 0px;
+    margin: auto;
+    transition: background 0.25s linear;
+    -webkit-transition: background 0.25s linear;
+}
+
+input[type=radio]:checked ~ .check {
+  border: 5px solid #0DFF92;
+}
+
+input[type=radio]:checked ~ .check::before{
+  background: #ff0000;
+}
+
+input[type=radio]:checked ~ label{
+      color: #0DFF92;
+}
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnModalCreate").click(function () {
+            var url = "@Url.Action("Create", "QuanLyTheme")";
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url)
+        })
+
+        $("#customModal").on("hide.bs.modal", function () {
+            $("#custom-panel").html("");
+        });
+
+        $(document).on("click", ".btnEdit", function () {
+            var url = "@Url.Action("Edit", "QuanLyTheme")" + "/" + $(this).attr("alt");
+            var form = document.getElementById("form-submit");
+            form.action = url;
+            $("#custom-panel").load(url);
+        })
+
+        $(document).on("click", ".btnDelete", function () {
+            var url = "@Url.Action("Delete", "QuanLyTheme")" + "/" + $(this).attr("alt");
+            bootbox.confirm("Bạn có muốn xóa không", function (result) {
+                if (result) {
+                    var form = document.getElementById("form-listview");
+                    form.method = "post";
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        });
+        $(".checkMacDinh").click(function () {
+            // Call Ajax Get Dot bao cao lon nhat
+            var index = $(".checkMacDinh").index(this);
+            var idTheme = $(".idTheme").eq(index).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeTheme/","QuanLyTheme")',
+                data: {
+                    idTheme: idTheme
+                  
+                },
+                success: function (result) {
+                    window.location = '/QuanLyTheme/index';
+                    
+                }
+            });
+            // End call Ajax
+        });
+
+    });
+
+</script>
+<form id="form-listview">
+    <div id="container">
+        <fieldset class="removeBorderFieldset">
+            <div id="tabs" class="ui-tabs">
+                <ul class="ui-tabs-nav" style="text-align: center">
+                    
+                     <li class="ui-tabs-selected ui-state-active"> <a><span><i class="fa fa-list" aria-hidden="true"> Danh sách Theme/Giao diện</i></span></a></li>
+                    <span style="color: red">@TempData["TonTai"]</span>
+                </ul>
+            </div>
+            <div class="panel-body background_top">
+                <div class="form-inline">
+                    <div class="form-group" style="float: right">
+                        <button class="btn btn-info" id="btnModalCreate" type="button" data-toggle="modal" data-target="#customModal">Thêm </button>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <table class="table table-striped table-hover table-condensed" id="maintable">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 45px">STT</th>
+                            <th>Tên</th>
+                            <th>Mã màu</th>
+                            <th>Xem trước</th>
+                            <th>Mặc định</th>
+                           
+                            <th style="width: 100px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {                            
+                            <tr>
+                                <td style="text-align: center">@i</td>
+                                <input type="hidden" value="@item.id" class="idTheme" />
+                                 <td style="text-align: left">@item.ten</td>
+                                <td style="text-align: left">@item.maMau</td>
+                                  <td style="text-align: left; background-color:@item.maMau"></td>
+                               <td style="text-align:center; width:100px;">
+                                   @{if (item.trangThai == 1) { 
+                                    <div class="checkMacDinh">
+                                       <input type="radio" id="@(i)-option" name="selector" checked>
+                                    <label for="@(i)-option"></label>
+    
+                                    <div class="check"></div>
+                                   </div>
+                                     }
+                                     else{
+                                     <div class="checkMacDinh">
+                                       <input type="radio" id="@(i)-option" name="selector">
+                                    <label for="@(i)-option"></label>
+    
+                                    <div class="check"></div>
+                                   </div>
+                                     
+                                     }
+                                       
+                                       }
+                                   
+                               </td>
+                                <td style="text-align: right">
+                                       <a class="btnEdit" alt="@item.id" data-toggle="modal" data-target="#customModal"  title ="Sửa phiếu"><i class="fa fa-pencil-square-o" style ="font-size :30px; color: orange ; cursor: pointer;" aria-hidden="true"> | </i></a>                        
+                             <a class="btnDelete" alt="@item.id" title ="Xoá phiếu"><i class="fa fa-trash" style ="font-size :30px; color: red ; cursor: pointer;" aria-hidden="true"></i></a>
+                   
+                                </td>
+                            </tr> 
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<form id="form-submit" method="post">
+    <!--------------------------- Modal - Thêm Sửa Modal Form ------------------------>
+    <div id="customModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                  </div>
+                <div class="modal-body">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <div id="custom-panel" class="filter-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseEmail">Đóng</button>
+                        <button class="btn btn-primary" id="btnSubmit">Lưu</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
